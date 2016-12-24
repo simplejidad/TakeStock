@@ -1,0 +1,95 @@
+<?xml version="1.0" encoding="utf-8"?>
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:orientation="vertical"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    tools:context=".view.FragmentItemDetail">
+
+    <TextView
+        android:id="@+id/textViewItemName"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:text="@string/lorem_ipsum"
+        android:layout_margin="10dp"
+        android:textSize="50dp"
+        android:layout_gravity="center_horizontal"
+        >
+
+    </TextView>
+
+    <LinearLayout
+        android:layout_width="match_parent"
+        android:layout_height="40dp"
+        android:layout_margin="5dp">
+
+        <TextView
+            android:layout_width="wrap_content"
+            android:layout_height="match_parent"
+            android:text="@string/stock"
+            android:textSize="24sp"
+            />
+
+        <TextView
+            android:id="@+id/textViewStock"
+            android:layout_height="wrap_content"
+            android:layout_width="wrap_content"
+            android:textSize="24sp"
+            android:text="@string/lorem_ipsum"
+            />
+
+
+    </LinearLayout>
+    <LinearLayout
+        android:layout_width="match_parent"
+        android:layout_height="40dp"
+        android:layout_margin="5dp">
+
+        <TextView
+            android:layout_width="wrap_content"
+            android:layout_height="match_parent"
+            android:text="@string/consumption_rate"
+            android:textSize="24dp"
+           />
+
+        <TextView
+            android:id="@+id/textViewConsumptionRate"
+            android:layout_height="match_parent"
+            android:layout_width="match_parent"
+            android:textSize="24dp"
+            android:text="@string/lorem_ipsum"
+            />
+
+
+    </LinearLayout>
+    <LinearLayout
+        android:layout_width="match_parent"
+        android:layout_height="40dp"
+        android:layout_margin="5dp">
+
+        <TextView
+            android:layout_width="wrap_content"
+            android:layout_height="match_parent"
+            android:text="@string/minimum_purchace_ammount"
+            android:textSize="24dp"
+            />
+
+        <TextView
+            android:id="@+id/textViewMinimumPurchaceAmmount"
+            android:layout_height="match_parent"
+            android:layout_width="match_parent"
+            android:textSize="24dp"
+            android:text="@string/lorem_ipsum"
+            />
+
+
+    </LinearLayout>
+
+    <Button
+        android:id="@+id/buttonDeleteItem"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:text="Delete"/>
+
+
+</LinearLayout>

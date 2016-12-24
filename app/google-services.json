@@ -1,0 +1,55 @@
+{
+  "project_info": {
+    "project_number": "269480763299",
+    "firebase_url": "https://takestock-9f40a.firebaseio.com",
+    "project_id": "takestock-9f40a",
+    "storage_bucket": "takestock-9f40a.appspot.com"
+  },
+  "client": [
+    {
+      "client_info": {
+        "mobilesdk_app_id": "1:269480763299:android:e70533f84b9d7486",
+        "android_client_info": {
+          "package_name": "com.santiagogil.takestock"
+        }
+      },
+      "oauth_client": [
+        {
+          "client_id": "269480763299-dj3r3hl412na1bpf5d5otfbqht2pnlbt.apps.googleusercontent.com",
+          "client_type": 1,
+          "android_info": {
+            "package_name": "com.santiagogil.takestock",
+            "certificate_hash": "F7FA7923E9AEC6B05FA990C3619CF9F8C63EDCBD"
+          }
+        },
+        {
+          "client_id": "269480763299-jtuak9vv21rmsd8ou9uvr2j4pfbospfr.apps.googleusercontent.com",
+          "client_type": 3
+        }
+      ],
+      "api_key": [
+        {
+          "current_key": "AIzaSyBT5dWs-9aIDSUqW22Q2zU0c8MvG-ji_Os"
+        }
+      ],
+      "services": {
+        "analytics_service": {
+          "status": 1
+        },
+        "appinvite_service": {
+          "status": 2,
+          "other_platform_oauth_client": [
+            {
+              "client_id": "269480763299-jtuak9vv21rmsd8ou9uvr2j4pfbospfr.apps.googleusercontent.com",
+              "client_type": 3
+            }
+          ]
+        },
+        "ads_service": {
+          "status": 2
+        }
+      }
+    }
+  ],
+  "configuration_version": "1"
+}
