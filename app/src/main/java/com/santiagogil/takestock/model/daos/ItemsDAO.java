@@ -25,7 +25,7 @@ import java.util.List;
  */
 public class ItemsDAO extends SQLiteOpenHelper {
 
-    private static final String DATABASENAME = "TakeStockDB";
+    private static final String DATABASENAME = "ItemsDB";
     private static final Integer DATABASEVERSION = 1;
 
     private static final String TABLEITEMS = "Item";
@@ -79,6 +79,7 @@ public class ItemsDAO extends SQLiteOpenHelper {
         FirebaseDatabase firebaseDatabase = FirebaseDatabase.getInstance();
         DatabaseReference myRef = firebaseDatabase.getReference();
         myRef.child("items").child(item.getID().toString()).setValue(item);
+
     };
 
     public void addItemToLocalDB(Item item){

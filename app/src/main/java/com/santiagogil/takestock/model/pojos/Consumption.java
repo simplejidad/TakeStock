@@ -8,14 +8,40 @@ import java.util.Date;
 
 public class Consumption {
 
-    private Date dateOfConsumption;
-    private Item item;
-    private Integer quantity;
+    private Long ID;
+    private Integer dateOfConsumption;
+    private Integer itemID;
 
-    public Consumption(Date date, Item item, Integer quantity) {
-        this.dateOfConsumption = new Date();
-        this.item = item;
-        this.quantity = quantity;
+    public Consumption(Integer itemID) {
+        this.itemID = itemID;
     }
 
+    public Consumption(){
+
+    }
+
+    public void setID(Long ID) {
+        this.ID = ID;
+    }
+
+    public void setDateOfConsumption(Integer dateOfConsumption) {
+        this.dateOfConsumption = dateOfConsumption;
+    }
+
+    public void setItemID(Integer itemID) {
+        this.itemID = itemID;
+    }
+
+    public Long getID() {
+
+        return ID;
+    }
+
+    public Integer getDateOfConsumption() {
+        return dateOfConsumption;
+    }
+
+    public Integer getItemID() {
+        return itemID;
+    }
 }
