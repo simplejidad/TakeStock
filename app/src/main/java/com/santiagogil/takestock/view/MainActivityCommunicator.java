@@ -47,6 +47,7 @@ public class MainActivityCommunicator extends AppCompatActivity implements Fragm
 
         FragmentTransaction fragmentTransaction = getSupportFragmentManager().beginTransaction();
         fragmentTransaction.replace(R.id.fragment_holder, fragmentItemDetail);
+        fragmentTransaction.addToBackStack(null);
         fragmentTransaction.commit();
 
     }
