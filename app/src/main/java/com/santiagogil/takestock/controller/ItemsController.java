@@ -2,6 +2,7 @@ package com.santiagogil.takestock.controller;
 
 import android.content.Context;
 
+import com.santiagogil.takestock.model.daos.ConsumptionsDAO;
 import com.santiagogil.takestock.model.daos.ItemsDAO;
 import com.santiagogil.takestock.model.pojos.Item;
 import com.santiagogil.takestock.util.ResultListener;
@@ -22,15 +23,13 @@ public class ItemsController {
 
                     listenerFromView.finish(result);
 
-                } else {
-                    itemsDao.getItemsFromFirebase(new ResultListener<List<Item>>() {
-                        @Override
-                        public void finish(List<Item> result) {
-                            itemsDao.addItemsToLocalDatabase(result);
-                            listenerFromView.finish(result);
-                        }
-                    });
-                }
+                } else itemsDao.getItemsFromFirebase(new ResultListener<List<Item>>() {
+                    @Override
+                    public void finish(List<Item> result) {
+                        itemsDao.addItemsToLocalDatabase(result);
+                        listenerFromView.finish(result);
+                    }
+                });
             }
         });
     }
@@ -40,8 +39,6 @@ public class ItemsController {
         itemsDAO.deleteItemFromDatabases(ID);
 
     }
-
-
 
     public void addItemToDatabases(Context context, Item item){
         ItemsDAO itemsDao = new ItemsDAO(context);
@@ -69,5 +66,12 @@ public class ItemsController {
     public void addItemToLocalDatabase(Context context, Item item){
         ItemsDAO itemsDAO = new ItemsDAO(context);
         itemsDAO.addItemToLocalDB(item);
+    }
+
+    public void updateItemConsumptionDate(Integer ItemID){
+
+        ConsumptionController consumptionsController = new ConsumptionController();
+        //consumptionsController.getItemConsumptionRate()
+
     }
 }

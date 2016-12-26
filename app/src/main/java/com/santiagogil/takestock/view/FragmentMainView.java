@@ -42,10 +42,7 @@ public class FragmentMainView extends Fragment implements View.OnClickListener{
             }
         });
 
-        //updateRecyclerAdapter();
-
         recyclerView.setAdapter(itemRecyclerAdapter);
-        //itemRecyclerAdapter.setItems(new ArrayList<Item>());
 
         LinearLayoutManager linearLayoutManager = new LinearLayoutManager(getContext());
         linearLayoutManager.setOrientation(LinearLayoutManager.VERTICAL);
@@ -120,7 +117,7 @@ public class FragmentMainView extends Fragment implements View.OnClickListener{
         Item item = new Item(itemName);
         itemsController.addItemToDatabases(view.getContext(), item);
         Toast.makeText(view.getContext(), item.getName() + " has been added.", Toast.LENGTH_SHORT).show();
-        itemRecyclerAdapter.getItems().add(item);
+        itemRecyclerAdapter.setItems(itemsController.getItemsFromLocalDatabase(getContext()));
         itemRecyclerAdapter.notifyDataSetChanged();
     }
 }

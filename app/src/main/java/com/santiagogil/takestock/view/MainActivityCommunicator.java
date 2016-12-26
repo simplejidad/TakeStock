@@ -18,16 +18,6 @@ public class MainActivityCommunicator extends AppCompatActivity implements Fragm
     private List<Item> items;
 
     @Override
-    public void refreshFragmentMainView() {
-
-        Fragment fragmentMainView = new FragmentMainView();
-        FragmentManager fragmentManager = this.getSupportFragmentManager();
-        FragmentTransaction fragmentTransaction = fragmentManager.beginTransaction();
-        fragmentTransaction.replace(R.id.fragment_holder, fragmentMainView);
-        fragmentTransaction.commit();
-    }
-
-    @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_main);
@@ -38,6 +28,16 @@ public class MainActivityCommunicator extends AppCompatActivity implements Fragm
         fragmentTransaction.replace(R.id.fragment_holder, fragmentMainView);
         fragmentTransaction.commit();
 
+    }
+
+    @Override
+    public void refreshFragmentMainView() {
+
+        Fragment fragmentMainView = new FragmentMainView();
+        FragmentManager fragmentManager = this.getSupportFragmentManager();
+        FragmentTransaction fragmentTransaction = fragmentManager.beginTransaction();
+        fragmentTransaction.replace(R.id.fragment_holder, fragmentMainView);
+        fragmentTransaction.commit();
     }
 
     @Override

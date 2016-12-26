@@ -4,21 +4,13 @@ import android.content.ContentValues;
 import android.content.Context;
 import android.database.Cursor;
 import android.database.sqlite.SQLiteDatabase;
-import android.database.sqlite.SQLiteOpenHelper;
 import android.os.AsyncTask;
-import android.os.SystemClock;
 
 import com.google.firebase.database.DatabaseReference;
 import com.google.firebase.database.FirebaseDatabase;
 import com.santiagogil.takestock.model.pojos.Consumption;
 
-/**
- * Created by digitalhouse on 24/12/16.
- */
-public class ConsumptionsDAO extends SQLiteOpenHelper {
-
-    private static final String DATABASENAME = "ConsumptionsDB";
-    private static final Integer DATABASEVERSION = 1;
+public class ConsumptionsDAO{
 
     private static final String TABLECONSUMPTIONS = "Consumptions";
     private static final String ID = "ID";
@@ -26,29 +18,11 @@ public class ConsumptionsDAO extends SQLiteOpenHelper {
     private static final String ITEMID = "ItemID";
 
     private Context context;
+    private DatabaseHelper databaseHelper;
 
     public ConsumptionsDAO(Context context) {
-        super(context, DATABASENAME, null , DATABASEVERSION);
         this.context = context;
-    }
-
-    @Override
-    public void onCreate(SQLiteDatabase sqLiteDatabase) {
-
-        String createTable = "CREATE TABLE " + TABLECONSUMPTIONS + "("
-                + ID + " INTEGER PRIMARY KEY AUTOINCREMENT,"
-                + DATE + " TEXT,"
-                + ITEMID + " NUMBER "
-                + ")";
-
-        sqLiteDatabase.execSQL(createTable);
-
-
-    }
-
-    @Override
-    public void onUpgrade(SQLiteDatabase sqLiteDatabase, int i, int i1) {
-
+        databaseHelper = new DatabaseHelper(context);
     }
 
     public void addConsumptionToDatabases(Integer itemID) {
@@ -59,7 +33,7 @@ public class ConsumptionsDAO extends SQLiteOpenHelper {
 
     public Consumption getConsumptionFromLocalDB(Long consumptionID){
 
-        SQLiteDatabase database = getReadableDatabase();
+        SQLiteDatabase database = databaseHelper.getReadableDatabase();
 
         String selectQuery = "SELECT * FROM " + TABLECONSUMPTIONS + " WHERE " + ID + " = " + consumptionID;
 
@@ -71,6 +45,8 @@ public class ConsumptionsDAO extends SQLiteOpenHelper {
             consumption.setDateOfConsumption(cursor.getInt(cursor.getColumnIndex(DATE)));
             consumption.setItemID(cursor.getInt(cursor.getColumnIndex(ITEMID)));
 
+            cursor.close();
+
             return consumption;
         }
 
@@ -79,14 +55,12 @@ public class ConsumptionsDAO extends SQLiteOpenHelper {
 
     public Integer currentDateInDays(){
 
-        Integer date = (int) (System.currentTimeMillis()/1000/60/60/24);
-
-        return date;
+        return (Integer) (int) (System.currentTimeMillis()/1000/60/60/24);
     }
 
     public Long addConsumptionToLocalDB(Integer itemID){
 
-        SQLiteDatabase database = getWritableDatabase();
+        SQLiteDatabase database = databaseHelper.getWritableDatabase();
 
         ContentValues row = new ContentValues();
 

@@ -4,7 +4,6 @@ import android.content.ContentValues;
 import android.content.Context;
 import android.database.Cursor;
 import android.database.sqlite.SQLiteDatabase;
-import android.database.sqlite.SQLiteOpenHelper;
 import android.os.AsyncTask;
 import android.widget.Toast;
 
@@ -14,21 +13,14 @@ import com.google.firebase.database.DatabaseReference;
 import com.google.firebase.database.FirebaseDatabase;
 import com.google.firebase.database.ValueEventListener;
 import com.santiagogil.takestock.model.pojos.Item;
-import com.santiagogil.takestock.util.HTTPConnectionManager;
 import com.santiagogil.takestock.util.ResultListener;
 
 import java.util.ArrayList;
 import java.util.List;
 
-/**
- * Created by digitalhouse on 24/12/16.
- */
-public class ItemsDAO extends SQLiteOpenHelper {
+public class ItemsDAO{
 
-    private static final String DATABASENAME = "ItemsDB";
-    private static final Integer DATABASEVERSION = 1;
-
-    private static final String TABLEITEMS = "Item";
+    private static final String TABLEITEMS = DatabaseHelper.TABLEITEMS;
     private static final String ID = "ID";
     private static final String NAME = "Name"  ;
     private static final String STOCK = "Stock" ;
@@ -38,33 +30,11 @@ public class ItemsDAO extends SQLiteOpenHelper {
 
     private List<Item> items = new ArrayList<>();
     private Context context;
-    private HTTPConnectionManager httpConnectionManager;
+    private DatabaseHelper databaseHelper;
 
     public ItemsDAO (Context context){
-        super(context, DATABASENAME, null, DATABASEVERSION);
-        //httpConnectionManager = new HTTPConnectionManager();
         this.context = context;
-    }
-
-    @Override
-    public void onCreate(SQLiteDatabase sqLiteDatabase) {
-
-        String createTable = "CREATE TABLE " + TABLEITEMS + "("
-                + ID + " INTEGER PRIMARY KEY AUTOINCREMENT,"
-                + NAME + " TEXT,"
-                + STOCK + " NUMBER,"
-                + IMAGE + " TEXT, "
-                + CONSUMPTIONRATE + " NUMBER, "
-                + MINIMUMPURCHACEQUANTITY + " NUMBER "
-                + ")";
-
-        sqLiteDatabase.execSQL(createTable);
-
-    }
-
-    @Override
-    public void onUpgrade(SQLiteDatabase sqLiteDatabase, int i, int i1) {
-
+        databaseHelper = new DatabaseHelper(context);
     }
 
     public void addItemToDatabases(final Item item) {
@@ -80,11 +50,11 @@ public class ItemsDAO extends SQLiteOpenHelper {
         DatabaseReference myRef = firebaseDatabase.getReference();
         myRef.child("items").child(item.getID().toString()).setValue(item);
 
-    };
+    }
 
     public void addItemToLocalDB(Item item){
 
-        SQLiteDatabase database = getWritableDatabase();
+        SQLiteDatabase database = databaseHelper.getWritableDatabase();
 
         ContentValues row = new ContentValues();
 
@@ -101,7 +71,7 @@ public class ItemsDAO extends SQLiteOpenHelper {
 
     public Item getItemFromLocalDB(String itemName){
 
-        SQLiteDatabase database = getReadableDatabase();
+        SQLiteDatabase database = databaseHelper.getReadableDatabase();
 
         String selectQuery = "SELECT * FROM " + TABLEITEMS + " WHERE " + NAME + " = " + '"'
                 +  itemName + '"';
@@ -113,8 +83,10 @@ public class ItemsDAO extends SQLiteOpenHelper {
             item.setImage(cursor.getInt(cursor.getColumnIndex(IMAGE)));
             item.setMinimumPurchaceQuantity(cursor.getInt(cursor.getColumnIndex(MINIMUMPURCHACEQUANTITY)));
             item.setName(cursor.getString(cursor.getColumnIndex(NAME)));
-            item.setStock((Integer) cursor.getInt(cursor.getColumnIndex(STOCK)));
-            item.setConsumptionRate((Integer) cursor.getInt(cursor.getColumnIndex(CONSUMPTIONRATE)));
+            item.setStock(cursor.getInt(cursor.getColumnIndex(STOCK)));
+            item.setConsumptionRate(cursor.getInt(cursor.getColumnIndex(CONSUMPTIONRATE)));
+
+            cursor.close();
 
             return item;
 
@@ -153,7 +125,7 @@ public class ItemsDAO extends SQLiteOpenHelper {
 
     public void getItemsFromLocalDB(final ResultListener<List<Item>> litenerFromController) {
 
-        SQLiteDatabase database = getReadableDatabase();
+        SQLiteDatabase database = databaseHelper.getReadableDatabase();
 
         String selectQuery = "SELECT * FROM " + TABLEITEMS;
         Cursor cursor = database.rawQuery(selectQuery, null);
@@ -174,13 +146,14 @@ public class ItemsDAO extends SQLiteOpenHelper {
 
         }
 
+        cursor.close();
         database.close();
         litenerFromController.finish(items);
     }
 
     public List<Item> getItemsFromLocalDB() {
 
-        SQLiteDatabase database = getReadableDatabase();
+        SQLiteDatabase database = databaseHelper.getReadableDatabase();
 
         String selectQuery = "SELECT * FROM " + TABLEITEMS;
         Cursor cursor = database.rawQuery(selectQuery, null);
@@ -194,13 +167,13 @@ public class ItemsDAO extends SQLiteOpenHelper {
             item.setImage(cursor.getInt(cursor.getColumnIndex(IMAGE)));
             item.setMinimumPurchaceQuantity(cursor.getInt(cursor.getColumnIndex(MINIMUMPURCHACEQUANTITY)));
             item.setName(cursor.getString(cursor.getColumnIndex(NAME)));
-            item.setStock((Integer) cursor.getInt(cursor.getColumnIndex(STOCK)));
-            item.setConsumptionRate((Integer) cursor.getInt(cursor.getColumnIndex(CONSUMPTIONRATE)));
+            item.setStock(cursor.getInt(cursor.getColumnIndex(STOCK)));
+            item.setConsumptionRate(cursor.getInt(cursor.getColumnIndex(CONSUMPTIONRATE)));
 
             items.add(item);
 
         }
-
+        cursor.close();
         database.close();
         return items;
     }
@@ -228,7 +201,7 @@ public class ItemsDAO extends SQLiteOpenHelper {
 
         updateItemStockFirebase.execute();
 
-        SQLiteDatabase database = getWritableDatabase();
+        SQLiteDatabase database =  databaseHelper.getWritableDatabase();
 
         ContentValues contentValues = new ContentValues();
         contentValues.put(STOCK, newStock);
@@ -237,53 +210,6 @@ public class ItemsDAO extends SQLiteOpenHelper {
 
         database.close();
 
-    }
-
-    private class RetrieveItemsFromFirebaseAsync extends AsyncTask<String, Void, List<Item>> {
-
-        private ResultListener<List<Item>> listenerFromController;
-
-        public RetrieveItemsFromFirebaseAsync(ResultListener<List<Item>> listenerFromController) {
-            this.listenerFromController = listenerFromController;
-        }
-
-        @Override
-        protected List<Item> doInBackground(String... strings) {
-
-            final List<Item> items = new ArrayList<>();
-
-            try{
-                FirebaseDatabase firebaseDatabase = FirebaseDatabase.getInstance();
-                DatabaseReference dbRef = firebaseDatabase.getReference().child("items");
-
-                dbRef.addListenerForSingleValueEvent(new ValueEventListener()   {
-                    @Override
-                    public void onDataChange(DataSnapshot dataSnapshot) {
-                        for (DataSnapshot data : dataSnapshot.getChildren()){
-                            Item item = data.getValue(Item.class);
-                            items.add(item);
-
-                        }
-                    }
-
-                    @Override
-                    public void onCancelled(DatabaseError databaseError) {
-
-                        Toast.makeText(context, "itemsDAO.getItemsFromFirebase FAILED", Toast.LENGTH_SHORT).show();
-                    }
-                });
-
-            } catch (Exception e){
-                e.printStackTrace();
-            }
-
-            return items;
-        }
-
-        @Override
-        protected void onPostExecute(List<Item> items) {
-            listenerFromController.finish(items);
-        }
     }
 
     private class UpdateItemStockFirebase extends AsyncTask<String, Void, Void>{
@@ -335,7 +261,7 @@ public class ItemsDAO extends SQLiteOpenHelper {
 
     public void deleteItemFromLocalDB(Integer ID){
 
-        SQLiteDatabase database = getWritableDatabase();
+        SQLiteDatabase database = databaseHelper.getWritableDatabase();
 
         try {
             database.delete(TABLEITEMS, ItemsDAO.ID + " = " + ID, null);
@@ -345,5 +271,16 @@ public class ItemsDAO extends SQLiteOpenHelper {
 
         }
     }
+
+/*
+    public void updateItemConsumptionRate(Integer ItemID){
+
+        ConsumptionController consumptionController = new ConsumptionController();
+        Integer consumptionRate = ConsumptionsDAO.getItemConsumptionRate(Integer ItemID);
+        updateItemConsumptionRateInLocalDB(ItemID, consumptionRate);
+        updateItemConsumptionRateInFirebase(ItemID, conumptionRate)
+
+    }
+*/
 
 }
