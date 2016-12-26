@@ -13,5 +13,13 @@ public class ConsumptionController {
 
     }
 
+    public Integer getItemConsumptionRate(Context context, Integer itemID){
+
+        ConsumptionsDAO consumptionsDAO = new ConsumptionsDAO(context);
+        return consumptionsDAO.getItemConsumptionRate(itemID);
+
+    }
+
+
 }
 

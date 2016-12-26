@@ -127,6 +127,7 @@ public class ItemRecyclerAdapter extends RecyclerView.Adapter implements View.On
             itemsController.decreaseItemStock(context, item);
             ConsumptionController consumptionController = new ConsumptionController();
             consumptionController.addConsumptionToDatabases(context, item.getID());
+            itemsController.updateItemConsumptionDate(context, item.getID());
         }
 
 

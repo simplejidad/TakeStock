@@ -12,6 +12,7 @@ import com.google.firebase.database.DatabaseError;
 import com.google.firebase.database.DatabaseReference;
 import com.google.firebase.database.FirebaseDatabase;
 import com.google.firebase.database.ValueEventListener;
+import com.santiagogil.takestock.controller.ConsumptionController;
 import com.santiagogil.takestock.model.pojos.Item;
 import com.santiagogil.takestock.util.ResultListener;
 
@@ -212,6 +213,26 @@ public class ItemsDAO{
 
     }
 
+    private class UpdateItemConsumptionRateFirebase extends AsyncTask<String, Void, Void>{
+
+        private Integer itemId;
+        private Integer consumptionRate;
+
+        public UpdateItemConsumptionRateFirebase(Integer itemId, Integer consumptionRate) {
+
+            this.itemId = itemId;
+            this.consumptionRate = consumptionRate;
+        }
+
+        @Override
+        protected Void doInBackground(String... strings) {
+
+            updateItemConsumptionRateInFirebase(itemId, consumptionRate);
+
+            return null;
+        }
+    }
+
     private class UpdateItemStockFirebase extends AsyncTask<String, Void, Void>{
 
         private Item item;
@@ -241,6 +262,7 @@ public class ItemsDAO{
 
         @Override
         protected Void doInBackground(String... strings) {
+
             addItemToFirebase(item);
 
             return null;
@@ -272,15 +294,32 @@ public class ItemsDAO{
         }
     }
 
-/*
-    public void updateItemConsumptionRate(Integer ItemID){
 
-        ConsumptionController consumptionController = new ConsumptionController();
-        Integer consumptionRate = ConsumptionsDAO.getItemConsumptionRate(Integer ItemID);
-        updateItemConsumptionRateInLocalDB(ItemID, consumptionRate);
-        updateItemConsumptionRateInFirebase(ItemID, conumptionRate)
+    public void updateItemConsumptionRateInDatabases(Integer itemID, Integer consumptionRate){
+
+        updateItemConsumptionRateInLocalDB(itemID, consumptionRate);
+        updateItemConsumptionRateInFirebase(itemID, consumptionRate);
+
 
     }
-*/
+
+    public void updateItemConsumptionRateInFirebase(Integer itemID, Integer consumptionRate){
+
+        UpdateItemConsumptionRateFirebase updateItemConsumptionRateFirebase = new UpdateItemConsumptionRateFirebase(itemID, consumptionRate);
+        updateItemConsumptionRateFirebase.execute();
+
+    }
+
+    public void updateItemConsumptionRateInLocalDB(Integer itemID, Integer consumptionRate){
+
+        SQLiteDatabase database = new DatabaseHelper(context).getWritableDatabase();
+
+        ContentValues contentValues = new ContentValues();
+        contentValues.put(CONSUMPTIONRATE, consumptionRate);
+
+        database.update(TABLEITEMS, contentValues, ID + " = " + itemID, null);
+
+    }
+
 
 }

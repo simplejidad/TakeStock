@@ -68,10 +68,12 @@ public class ItemsController {
         itemsDAO.addItemToLocalDB(item);
     }
 
-    public void updateItemConsumptionDate(Integer ItemID){
+    public void updateItemConsumptionDate(Context context, Integer itemID){
 
         ConsumptionController consumptionsController = new ConsumptionController();
-        //consumptionsController.getItemConsumptionRate()
+        Integer updatedConsumptionDate = consumptionsController.getItemConsumptionRate(context, itemID);
+        ItemsDAO itemsDAO = new ItemsDAO(context);
+        itemsDAO.updateItemConsumptionRateInDatabases(itemID, updatedConsumptionDate);
 
     }
 }
