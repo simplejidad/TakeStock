@@ -7,6 +7,7 @@ import android.view.View;
 import android.view.ViewGroup;
 import android.widget.Button;
 import android.widget.TextView;
+import android.widget.Toast;
 
 import com.santiagogil.takestock.R;
 import com.santiagogil.takestock.controller.ConsumptionController;
@@ -123,15 +124,17 @@ public class ItemRecyclerAdapter extends RecyclerView.Adapter implements View.On
         }
 
         public void decreaseItemStock(Item item){
-            ItemsController itemsController = new ItemsController();
-            itemsController.decreaseItemStock(context, item);
-            ConsumptionController consumptionController = new ConsumptionController();
-            consumptionController.addConsumptionToDatabases(context, item.getID());
-            itemsController.updateItemConsumptionDate(context, item.getID());
+
+            if(item.getStock() == 0){
+                Toast.makeText(context, "Nothing left to consume", Toast.LENGTH_SHORT).show();
+            } else {
+
+                ItemsController itemsController = new ItemsController();
+                itemsController.decreaseItemStock(context, item);
+                ConsumptionController consumptionController = new ConsumptionController();
+                consumptionController.addConsumptionToDatabases(context, item.getID());
+                itemsController.updateItemConsumptionDate(context, item.getID());
+            }
         }
-
-
-
     }
-
 }
