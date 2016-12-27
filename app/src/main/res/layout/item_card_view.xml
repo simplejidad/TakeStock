@@ -3,50 +3,60 @@
     xmlns:app="http://schemas.android.com/apk/res-auto"
     android:orientation="vertical"
     android:layout_width="match_parent"
-    android:layout_height="50dp"
-    android:layout_margin="5dp"
-    app:cardCornerRadius="10dp">
+    android:layout_height="wrap_content"
+    android:layout_margin="4dp"
+    app:cardCornerRadius="10dp"
+    android:minHeight="50dp">
 
-    <RelativeLayout
+    <LinearLayout
         android:layout_width="match_parent"
         android:layout_height="match_parent"
         android:orientation="horizontal"
+        android:minHeight="50dp"
         >
 
         <Button
             android:id="@+id/buttonSubtract"
-            android:layout_width="50dp"
-            android:layout_height="wrap_content"
+            android:layout_width="0dp"
+            android:layout_weight="3"
+            android:layout_height="match_parent"
             android:text="-"
-            android:layout_alignParentLeft="true"
+            android:layout_gravity="center"
             android:textSize="24dp"
           />
 
+
+
         <TextView
             android:id="@+id/textViewItemName"
-            android:layout_width="wrap_content"
+            android:layout_width="0dp"
+            android:layout_weight="10"
             android:layout_height="wrap_content"
             android:text="Descripción"
             android:layout_margin="5dp"
             android:textSize="18dp"
-            android:layout_toRightOf="@+id/buttonSubtract"
+            android:layout_gravity="center"
             android:layout_centerVertical="true"
             />
 
         <TextView
             android:textSize="18dp"
             android:id="@+id/textViewX"
+            android:layout_gravity="center"
             android:layout_toRightOf="@+id/textViewItemName"
-            android:layout_width="wrap_content"
+            android:layout_width="0dp"
+            android:layout_weight="1"
             android:layout_height="wrap_content"
-            android:text="X"
+            android:text="x"
             android:layout_margin="5dp"
-            android:layout_centerVertical="true"
+
             />
 
         <TextView
             android:id="@+id/textViewStock"
-            android:layout_width="wrap_content"
+            android:layout_width="0dp"
+            android:layout_weight="1"
+            android:layout_gravity="center"
             android:layout_height="wrap_content"
             android:text="0"
             android:textSize="18dp"
@@ -55,10 +65,15 @@
             android:layout_centerVertical="true"
             />
 
+
+
+
+
         <Button
             android:id="@+id/buttonAdd"
-            android:layout_width="50dp"
-            android:layout_height="wrap_content"
+            android:layout_width="0dp"
+            android:layout_weight="3"
+            android:layout_height="match_parent"
             android:text="+"
             android:textSize="18dp"
             android:layout_alignParentRight="true"
@@ -67,7 +82,7 @@
 
 
 
-    </RelativeLayout>
+    </LinearLayout>
 
 
 

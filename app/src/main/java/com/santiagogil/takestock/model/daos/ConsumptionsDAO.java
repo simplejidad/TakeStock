@@ -103,6 +103,8 @@ public class ConsumptionsDAO{
             dates.add(cursor.getInt(cursor.getColumnIndex(DATE)));
         }
 
+        cursor.close();
+
         Collections.sort(dates);
 
         List<Integer> differences = new ArrayList<>();

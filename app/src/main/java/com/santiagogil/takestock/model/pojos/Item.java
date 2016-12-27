@@ -1,9 +1,11 @@
 package com.santiagogil.takestock.model.pojos;
 
+import java.io.Serializable;
+
 /**
  * Created by digitalhouse on 24/12/16.
  */
-public class Item {
+public class Item { //implements Comparable<Item>, Serializable {
 
     static final Integer DEFAULT_CONSUMPTION_RATE = 90;
 
@@ -18,6 +20,17 @@ public class Item {
     public Item(){
 
     }
+
+  /*  @Override
+    public int compareTo(Item item) {
+
+        String otherItemName = ((Item) item).getName();
+        String currentItemName = this.getName();
+
+        return compareNames(otherItemName, currentItemName);
+    }
+*/
+
 
     public Integer getConsumptionRate() {
         return consumptionRate;
