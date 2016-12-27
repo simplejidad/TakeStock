@@ -29,7 +29,7 @@ public class ConsumptionsDAO{
         databaseHelper = new DatabaseHelper(context);
     }
 
-    public void addConsumptionToDatabases(Integer itemID) {
+    public void addConsumptionToDatabases(Long itemID) {
         Long consumptionID = addConsumptionToLocalDB(itemID);
         AddConsumptionToFirebaseTask addConsumptionToFirebaseTask = new AddConsumptionToFirebaseTask(getConsumptionFromLocalDB(consumptionID));
         addConsumptionToFirebaseTask.execute();
@@ -62,7 +62,7 @@ public class ConsumptionsDAO{
         return (Integer) (int) (System.currentTimeMillis()/1000/60/60/24);
     }
 
-    public Long addConsumptionToLocalDB(Integer itemID){
+    public Long addConsumptionToLocalDB(Long itemID){
 
         SQLiteDatabase database = databaseHelper.getWritableDatabase();
 
@@ -87,7 +87,7 @@ public class ConsumptionsDAO{
 
     }
 
-    public Integer getItemConsumptionRate(Integer itemID){
+    public Integer getItemConsumptionRate(Long itemID){
 
         SQLiteDatabase database = new DatabaseHelper(context).getReadableDatabase();
 

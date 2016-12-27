@@ -16,9 +16,10 @@ import com.santiagogil.takestock.model.pojos.Item;
 
 public class FragmentItemDetail extends Fragment {
 
-    public static FragmentItemDetail provideFragment(Item item){
+    public static FragmentItemDetail provideFragment(Item item, Integer position){
         Bundle bundle = new Bundle();
-        bundle.putInt(FragmentItemDetail.ID, item.getID());
+        bundle.putInt(FragmentItemDetail.POSITION, position);
+        bundle.putLong(FragmentItemDetail.ID, item.getID());
         bundle.putString(FragmentItemDetail.NAME, item.getName());
         bundle.putInt(FragmentItemDetail.STOCK, item.getStock());
         bundle.putInt(FragmentItemDetail.MINIMUM_PURCHASE_QUANTITY, item.getMinimumPurchaceQuantity());
@@ -38,6 +39,7 @@ public class FragmentItemDetail extends Fragment {
     private View fragmentView;
     private Button deleteButton;
 
+    static final String POSITION = "position";
     static final String ID = "id";
     static final String STOCK = "stock";
     static final String NAME = "name";
@@ -62,10 +64,10 @@ public class FragmentItemDetail extends Fragment {
             @Override
             public void onClick(View view) {
                 ItemsController itemsController = new ItemsController();
-                itemsController.deleteItemFromDatabases(getContext(), bundle.getInt(ID));
+                itemsController.deleteItemFromDatabases(getContext(), bundle.getLong(ID));
                 Toast.makeText(getContext(), "Item Deleted", Toast.LENGTH_SHORT).show();
                 FragmentActivityCommunicator fragmentActivityCommunicator = (FragmentActivityCommunicator) getActivity();
-                fragmentActivityCommunicator.refreshFragmentMainView();
+                fragmentActivityCommunicator.refreshFragmentMainView(bundle.getInt(POSITION));
             }
         });
 
@@ -79,7 +81,7 @@ public class FragmentItemDetail extends Fragment {
     }
 
     public interface FragmentActivityCommunicator{
-        void refreshFragmentMainView();
+        void refreshFragmentMainView(Integer position);
     }
 
 

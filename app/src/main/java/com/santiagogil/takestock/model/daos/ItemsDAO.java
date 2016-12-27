@@ -12,11 +12,12 @@ import com.google.firebase.database.DatabaseError;
 import com.google.firebase.database.DatabaseReference;
 import com.google.firebase.database.FirebaseDatabase;
 import com.google.firebase.database.ValueEventListener;
-import com.santiagogil.takestock.controller.ConsumptionController;
 import com.santiagogil.takestock.model.pojos.Item;
 import com.santiagogil.takestock.util.ResultListener;
 
 import java.util.ArrayList;
+import java.util.Collections;
+import java.util.Comparator;
 import java.util.List;
 
 public class ItemsDAO{
@@ -38,11 +39,13 @@ public class ItemsDAO{
         databaseHelper = new DatabaseHelper(context);
     }
 
-    public void addItemToDatabases(final Item item) {
+    public Long addItemToDatabases(final Item item) {
 
         addItemToLocalDB(item);
-        AddItemToFirebaseTask addItemToFirebaseTask = new AddItemToFirebaseTask(getItemFromLocalDB(item.getName()));
+        Item itemWithID = getItemFromLocalDB(item.getName());
+        AddItemToFirebaseTask addItemToFirebaseTask = new AddItemToFirebaseTask(itemWithID);
         addItemToFirebaseTask.execute();
+        return itemWithID.getID();
     }
 
     public void addItemToFirebase(Item item){
@@ -70,6 +73,32 @@ public class ItemsDAO{
         database.close();
     }
 
+    public void getAllItemsFromLocalDBSortedAlphabetically(final ResultListener<List<Item>> listenerFromController){
+
+        List<Item> items = getItemsFromLocalDBSortedByID();
+        Collections.sort(items, new Comparator<Item>(){
+            public int compare (Item o1, Item o2){
+                return o1.getName().compareTo(o2.getName());
+            }
+        });
+
+        listenerFromController.finish(items);
+
+    }
+
+    public List<Item> getAllItemsFromLocalDBSortedAlphabetically(){
+
+        List<Item> items = getItemsFromLocalDBSortedByID();
+        Collections.sort(items, new Comparator<Item>(){
+            public int compare (Item o1, Item o2){
+                return o1.getName().compareTo(o2.getName());
+            }
+        });
+
+        return items;
+
+    }
+
     public Item getItemFromLocalDB(String itemName){
 
         SQLiteDatabase database = databaseHelper.getReadableDatabase();
@@ -80,7 +109,7 @@ public class ItemsDAO{
         if (cursor.moveToNext()){
 
             Item item = new Item();
-            item.setID(cursor.getInt(cursor.getColumnIndex(ID)));
+            item.setID(cursor.getLong(cursor.getColumnIndex(ID)));
             item.setImage(cursor.getInt(cursor.getColumnIndex(IMAGE)));
             item.setMinimumPurchaceQuantity(cursor.getInt(cursor.getColumnIndex(MINIMUMPURCHACEQUANTITY)));
             item.setName(cursor.getString(cursor.getColumnIndex(NAME)));
@@ -124,35 +153,15 @@ public class ItemsDAO{
 
     }
 
-    public void getItemsFromLocalDB(final ResultListener<List<Item>> litenerFromController) {
+    public void getItemsFromLocalDBSortedByID(final ResultListener<List<Item>> litenerFromController) {
 
-        SQLiteDatabase database = databaseHelper.getReadableDatabase();
-
-        String selectQuery = "SELECT * FROM " + TABLEITEMS;
-        Cursor cursor = database.rawQuery(selectQuery, null);
-
-        List<Item> items = new ArrayList<>();
-
-        while (cursor.moveToNext()) {
-
-            Item item = new Item();
-            item.setID(cursor.getInt(cursor.getColumnIndex(ID)));
-            item.setImage(cursor.getInt(cursor.getColumnIndex(IMAGE)));
-            item.setMinimumPurchaceQuantity(cursor.getInt(cursor.getColumnIndex(MINIMUMPURCHACEQUANTITY)));
-            item.setName(cursor.getString(cursor.getColumnIndex(NAME)));
-            item.setStock(cursor.getInt(cursor.getColumnIndex(STOCK)));
-            item.setConsumptionRate(cursor.getInt(cursor.getColumnIndex(CONSUMPTIONRATE)));
-
-            items.add(item);
-
-        }
-
-        cursor.close();
-        database.close();
+        List<Item> items = getItemsFromLocalDBSortedByID();
         litenerFromController.finish(items);
     }
 
-    public List<Item> getItemsFromLocalDB() {
+
+
+    public List<Item> getItemsFromLocalDBSortedByID() {
 
         SQLiteDatabase database = databaseHelper.getReadableDatabase();
 
@@ -164,7 +173,7 @@ public class ItemsDAO{
         while (cursor.moveToNext()) {
 
             Item item = new Item();
-            item.setID(cursor.getInt(cursor.getColumnIndex(ID)));
+            item.setID(cursor.getLong(cursor.getColumnIndex(ID)));
             item.setImage(cursor.getInt(cursor.getColumnIndex(IMAGE)));
             item.setMinimumPurchaceQuantity(cursor.getInt(cursor.getColumnIndex(MINIMUMPURCHACEQUANTITY)));
             item.setName(cursor.getString(cursor.getColumnIndex(NAME)));
@@ -215,10 +224,10 @@ public class ItemsDAO{
 
     private class UpdateItemConsumptionRateFirebase extends AsyncTask<String, Void, Void>{
 
-        private Integer itemId;
+        private Long itemId;
         private Integer consumptionRate;
 
-        public UpdateItemConsumptionRateFirebase(Integer itemId, Integer consumptionRate) {
+        public UpdateItemConsumptionRateFirebase(Long itemId, Integer consumptionRate) {
 
             this.itemId = itemId;
             this.consumptionRate = consumptionRate;
@@ -275,13 +284,13 @@ public class ItemsDAO{
         }
     }
 
-    public void deleteItemFromDatabases(Integer ID){
+    public void deleteItemFromDatabases(Long ID){
 
         deleteItemFromLocalDB(ID);
 
     }
 
-    public void deleteItemFromLocalDB(Integer ID){
+    public void deleteItemFromLocalDB(Long ID){
 
         SQLiteDatabase database = databaseHelper.getWritableDatabase();
 
@@ -295,7 +304,7 @@ public class ItemsDAO{
     }
 
 
-    public void updateItemConsumptionRateInDatabases(Integer itemID, Integer consumptionRate){
+    public void updateItemConsumptionRateInDatabases(Long itemID, Integer consumptionRate){
 
         updateItemConsumptionRateInLocalDB(itemID, consumptionRate);
         updateItemConsumptionRateInFirebase(itemID, consumptionRate);
@@ -303,14 +312,14 @@ public class ItemsDAO{
 
     }
 
-    public void updateItemConsumptionRateInFirebase(Integer itemID, Integer consumptionRate){
+    public void updateItemConsumptionRateInFirebase(Long itemID, Integer consumptionRate){
 
         UpdateItemConsumptionRateFirebase updateItemConsumptionRateFirebase = new UpdateItemConsumptionRateFirebase(itemID, consumptionRate);
         updateItemConsumptionRateFirebase.execute();
 
     }
 
-    public void updateItemConsumptionRateInLocalDB(Integer itemID, Integer consumptionRate){
+    public void updateItemConsumptionRateInLocalDB(Long itemID, Integer consumptionRate){
 
         SQLiteDatabase database = new DatabaseHelper(context).getWritableDatabase();
 

@@ -1,5 +1,6 @@
 package com.santiagogil.takestock.view;
 
+import android.content.Context;
 import android.os.Bundle;
 import android.support.annotation.Nullable;
 import android.support.v4.app.Fragment;
@@ -8,6 +9,8 @@ import android.support.v7.widget.RecyclerView;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
+import android.view.WindowManager;
+import android.view.inputmethod.InputMethodManager;
 import android.widget.Button;
 import android.widget.EditText;
 import android.widget.Toast;
@@ -25,6 +28,9 @@ public class FragmentMainView extends Fragment implements View.OnClickListener{
     private RecyclerView recyclerView;
     private EditText editTextAddItem;
     private ItemRecyclerAdapter itemRecyclerAdapter;
+    private Button buttonAddItem;
+
+    public static final String POSITION = "position";
 
     @Nullable
     @Override
@@ -33,9 +39,12 @@ public class FragmentMainView extends Fragment implements View.OnClickListener{
         View view = inflater.inflate(R.layout.fragment_main_view, container, false);
         itemsController = new ItemsController();
 
+        //this.getActivity().getWindow().setSoftInputMode(WindowManager.LayoutParams.SOFT_INPUT_STATE_ALWAYS_HIDDEN);
+
+        buttonAddItem = (Button) view.findViewById(R.id.buttonNewItem);
         recyclerView = (RecyclerView) view.findViewById(R.id.recyclerViewItems);
         itemRecyclerAdapter = new ItemRecyclerAdapter(getContext(), this, new ItemListener());
-        itemsController.getItems(getContext(), new ResultListener<List<Item>>() {
+        itemsController.getItemsSortedAlphabetically(getContext(), new ResultListener<List<Item>>() {
             @Override
             public void finish(List<Item> result) {
                 itemRecyclerAdapter.setItems(result);
@@ -64,6 +73,26 @@ public class FragmentMainView extends Fragment implements View.OnClickListener{
             }
         });
 
+        Bundle bundle = getArguments();
+        if(bundle != null){
+
+            Integer position = null;
+
+            try {
+                position = bundle.getInt(POSITION);
+            }catch (Exception e){
+                Toast.makeText(getContext(), "No position in bundle", Toast.LENGTH_SHORT).show();
+            }
+
+            if (position <= itemRecyclerAdapter.getItems().size()){
+
+                recyclerView.scrollToPosition(bundle.getInt(POSITION));
+
+            }
+        }
+
+        this.getActivity().getWindow().setSoftInputMode(WindowManager.LayoutParams.SOFT_INPUT_STATE_HIDDEN);
+
         return view;
 
     }
@@ -75,7 +104,7 @@ public class FragmentMainView extends Fragment implements View.OnClickListener{
     }
 
     public interface FragmentActivityCommunicator {
-        void onItemTouched(Item touchedItem);
+        void onItemTouched(Item touchedItem, Integer touchedPosition);
     }
 
     public class ItemListener implements View.OnClickListener {
@@ -86,38 +115,34 @@ public class FragmentMainView extends Fragment implements View.OnClickListener{
             Item touchedItem = itemRecyclerAdapter.getItemAtPosition(touchedPosition);
 
             FragmentActivityCommunicator fragmentActivityCommunicator = (FragmentActivityCommunicator) getActivity();
-            fragmentActivityCommunicator.onItemTouched(touchedItem);
+            fragmentActivityCommunicator.onItemTouched(touchedItem, touchedPosition);
 
         }
     }
-
-    public void updateRecyclerAdapter (){
-
-        itemsController.getItems(getContext(), new ResultListener<List<Item>>() {
-            @Override
-            public void finish(List<Item> result) {
-
-                itemRecyclerAdapter.setItems(result);
-                itemRecyclerAdapter.notifyDataSetChanged();
-
-                if(itemsController.getItemsFromLocalDatabase(getContext()).size() == 0) {
-                    for (Item item : result){
-                        itemsController.addItemToLocalDatabase(getContext(), item);
-                    }
-                };
-            }
-        });
-    }
-
-
 
     public void addNewItem(View view){
         String itemName = editTextAddItem.getText().toString();
         editTextAddItem.setText("");
         Item item = new Item(itemName);
-        itemsController.addItemToDatabases(view.getContext(), item);
-        Toast.makeText(view.getContext(), item.getName() + " has been added.", Toast.LENGTH_SHORT).show();
-        itemRecyclerAdapter.setItems(itemsController.getItemsFromLocalDatabase(getContext()));
+        Long newItemID = itemsController.addItemToDatabases(view.getContext(), item);
+        //TODO: check if item already exists
+        //Toast.makeText(view.getContext(), item.getName() + " has been added.", Toast.LENGTH_SHORT).show();
+        List<Item> items = itemsController.getItemsFromLocalDBsortedAlphabetically(getContext());
+        itemRecyclerAdapter.setItems(items);
         itemRecyclerAdapter.notifyDataSetChanged();
+        InputMethodManager inputMethodManager = (InputMethodManager) getActivity().getSystemService(Context.INPUT_METHOD_SERVICE);
+        inputMethodManager.hideSoftInputFromWindow(getActivity().getCurrentFocus().getWindowToken(), 0);
+        recyclerView.getLayoutManager().smoothScrollToPosition(recyclerView, null, findItemPosition(newItemID));
+
+    }
+
+    public Integer findItemPosition(Long itemID){
+        List<Item> items = itemRecyclerAdapter.getItems();
+        for(Item item : items){
+            if(item.getID().equals(itemID)){
+                return(items.indexOf(item));
+            }
+        }
+        return null;
     }
 }
