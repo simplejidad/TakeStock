@@ -28,7 +28,6 @@ public class FragmentMainView extends Fragment implements View.OnClickListener{
     private RecyclerView recyclerView;
     private EditText editTextAddItem;
     private ItemRecyclerAdapter itemRecyclerAdapter;
-    private Button buttonAddItem;
 
     public static final String POSITION = "position";
 
@@ -38,10 +37,6 @@ public class FragmentMainView extends Fragment implements View.OnClickListener{
 
         View view = inflater.inflate(R.layout.fragment_main_view, container, false);
         itemsController = new ItemsController();
-
-        //this.getActivity().getWindow().setSoftInputMode(WindowManager.LayoutParams.SOFT_INPUT_STATE_ALWAYS_HIDDEN);
-
-        buttonAddItem = (Button) view.findViewById(R.id.buttonNewItem);
         recyclerView = (RecyclerView) view.findViewById(R.id.recyclerViewItems);
         itemRecyclerAdapter = new ItemRecyclerAdapter(getContext(), this, new ItemListener());
         itemsController.getItemsSortedAlphabetically(getContext(), new ResultListener<List<Item>>() {
@@ -86,8 +81,10 @@ public class FragmentMainView extends Fragment implements View.OnClickListener{
 
             if (position <= itemRecyclerAdapter.getItems().size()){
 
-                recyclerView.scrollToPosition(bundle.getInt(POSITION));
+                recyclerView.scrollToPosition(position);
 
+            } else if(position > 0){
+                recyclerView.scrollToPosition(position - 1);
             }
         }
 

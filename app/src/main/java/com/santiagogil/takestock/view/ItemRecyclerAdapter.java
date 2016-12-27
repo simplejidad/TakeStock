@@ -43,8 +43,7 @@ public class ItemRecyclerAdapter extends RecyclerView.Adapter implements View.On
         LayoutInflater inflater = LayoutInflater.from(context);
         View view = inflater.inflate(R.layout.item_card_view, parent, false);
         view.setOnClickListener(onTouchedItemListener);
-        ItemViewHolder itemViewHolder = new ItemViewHolder(view, context, onStockModifiedListener);
-        return itemViewHolder;
+        return new ItemViewHolder(view, context, onStockModifiedListener);
     }
 
     @Override
@@ -69,10 +68,6 @@ public class ItemRecyclerAdapter extends RecyclerView.Adapter implements View.On
 
     }
 
-    public interface OnItemClickedListener {
-        void onItemClick(Item item);
-    }
-
     static class ItemViewHolder extends RecyclerView.ViewHolder {
 
         private TextView textViewItemName;
@@ -80,7 +75,6 @@ public class ItemRecyclerAdapter extends RecyclerView.Adapter implements View.On
         private Button buttonSubtract;
         private Button buttonAdd;
         private Context context;
-        private Item item;
         private View.OnClickListener onStockModifiedListener;
 
         public ItemViewHolder(View itemView, Context context, View.OnClickListener onStockModifiedListener) {
@@ -98,7 +92,8 @@ public class ItemRecyclerAdapter extends RecyclerView.Adapter implements View.On
         public void loadItem(final Item item){
 
             textViewItemName.setText(item.getName());
-            textViewStock.setText(item.getStock().toString());
+            String itemStock = item.getStock().toString();
+            textViewStock.setText(itemStock);
             buttonAdd.setOnClickListener(new View.OnClickListener() {
                 @Override
                 public void onClick(View view) {

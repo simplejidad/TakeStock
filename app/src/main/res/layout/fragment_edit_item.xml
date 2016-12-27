@@ -4,10 +4,10 @@
     android:orientation="vertical"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
-    tools:context=".view.FragmentItemDetail">
+    tools:context=".view.FragmentEditItem">
 
-    <TextView
-        android:id="@+id/textViewItemName"
+    <EditText
+        android:id="@+id/editTextItemName"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:text="@string/lorem_ipsum"
@@ -16,7 +16,7 @@
         android:layout_gravity="center_horizontal"
         >
 
-    </TextView>
+    </EditText>
 
     <LinearLayout
         android:layout_width="match_parent"
@@ -30,8 +30,8 @@
             android:textSize="24sp"
             />
 
-        <TextView
-            android:id="@+id/textViewStock"
+        <EditText
+            android:id="@+id/editTextStock"
             android:layout_height="wrap_content"
             android:layout_width="wrap_content"
             android:textSize="24sp"
@@ -50,10 +50,10 @@
             android:layout_height="match_parent"
             android:text="@string/consumption_rate"
             android:textSize="24dp"
-           />
+            />
 
-        <TextView
-            android:id="@+id/textViewConsumptionRate"
+        <EditText
+            android:id="@+id/editTextConsumptionRate"
             android:layout_height="match_parent"
             android:layout_width="match_parent"
             android:textSize="24dp"
@@ -74,8 +74,8 @@
             android:textSize="24dp"
             />
 
-        <TextView
-            android:id="@+id/textViewMinimumPurchaceAmmount"
+        <EditText
+            android:id="@+id/editTextMinimumPurchaceAmmount"
             android:layout_height="match_parent"
             android:layout_width="match_parent"
             android:textSize="24dp"
@@ -90,16 +90,16 @@
         android:layout_height="wrap_content">
 
         <Button
-            android:id="@+id/buttonDeleteItem"
+            android:id="@+id/buttonCancel"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:text="Delete"/>
+            android:text="Cancel"/>
 
         <Button
-            android:id="@+id/buttonEditItem"
+            android:id="@+id/buttonSave"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:text="Edit"/>
+            android:text="Save"/>
 
     </LinearLayout>
 

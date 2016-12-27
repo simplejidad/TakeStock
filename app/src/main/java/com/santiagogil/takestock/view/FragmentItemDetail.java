@@ -3,6 +3,7 @@ package com.santiagogil.takestock.view;
 import android.os.Bundle;
 import android.support.annotation.Nullable;
 import android.support.v4.app.Fragment;
+import android.support.v4.app.FragmentTransaction;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -38,6 +39,7 @@ public class FragmentItemDetail extends Fragment {
     private TextView textViewConsumptionRate;
     private View fragmentView;
     private Button deleteButton;
+    private Button editButton;
 
     static final String POSITION = "position";
     static final String ID = "id";
@@ -70,6 +72,16 @@ public class FragmentItemDetail extends Fragment {
                 fragmentActivityCommunicator.refreshFragmentMainView(bundle.getInt(POSITION));
             }
         });
+        editButton = (Button) fragmentView.findViewById(R.id.buttonEditItem);
+        editButton.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+
+                FragmentActivityCommunicator fragmentActivityCommunicator = (FragmentActivityCommunicator) getActivity();
+                fragmentActivityCommunicator.showFragmentEditItem(getArguments());
+
+            }
+        });
 
 
         textViewItemName.setText(bundle.getString(NAME));
@@ -82,6 +94,7 @@ public class FragmentItemDetail extends Fragment {
 
     public interface FragmentActivityCommunicator{
         void refreshFragmentMainView(Integer position);
+        void showFragmentEditItem(Bundle bundle);
     }
 
 

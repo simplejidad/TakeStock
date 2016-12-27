@@ -33,7 +33,7 @@ public class MainActivityCommunicator extends AppCompatActivity implements Fragm
     @Override
     public void refreshFragmentMainView(Integer position) {
 
-        Fragment fragmentMainView = new FragmentMainView();
+        FragmentMainView fragmentMainView = new FragmentMainView();
         FragmentManager fragmentManager = getSupportFragmentManager();
         Bundle bundle = new Bundle();
         bundle.putInt(FragmentMainView.POSITION, position);
@@ -41,6 +41,19 @@ public class MainActivityCommunicator extends AppCompatActivity implements Fragm
         FragmentTransaction fragmentTransaction = fragmentManager.beginTransaction();
         fragmentTransaction.replace(R.id.fragment_holder, fragmentMainView);
         fragmentTransaction.commit();
+    }
+
+    @Override
+    public void showFragmentEditItem(Bundle bundle) {
+
+        FragmentEditItem fragmentEditItem = new FragmentEditItem();
+        fragmentEditItem.setArguments(bundle);
+        FragmentManager fragmentManager = getSupportFragmentManager();
+        FragmentTransaction fragmentTransaction = fragmentManager.beginTransaction();
+        fragmentTransaction.replace(R.id.fragment_holder, fragmentEditItem);
+        fragmentTransaction.addToBackStack(null);
+        fragmentTransaction.commit();
+
     }
 
     @Override
