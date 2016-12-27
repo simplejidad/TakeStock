@@ -40,6 +40,7 @@ public class FragmentItemDetail extends Fragment {
     private View fragmentView;
     private Button deleteButton;
     private Button editButton;
+    private Button backButton;
 
     static final String POSITION = "position";
     static final String ID = "id";
@@ -61,6 +62,13 @@ public class FragmentItemDetail extends Fragment {
         textViewItemStock = (TextView) fragmentView.findViewById(R.id.textViewStock);
         textViewConsumptionRate = (TextView) fragmentView.findViewById(R.id.textViewConsumptionRate);
         textViewMinimumPurchace = (TextView) fragmentView.findViewById(R.id.textViewMinimumPurchaceAmmount);
+        backButton = (Button) fragmentView.findViewById(R.id.buttonBack);
+        backButton.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+                getActivity().onBackPressed();
+            }
+        });
         deleteButton = (Button) fragmentView.findViewById(R.id.buttonDeleteItem);
         deleteButton.setOnClickListener(new View.OnClickListener() {
             @Override

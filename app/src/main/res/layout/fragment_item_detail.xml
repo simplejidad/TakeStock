@@ -90,16 +90,27 @@
         android:layout_height="wrap_content">
 
         <Button
-            android:id="@+id/buttonDeleteItem"
-            android:layout_width="wrap_content"
+            android:id="@+id/buttonBack"
+            android:layout_width="0dp"
+            android:layout_weight="1"
             android:layout_height="wrap_content"
-            android:text="Delete"/>
+            android:text="Back"/>
 
         <Button
             android:id="@+id/buttonEditItem"
-            android:layout_width="wrap_content"
+            android:layout_width="0dp"
+            android:layout_weight="1"
             android:layout_height="wrap_content"
             android:text="Edit"/>
+
+        <Button
+            android:id="@+id/buttonDeleteItem"
+            android:layout_width="0dp"
+            android:layout_weight="1"
+            android:layout_height="wrap_content"
+            android:text="Delete"/>
+
+
 
     </LinearLayout>
 
