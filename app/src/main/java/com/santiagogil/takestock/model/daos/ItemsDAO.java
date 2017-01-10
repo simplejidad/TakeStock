@@ -136,9 +136,8 @@ public class ItemsDAO{
                 for (DataSnapshot data : dataSnapshot.getChildren()){
                     Item item = data.getValue(Item.class);
                     items.add(item);
-                    listenerFromController.finish(items);
-
                 }
+                listenerFromController.finish(items);
             }
 
             @Override
@@ -280,7 +279,7 @@ public class ItemsDAO{
 
     public void addItemsToLocalDatabase(List<Item> items){
         for (Item item : items){
-            addItemToDatabases(item);
+            addItemToLocalDB(item);
         }
     }
 
