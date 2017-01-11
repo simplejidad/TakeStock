@@ -96,7 +96,8 @@ public class FragmentMainView extends Fragment implements View.OnClickListener{
 
     @Override
     public void onClick(View view) {
-        itemRecyclerAdapter.setItems(itemsController.getItemsFromLocalDatabase(getContext()));
+
+        itemRecyclerAdapter.setItems(itemsController.getItemsFromLocalDBsortedAlphabetically(getContext()));
         itemRecyclerAdapter.notifyDataSetChanged();
     }
 
