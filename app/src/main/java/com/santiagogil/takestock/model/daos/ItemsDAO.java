@@ -19,6 +19,7 @@ import java.util.ArrayList;
 import java.util.Collections;
 import java.util.Comparator;
 import java.util.List;
+import java.util.UUID;
 
 public class ItemsDAO{
 
@@ -39,10 +40,10 @@ public class ItemsDAO{
         databaseHelper = new DatabaseHelper(context);
     }
 
-    public Long addItemToDatabases(final Item item) {
+    public Long addItemToDatabases(final Item itemWithoutID) {
 
-        addItemToLocalDB(item);
-        Item itemWithID = getItemFromLocalDB(item.getName());
+        addItemToLocalDB(itemWithoutID);
+        Item itemWithID = getItemFromLocalDB(itemWithoutID.getName());
         AddItemToFirebaseTask addItemToFirebaseTask = new AddItemToFirebaseTask(itemWithID);
         addItemToFirebaseTask.execute();
         return itemWithID.getID();
@@ -62,6 +63,7 @@ public class ItemsDAO{
 
         ContentValues row = new ContentValues();
 
+        row.put(ID, UUID.randomUUID().toString());
         row.put(NAME, item.getName());
         row.put(STOCK, item.getStock());
         row.put(IMAGE, item.getImage());
@@ -76,11 +78,13 @@ public class ItemsDAO{
     public void getAllItemsFromLocalDBSortedAlphabetically(final ResultListener<List<Item>> listenerFromController){
 
         List<Item> items = getItemsFromLocalDBSortedByID();
-        Collections.sort(items, new Comparator<Item>(){
-            public int compare (Item o1, Item o2){
-                return o1.getName().compareTo(o2.getName());
-            }
-        });
+        if(items.size() > 1 && items!=null) {
+            Collections.sort(items, new Comparator<Item>() {
+                public int compare(Item o1, Item o2) {
+                    return o1.getName().compareTo(o2.getName());
+                }
+            });
+        }
 
         listenerFromController.finish(items);
 
@@ -89,11 +93,15 @@ public class ItemsDAO{
     public List<Item> getAllItemsFromLocalDBSortedAlphabetically(){
 
         List<Item> items = getItemsFromLocalDBSortedByID();
-        Collections.sort(items, new Comparator<Item>(){
-            public int compare (Item o1, Item o2){
-                return o1.getName().compareTo(o2.getName());
-            }
-        });
+        if(items.size() > 1){
+
+            Collections.sort(items, new Comparator<Item>(){
+                public int compare (Item o1, Item o2){
+                    return o1.getName().compareTo(o2.getName());
+                }
+            });
+        }
+
 
         return items;
 

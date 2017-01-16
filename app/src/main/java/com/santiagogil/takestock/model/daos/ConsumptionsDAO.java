@@ -13,6 +13,7 @@ import com.santiagogil.takestock.model.pojos.Consumption;
 import java.util.ArrayList;
 import java.util.Collections;
 import java.util.List;
+import java.util.UUID;
 
 public class ConsumptionsDAO{
 
@@ -68,6 +69,7 @@ public class ConsumptionsDAO{
 
         ContentValues row = new ContentValues();
 
+        row.put(ID, UUID.randomUUID().toString());
         row.put(DATE, currentDateInDays());
         row.put(ITEMID, itemID);
 
