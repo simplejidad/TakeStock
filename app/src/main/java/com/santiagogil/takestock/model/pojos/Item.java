@@ -9,7 +9,7 @@ public class Item { //implements Comparable<Item>, Serializable {
 
     static final Integer DEFAULT_CONSUMPTION_RATE = 90;
 
-    private Long ID;
+    private String ID;
     private String name;
     private Integer stock;
     private Integer minimumPurchaceQuantity;
@@ -65,7 +65,7 @@ public class Item { //implements Comparable<Item>, Serializable {
         this.stock = stock;
     }
 
-    public Long getID() {
+    public String getID() {
         return ID;
     }
 
@@ -73,7 +73,7 @@ public class Item { //implements Comparable<Item>, Serializable {
         return image;
     }
 
-    public void setID(Long ID) {
+    public void setID(String ID) {
         this.ID = ID;
     }
 

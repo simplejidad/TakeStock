@@ -20,7 +20,7 @@ public class FragmentItemDetail extends Fragment {
     public static FragmentItemDetail provideFragment(Item item, Integer position){
         Bundle bundle = new Bundle();
         bundle.putInt(FragmentItemDetail.POSITION, position);
-        bundle.putLong(FragmentItemDetail.ID, item.getID());
+        bundle.putString(FragmentItemDetail.ID, item.getID());
         bundle.putString(FragmentItemDetail.NAME, item.getName());
         bundle.putInt(FragmentItemDetail.STOCK, item.getStock());
         bundle.putInt(FragmentItemDetail.MINIMUM_PURCHASE_QUANTITY, item.getMinimumPurchaceQuantity());

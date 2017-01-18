@@ -6,14 +6,14 @@ import com.santiagogil.takestock.model.daos.ConsumptionsDAO;
 
 public class ConsumptionController {
 
-    public void addConsumptionToDatabases(Context context, Long itemID){
+    public void addConsumptionToDatabases(Context context, String itemID){
 
         ConsumptionsDAO consumptionsDAO = new ConsumptionsDAO(context);
         consumptionsDAO.addConsumptionToDatabases(itemID);
 
     }
 
-    public Integer getItemConsumptionRate(Context context, Long itemID){
+    public Integer getItemConsumptionRate(Context context, String itemID){
 
         ConsumptionsDAO consumptionsDAO = new ConsumptionsDAO(context);
         return consumptionsDAO.getItemConsumptionRate(itemID);

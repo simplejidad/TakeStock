@@ -30,25 +30,25 @@ public class ConsumptionsDAO{
         databaseHelper = new DatabaseHelper(context);
     }
 
-    public void addConsumptionToDatabases(Long itemID) {
-        Long consumptionID = addConsumptionToLocalDB(itemID);
+    public void addConsumptionToDatabases(String itemID) {
+        String consumptionID = addConsumptionToLocalDB(itemID);
         AddConsumptionToFirebaseTask addConsumptionToFirebaseTask = new AddConsumptionToFirebaseTask(getConsumptionFromLocalDB(consumptionID));
         addConsumptionToFirebaseTask.execute();
     }
 
-    public Consumption getConsumptionFromLocalDB(Long consumptionID){
+    public Consumption getConsumptionFromLocalDB(String consumptionID){
 
         SQLiteDatabase database = databaseHelper.getReadableDatabase();
 
-        String selectQuery = "SELECT * FROM " + TABLECONSUMPTIONS + " WHERE " + ID + " = " + consumptionID;
+        String selectQuery = "SELECT * FROM " + TABLECONSUMPTIONS + " WHERE " + ID + " = " + '"' + consumptionID + '"';
 
         Cursor cursor = database.rawQuery(selectQuery, null);
         if(cursor.moveToNext()){
 
             Consumption consumption = new Consumption();
-            consumption.setID(cursor.getLong(cursor.getColumnIndex(ID)));
+            consumption.setID(cursor.getString(cursor.getColumnIndex(ID)));
             consumption.setDateOfConsumption(cursor.getInt(cursor.getColumnIndex(DATE)));
-            consumption.setItemID(cursor.getInt(cursor.getColumnIndex(ITEMID)));
+            consumption.setItemID(cursor.getString(cursor.getColumnIndex(ITEMID)));
 
             cursor.close();
 
@@ -63,21 +63,23 @@ public class ConsumptionsDAO{
         return (Integer) (int) (System.currentTimeMillis()/1000/60/60/24);
     }
 
-    public Long addConsumptionToLocalDB(Long itemID){
+    public String addConsumptionToLocalDB(String itemID){
 
         SQLiteDatabase database = databaseHelper.getWritableDatabase();
 
         ContentValues row = new ContentValues();
 
-        row.put(ID, UUID.randomUUID().toString());
+        String consumptionID = UUID.randomUUID().toString();
+
+        row.put(ID, consumptionID);
         row.put(DATE, currentDateInDays());
         row.put(ITEMID, itemID);
 
-        Long id = database.insert(TABLECONSUMPTIONS, null, row);
+        database.insert(TABLECONSUMPTIONS, null, row);
 
         database.close();
 
-        return id;
+        return consumptionID;
 
     }
 
@@ -89,12 +91,12 @@ public class ConsumptionsDAO{
 
     }
 
-    public Integer getItemConsumptionRate(Long itemID){
+    public Integer getItemConsumptionRate(String itemID){
 
         SQLiteDatabase database = new DatabaseHelper(context).getReadableDatabase();
 
         String sqlQuery = "SELECT * FROM " + TABLECONSUMPTIONS
-                + " WHERE " + ITEMID + " = " + itemID;
+                + " WHERE " + ITEMID + " = " + '"' + itemID + '"';
 
         Cursor cursor = database.rawQuery(sqlQuery, null);
 

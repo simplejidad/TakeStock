@@ -36,7 +36,7 @@ public class DatabaseHelper extends SQLiteOpenHelper {
     }
 
     private static final String CREATE_TABLE_ITEMS = "CREATE TABLE " + TABLEITEMS + "("
-            + ID + " INTEGER PRIMARY KEY,"
+            + ID + " STRING PRIMARY KEY,"
             + NAME + " TEXT,"
             + STOCK + " NUMBER,"
             + IMAGE + " TEXT, "
@@ -46,9 +46,9 @@ public class DatabaseHelper extends SQLiteOpenHelper {
 
 
     private static final String CREATE_TABLE_CONSUMPTIONS = "CREATE TABLE " + TABLECONSUMPTIONS + "("
-            + ID + " INTEGER PRIMARY KEY,"
+            + ID + " STRING PRIMARY KEY,"
             + DATE + " TEXT,"
-            + ITEMID + " NUMBER "
+            + ITEMID + " STRING "
             + ")";
 
 

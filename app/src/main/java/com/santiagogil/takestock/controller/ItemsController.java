@@ -42,7 +42,7 @@ public class ItemsController {
 
     }
 
-    public Long addItemToDatabases(Context context, Item item){
+    public String addItemToDatabases(Context context, Item item){
         ItemsDAO itemsDao = new ItemsDAO(context);
         return itemsDao.addItemToDatabases(item);
 
@@ -76,7 +76,7 @@ public class ItemsController {
         itemsDAO.addItemToLocalDB(item);
     }
 
-    public void updateItemConsumptionDate(Context context, Long itemID){
+    public void updateItemConsumptionDate(Context context, String itemID){
 
         ConsumptionController consumptionsController = new ConsumptionController();
         Integer updatedConsumptionDate = consumptionsController.getItemConsumptionRate(context, itemID);

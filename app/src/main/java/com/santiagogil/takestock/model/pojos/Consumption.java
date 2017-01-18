@@ -1,18 +1,16 @@
 package com.santiagogil.takestock.model.pojos;
 
-import java.util.Date;
-
 /**
  * Created by digitalhouse on 24/12/16.
  */
 
 public class Consumption {
 
-    private Long ID;
+    private String ID;
     private Integer dateOfConsumption;
-    private Integer itemID;
+    private String itemID;
 
-    public Consumption(Integer itemID) {
+    public Consumption(String itemID) {
         this.itemID = itemID;
     }
 
@@ -20,7 +18,7 @@ public class Consumption {
 
     }
 
-    public void setID(Long ID) {
+    public void setID(String ID) {
         this.ID = ID;
     }
 
@@ -28,11 +26,11 @@ public class Consumption {
         this.dateOfConsumption = dateOfConsumption;
     }
 
-    public void setItemID(Integer itemID) {
+    public void setItemID(String itemID) {
         this.itemID = itemID;
     }
 
-    public Long getID() {
+    public String getID() {
 
         return ID;
     }
@@ -41,7 +39,7 @@ public class Consumption {
         return dateOfConsumption;
     }
 
-    public Integer getItemID() {
+    public String getItemID() {
         return itemID;
     }
 }

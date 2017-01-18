@@ -122,7 +122,7 @@ public class FragmentMainView extends Fragment implements View.OnClickListener{
         String itemName = editTextAddItem.getText().toString();
         editTextAddItem.setText("");
         Item item = new Item(itemName);
-        Long newItemID = itemsController.addItemToDatabases(view.getContext(), item);
+        String newItemID = itemsController.addItemToDatabases(view.getContext(), item);
         //TODO: check if item already exists
         //Toast.makeText(view.getContext(), item.getName() + " has been added.", Toast.LENGTH_SHORT).show();
         List<Item> items = itemsController.getItemsFromLocalDBsortedAlphabetically(getContext());
@@ -134,7 +134,7 @@ public class FragmentMainView extends Fragment implements View.OnClickListener{
 
     }
 
-    public Integer findItemPosition(Long itemID){
+    public Integer findItemPosition(String itemID){
         List<Item> items = itemRecyclerAdapter.getItems();
         for(Item item : items){
             if(item.getID().equals(itemID)){
