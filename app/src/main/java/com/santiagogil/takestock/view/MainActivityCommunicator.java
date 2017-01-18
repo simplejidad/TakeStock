@@ -59,11 +59,18 @@ public class MainActivityCommunicator extends AppCompatActivity implements Fragm
     @Override
     public void onItemTouched(Item touchedItem, Integer touchedPosition) {
 
-        FragmentItemDetail fragmentItemDetail = FragmentItemDetail.provideFragment(touchedItem, touchedPosition);
+ /*       FragmentItemDetail fragmentItemDetail = FragmentItemDetail.provideFragment(touchedItem, touchedPosition);
         FragmentTransaction fragmentTransaction = getSupportFragmentManager().beginTransaction();
         fragmentTransaction.replace(R.id.fragment_holder, fragmentItemDetail);
         fragmentTransaction.addToBackStack(null);
+        fragmentTransaction.commit();*/
+
+        FragmentItemsViewPager fragmentItemsViewPager = new FragmentItemsViewPager();
+        FragmentTransaction fragmentTransaction = getSupportFragmentManager().beginTransaction();
+        fragmentTransaction.replace(R.id.fragment_holder, fragmentItemsViewPager);
+        fragmentTransaction.addToBackStack(null);
         fragmentTransaction.commit();
+
 
     }
 
