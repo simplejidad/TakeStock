@@ -79,9 +79,9 @@ public class ItemsController {
     public void updateItemConsumptionDate(Context context, String itemID){
 
         ConsumptionController consumptionsController = new ConsumptionController();
-        Integer updatedConsumptionDate = consumptionsController.getItemConsumptionRate(context, itemID);
+        Integer updatedConsumptionRate = consumptionsController.getItemConsumptionRate(context, itemID);
         ItemsDAO itemsDAO = new ItemsDAO(context);
-        itemsDAO.updateItemConsumptionRateInDatabases(itemID, updatedConsumptionDate);
+        itemsDAO.updateItemConsumptionRateInDatabases(itemID, updatedConsumptionRate);
 
     }
 

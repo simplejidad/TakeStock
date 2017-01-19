@@ -44,13 +44,6 @@ public class FragmentItemDetail extends Fragment {
     private Button backButton;
 
     static final String POSITION = "position";
-    static final String ID = "id";
-    static final String STOCK = "stock";
-    static final String NAME = "name";
-    static final String CONSUMPTION_RATE = "consumptionRate";
-    static final String MINIMUM_PURCHASE_QUANTITY = "minimumPurchaceQuantity";
-
-
 
     @Nullable
     @Override
@@ -75,7 +68,7 @@ public class FragmentItemDetail extends Fragment {
             @Override
             public void onClick(View view) {
                 ItemsController itemsController = new ItemsController();
-                itemsController.deleteItemFromDatabases(getContext(), bundle.getLong(ID));
+                itemsController.deleteItemFromDatabases(getContext(), bundle.getLong(DatabaseHelper.ID));
                 Toast.makeText(getContext(), "Item Deleted", Toast.LENGTH_SHORT).show();
                 FragmentActivityCommunicator fragmentActivityCommunicator = (FragmentActivityCommunicator) getActivity();
                 fragmentActivityCommunicator.refreshFragmentMainView(bundle.getInt(POSITION));
@@ -93,10 +86,10 @@ public class FragmentItemDetail extends Fragment {
         });
 
 
-        textViewItemName.setText(bundle.getString(NAME));
-        textViewItemStock.setText(((Integer) bundle.getInt(STOCK)).toString());
-        textViewMinimumPurchace.setText(((Integer) bundle.getInt(MINIMUM_PURCHASE_QUANTITY)).toString());
-        textViewConsumptionRate.setText(((Integer) bundle.getInt(CONSUMPTION_RATE)).toString());
+        textViewItemName.setText(bundle.getString(DatabaseHelper.NAME));
+        textViewItemStock.setText(((Integer) bundle.getInt(DatabaseHelper.STOCK)).toString());
+        textViewMinimumPurchace.setText(((Integer) bundle.getInt(DatabaseHelper.MINIMUMPURCHACEQUANTITY)).toString());
+        textViewConsumptionRate.setText(((Integer) bundle.getInt(DatabaseHelper.CONSUMPTIONRATE)).toString());
 
         return fragmentView;
     }

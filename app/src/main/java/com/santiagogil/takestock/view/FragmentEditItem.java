@@ -66,15 +66,15 @@ public class FragmentEditItem extends Fragment {
             @Override
             public void onClick(View view) {
 
-
+                updateItemDetails();
 
             }
         });
 
         editTextItemName.setText(itemName);
-        editTextItemStock.setText(itemStock);
-        editTextConsumptionRate.setText(itemConsumptionRate);
-        editTextMinimumPurchace.setText(itemMinimumPurchaceQuantity);
+        editTextItemStock.setText(itemStock.toString());
+        editTextConsumptionRate.setText(itemConsumptionRate.toString());
+        editTextMinimumPurchace.setText(itemMinimumPurchaceQuantity.toString());
 
         return fragmentView;
     }
@@ -91,7 +91,7 @@ public class FragmentEditItem extends Fragment {
         Integer updatedItemConsumptionRate = tryParse(editTextConsumptionRate.getText().toString());
 
         ItemsController itemsController = new ItemsController();
-        itemsController.updateItemDetails(getContext(), itemID, itemName, itemStock, itemConsumptionRate, itemMinimumPurchaceQuantity);
+        itemsController.updateItemDetails(getContext(), itemID, updatedItemName, updatedItemStock, updatedItemConsumptionRate, updatedItemMinimumPurchaceQuantity);
 
     }
 

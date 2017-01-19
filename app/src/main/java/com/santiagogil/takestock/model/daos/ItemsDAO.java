@@ -5,6 +5,7 @@ import android.content.Context;
 import android.database.Cursor;
 import android.database.sqlite.SQLiteDatabase;
 import android.os.AsyncTask;
+import android.provider.ContactsContract;
 import android.widget.Toast;
 
 import com.google.firebase.database.DataSnapshot;
@@ -46,7 +47,8 @@ public class ItemsDAO{
 
         FirebaseDatabase firebaseDatabase = FirebaseDatabase.getInstance();
         DatabaseReference myRef = firebaseDatabase.getReference();
-        myRef.child(DatabaseHelper.TABLEITEMS).child(item.getID()).setValue(item);
+        myRef.child(DatabaseHelper.TABLEITEMS).child(item.getID()).child(DatabaseHelper.ID).setValue(item.getID());
+        updateItemDetails(item.getID(), item.getName(), item.getStock(), item.getConsumptionRate(), item.getMinimumPurchaceQuantity());
 
     }
 
@@ -223,13 +225,17 @@ public class ItemsDAO{
         database.close();
 
         FirebaseDatabase firebaseDatabase = FirebaseDatabase.getInstance();
-        firebaseDatabase.getReference().child("items").child(item.getID()).child(DatabaseHelper.STOCK).setValue(newStock);
+        firebaseDatabase.getReference().child(DatabaseHelper.TABLEITEMS).child(item.getID()).child(DatabaseHelper.STOCK).setValue(newStock);
 
     }
 
     public void updateItemDetails(String itemID, String updatedItemName, Integer updatedItemStock, Integer updatedConsumptionRate, Integer updatedMinimumPurchace){
         FirebaseDatabase firebaseDatabase = FirebaseDatabase.getInstance();
-        firebaseDatabase.getReference().child("items").child(itemID).child("stock").setValue(newStock);
+        DatabaseReference myRef = firebaseDatabase.getReference().child(DatabaseHelper.TABLEITEMS).child(itemID);
+        myRef.child(DatabaseHelper.NAME).setValue(updatedItemName);
+        myRef.child(DatabaseHelper.STOCK).setValue(updatedItemStock);
+        myRef.child(DatabaseHelper.CONSUMPTIONRATE).setValue(updatedConsumptionRate);
+        myRef.child(DatabaseHelper.MINIMUMPURCHACEQUANTITY).setValue(updatedMinimumPurchace);
     }
 
     private class UpdateItemConsumptionRateFirebase extends AsyncTask<String, Void, Void>{
@@ -325,9 +331,10 @@ public class ItemsDAO{
 
     public void updateItemConsumptionRateInFirebase(String itemID, Integer consumptionRate){
 
-        UpdateItemConsumptionRateFirebase updateItemConsumptionRateFirebase = new UpdateItemConsumptionRateFirebase(itemID, consumptionRate);
-        updateItemConsumptionRateFirebase.execute();
-        //updateItemConsumptionRateInFirebase(itemID, consumptionRate);
+        //UpdateItemConsumptionRateFirebase updateItemConsumptionRateFirebase = new UpdateItemConsumptionRateFirebase(itemID, consumptionRate);
+        //updateItemConsumptionRateFirebase.execute();
+        FirebaseDatabase firebaseDatabase = FirebaseDatabase.getInstance();
+        firebaseDatabase.getReference().child(DatabaseHelper.TABLEITEMS).child(itemID).child(DatabaseHelper.CONSUMPTIONRATE).setValue(consumptionRate);
 
     }
 
