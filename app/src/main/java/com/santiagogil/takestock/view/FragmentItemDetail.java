@@ -13,6 +13,7 @@ import android.widget.Toast;
 
 import com.santiagogil.takestock.R;
 import com.santiagogil.takestock.controller.ItemsController;
+import com.santiagogil.takestock.model.daos.DatabaseHelper;
 import com.santiagogil.takestock.model.pojos.Item;
 
 public class FragmentItemDetail extends Fragment {
@@ -20,11 +21,11 @@ public class FragmentItemDetail extends Fragment {
     public static FragmentItemDetail provideFragment(Item item, Integer position){
         Bundle bundle = new Bundle();
         bundle.putInt(FragmentItemDetail.POSITION, position);
-        bundle.putString(FragmentItemDetail.ID, item.getID());
-        bundle.putString(FragmentItemDetail.NAME, item.getName());
-        bundle.putInt(FragmentItemDetail.STOCK, item.getStock());
-        bundle.putInt(FragmentItemDetail.MINIMUM_PURCHASE_QUANTITY, item.getMinimumPurchaceQuantity());
-        bundle.putInt(FragmentItemDetail.CONSUMPTION_RATE, item.getConsumptionRate());
+        bundle.putString(DatabaseHelper.ID, item.getID());
+        bundle.putString(DatabaseHelper.NAME, item.getName());
+        bundle.putInt(DatabaseHelper.STOCK, item.getStock());
+        bundle.putInt(DatabaseHelper.MINIMUMPURCHACEQUANTITY, item.getMinimumPurchaceQuantity());
+        bundle.putInt(DatabaseHelper.CONSUMPTIONRATE, item.getConsumptionRate());
 
         FragmentItemDetail fragmentItemDetail = new FragmentItemDetail();
 

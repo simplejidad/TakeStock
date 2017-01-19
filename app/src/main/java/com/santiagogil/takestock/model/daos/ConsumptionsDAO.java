@@ -17,11 +17,6 @@ import java.util.UUID;
 
 public class ConsumptionsDAO{
 
-    private static final String TABLECONSUMPTIONS = "Consumptions";
-    private static final String ID = "ID";
-    private static final String DATE = "Date";
-    private static final String ITEMID = "ItemID";
-
     private Context context;
     private DatabaseHelper databaseHelper;
 
@@ -40,15 +35,15 @@ public class ConsumptionsDAO{
 
         SQLiteDatabase database = databaseHelper.getReadableDatabase();
 
-        String selectQuery = "SELECT * FROM " + TABLECONSUMPTIONS + " WHERE " + ID + " = " + '"' + consumptionID + '"';
+        String selectQuery = "SELECT * FROM " + DatabaseHelper.TABLECONSUMPTIONS + " WHERE " + DatabaseHelper.ID + " = " + '"' + consumptionID + '"';
 
         Cursor cursor = database.rawQuery(selectQuery, null);
         if(cursor.moveToNext()){
 
             Consumption consumption = new Consumption();
-            consumption.setID(cursor.getString(cursor.getColumnIndex(ID)));
-            consumption.setDateOfConsumption(cursor.getInt(cursor.getColumnIndex(DATE)));
-            consumption.setItemID(cursor.getString(cursor.getColumnIndex(ITEMID)));
+            consumption.setID(cursor.getString(cursor.getColumnIndex(DatabaseHelper.ID)));
+            consumption.setDateOfConsumption(cursor.getInt(cursor.getColumnIndex(DatabaseHelper.DATE)));
+            consumption.setItemID(cursor.getString(cursor.getColumnIndex(DatabaseHelper.ITEMID)));
 
             cursor.close();
 
@@ -71,11 +66,11 @@ public class ConsumptionsDAO{
 
         String consumptionID = UUID.randomUUID().toString();
 
-        row.put(ID, consumptionID);
-        row.put(DATE, currentDateInDays());
-        row.put(ITEMID, itemID);
+        row.put(DatabaseHelper.ID, consumptionID);
+        row.put(DatabaseHelper.DATE, currentDateInDays());
+        row.put(DatabaseHelper.ITEMID, itemID);
 
-        database.insert(TABLECONSUMPTIONS, null, row);
+        database.insert(DatabaseHelper.TABLECONSUMPTIONS, null, row);
 
         database.close();
 
@@ -95,8 +90,8 @@ public class ConsumptionsDAO{
 
         SQLiteDatabase database = new DatabaseHelper(context).getReadableDatabase();
 
-        String sqlQuery = "SELECT * FROM " + TABLECONSUMPTIONS
-                + " WHERE " + ITEMID + " = " + '"' + itemID + '"';
+        String sqlQuery = "SELECT * FROM " + DatabaseHelper.TABLECONSUMPTIONS
+                + " WHERE " + DatabaseHelper.ITEMID + " = " + '"' + itemID + '"';
 
         Cursor cursor = database.rawQuery(sqlQuery, null);
 
@@ -104,7 +99,7 @@ public class ConsumptionsDAO{
 
         while(cursor.moveToNext()){
 
-            dates.add(cursor.getInt(cursor.getColumnIndex(DATE)));
+            dates.add(cursor.getInt(cursor.getColumnIndex(DatabaseHelper.DATE)));
         }
 
         cursor.close();

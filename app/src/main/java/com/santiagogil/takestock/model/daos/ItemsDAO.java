@@ -46,7 +46,7 @@ public class ItemsDAO{
 
         FirebaseDatabase firebaseDatabase = FirebaseDatabase.getInstance();
         DatabaseReference myRef = firebaseDatabase.getReference();
-        myRef.child("items").child(item.getID()).setValue(item);
+        myRef.child(DatabaseHelper.TABLEITEMS).child(item.getID()).setValue(item);
 
     }
 
@@ -133,7 +133,7 @@ public class ItemsDAO{
     public void getItemsFromFirebase(final ResultListener<List<Item>> listenerFromController){
 
         FirebaseDatabase firebaseDatabase = FirebaseDatabase.getInstance();
-        DatabaseReference dbRef = firebaseDatabase.getReference().child("items");
+        DatabaseReference dbRef = firebaseDatabase.getReference().child(DatabaseHelper.TABLEITEMS);
 
         dbRef.addListenerForSingleValueEvent(new ValueEventListener()   {
             @Override
@@ -223,8 +223,13 @@ public class ItemsDAO{
         database.close();
 
         FirebaseDatabase firebaseDatabase = FirebaseDatabase.getInstance();
-        firebaseDatabase.getReference().child("items").child(item.getID()).child("stock").setValue(newStock);
+        firebaseDatabase.getReference().child("items").child(item.getID()).child(DatabaseHelper.STOCK).setValue(newStock);
 
+    }
+
+    public void updateItemDetails(String itemID, String updatedItemName, Integer updatedItemStock, Integer updatedConsumptionRate, Integer updatedMinimumPurchace){
+        FirebaseDatabase firebaseDatabase = FirebaseDatabase.getInstance();
+        firebaseDatabase.getReference().child("items").child(itemID).child("stock").setValue(newStock);
     }
 
     private class UpdateItemConsumptionRateFirebase extends AsyncTask<String, Void, Void>{
@@ -261,7 +266,7 @@ public class ItemsDAO{
         protected Void doInBackground(String... strings) {
 
             FirebaseDatabase firebaseDatabase = FirebaseDatabase.getInstance();
-            firebaseDatabase.getReference().child("items").child(item.getID()).child("stock").setValue(newStock);
+            firebaseDatabase.getReference().child(databaseHelper.TABLEITEMS).child(item.getID()).child(DatabaseHelper.STOCK).setValue(newStock);
             return null;
         }
     }

@@ -84,4 +84,9 @@ public class ItemsController {
         itemsDAO.updateItemConsumptionRateInDatabases(itemID, updatedConsumptionDate);
 
     }
+
+    public void updateItemDetails(Context context, String itemID, String itemName, Integer itemStock, Integer itemConsumptionRate, Integer itemMinimumPurchace ){
+        ItemsDAO itemsDAO = new ItemsDAO(context);
+        itemsDAO.updateItemDetails(itemID, itemName, itemStock, itemConsumptionRate, itemMinimumPurchace);
+    }
 }

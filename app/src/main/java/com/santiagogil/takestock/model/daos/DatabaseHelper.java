@@ -20,9 +20,9 @@ public class DatabaseHelper extends SQLiteOpenHelper {
     public static final String CONSUMPTIONRATE = "ConsumptionRate";
     public static final String IMAGE = "Image" ;
 
-    private static final String TABLECONSUMPTIONS = "Consumptions";
-    private static final String DATE = "Date";
-    private static final String ITEMID = "ItemID";
+    public static final String TABLECONSUMPTIONS = "Consumptions";
+    public static final String DATE = "Date";
+    public static final String ITEMID = "ItemID";
 
     public DatabaseHelper(Context context) {
         super(context, DATABASENAME, null, DATABASEVERSION);
