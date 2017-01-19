@@ -13,12 +13,12 @@ public class DatabaseHelper extends SQLiteOpenHelper {
 
 
     public static final String TABLEITEMS = "Item";
-    private static final String ID = "ID";
-    private static final String NAME = "Name"  ;
-    private static final String STOCK = "Stock" ;
-    private static final String MINIMUMPURCHACEQUANTITY = "MinimumPurchaceQuantity" ;
-    private static final String CONSUMPTIONRATE = "ConsumptionRate";
-    private static final String IMAGE = "Image" ;
+    public static final String ID = "ID";
+    public static final String NAME = "Name"  ;
+    public static final String STOCK = "Stock" ;
+    public static final String MINIMUMPURCHACEQUANTITY = "MinimumPurchaceQuantity" ;
+    public static final String CONSUMPTIONRATE = "ConsumptionRate";
+    public static final String IMAGE = "Image" ;
 
     private static final String TABLECONSUMPTIONS = "Consumptions";
     private static final String DATE = "Date";

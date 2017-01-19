@@ -14,6 +14,8 @@ public class FragmentItemsViewPager extends Fragment {
 
     private ViewPager itemsViewPager;
 
+    public static final String POSITION = "Position";
+
     public FragmentItemsViewPager() {
         // Required empty public constructor
     }
@@ -26,7 +28,10 @@ public class FragmentItemsViewPager extends Fragment {
         View view = inflater.inflate(R.layout.fragment_items_viewpager, container, false);
 
         itemsViewPager = (ViewPager) view.findViewById(R.id.itemsViewPager);
-
+        ItemsViewPagerAdapter itemsViewPagerAdapter = new ItemsViewPagerAdapter(getChildFragmentManager(), getContext());
+        itemsViewPager.setAdapter(itemsViewPagerAdapter);
+        Bundle bundle = getArguments();
+        itemsViewPager.setCurrentItem(bundle.getInt(POSITION));
         return view;
     }
 

@@ -10,6 +10,7 @@ import android.support.v7.widget.RecyclerView;
 import com.santiagogil.takestock.controller.ItemsController;
 import com.santiagogil.takestock.model.pojos.Item;
 
+import java.util.ArrayList;
 import java.util.List;
 
 public class ItemsViewPagerAdapter extends FragmentStatePagerAdapter {
@@ -24,12 +25,13 @@ public class ItemsViewPagerAdapter extends FragmentStatePagerAdapter {
     public ItemsViewPagerAdapter(FragmentManager fm, Context context){
         super(fm);
         this.context = context;
+        fragmentList = new ArrayList<>();
         retrieveItemFragmentLists();
     }
 
     @Override
     public Fragment getItem(int position) {
-        return null;
+        return fragmentList.get(position);
     }
 
     @Override

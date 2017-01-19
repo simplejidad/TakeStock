@@ -23,14 +23,6 @@ import java.util.UUID;
 
 public class ItemsDAO{
 
-    private static final String TABLEITEMS = DatabaseHelper.TABLEITEMS;
-    private static final String ID = "ID";
-    private static final String NAME = "Name"  ;
-    private static final String STOCK = "Stock" ;
-    private static final String MINIMUMPURCHACEQUANTITY = "MinimumPurchaceQuantity" ;
-    private static final String CONSUMPTIONRATE = "ConsumptionRate";
-    private static final String IMAGE = "Image" ;
-
     private List<Item> items = new ArrayList<>();
     private Context context;
     private DatabaseHelper databaseHelper;
@@ -44,8 +36,9 @@ public class ItemsDAO{
 
         addItemToLocalDB(itemWithoutID);
         Item itemWithID = getItemFromLocalDB(itemWithoutID.getName());
-        AddItemToFirebaseTask addItemToFirebaseTask = new AddItemToFirebaseTask(itemWithID);
-        addItemToFirebaseTask.execute();
+        //AddItemToFirebaseTask addItemToFirebaseTask = new AddItemToFirebaseTask(itemWithID);
+        //addItemToFirebaseTask.execute();
+        addItemToFirebase(itemWithID);
         return itemWithID.getID();
     }
 
@@ -64,17 +57,17 @@ public class ItemsDAO{
         ContentValues row = new ContentValues();
 
         if(item.getID() != null){
-            row.put(ID, item.getID());
+            row.put(DatabaseHelper.ID, item.getID());
         } else {
-            row.put(ID, UUID.randomUUID().toString());
+            row.put(DatabaseHelper.ID, UUID.randomUUID().toString());
         }
-        row.put(NAME, item.getName());
-        row.put(STOCK, item.getStock());
-        row.put(IMAGE, item.getImage());
-        row.put(MINIMUMPURCHACEQUANTITY, item.getMinimumPurchaceQuantity());
-        row.put(CONSUMPTIONRATE, item.getConsumptionRate());
+        row.put(DatabaseHelper.NAME, item.getName());
+        row.put(DatabaseHelper.STOCK, item.getStock());
+        row.put(DatabaseHelper.IMAGE, item.getImage());
+        row.put(DatabaseHelper.MINIMUMPURCHACEQUANTITY, item.getMinimumPurchaceQuantity());
+        row.put(DatabaseHelper.CONSUMPTIONRATE, item.getConsumptionRate());
 
-        database.insert(TABLEITEMS, null, row);
+        database.insert(DatabaseHelper.TABLEITEMS, null, row);
 
         database.close();
     }
@@ -115,18 +108,18 @@ public class ItemsDAO{
 
         SQLiteDatabase database = databaseHelper.getReadableDatabase();
 
-        String selectQuery = "SELECT * FROM " + TABLEITEMS + " WHERE " + NAME + " = " + '"'
+        String selectQuery = "SELECT * FROM " + DatabaseHelper.TABLEITEMS + " WHERE " + DatabaseHelper.NAME + " = " + '"'
                 +  itemName + '"';
         Cursor cursor = database.rawQuery(selectQuery, null);
         if (cursor.moveToNext()){
 
             Item item = new Item();
-            item.setID(cursor.getString(cursor.getColumnIndex(ID)));
-            item.setImage(cursor.getInt(cursor.getColumnIndex(IMAGE)));
-            item.setMinimumPurchaceQuantity(cursor.getInt(cursor.getColumnIndex(MINIMUMPURCHACEQUANTITY)));
-            item.setName(cursor.getString(cursor.getColumnIndex(NAME)));
-            item.setStock(cursor.getInt(cursor.getColumnIndex(STOCK)));
-            item.setConsumptionRate(cursor.getInt(cursor.getColumnIndex(CONSUMPTIONRATE)));
+            item.setID(cursor.getString(cursor.getColumnIndex(DatabaseHelper.ID)));
+            item.setImage(cursor.getInt(cursor.getColumnIndex(DatabaseHelper.IMAGE)));
+            item.setMinimumPurchaceQuantity(cursor.getInt(cursor.getColumnIndex(DatabaseHelper.MINIMUMPURCHACEQUANTITY)));
+            item.setName(cursor.getString(cursor.getColumnIndex(DatabaseHelper.NAME)));
+            item.setStock(cursor.getInt(cursor.getColumnIndex(DatabaseHelper.STOCK)));
+            item.setConsumptionRate(cursor.getInt(cursor.getColumnIndex(DatabaseHelper.CONSUMPTIONRATE)));
 
             cursor.close();
 
@@ -176,7 +169,7 @@ public class ItemsDAO{
 
         SQLiteDatabase database = databaseHelper.getReadableDatabase();
 
-        String selectQuery = "SELECT * FROM " + TABLEITEMS;
+        String selectQuery = "SELECT * FROM " + DatabaseHelper.TABLEITEMS;
         Cursor cursor = database.rawQuery(selectQuery, null);
 
         List<Item> items = new ArrayList<>();
@@ -184,12 +177,12 @@ public class ItemsDAO{
         while (cursor.moveToNext()) {
 
             Item item = new Item();
-            item.setID(cursor.getString(cursor.getColumnIndex(ID)));
-            item.setImage(cursor.getInt(cursor.getColumnIndex(IMAGE)));
-            item.setMinimumPurchaceQuantity(cursor.getInt(cursor.getColumnIndex(MINIMUMPURCHACEQUANTITY)));
-            item.setName(cursor.getString(cursor.getColumnIndex(NAME)));
-            item.setStock(cursor.getInt(cursor.getColumnIndex(STOCK)));
-            item.setConsumptionRate(cursor.getInt(cursor.getColumnIndex(CONSUMPTIONRATE)));
+            item.setID(cursor.getString(cursor.getColumnIndex(DatabaseHelper.ID)));
+            item.setImage(cursor.getInt(cursor.getColumnIndex(DatabaseHelper.IMAGE)));
+            item.setMinimumPurchaceQuantity(cursor.getInt(cursor.getColumnIndex(DatabaseHelper.MINIMUMPURCHACEQUANTITY)));
+            item.setName(cursor.getString(cursor.getColumnIndex(DatabaseHelper.NAME)));
+            item.setStock(cursor.getInt(cursor.getColumnIndex(DatabaseHelper.STOCK)));
+            item.setConsumptionRate(cursor.getInt(cursor.getColumnIndex(DatabaseHelper.CONSUMPTIONRATE)));
 
             items.add(item);
 
@@ -217,19 +210,20 @@ public class ItemsDAO{
 
     public void updateItemStock(final Item item, final Integer newStock){
 
-
-        UpdateItemStockFirebase updateItemStockFirebase = new UpdateItemStockFirebase(item, newStock);
-
-        updateItemStockFirebase.execute();
+        //UpdateItemStockFirebase updateItemStockFirebase = new UpdateItemStockFirebase(item, newStock);
+        //updateItemStockFirebase.execute();
 
         SQLiteDatabase database =  databaseHelper.getWritableDatabase();
 
         ContentValues contentValues = new ContentValues();
-        contentValues.put(STOCK, newStock);
+        contentValues.put(DatabaseHelper.STOCK, newStock);
 
-        database.update(TABLEITEMS,  contentValues, ID + " = " + '"' +  item.getID() + '"' , null);
+        database.update(DatabaseHelper.TABLEITEMS,  contentValues, DatabaseHelper.ID + " = " + '"' +  item.getID() + '"' , null);
 
         database.close();
+
+        FirebaseDatabase firebaseDatabase = FirebaseDatabase.getInstance();
+        firebaseDatabase.getReference().child("items").child(item.getID()).child("stock").setValue(newStock);
 
     }
 
@@ -289,6 +283,8 @@ public class ItemsDAO{
         }
     }
 
+    //private class UpdtateItemOnFirebaseTask extends AsyncTask <String, Void, Void>{}
+
     public void addItemsToLocalDatabase(List<Item> items){
         for (Item item : items){
             addItemToLocalDB(item);
@@ -306,14 +302,13 @@ public class ItemsDAO{
         SQLiteDatabase database = databaseHelper.getWritableDatabase();
 
         try {
-            database.delete(TABLEITEMS, ItemsDAO.ID + " = " + ID, null);
+            database.delete(DatabaseHelper.TABLEITEMS, DatabaseHelper.ID + " = " + ID, null);
         } catch (Exception e){
 
             e.printStackTrace();
 
         }
     }
-
 
     public void updateItemConsumptionRateInDatabases(String itemID, Integer consumptionRate){
 
@@ -327,6 +322,7 @@ public class ItemsDAO{
 
         UpdateItemConsumptionRateFirebase updateItemConsumptionRateFirebase = new UpdateItemConsumptionRateFirebase(itemID, consumptionRate);
         updateItemConsumptionRateFirebase.execute();
+        //updateItemConsumptionRateInFirebase(itemID, consumptionRate);
 
     }
 
@@ -335,11 +331,9 @@ public class ItemsDAO{
         SQLiteDatabase database = new DatabaseHelper(context).getWritableDatabase();
 
         ContentValues contentValues = new ContentValues();
-        contentValues.put(CONSUMPTIONRATE, consumptionRate);
+        contentValues.put(DatabaseHelper.CONSUMPTIONRATE, consumptionRate);
 
-        database.update(TABLEITEMS, contentValues, ID + " = " + '"' + itemID + '"', null);
+        database.update(DatabaseHelper.TABLEITEMS, contentValues, DatabaseHelper.ID + " = " + '"' + itemID + '"', null);
 
     }
-
-
 }

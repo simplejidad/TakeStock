@@ -104,6 +104,4 @@ public class FragmentItemDetail extends Fragment {
         void refreshFragmentMainView(Integer position);
         void showFragmentEditItem(Bundle bundle);
     }
-
-
 }

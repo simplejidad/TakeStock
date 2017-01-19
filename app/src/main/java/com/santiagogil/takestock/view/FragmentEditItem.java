@@ -52,6 +52,12 @@ public class FragmentEditItem extends Fragment {
         });
 
         saveButton = (Button) fragmentView.findViewById(R.id.buttonSave);
+        saveButton.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+
+            }
+        });
 
         editTextItemName.setText(bundle.getString(NAME));
         editTextItemStock.setText(((Integer) bundle.getInt(STOCK)).toString());
