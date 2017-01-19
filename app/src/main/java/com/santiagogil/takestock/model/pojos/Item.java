@@ -1,5 +1,8 @@
 package com.santiagogil.takestock.model.pojos;
 
+import com.google.firebase.database.PropertyName;
+import com.santiagogil.takestock.model.daos.DatabaseHelper;
+
 import java.io.Serializable;
 
 /**
@@ -9,11 +12,17 @@ public class Item { //implements Comparable<Item>, Serializable {
 
     static final Integer DEFAULT_CONSUMPTION_RATE = 90;
 
+    @PropertyName(DatabaseHelper.ID)
     private String ID;
+    @PropertyName(DatabaseHelper.NAME)
     private String name;
+    @PropertyName(DatabaseHelper.STOCK)
     private Integer stock;
+    @PropertyName(DatabaseHelper.MINIMUMPURCHACEQUANTITY)
     private Integer minimumPurchaceQuantity;
+    @PropertyName(DatabaseHelper.IMAGE)
     private Integer image;
+    @PropertyName(DatabaseHelper.CONSUMPTIONRATE)
     private Integer consumptionRate;
 
 
