@@ -5,10 +5,16 @@ import android.content.Context;
 import android.database.Cursor;
 import android.database.sqlite.SQLiteDatabase;
 import android.os.AsyncTask;
+import android.widget.Toast;
 
+import com.google.firebase.database.DataSnapshot;
+import com.google.firebase.database.DatabaseError;
 import com.google.firebase.database.DatabaseReference;
 import com.google.firebase.database.FirebaseDatabase;
+import com.google.firebase.database.ValueEventListener;
 import com.santiagogil.takestock.model.pojos.Consumption;
+import com.santiagogil.takestock.model.pojos.Item;
+import com.santiagogil.takestock.util.ResultListener;
 
 import java.util.ArrayList;
 import java.util.Collections;
@@ -127,6 +133,22 @@ public class ConsumptionsDAO{
         return consumptionRate;
     }
 
+    public void addConsumptionToLocalDB(Consumption consumption) {
+
+        SQLiteDatabase database = databaseHelper.getWritableDatabase();
+
+        ContentValues row = new ContentValues();
+
+        row.put(DatabaseHelper.ID, consumption.getID());
+        row.put(DatabaseHelper.DATE, consumption.getDateOfConsumption());
+        row.put(DatabaseHelper.ITEMID, consumption.getItemID());
+
+        database.insert(DatabaseHelper.TABLECONSUMPTIONS, null, row);
+
+        database.close();
+
+    }
+
     private class AddConsumptionToFirebaseTask extends AsyncTask <String, Void, Void>{
 
         private Consumption consumption;
@@ -142,6 +164,62 @@ public class ConsumptionsDAO{
 
             return null;
         }
+    }
+
+    public List<Consumption> getConsumptions(){
+
+        return getConsumptionsFromLocalDB();
+
+    }
+
+    public List<Consumption> getConsumptionsFromLocalDB(){
+
+        List<Consumption> consumptions = new ArrayList<>();
+
+        SQLiteDatabase database = databaseHelper.getReadableDatabase();
+
+        String sqlQuerry = "SELECT * FROM " + DatabaseHelper.TABLECONSUMPTIONS;
+
+        Cursor cursor = database.rawQuery(sqlQuerry, null);
+
+        while(cursor.moveToNext()){
+
+            Consumption consumption = new Consumption();
+            consumption.setID(cursor.getString(cursor.getColumnIndex(DatabaseHelper.ID)));
+            consumption.setDateOfConsumption(cursor.getInt(cursor.getColumnIndex(DatabaseHelper.DATE)));
+            consumption.setItemID(cursor.getString(cursor.getColumnIndex(DatabaseHelper.ITEMID)));
+
+            consumptions.add(consumption);
+        }
+
+        cursor.close();
+        database.close();
+        return consumptions;
+    }
+
+    public void getConsumptionsFromFirebase(final ResultListener<List<Consumption>> resultListener){
+
+        final List<Consumption> consumptions = new ArrayList<>();
+
+        FirebaseDatabase firebaseDatabase = FirebaseDatabase.getInstance();
+        DatabaseReference dbRef = firebaseDatabase.getReference().child(DatabaseHelper.TABLECONSUMPTIONS);
+
+        dbRef.addListenerForSingleValueEvent(new ValueEventListener()   {
+            @Override
+            public void onDataChange(DataSnapshot dataSnapshot) {
+                for (DataSnapshot data : dataSnapshot.getChildren()){
+                    Consumption consumption = data.getValue(Consumption.class);
+                    consumptions.add(consumption);
+                    resultListener.finish(consumptions);
+                }
+            }
+
+            @Override
+            public void onCancelled(DatabaseError databaseError) {
+
+                Toast.makeText(context, "itemsDAO.getConsumptionsFromFirebase FAILED", Toast.LENGTH_SHORT).show();
+            }
+        });
     }
 }
 

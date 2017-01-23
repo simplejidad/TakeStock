@@ -6,8 +6,6 @@ import com.santiagogil.takestock.model.daos.ItemsDAO;
 import com.santiagogil.takestock.model.pojos.Item;
 import com.santiagogil.takestock.util.ResultListener;
 
-import java.util.Collections;
-import java.util.Comparator;
 import java.util.List;
 
 
@@ -78,7 +76,7 @@ public class ItemsController {
 
     public void updateItemConsumptionDate(Context context, String itemID){
 
-        ConsumptionController consumptionsController = new ConsumptionController();
+        ConsumptionsController consumptionsController = new ConsumptionsController();
         Integer updatedConsumptionRate = consumptionsController.getItemConsumptionRate(context, itemID);
         ItemsDAO itemsDAO = new ItemsDAO(context);
         itemsDAO.updateItemConsumptionRateInDatabases(itemID, updatedConsumptionRate);

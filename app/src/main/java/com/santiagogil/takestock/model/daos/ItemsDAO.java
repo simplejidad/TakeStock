@@ -153,10 +153,6 @@ public class ItemsDAO{
                 Toast.makeText(context, "itemsDAO.getItemsFromFirebase FAILED", Toast.LENGTH_SHORT).show();
             }
         });
-
-        //RetrieveItemsFromFirebaseAsync retrieveItemsFromFirebaseAsync = new RetrieveItemsFromFirebaseAsync(listenerFromController);
-        //retrieveItemsFromFirebaseAsync.execute();
-
     }
 
     public void getItemsFromLocalDBSortedByID(final ResultListener<List<Item>> litenerFromController) {

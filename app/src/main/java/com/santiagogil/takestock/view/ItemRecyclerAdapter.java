@@ -10,7 +10,7 @@ import android.widget.TextView;
 import android.widget.Toast;
 
 import com.santiagogil.takestock.R;
-import com.santiagogil.takestock.controller.ConsumptionController;
+import com.santiagogil.takestock.controller.ConsumptionsController;
 import com.santiagogil.takestock.controller.ItemsController;
 import com.santiagogil.takestock.model.pojos.Item;
 
@@ -126,8 +126,8 @@ public class ItemRecyclerAdapter extends RecyclerView.Adapter implements View.On
 
                 ItemsController itemsController = new ItemsController();
                 itemsController.decreaseItemStock(context, item);
-                ConsumptionController consumptionController = new ConsumptionController();
-                consumptionController.addConsumptionToDatabases(context, item.getID());
+                ConsumptionsController consumptionsController = new ConsumptionsController();
+                consumptionsController.addConsumptionToDatabases(context, item.getID());
                 itemsController.updateItemConsumptionDate(context, item.getID());
             }
         }

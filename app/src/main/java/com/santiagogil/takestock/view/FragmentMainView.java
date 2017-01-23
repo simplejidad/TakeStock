@@ -16,6 +16,7 @@ import android.widget.EditText;
 import android.widget.Toast;
 
 import com.santiagogil.takestock.R;
+import com.santiagogil.takestock.controller.ConsumptionsController;
 import com.santiagogil.takestock.controller.ItemsController;
 import com.santiagogil.takestock.model.pojos.Item;
 import com.santiagogil.takestock.util.ResultListener;
@@ -28,6 +29,7 @@ public class FragmentMainView extends Fragment implements View.OnClickListener{
     private RecyclerView recyclerView;
     private EditText editTextAddItem;
     private ItemRecyclerAdapter itemRecyclerAdapter;
+    private ConsumptionsController consumptionsController;
 
     public static final String POSITION = "position";
 
@@ -45,6 +47,9 @@ public class FragmentMainView extends Fragment implements View.OnClickListener{
                 itemRecyclerAdapter.setItems(result);
             }
         });
+
+        consumptionsController = new ConsumptionsController();
+        consumptionsController.updateConsumptionsDatabase(getContext());
 
         recyclerView.setAdapter(itemRecyclerAdapter);
 
