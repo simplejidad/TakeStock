@@ -18,6 +18,7 @@ import android.widget.Toast;
 import com.santiagogil.takestock.R;
 import com.santiagogil.takestock.controller.ConsumptionsController;
 import com.santiagogil.takestock.controller.ItemsController;
+import com.santiagogil.takestock.model.pojos.Consumption;
 import com.santiagogil.takestock.model.pojos.Item;
 import com.santiagogil.takestock.util.ResultListener;
 
@@ -37,63 +38,68 @@ public class FragmentMainView extends Fragment implements View.OnClickListener{
     @Override
     public View onCreateView(LayoutInflater inflater, final ViewGroup container, Bundle savedInstanceState) {
 
-        View view = inflater.inflate(R.layout.fragment_main_view, container, false);
+        final View view = inflater.inflate(R.layout.fragment_main_view, container, false);
         itemsController = new ItemsController();
         recyclerView = (RecyclerView) view.findViewById(R.id.recyclerViewItems);
         itemRecyclerAdapter = new ItemRecyclerAdapter(getContext(), this, new ItemListener());
+        recyclerView.setAdapter(itemRecyclerAdapter);
+        LinearLayoutManager linearLayoutManager = new LinearLayoutManager(getContext());
+        linearLayoutManager.setOrientation(LinearLayoutManager.VERTICAL);
+        recyclerView.setLayoutManager(linearLayoutManager);
+        this.getActivity().getWindow().setSoftInputMode(WindowManager.LayoutParams.SOFT_INPUT_STATE_HIDDEN);
+
         itemsController.getItemsSortedAlphabetically(getContext(), new ResultListener<List<Item>>() {
             @Override
             public void finish(List<Item> result) {
                 itemRecyclerAdapter.setItems(result);
+                itemRecyclerAdapter.notifyDataSetChanged();
+
+
+                Button buttonNewItem = (Button) view.findViewById(R.id.buttonNewItem);
+                editTextAddItem = (EditText) view.findViewById(R.id.editText);
+
+                buttonNewItem.setOnClickListener(new View.OnClickListener() {
+                    @Override
+                    public void onClick(View view) {
+                        if(editTextAddItem.getText().toString().equals("")){
+                            Toast.makeText(view.getContext(), "Write an item name", Toast.LENGTH_SHORT).show();
+                        } else {
+                            addNewItem(view);
+                        }
+
+                        editTextAddItem.clearFocus();
+                    }
+                });
+
+                Bundle bundle = getArguments();
+                if(bundle != null){
+
+                    Integer position = null;
+
+                    try {
+                        position = bundle.getInt(POSITION);
+                    }catch (Exception e){
+                        Toast.makeText(getContext(), "No position in bundle", Toast.LENGTH_SHORT).show();
+                    }
+
+                    if (position <= itemRecyclerAdapter.getItems().size()){
+
+                        recyclerView.scrollToPosition(position);
+
+                    } else if(position > 0){
+                        recyclerView.scrollToPosition(position - 1);
+                    }
+                }
             }
         });
 
         consumptionsController = new ConsumptionsController();
-        consumptionsController.updateConsumptionsDatabase(getContext());
-
-        recyclerView.setAdapter(itemRecyclerAdapter);
-
-        LinearLayoutManager linearLayoutManager = new LinearLayoutManager(getContext());
-        linearLayoutManager.setOrientation(LinearLayoutManager.VERTICAL);
-        recyclerView.setLayoutManager(linearLayoutManager);
-
-        Button buttonNewItem = (Button) view.findViewById(R.id.buttonNewItem);
-        editTextAddItem = (EditText) view.findViewById(R.id.editText);
-
-        buttonNewItem.setOnClickListener(new View.OnClickListener() {
+        consumptionsController.updateConsumptionsDatabase(getContext(), new ResultListener<List<Consumption>>(){
             @Override
-            public void onClick(View view) {
-                if(editTextAddItem.getText().toString().equals("")){
-                    Toast.makeText(view.getContext(), "Write an item name", Toast.LENGTH_SHORT).show();
-                } else {
-                    addNewItem(view);
-                }
-
-                editTextAddItem.clearFocus();
+            public void finish(List<Consumption> result) {
+                Toast.makeText(getContext(), "Cargo la base", Toast.LENGTH_SHORT).show();
             }
         });
-
-        Bundle bundle = getArguments();
-        if(bundle != null){
-
-            Integer position = null;
-
-            try {
-                position = bundle.getInt(POSITION);
-            }catch (Exception e){
-                Toast.makeText(getContext(), "No position in bundle", Toast.LENGTH_SHORT).show();
-            }
-
-            if (position <= itemRecyclerAdapter.getItems().size()){
-
-                recyclerView.scrollToPosition(position);
-
-            } else if(position > 0){
-                recyclerView.scrollToPosition(position - 1);
-            }
-        }
-
-        this.getActivity().getWindow().setSoftInputMode(WindowManager.LayoutParams.SOFT_INPUT_STATE_HIDDEN);
 
         return view;
 

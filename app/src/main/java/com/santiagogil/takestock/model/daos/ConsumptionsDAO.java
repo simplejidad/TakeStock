@@ -13,7 +13,6 @@ import com.google.firebase.database.DatabaseReference;
 import com.google.firebase.database.FirebaseDatabase;
 import com.google.firebase.database.ValueEventListener;
 import com.santiagogil.takestock.model.pojos.Consumption;
-import com.santiagogil.takestock.model.pojos.Item;
 import com.santiagogil.takestock.util.ResultListener;
 
 import java.util.ArrayList;
@@ -48,7 +47,7 @@ public class ConsumptionsDAO{
 
             Consumption consumption = new Consumption();
             consumption.setID(cursor.getString(cursor.getColumnIndex(DatabaseHelper.ID)));
-            consumption.setDateOfConsumption(cursor.getInt(cursor.getColumnIndex(DatabaseHelper.DATE)));
+            consumption.setDate(cursor.getInt(cursor.getColumnIndex(DatabaseHelper.DATE)));
             consumption.setItemID(cursor.getString(cursor.getColumnIndex(DatabaseHelper.ITEMID)));
 
             cursor.close();
@@ -88,7 +87,9 @@ public class ConsumptionsDAO{
 
         FirebaseDatabase firebaseDatabase = FirebaseDatabase.getInstance();
         DatabaseReference myRef = firebaseDatabase.getReference();
-        myRef.child("consumptions").child(consumption.getID().toString()).setValue(consumption);
+        myRef.child(DatabaseHelper.TABLECONSUMPTIONS).child(consumption.getID().toString()).child(DatabaseHelper.ID).setValue(consumption.getID());
+        myRef.child(DatabaseHelper.TABLECONSUMPTIONS).child(consumption.getID().toString()).child(DatabaseHelper.DATE).setValue(consumption.getDate());
+        myRef.child(DatabaseHelper.TABLECONSUMPTIONS).child(consumption.getID().toString()).child(DatabaseHelper.ITEMID).setValue(consumption.getItemID());
 
     }
 
@@ -140,7 +141,7 @@ public class ConsumptionsDAO{
         ContentValues row = new ContentValues();
 
         row.put(DatabaseHelper.ID, consumption.getID());
-        row.put(DatabaseHelper.DATE, consumption.getDateOfConsumption());
+        row.put(DatabaseHelper.DATE, consumption.getDate());
         row.put(DatabaseHelper.ITEMID, consumption.getItemID());
 
         database.insert(DatabaseHelper.TABLECONSUMPTIONS, null, row);
@@ -186,7 +187,7 @@ public class ConsumptionsDAO{
 
             Consumption consumption = new Consumption();
             consumption.setID(cursor.getString(cursor.getColumnIndex(DatabaseHelper.ID)));
-            consumption.setDateOfConsumption(cursor.getInt(cursor.getColumnIndex(DatabaseHelper.DATE)));
+            consumption.setDate(cursor.getInt(cursor.getColumnIndex(DatabaseHelper.DATE)));
             consumption.setItemID(cursor.getString(cursor.getColumnIndex(DatabaseHelper.ITEMID)));
 
             consumptions.add(consumption);
@@ -210,8 +211,8 @@ public class ConsumptionsDAO{
                 for (DataSnapshot data : dataSnapshot.getChildren()){
                     Consumption consumption = data.getValue(Consumption.class);
                     consumptions.add(consumption);
-                    resultListener.finish(consumptions);
                 }
+                resultListener.finish(consumptions);
             }
 
             @Override

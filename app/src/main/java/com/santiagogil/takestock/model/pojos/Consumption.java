@@ -11,8 +11,10 @@ public class Consumption {
 
     @PropertyName(DatabaseHelper.ID)
     private String ID;
+
     @PropertyName(DatabaseHelper.DATE)
-    private Integer dateOfConsumption;
+    private Integer date;
+
     @PropertyName(DatabaseHelper.ITEMID)
     private String itemID;
 
@@ -28,8 +30,8 @@ public class Consumption {
         this.ID = ID;
     }
 
-    public void setDateOfConsumption(Integer dateOfConsumption) {
-        this.dateOfConsumption = dateOfConsumption;
+    public void setDate(Integer date) {
+        this.date = date;
     }
 
     public void setItemID(String itemID) {
@@ -41,8 +43,8 @@ public class Consumption {
         return ID;
     }
 
-    public Integer getDateOfConsumption() {
-        return dateOfConsumption;
+    public Integer getDate() {
+        return date;
     }
 
     public String getItemID() {

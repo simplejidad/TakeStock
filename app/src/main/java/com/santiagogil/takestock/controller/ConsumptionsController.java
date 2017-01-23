@@ -6,19 +6,29 @@ import com.santiagogil.takestock.model.daos.ConsumptionsDAO;
 import com.santiagogil.takestock.model.pojos.Consumption;
 import com.santiagogil.takestock.util.ResultListener;
 
+import java.util.ArrayList;
 import java.util.List;
 
 public class ConsumptionsController {
 
-    public void updateConsumptionsDatabase(final Context context) {
+    public void updateConsumptionsDatabase(final Context context, final ResultListener<List<Consumption>> listenerFromFragment) {
 
         ConsumptionsDAO consumptionsDAO = new ConsumptionsDAO(context);
 
-        if(consumptionsDAO.getConsumptionsFromLocalDB().size() == 0){
+        List<Consumption> consumptions = new ArrayList<>();
+
+        consumptions = consumptionsDAO.getConsumptionsFromLocalDB();
+
+        if(consumptions.size() > 0) {
+
+            listenerFromFragment.finish(consumptions);
+
+        } else {
             consumptionsDAO.getConsumptionsFromFirebase(new ResultListener<List<Consumption>>(){
                 @Override
                 public void finish(List<Consumption> result) {
                     addConsumptionsToDatabase(context, result);
+                    listenerFromFragment.finish(result);
                 }
             });
         }
