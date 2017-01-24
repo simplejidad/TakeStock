@@ -106,12 +106,12 @@ public class ItemsDAO{
 
     }
 
-    public Item getItemFromLocalDB(String itemName){
+    public Item getItemFromLocalDB(String itemID){
 
         SQLiteDatabase database = databaseHelper.getReadableDatabase();
 
-        String selectQuery = "SELECT * FROM " + DatabaseHelper.TABLEITEMS + " WHERE " + DatabaseHelper.NAME + " = " + '"'
-                +  itemName + '"';
+        String selectQuery = "SELECT * FROM " + DatabaseHelper.TABLEITEMS + " WHERE " + DatabaseHelper.ID + " = " + '"'
+                +  itemID + '"';
         Cursor cursor = database.rawQuery(selectQuery, null);
         if (cursor.moveToNext()){
 

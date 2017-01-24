@@ -24,10 +24,6 @@ public class FragmentItemDetail extends Fragment {
         Bundle bundle = new Bundle();
         bundle.putInt(FragmentItemDetail.POSITION, position);
         bundle.putString(DatabaseHelper.ID, item.getID());
-        bundle.putString(DatabaseHelper.NAME, item.getName());
-        bundle.putInt(DatabaseHelper.STOCK, item.getStock());
-        bundle.putInt(DatabaseHelper.MINIMUMPURCHACEQUANTITY, item.getMinimumPurchaceQuantity());
-        bundle.putInt(DatabaseHelper.CONSUMPTIONRATE, item.getConsumptionRate());
 
         FragmentItemDetail fragmentItemDetail = new FragmentItemDetail();
 
@@ -47,6 +43,8 @@ public class FragmentItemDetail extends Fragment {
     private RecyclerView recyclerView;
     private ConsumptionRecyclerAdapter consumptionRecyclerAdapter;
     private ConsumptionsController consumptionsController;
+    private ItemsController itemController;
+    private Item item;
 
     static final String POSITION = "position";
 
@@ -56,6 +54,9 @@ public class FragmentItemDetail extends Fragment {
         fragmentView = inflater.inflate(R.layout.fragment_item_detail, container, false);
 
         final Bundle bundle = getArguments();
+
+        itemController = new ItemsController();
+        item = itemController.getItemFromLocalDatabase(getContext(), bundle.getString(DatabaseHelper.ID));
 
         textViewItemName = (TextView) fragmentView.findViewById(R.id.textViewItemName);
         textViewItemStock = (TextView) fragmentView.findViewById(R.id.textViewStock);
@@ -90,12 +91,10 @@ public class FragmentItemDetail extends Fragment {
             }
         });
 
-
-
-        textViewItemName.setText(bundle.getString(DatabaseHelper.NAME));
-        textViewItemStock.setText(((Integer) bundle.getInt(DatabaseHelper.STOCK)).toString());
-        textViewMinimumPurchace.setText(((Integer) bundle.getInt(DatabaseHelper.MINIMUMPURCHACEQUANTITY)).toString());
-        textViewConsumptionRate.setText(((Integer) bundle.getInt(DatabaseHelper.CONSUMPTIONRATE)).toString());
+        textViewItemName.setText(item.getName());
+        textViewItemStock.setText(item.getStock().toString());
+        textViewMinimumPurchace.setText(item.getMinimumPurchaceQuantity().toString());
+        textViewConsumptionRate.setText(item.getConsumptionRate().toString());
 
 
         recyclerView = (RecyclerView) fragmentView.findViewById(R.id.recyclerViewConsumptions);

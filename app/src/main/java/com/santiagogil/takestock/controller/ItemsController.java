@@ -87,4 +87,10 @@ public class ItemsController {
         ItemsDAO itemsDAO = new ItemsDAO(context);
         itemsDAO.updateItemDetails(itemID, itemName, itemStock, itemConsumptionRate, itemMinimumPurchace);
     }
+
+    public Item getItemFromLocalDatabase(Context context, String itemID) {
+
+        ItemsDAO itemsDAO = new ItemsDAO(context);
+        return itemsDAO.getItemFromLocalDB(itemID);
+    }
 }

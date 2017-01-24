@@ -26,11 +26,8 @@ public class FragmentEditItem extends Fragment {
     private Button cancelButton;
     private Button saveButton;
 
-    private String itemID;
-    private String itemName;
-    private Integer itemStock;
-    private Integer itemConsumptionRate;
-    private Integer itemMinimumPurchaceQuantity;
+    private Item item;
+    private ItemsController itemsController;
 
 
 
@@ -43,11 +40,8 @@ public class FragmentEditItem extends Fragment {
 
         final Bundle bundle = getArguments();
 
-        itemID = bundle.getString(DatabaseHelper.ID);
-        itemName = bundle.getString(DatabaseHelper.NAME);
-        itemStock = bundle.getInt(DatabaseHelper.STOCK);
-        itemConsumptionRate = bundle.getInt(DatabaseHelper.CONSUMPTIONRATE);
-        itemMinimumPurchaceQuantity = bundle.getInt(DatabaseHelper.MINIMUMPURCHACEQUANTITY);
+        itemsController = new ItemsController();
+        item = itemsController.getItemFromLocalDatabase(getContext(), bundle.getString(DatabaseHelper.ID));
 
         editTextItemName = (EditText) fragmentView.findViewById(R.id.editTextItemName);
         editTextItemStock = (EditText) fragmentView.findViewById(R.id.editTextStock);
@@ -71,17 +65,17 @@ public class FragmentEditItem extends Fragment {
             }
         });
 
-        editTextItemName.setText(itemName);
-        editTextItemStock.setText(itemStock.toString());
-        editTextConsumptionRate.setText(itemConsumptionRate.toString());
-        editTextMinimumPurchace.setText(itemMinimumPurchaceQuantity.toString());
+        editTextItemName.setText(item.getName());
+        editTextItemStock.setText(item.getStock().toString());
+        editTextConsumptionRate.setText(item.getConsumptionRate().toString());
+        editTextMinimumPurchace.setText(item.getMinimumPurchaceQuantity().toString());
 
         return fragmentView;
     }
 
-    public interface FragmentActivityCommunicator{
-        void refreshFragmentMainView(Integer position);
-    }
+    //public interface FragmentActivityCommunicator{
+    //    void refreshFragmentMainView(Integer position);
+    //}
 
     public void updateItemDetails (){
 
@@ -91,7 +85,7 @@ public class FragmentEditItem extends Fragment {
         Integer updatedItemConsumptionRate = tryParse(editTextConsumptionRate.getText().toString());
 
         ItemsController itemsController = new ItemsController();
-        itemsController.updateItemDetails(getContext(), itemID, updatedItemName, updatedItemStock, updatedItemConsumptionRate, updatedItemMinimumPurchaceQuantity);
+        itemsController.updateItemDetails(getContext(), item.getID(), updatedItemName, updatedItemStock, updatedItemConsumptionRate, updatedItemMinimumPurchaceQuantity);
 
     }
 
