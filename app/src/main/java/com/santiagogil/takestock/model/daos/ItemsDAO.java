@@ -34,9 +34,7 @@ public class ItemsDAO{
     public String addItemToDatabases(final Item itemWithoutID) {
 
         addItemToLocalDB(itemWithoutID);
-        Item itemWithID = getItemFromLocalDB(itemWithoutID.getName());
-        //AddItemToFirebaseTask addItemToFirebaseTask = new AddItemToFirebaseTask(itemWithID);
-        //addItemToFirebaseTask.execute();
+        Item itemWithID = getItemFromLocalDBUsingItemName(itemWithoutID.getName());
         addItemToFirebase(itemWithID);
         return itemWithID.getID();
     }
@@ -102,6 +100,32 @@ public class ItemsDAO{
 
         return items;
 
+    }
+
+    public Item getItemFromLocalDBUsingItemName(String itemName){
+
+        SQLiteDatabase database = databaseHelper.getReadableDatabase();
+
+        String selectQuery = "SELECT * FROM " + DatabaseHelper.TABLEITEMS + " WHERE " + DatabaseHelper.NAME + " = " + '"'
+                +  itemName + '"';
+        Cursor cursor = database.rawQuery(selectQuery, null);
+        if (cursor.moveToNext()) {
+
+            Item item = new Item();
+            item.setID(cursor.getString(cursor.getColumnIndex(DatabaseHelper.ID)));
+            item.setImage(cursor.getInt(cursor.getColumnIndex(DatabaseHelper.IMAGE)));
+            item.setMinimumPurchaceQuantity(cursor.getInt(cursor.getColumnIndex(DatabaseHelper.MINIMUMPURCHACEQUANTITY)));
+            item.setName(cursor.getString(cursor.getColumnIndex(DatabaseHelper.NAME)));
+            item.setStock(cursor.getInt(cursor.getColumnIndex(DatabaseHelper.STOCK)));
+            item.setConsumptionRate(cursor.getInt(cursor.getColumnIndex(DatabaseHelper.CONSUMPTIONRATE)));
+
+            cursor.close();
+            database.close();
+
+            return item;
+        }
+        Toast.makeText(context, "getItemFromLocalDBUsingItemName FAILED", Toast.LENGTH_SHORT).show();
+        return null;
     }
 
     public Item getItemFromLocalDB(String itemID){
