@@ -61,6 +61,8 @@ public class FragmentEditItem extends Fragment {
             public void onClick(View view) {
 
                 updateItemDetails();
+                getActivity().onBackPressed();
+
 
             }
         });
