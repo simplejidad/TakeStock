@@ -61,9 +61,8 @@ public class FragmentEditItem extends Fragment {
             public void onClick(View view) {
 
                 updateItemDetails();
+
                 getActivity().onBackPressed();
-
-
             }
         });
 
@@ -74,10 +73,6 @@ public class FragmentEditItem extends Fragment {
 
         return fragmentView;
     }
-
-    //public interface FragmentActivityCommunicator{
-    //    void refreshFragmentMainView(Integer position);
-    //}
 
     public void updateItemDetails (){
 
