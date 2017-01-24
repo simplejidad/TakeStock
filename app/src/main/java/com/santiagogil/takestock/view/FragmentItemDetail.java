@@ -4,6 +4,7 @@ import android.os.Bundle;
 import android.support.annotation.Nullable;
 import android.support.v4.app.Fragment;
 import android.support.v4.app.FragmentTransaction;
+import android.support.v7.widget.RecyclerView;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -12,6 +13,7 @@ import android.widget.TextView;
 import android.widget.Toast;
 
 import com.santiagogil.takestock.R;
+import com.santiagogil.takestock.controller.ConsumptionsController;
 import com.santiagogil.takestock.controller.ItemsController;
 import com.santiagogil.takestock.model.daos.DatabaseHelper;
 import com.santiagogil.takestock.model.pojos.Item;
@@ -42,6 +44,9 @@ public class FragmentItemDetail extends Fragment {
     private Button deleteButton;
     private Button editButton;
     private Button backButton;
+    private RecyclerView recyclerView;
+    private ConsumptionRecyclerAdapter consumptionRecyclerAdapter;
+    private ConsumptionsController consumptionsController;
 
     static final String POSITION = "position";
 
@@ -86,10 +91,18 @@ public class FragmentItemDetail extends Fragment {
         });
 
 
+
         textViewItemName.setText(bundle.getString(DatabaseHelper.NAME));
         textViewItemStock.setText(((Integer) bundle.getInt(DatabaseHelper.STOCK)).toString());
         textViewMinimumPurchace.setText(((Integer) bundle.getInt(DatabaseHelper.MINIMUMPURCHACEQUANTITY)).toString());
         textViewConsumptionRate.setText(((Integer) bundle.getInt(DatabaseHelper.CONSUMPTIONRATE)).toString());
+
+
+        recyclerView = (RecyclerView) fragmentView.findViewById(R.id.recyclerViewConsumptions);
+        consumptionRecyclerAdapter = new ConsumptionRecyclerAdapter(getContext());
+        consumptionsController = new ConsumptionsController();
+        consumptionRecyclerAdapter.setConsumptionList(consumptionsController.getItemConsumptionList(getContext(), bundle.getString(DatabaseHelper.ID)));
+        recyclerView.setAdapter(consumptionRecyclerAdapter);
 
         return fragmentView;
     }

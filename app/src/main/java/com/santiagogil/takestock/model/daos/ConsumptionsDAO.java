@@ -51,7 +51,7 @@ public class ConsumptionsDAO{
             consumption.setItemID(cursor.getString(cursor.getColumnIndex(DatabaseHelper.ITEMID)));
 
             cursor.close();
-
+            database.close();
             return consumption;
         }
 
@@ -222,5 +222,30 @@ public class ConsumptionsDAO{
             }
         });
     }
+
+    public List<Consumption> getItemConsumptionList(String itemID){
+
+        List<Consumption> consumptionList = new ArrayList<>();
+
+        SQLiteDatabase database = databaseHelper.getReadableDatabase();
+
+        String selectQuery = "SELECT * FROM " + DatabaseHelper.TABLECONSUMPTIONS + " WHERE " + DatabaseHelper.ITEMID + " = " + '"' + itemID + '"';
+
+        Cursor cursor = database.rawQuery(selectQuery, null);
+        while(cursor.moveToNext()) {
+
+            Consumption consumption = new Consumption();
+            consumption.setID(cursor.getString(cursor.getColumnIndex(DatabaseHelper.ID)));
+            consumption.setDate(cursor.getInt(cursor.getColumnIndex(DatabaseHelper.DATE)));
+            consumption.setItemID(cursor.getString(cursor.getColumnIndex(DatabaseHelper.ITEMID)));
+
+            consumptionList.add(consumption);
+        }
+
+            cursor.close();
+            database.close();
+            return consumptionList;
+        }
+
 }
 

@@ -208,9 +208,6 @@ public class ItemsDAO{
 
     public void updateItemStock(final Item item, final Integer newStock){
 
-        //UpdateItemStockFirebase updateItemStockFirebase = new UpdateItemStockFirebase(item, newStock);
-        //updateItemStockFirebase.execute();
-
         SQLiteDatabase database =  databaseHelper.getWritableDatabase();
 
         ContentValues contentValues = new ContentValues();
@@ -226,12 +223,36 @@ public class ItemsDAO{
     }
 
     public void updateItemDetails(String itemID, String updatedItemName, Integer updatedItemStock, Integer updatedConsumptionRate, Integer updatedMinimumPurchace){
+
+        updateItemDetailsOnLocalDatabase(itemID, updatedItemName, updatedItemStock, updatedConsumptionRate,updatedMinimumPurchace);
+        updateItemDetailsOnFirebase(itemID, updatedItemName, updatedItemStock, updatedConsumptionRate,updatedMinimumPurchace);
+
+    }
+
+    public void updateItemDetailsOnLocalDatabase(String itemID, String updatedItemName, Integer updatedItemStock, Integer updatedConsumptionRate, Integer updatedMinimumPurchace){
+
+        SQLiteDatabase database =  databaseHelper.getWritableDatabase();
+
+        ContentValues contentValues = new ContentValues();
+        contentValues.put(DatabaseHelper.NAME, updatedItemName);
+        contentValues.put(DatabaseHelper.STOCK, updatedItemStock);
+        contentValues.put(DatabaseHelper.CONSUMPTIONRATE, updatedConsumptionRate);
+        contentValues.put(DatabaseHelper.MINIMUMPURCHACEQUANTITY, updatedMinimumPurchace);
+
+        database.update(DatabaseHelper.TABLEITEMS,  contentValues, DatabaseHelper.ID + " = " + '"' + itemID + '"' , null);
+
+        database.close();
+    }
+
+    public void updateItemDetailsOnFirebase(String itemID, String updatedItemName, Integer updatedItemStock, Integer updatedConsumptionRate, Integer updatedMinimumPurchace){
+
         FirebaseDatabase firebaseDatabase = FirebaseDatabase.getInstance();
         DatabaseReference myRef = firebaseDatabase.getReference().child(DatabaseHelper.TABLEITEMS).child(itemID);
         myRef.child(DatabaseHelper.NAME).setValue(updatedItemName);
         myRef.child(DatabaseHelper.STOCK).setValue(updatedItemStock);
         myRef.child(DatabaseHelper.CONSUMPTIONRATE).setValue(updatedConsumptionRate);
         myRef.child(DatabaseHelper.MINIMUMPURCHACEQUANTITY).setValue(updatedMinimumPurchace);
+
     }
 
     private class UpdateItemConsumptionRateFirebase extends AsyncTask<String, Void, Void>{

@@ -87,8 +87,6 @@ public class ItemRecyclerAdapter extends RecyclerView.Adapter implements View.On
             this.onStockModifiedListener = onStockModifiedListener;
         }
 
-
-
         public void loadItem(final Item item){
 
             textViewItemName.setText(item.getName());

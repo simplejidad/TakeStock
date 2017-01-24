@@ -66,6 +66,12 @@ public class ConsumptionsController {
         return consumptionsDAO.getConsumptions();
     }
 
+    public List<Consumption> getItemConsumptionList(Context context, String itemID){
+        ConsumptionsDAO consumptionsDAO = new ConsumptionsDAO(context);
+        return consumptionsDAO.getItemConsumptionList(itemID);
+
+    }
+
 
 }
 
