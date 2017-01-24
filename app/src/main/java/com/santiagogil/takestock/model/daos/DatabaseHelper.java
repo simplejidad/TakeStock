@@ -6,20 +6,28 @@ import android.database.sqlite.SQLiteOpenHelper;
 
 public class DatabaseHelper extends SQLiteOpenHelper {
 
+    //Database
     private static final String DATABASENAME = "TakeStockDB";
     private static final Integer DATABASEVERSION = 1;
 
+    //Tables
     public static final String TABLEITEMS = "Item";
+    public static final String TABLECONSUMPTIONS = "Consumptions";
+
+    //Columns
     public static final String ID = "ID";
     public static final String NAME = "Name"  ;
     public static final String STOCK = "Stock" ;
     public static final String MINIMUMPURCHACEQUANTITY = "MinimumPurchaceQuantity" ;
     public static final String CONSUMPTIONRATE = "ConsumptionRate";
     public static final String IMAGE = "Image" ;
-
-    public static final String TABLECONSUMPTIONS = "Consumptions";
+    public static final String DELETED = "Deleted";
     public static final String DATE = "Date";
     public static final String ITEMID = "ItemID";
+
+    //Values
+    public static final String DELETED_TRUE = "true";
+    public static final String DELETED_FALSE = "true";
 
     public DatabaseHelper(Context context) {
         super(context, DATABASENAME, null, DATABASEVERSION);
@@ -52,8 +60,6 @@ public class DatabaseHelper extends SQLiteOpenHelper {
 
     @Override
     public void onUpgrade(SQLiteDatabase sqLiteDatabase, int i, int i1) {
-
-
 
     }
 }

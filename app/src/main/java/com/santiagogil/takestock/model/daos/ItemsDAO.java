@@ -255,7 +255,15 @@ public class ItemsDAO{
     public void deleteItemFromDatabases(String itemID){
 
         deleteItemFromLocalDB(itemID);
+        deleteItemFromFirebase(itemID);
 
+    }
+
+    private void deleteItemFromFirebase(String itemID) {
+
+        FirebaseDatabase firebaseDatabase = FirebaseDatabase.getInstance();
+        DatabaseReference myRef = firebaseDatabase.getReference();
+        myRef.child(DatabaseHelper.TABLEITEMS).child(itemID).child(DatabaseHelper.DELETED).setValue(DatabaseHelper.DELETED_TRUE);
     }
 
     public void deleteItemFromLocalDB(String itemID){
@@ -263,7 +271,10 @@ public class ItemsDAO{
         SQLiteDatabase database = databaseHelper.getWritableDatabase();
 
         try {
-            database.delete(DatabaseHelper.TABLEITEMS, DatabaseHelper.ID + " = " + itemID, null);
+
+            database.delete(DatabaseHelper.TABLEITEMS, DatabaseHelper.ID + " = " + '"' + itemID + '"', null);
+            database.close();
+
         } catch (Exception e){
 
             e.printStackTrace();

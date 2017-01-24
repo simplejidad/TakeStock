@@ -56,7 +56,7 @@ public class ConsumptionRecyclerAdapter extends RecyclerView.Adapter {
 
         public void loadConsumption(Consumption consumption){
 
-            textViewConsumptionDate.setText(consumption.getDate());
+            textViewConsumptionDate.setText(consumption.getDate().toString());
 
         }
     }
