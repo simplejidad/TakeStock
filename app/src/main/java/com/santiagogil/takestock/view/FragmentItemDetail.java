@@ -75,7 +75,7 @@ public class FragmentItemDetail extends Fragment {
             @Override
             public void onClick(View view) {
                 ItemsController itemsController = new ItemsController();
-                itemsController.deleteItemFromDatabases(getContext(), bundle.getLong(DatabaseHelper.ID));
+                itemsController.deleteItemFromDatabases(getContext(), item.getID());
                 Toast.makeText(getContext(), "Item Deleted", Toast.LENGTH_SHORT).show();
                 FragmentActivityCommunicator fragmentActivityCommunicator = (FragmentActivityCommunicator) getActivity();
                 fragmentActivityCommunicator.refreshFragmentMainView(bundle.getInt(POSITION));

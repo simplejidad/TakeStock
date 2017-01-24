@@ -3,11 +3,6 @@ package com.santiagogil.takestock.model.pojos;
 import com.google.firebase.database.PropertyName;
 import com.santiagogil.takestock.model.daos.DatabaseHelper;
 
-import java.io.Serializable;
-
-/**
- * Created by digitalhouse on 24/12/16.
- */
 public class Item { //implements Comparable<Item>, Serializable {
 
     static final Integer DEFAULT_CONSUMPTION_RATE = 90;
@@ -29,16 +24,6 @@ public class Item { //implements Comparable<Item>, Serializable {
     public Item(){
 
     }
-
-  /*  @Override
-    public int compareTo(Item item) {
-
-        String otherItemName = ((Item) item).getName();
-        String currentItemName = this.getName();
-
-        return compareNames(otherItemName, currentItemName);
-    }
-*/
 
 
     public Integer getConsumptionRate() {

@@ -34,9 +34,9 @@ public class ItemsController {
         });
     }
 
-    public void deleteItemFromDatabases(Context context, Long ID){
+    public void deleteItemFromDatabases(Context context, String itemID){
         ItemsDAO itemsDAO = new ItemsDAO(context);
-        itemsDAO.deleteItemFromDatabases(ID);
+        itemsDAO.deleteItemFromDatabases(itemID);
 
     }
 

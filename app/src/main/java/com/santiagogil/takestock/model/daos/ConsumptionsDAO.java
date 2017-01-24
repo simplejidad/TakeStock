@@ -87,9 +87,9 @@ public class ConsumptionsDAO{
 
         FirebaseDatabase firebaseDatabase = FirebaseDatabase.getInstance();
         DatabaseReference myRef = firebaseDatabase.getReference();
-        myRef.child(DatabaseHelper.TABLECONSUMPTIONS).child(consumption.getID().toString()).child(DatabaseHelper.ID).setValue(consumption.getID());
-        myRef.child(DatabaseHelper.TABLECONSUMPTIONS).child(consumption.getID().toString()).child(DatabaseHelper.DATE).setValue(consumption.getDate());
-        myRef.child(DatabaseHelper.TABLECONSUMPTIONS).child(consumption.getID().toString()).child(DatabaseHelper.ITEMID).setValue(consumption.getItemID());
+        myRef.child(DatabaseHelper.TABLECONSUMPTIONS).child(consumption.getID()).child(DatabaseHelper.ID).setValue(consumption.getID());
+        myRef.child(DatabaseHelper.TABLECONSUMPTIONS).child(consumption.getID()).child(DatabaseHelper.DATE).setValue(consumption.getDate());
+        myRef.child(DatabaseHelper.TABLECONSUMPTIONS).child(consumption.getID()).child(DatabaseHelper.ITEMID).setValue(consumption.getItemID());
 
     }
 

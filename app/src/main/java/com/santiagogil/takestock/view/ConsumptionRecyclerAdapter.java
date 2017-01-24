@@ -25,7 +25,7 @@ public class ConsumptionRecyclerAdapter extends RecyclerView.Adapter {
     public RecyclerView.ViewHolder onCreateViewHolder(ViewGroup parent, int viewType) {
         LayoutInflater inflater = LayoutInflater.from(context);
         View view = inflater.inflate(R.layout.card_view_consumption, parent, false);
-        return new ConsumptionViewHolder(view, context);
+        return new ConsumptionViewHolder(view);
     }
 
     @Override
@@ -49,14 +49,14 @@ public class ConsumptionRecyclerAdapter extends RecyclerView.Adapter {
 
         private TextView textViewConsumptionDate;
 
-        public ConsumptionViewHolder(View consumptionView, Context context) {
+        public ConsumptionViewHolder(View consumptionView) {
             super(consumptionView);
             textViewConsumptionDate = (TextView) consumptionView.findViewById(R.id.textViewConsumptionDate);
         }
 
         public void loadConsumption(Consumption consumption){
 
-            textViewConsumptionDate.setText(consumption.getDate().toString());
+            textViewConsumptionDate.setText(consumption.getDate());
 
         }
     }

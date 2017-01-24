@@ -18,10 +18,6 @@ public class Consumption {
     @PropertyName(DatabaseHelper.ITEMID)
     private String itemID;
 
-    public Consumption(String itemID) {
-        this.itemID = itemID;
-    }
-
     public Consumption(){
 
     }

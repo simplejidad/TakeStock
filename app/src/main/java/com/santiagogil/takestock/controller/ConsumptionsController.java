@@ -6,7 +6,6 @@ import com.santiagogil.takestock.model.daos.ConsumptionsDAO;
 import com.santiagogil.takestock.model.pojos.Consumption;
 import com.santiagogil.takestock.util.ResultListener;
 
-import java.util.ArrayList;
 import java.util.List;
 
 public class ConsumptionsController {
@@ -15,7 +14,7 @@ public class ConsumptionsController {
 
         ConsumptionsDAO consumptionsDAO = new ConsumptionsDAO(context);
 
-        List<Consumption> consumptions = new ArrayList<>();
+        List<Consumption> consumptions;
 
         consumptions = consumptionsDAO.getConsumptionsFromLocalDB();
 

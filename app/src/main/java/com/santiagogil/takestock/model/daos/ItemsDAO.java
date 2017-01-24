@@ -4,8 +4,6 @@ import android.content.ContentValues;
 import android.content.Context;
 import android.database.Cursor;
 import android.database.sqlite.SQLiteDatabase;
-import android.os.AsyncTask;
-import android.provider.ContactsContract;
 import android.widget.Toast;
 
 import com.google.firebase.database.DataSnapshot;
@@ -155,14 +153,6 @@ public class ItemsDAO{
         });
     }
 
-    public void getItemsFromLocalDBSortedByID(final ResultListener<List<Item>> litenerFromController) {
-
-        List<Item> items = getItemsFromLocalDBSortedByID();
-        litenerFromController.finish(items);
-    }
-
-
-
     public List<Item> getItemsFromLocalDBSortedByID() {
 
         SQLiteDatabase database = databaseHelper.getReadableDatabase();
@@ -255,63 +245,6 @@ public class ItemsDAO{
 
     }
 
-    private class UpdateItemConsumptionRateFirebase extends AsyncTask<String, Void, Void>{
-
-        private String itemId;
-        private Integer consumptionRate;
-
-        public UpdateItemConsumptionRateFirebase(String itemId, Integer consumptionRate) {
-
-            this.itemId = itemId;
-            this.consumptionRate = consumptionRate;
-        }
-
-        @Override
-        protected Void doInBackground(String... strings) {
-
-            updateItemConsumptionRateInFirebase(itemId, consumptionRate);
-
-            return null;
-        }
-    }
-
-    private class UpdateItemStockFirebase extends AsyncTask<String, Void, Void>{
-
-        private Item item;
-        private Integer newStock;
-
-        public UpdateItemStockFirebase(Item item, Integer newStock) {
-            this.item = item;
-            this.newStock = newStock;
-        }
-
-        @Override
-        protected Void doInBackground(String... strings) {
-
-            FirebaseDatabase firebaseDatabase = FirebaseDatabase.getInstance();
-            firebaseDatabase.getReference().child(databaseHelper.TABLEITEMS).child(item.getID()).child(DatabaseHelper.STOCK).setValue(newStock);
-            return null;
-        }
-    }
-
-    private class AddItemToFirebaseTask extends AsyncTask <String, Void, Void>{
-
-        private Item item;
-
-        public AddItemToFirebaseTask(Item item) {
-            this.item = item;
-        }
-
-        @Override
-        protected Void doInBackground(String... strings) {
-
-            addItemToFirebase(item);
-
-            return null;
-        }
-    }
-
-    //private class UpdtateItemOnFirebaseTask extends AsyncTask <String, Void, Void>{}
 
     public void addItemsToLocalDatabase(List<Item> items){
         for (Item item : items){
@@ -319,18 +252,18 @@ public class ItemsDAO{
         }
     }
 
-    public void deleteItemFromDatabases(Long ID){
+    public void deleteItemFromDatabases(String itemID){
 
-        deleteItemFromLocalDB(ID);
+        deleteItemFromLocalDB(itemID);
 
     }
 
-    public void deleteItemFromLocalDB(Long ID){
+    public void deleteItemFromLocalDB(String itemID){
 
         SQLiteDatabase database = databaseHelper.getWritableDatabase();
 
         try {
-            database.delete(DatabaseHelper.TABLEITEMS, DatabaseHelper.ID + " = " + ID, null);
+            database.delete(DatabaseHelper.TABLEITEMS, DatabaseHelper.ID + " = " + itemID, null);
         } catch (Exception e){
 
             e.printStackTrace();

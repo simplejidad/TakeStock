@@ -1,7 +1,6 @@
 package com.santiagogil.takestock.model.daos;
 
 import android.content.Context;
-import android.database.DatabaseErrorHandler;
 import android.database.sqlite.SQLiteDatabase;
 import android.database.sqlite.SQLiteOpenHelper;
 
@@ -9,8 +8,6 @@ public class DatabaseHelper extends SQLiteOpenHelper {
 
     private static final String DATABASENAME = "TakeStockDB";
     private static final Integer DATABASEVERSION = 1;
-
-
 
     public static final String TABLEITEMS = "Item";
     public static final String ID = "ID";
