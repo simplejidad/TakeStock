@@ -19,7 +19,16 @@ public class Item { //implements Comparable<Item>, Serializable {
     private Integer image;
     @PropertyName(DatabaseHelper.CONSUMPTIONRATE)
     private Integer consumptionRate;
+    @PropertyName (DatabaseHelper.ACTIVE)
+    private Boolean active;
 
+    public Boolean getActive() {
+        return active;
+    }
+
+    public void setActive(Boolean active) {
+        this.active = active;
+    }
 
     public Item(){
 
@@ -39,6 +48,7 @@ public class Item { //implements Comparable<Item>, Serializable {
         this.stock = 0;
         minimumPurchaceQuantity = 1;
         image = 0;
+        active = true;
         consumptionRate = DEFAULT_CONSUMPTION_RATE;
 
     }

@@ -21,13 +21,13 @@ public class DatabaseHelper extends SQLiteOpenHelper {
     public static final String MINIMUMPURCHACEQUANTITY = "MinimumPurchaceQuantity" ;
     public static final String CONSUMPTIONRATE = "ConsumptionRate";
     public static final String IMAGE = "Image" ;
-    public static final String DELETED = "Deleted";
+    public static final String ACTIVE = "Active";
     public static final String DATE = "Date";
     public static final String ITEMID = "ItemID";
 
     //Values
-    public static final String DELETED_TRUE = "true";
-    public static final String DELETED_FALSE = "true";
+    public static final String ACTIVE_TRUE = "1";
+    public static final String ACTIVE_FALSE = "0";
 
     public DatabaseHelper(Context context) {
         super(context, DATABASENAME, null, DATABASEVERSION);
@@ -46,7 +46,8 @@ public class DatabaseHelper extends SQLiteOpenHelper {
             + STOCK + " NUMBER,"
             + IMAGE + " TEXT, "
             + CONSUMPTIONRATE + " NUMBER, "
-            + MINIMUMPURCHACEQUANTITY + " NUMBER "
+            + MINIMUMPURCHACEQUANTITY + " NUMBER, "
+            + ACTIVE + " BOOLEAN "
             + ")";
 
 

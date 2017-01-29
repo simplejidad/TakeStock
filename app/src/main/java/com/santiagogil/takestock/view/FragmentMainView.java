@@ -48,7 +48,7 @@ public class FragmentMainView extends Fragment implements View.OnClickListener{
         recyclerView.setLayoutManager(linearLayoutManager);
         this.getActivity().getWindow().setSoftInputMode(WindowManager.LayoutParams.SOFT_INPUT_STATE_HIDDEN);
 
-        itemsController.getItemsSortedAlphabetically(getContext(), new ResultListener<List<Item>>() {
+        itemsController.getActiveItemsSortedAlphabetically(getContext(), new ResultListener<List<Item>>() {
             @Override
             public void finish(List<Item> result) {
                 itemRecyclerAdapter.setItems(result);

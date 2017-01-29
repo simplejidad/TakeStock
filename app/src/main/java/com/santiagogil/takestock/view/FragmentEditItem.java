@@ -78,9 +78,10 @@ public class FragmentEditItem extends Fragment {
         Integer updatedItemStock = tryParse(editTextItemStock.getText().toString());
         Integer updatedItemMinimumPurchaceQuantity = tryParse(editTextMinimumPurchace.getText().toString());
         Integer updatedItemConsumptionRate = tryParse(editTextConsumptionRate.getText().toString());
+        Boolean updatedActiveStatus = true;
 
         ItemsController itemsController = new ItemsController();
-        itemsController.updateItemDetails(getContext(), item.getID(), updatedItemName, updatedItemStock, updatedItemConsumptionRate, updatedItemMinimumPurchaceQuantity);
+        itemsController.updateItemDetails(getContext(), item.getID(), updatedItemName, updatedItemStock, updatedItemConsumptionRate, updatedItemMinimumPurchaceQuantity, updatedActiveStatus);
 
     }
 

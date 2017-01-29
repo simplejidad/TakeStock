@@ -22,7 +22,7 @@ import java.util.UUID;
 
 public class ItemsDAO{
 
-    private List<Item> items = new ArrayList<>();
+    //private List<Item> items = new ArrayList<>();
     private Context context;
     private DatabaseHelper databaseHelper;
 
@@ -39,14 +39,35 @@ public class ItemsDAO{
         return itemWithID.getID();
     }
 
-    public void addItemToFirebase(Item item){
+    public void updateItemConsumptionRateInLocalDB(String itemID, Integer consumptionRate){
 
-        FirebaseDatabase firebaseDatabase = FirebaseDatabase.getInstance();
-        DatabaseReference myRef = firebaseDatabase.getReference();
-        myRef.child(DatabaseHelper.TABLEITEMS).child(item.getID()).child(DatabaseHelper.ID).setValue(item.getID());
-        updateItemDetails(item.getID(), item.getName(), item.getStock(), item.getConsumptionRate(), item.getMinimumPurchaceQuantity());
+        SQLiteDatabase database = new DatabaseHelper(context).getWritableDatabase();
+
+        ContentValues contentValues = new ContentValues();
+        contentValues.put(DatabaseHelper.CONSUMPTIONRATE, consumptionRate);
+
+        database.update(DatabaseHelper.TABLEITEMS, contentValues, DatabaseHelper.ID + " = " + '"' + itemID + '"', null);
 
     }
+
+
+    public void getAllItemsFromLocalDBSortedAlphabetically(final ResultListener<List<Item>> listenerFromController){
+
+        List<Item> itemList = getAllItemsFromLocalDB();
+
+        listenerFromController.finish(sortItemsAlphabetically(itemList));
+
+    }
+
+    public void getActiveItemsFromLocalDBSortedAlphabetically(final ResultListener<List<Item>> listenerFromController){
+
+        List<Item> itemList = getActiveItemsFromLocalDB();
+
+        listenerFromController.finish(sortItemsAlphabetically(itemList));
+
+    }
+
+
 
     public void addItemToLocalDB(Item item){
 
@@ -64,33 +85,34 @@ public class ItemsDAO{
         row.put(DatabaseHelper.IMAGE, item.getImage());
         row.put(DatabaseHelper.MINIMUMPURCHACEQUANTITY, item.getMinimumPurchaceQuantity());
         row.put(DatabaseHelper.CONSUMPTIONRATE, item.getConsumptionRate());
+        row.put(DatabaseHelper.ACTIVE, booleanToInteger(item.getActive()));
 
         database.insert(DatabaseHelper.TABLEITEMS, null, row);
 
         database.close();
     }
 
-    public void getAllItemsFromLocalDBSortedAlphabetically(final ResultListener<List<Item>> listenerFromController){
+    public void addItemToFirebase(Item item){
 
-        List<Item> items = getItemsFromLocalDBSortedByID();
-        if(items.size() > 1) {
-            Collections.sort(items, new Comparator<Item>() {
-                public int compare(Item o1, Item o2) {
-                    return o1.getName().compareTo(o2.getName());
-                }
-            });
-        }
-
-        listenerFromController.finish(items);
+        FirebaseDatabase firebaseDatabase = FirebaseDatabase.getInstance();
+        DatabaseReference myRef = firebaseDatabase.getReference();
+        myRef.child(DatabaseHelper.TABLEITEMS).child(item.getID()).child(DatabaseHelper.ID).setValue(item.getID());
+        updateItemDetails(item.getID(), item.getName(), item.getStock(), item.getConsumptionRate(), item.getMinimumPurchaceQuantity(), item.getActive());
 
     }
 
     public List<Item> getAllItemsFromLocalDBSortedAlphabetically(){
 
-        List<Item> items = getItemsFromLocalDBSortedByID();
-        if(items.size() > 1){
+        List<Item> itemList = getAllItemsFromLocalDB();
 
-            Collections.sort(items, new Comparator<Item>(){
+        return sortItemsAlphabetically(itemList);
+    }
+
+    public List<Item> sortItemsAlphabetically(List<Item> itemList) {
+
+        if(itemList.size() > 1){
+
+            Collections.sort(itemList, new Comparator<Item>(){
                 public int compare (Item o1, Item o2){
                     return o1.getName().compareTo(o2.getName());
                 }
@@ -98,7 +120,7 @@ public class ItemsDAO{
         }
 
 
-        return items;
+        return itemList;
 
     }
 
@@ -118,6 +140,7 @@ public class ItemsDAO{
             item.setName(cursor.getString(cursor.getColumnIndex(DatabaseHelper.NAME)));
             item.setStock(cursor.getInt(cursor.getColumnIndex(DatabaseHelper.STOCK)));
             item.setConsumptionRate(cursor.getInt(cursor.getColumnIndex(DatabaseHelper.CONSUMPTIONRATE)));
+            item.setActive(cursor.getInt(cursor.getColumnIndex(DatabaseHelper.ACTIVE)) > 0);
 
             cursor.close();
             database.close();
@@ -144,6 +167,7 @@ public class ItemsDAO{
             item.setName(cursor.getString(cursor.getColumnIndex(DatabaseHelper.NAME)));
             item.setStock(cursor.getInt(cursor.getColumnIndex(DatabaseHelper.STOCK)));
             item.setConsumptionRate(cursor.getInt(cursor.getColumnIndex(DatabaseHelper.CONSUMPTIONRATE)));
+            item.setActive(cursor.getInt(cursor.getColumnIndex(DatabaseHelper.ACTIVE)) > 0);
 
             cursor.close();
 
@@ -158,15 +182,16 @@ public class ItemsDAO{
 
         FirebaseDatabase firebaseDatabase = FirebaseDatabase.getInstance();
         DatabaseReference dbRef = firebaseDatabase.getReference().child(DatabaseHelper.TABLEITEMS);
+        final List<Item> itemList = new ArrayList<>();
 
         dbRef.addListenerForSingleValueEvent(new ValueEventListener()   {
             @Override
             public void onDataChange(DataSnapshot dataSnapshot) {
                 for (DataSnapshot data : dataSnapshot.getChildren()){
                     Item item = data.getValue(Item.class);
-                    items.add(item);
+                    itemList.add(item);
                 }
-                listenerFromController.finish(items);
+                listenerFromController.finish(itemList);
             }
 
             @Override
@@ -177,7 +202,7 @@ public class ItemsDAO{
         });
     }
 
-    public List<Item> getItemsFromLocalDBSortedByID() {
+    public List<Item> getAllItemsFromLocalDB() {
 
         SQLiteDatabase database = databaseHelper.getReadableDatabase();
 
@@ -195,6 +220,36 @@ public class ItemsDAO{
             item.setName(cursor.getString(cursor.getColumnIndex(DatabaseHelper.NAME)));
             item.setStock(cursor.getInt(cursor.getColumnIndex(DatabaseHelper.STOCK)));
             item.setConsumptionRate(cursor.getInt(cursor.getColumnIndex(DatabaseHelper.CONSUMPTIONRATE)));
+            item.setActive(cursor.getInt(cursor.getColumnIndex(DatabaseHelper.ACTIVE))>0);
+
+            items.add(item);
+
+        }
+        cursor.close();
+        database.close();
+        return items;
+    }
+
+    public List<Item> getActiveItemsFromLocalDB() {
+
+        SQLiteDatabase database = databaseHelper.getReadableDatabase();
+
+        String selectQuery = "SELECT * FROM " + DatabaseHelper.TABLEITEMS + " WHERE " + DatabaseHelper.ACTIVE
+                + " = " + '"' + DatabaseHelper.ACTIVE_TRUE + '"';
+        Cursor cursor = database.rawQuery(selectQuery, null);
+
+        List<Item> items = new ArrayList<>();
+
+        while (cursor.moveToNext()) {
+
+            Item item = new Item();
+            item.setID(cursor.getString(cursor.getColumnIndex(DatabaseHelper.ID)));
+            item.setImage(cursor.getInt(cursor.getColumnIndex(DatabaseHelper.IMAGE)));
+            item.setMinimumPurchaceQuantity(cursor.getInt(cursor.getColumnIndex(DatabaseHelper.MINIMUMPURCHACEQUANTITY)));
+            item.setName(cursor.getString(cursor.getColumnIndex(DatabaseHelper.NAME)));
+            item.setStock(cursor.getInt(cursor.getColumnIndex(DatabaseHelper.STOCK)));
+            item.setConsumptionRate(cursor.getInt(cursor.getColumnIndex(DatabaseHelper.CONSUMPTIONRATE)));
+            item.setActive(cursor.getInt(cursor.getColumnIndex(DatabaseHelper.ACTIVE))>0);
 
             items.add(item);
 
@@ -236,14 +291,14 @@ public class ItemsDAO{
 
     }
 
-    public void updateItemDetails(String itemID, String updatedItemName, Integer updatedItemStock, Integer updatedConsumptionRate, Integer updatedMinimumPurchace){
+    public void updateItemDetails(String itemID, String updatedItemName, Integer updatedItemStock, Integer updatedConsumptionRate, Integer updatedMinimumPurchace, Boolean active){
 
-        updateItemDetailsOnLocalDatabase(itemID, updatedItemName, updatedItemStock, updatedConsumptionRate,updatedMinimumPurchace);
-        updateItemDetailsOnFirebase(itemID, updatedItemName, updatedItemStock, updatedConsumptionRate,updatedMinimumPurchace);
+        updateItemDetailsOnLocalDatabase(itemID, updatedItemName, updatedItemStock, updatedConsumptionRate,updatedMinimumPurchace, active);
+        updateItemDetailsOnFirebase(itemID, updatedItemName, updatedItemStock, updatedConsumptionRate,updatedMinimumPurchace, active);
 
     }
 
-    public void updateItemDetailsOnLocalDatabase(String itemID, String updatedItemName, Integer updatedItemStock, Integer updatedConsumptionRate, Integer updatedMinimumPurchace){
+    public void updateItemDetailsOnLocalDatabase(String itemID, String updatedItemName, Integer updatedItemStock, Integer updatedConsumptionRate, Integer updatedMinimumPurchace, Boolean active){
 
         SQLiteDatabase database =  databaseHelper.getWritableDatabase();
 
@@ -252,20 +307,31 @@ public class ItemsDAO{
         contentValues.put(DatabaseHelper.STOCK, updatedItemStock);
         contentValues.put(DatabaseHelper.CONSUMPTIONRATE, updatedConsumptionRate);
         contentValues.put(DatabaseHelper.MINIMUMPURCHACEQUANTITY, updatedMinimumPurchace);
+        contentValues.put(DatabaseHelper.ACTIVE, booleanToInteger(active));
 
         database.update(DatabaseHelper.TABLEITEMS,  contentValues, DatabaseHelper.ID + " = " + '"' + itemID + '"' , null);
 
         database.close();
     }
 
-    public void updateItemDetailsOnFirebase(String itemID, String updatedItemName, Integer updatedItemStock, Integer updatedConsumptionRate, Integer updatedMinimumPurchace){
+    private Integer booleanToInteger(Boolean activeStatus){
+        if(activeStatus){
+            return 1;
+        } else {
+            return 0;
+        }
+    }
+
+    public void updateItemDetailsOnFirebase(String itemID, String updatedItemName, Integer updatedItemStock, Integer updatedConsumptionRate, Integer updatedMinimumPurchace, Boolean active){
 
         FirebaseDatabase firebaseDatabase = FirebaseDatabase.getInstance();
         DatabaseReference myRef = firebaseDatabase.getReference().child(DatabaseHelper.TABLEITEMS).child(itemID);
+        myRef.child(DatabaseHelper.ID).setValue(itemID);
         myRef.child(DatabaseHelper.NAME).setValue(updatedItemName);
         myRef.child(DatabaseHelper.STOCK).setValue(updatedItemStock);
         myRef.child(DatabaseHelper.CONSUMPTIONRATE).setValue(updatedConsumptionRate);
         myRef.child(DatabaseHelper.MINIMUMPURCHACEQUANTITY).setValue(updatedMinimumPurchace);
+        myRef.child(DatabaseHelper.ACTIVE).setValue(active);
 
     }
 
@@ -283,11 +349,11 @@ public class ItemsDAO{
 
     }
 
-    private void deleteItemFromFirebase(String itemID) {
+    public void deleteItemFromFirebase(String itemID) {
 
         FirebaseDatabase firebaseDatabase = FirebaseDatabase.getInstance();
         DatabaseReference myRef = firebaseDatabase.getReference();
-        myRef.child(DatabaseHelper.TABLEITEMS).child(itemID).child(DatabaseHelper.DELETED).setValue(DatabaseHelper.DELETED_TRUE);
+        myRef.child(DatabaseHelper.TABLEITEMS).child(itemID).child(DatabaseHelper.ACTIVE).setValue(false);
     }
 
     public void deleteItemFromLocalDB(String itemID){
@@ -310,27 +376,12 @@ public class ItemsDAO{
 
         updateItemConsumptionRateInLocalDB(itemID, consumptionRate);
         updateItemConsumptionRateInFirebase(itemID, consumptionRate);
-
-
     }
 
     public void updateItemConsumptionRateInFirebase(String itemID, Integer consumptionRate){
 
-        //UpdateItemConsumptionRateFirebase updateItemConsumptionRateFirebase = new UpdateItemConsumptionRateFirebase(itemID, consumptionRate);
-        //updateItemConsumptionRateFirebase.execute();
         FirebaseDatabase firebaseDatabase = FirebaseDatabase.getInstance();
         firebaseDatabase.getReference().child(DatabaseHelper.TABLEITEMS).child(itemID).child(DatabaseHelper.CONSUMPTIONRATE).setValue(consumptionRate);
-
-    }
-
-    public void updateItemConsumptionRateInLocalDB(String itemID, Integer consumptionRate){
-
-        SQLiteDatabase database = new DatabaseHelper(context).getWritableDatabase();
-
-        ContentValues contentValues = new ContentValues();
-        contentValues.put(DatabaseHelper.CONSUMPTIONRATE, consumptionRate);
-
-        database.update(DatabaseHelper.TABLEITEMS, contentValues, DatabaseHelper.ID + " = " + '"' + itemID + '"', null);
 
     }
 }

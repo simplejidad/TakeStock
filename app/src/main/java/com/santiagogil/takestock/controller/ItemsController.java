@@ -34,6 +34,29 @@ public class ItemsController {
         });
     }
 
+    public void getActiveItemsSortedAlphabetically(final Context context, final ResultListener<List<Item>> listenerFromView) {
+        final ItemsDAO itemsDao = new ItemsDAO(context);
+
+        itemsDao.getActiveItemsFromLocalDBSortedAlphabetically(new ResultListener<List<Item>>() {
+            @Override
+            public void finish(List<Item> result) {
+
+                if (result.size() > 0) {
+
+                    listenerFromView.finish(result);
+
+                } else itemsDao.getItemsFromFirebase(new ResultListener<List<Item>>() {
+                    @Override
+                    public void finish(List<Item> result) {
+                        itemsDao.addItemsToLocalDatabase(result);
+
+                        listenerFromView.finish(result);
+                    }
+                });
+            }
+        });
+    }
+
     public void deleteItemFromDatabases(Context context, String itemID){
         ItemsDAO itemsDAO = new ItemsDAO(context);
         itemsDAO.deleteItemFromDatabases(itemID);
@@ -66,7 +89,7 @@ public class ItemsController {
 
     public List<Item> getItemsFromLocalDatabase(Context context){
         ItemsDAO itemsDAO = new ItemsDAO(context);
-        return itemsDAO.getItemsFromLocalDBSortedByID();
+        return itemsDAO.getAllItemsFromLocalDB();
     }
 
     public void addItemToLocalDatabase(Context context, Item item){
@@ -83,9 +106,9 @@ public class ItemsController {
 
     }
 
-    public void updateItemDetails(Context context, String itemID, String itemName, Integer itemStock, Integer itemConsumptionRate, Integer itemMinimumPurchace ){
+    public void updateItemDetails(Context context, String itemID, String itemName, Integer itemStock, Integer itemConsumptionRate, Integer itemMinimumPurchace, Boolean itemActiveStatus ){
         ItemsDAO itemsDAO = new ItemsDAO(context);
-        itemsDAO.updateItemDetails(itemID, itemName, itemStock, itemConsumptionRate, itemMinimumPurchace);
+        itemsDAO.updateItemDetails(itemID, itemName, itemStock, itemConsumptionRate, itemMinimumPurchace, itemActiveStatus);
     }
 
     public Item getItemFromLocalDatabase(Context context, String itemID) {
