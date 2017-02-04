@@ -38,6 +38,7 @@ public class FragmentItemList extends Fragment implements View.OnClickListener{
     private ItemRecyclerAdapter itemRecyclerAdapter;
     private ConsumptionsController consumptionsController;
     private TextView title;
+    private Bundle bundle;
 
     public static final String TITLE = "title";
     public static final String INDEPENDENCE = "independence";
@@ -62,11 +63,11 @@ public class FragmentItemList extends Fragment implements View.OnClickListener{
 
         final View view = inflater.inflate(R.layout.fragment_item_list, container, false);
         title = (TextView) view.findViewById(R.id.textViewTitle);
-        Bundle bundle = getArguments();
+        bundle = getArguments();
         title.setText(bundle.getString(TITLE));
         itemsController = new ItemsController();
         recyclerView = (RecyclerView) view.findViewById(R.id.recyclerViewItems);
-        itemRecyclerAdapter = new ItemRecyclerAdapter(getContext(), this, new com.santiagogil.takestock.view.FragmentItemList.ItemListener());
+        itemRecyclerAdapter = new ItemRecyclerAdapter(getContext(), this, new FragmentItemList.ItemListener());
         recyclerView.setAdapter(itemRecyclerAdapter);
         LinearLayoutManager linearLayoutManager = new LinearLayoutManager(getContext());
         linearLayoutManager.setOrientation(LinearLayoutManager.VERTICAL);
@@ -122,7 +123,7 @@ public class FragmentItemList extends Fragment implements View.OnClickListener{
         consumptionsController.updateConsumptionsDatabase(getContext(), new ResultListener<List<Consumption>>(){
             @Override
             public void finish(List<Consumption> result) {
-                Toast.makeText(getContext(), "Cargo la base", Toast.LENGTH_SHORT).show();
+
             }
         });
 
@@ -133,12 +134,12 @@ public class FragmentItemList extends Fragment implements View.OnClickListener{
     @Override
     public void onClick(View view) {
 
-        itemRecyclerAdapter.setItems(itemsController.getItemsFromLocalDBsortedAlphabetically(getContext()));
+        itemRecyclerAdapter.setItems(itemsController.getActiveItemsByIndependence(getContext(), bundle.getInt(INDEPENDENCE)));
         itemRecyclerAdapter.notifyDataSetChanged();
     }
 
     public interface FragmentActivityCommunicator {
-        void onItemTouched(Item touchedItem, Integer touchedPosition);
+        void onItemTouched(Item touchedItem, Integer touchedPosition, Integer independence);
     }
 
     public class ItemListener implements View.OnClickListener {
@@ -148,8 +149,8 @@ public class FragmentItemList extends Fragment implements View.OnClickListener{
             Integer touchedPosition = recyclerView.getChildAdapterPosition(view);
             Item touchedItem = itemRecyclerAdapter.getItemAtPosition(touchedPosition);
 
-            com.santiagogil.takestock.view.FragmentItemList.FragmentActivityCommunicator fragmentActivityCommunicator = (com.santiagogil.takestock.view.FragmentItemList.FragmentActivityCommunicator) getActivity();
-            fragmentActivityCommunicator.onItemTouched(touchedItem, touchedPosition);
+            FragmentItemList.FragmentActivityCommunicator fragmentActivityCommunicator = (FragmentItemList.FragmentActivityCommunicator) getActivity();
+            fragmentActivityCommunicator.onItemTouched(touchedItem, touchedPosition, bundle.getInt(INDEPENDENCE));
 
         }
     }
@@ -160,8 +161,7 @@ public class FragmentItemList extends Fragment implements View.OnClickListener{
         Item item = new Item(itemName);
         String newItemID = itemsController.addItemToDatabases(view.getContext(), item);
         //TODO: check if item already exists
-        //Toast.makeText(view.getContext(), item.getName() + " has been added.", Toast.LENGTH_SHORT).show();
-        List<Item> items = itemsController.getItemsFromLocalDBsortedAlphabetically(getContext());
+        List<Item> items = itemsController.getActiveItemsByIndependence(getContext(), bundle.getInt(INDEPENDENCE));
         itemRecyclerAdapter.setItems(items);
         itemRecyclerAdapter.notifyDataSetChanged();
         InputMethodManager inputMethodManager = (InputMethodManager) getActivity().getSystemService(Context.INPUT_METHOD_SERVICE);

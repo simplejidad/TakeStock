@@ -127,7 +127,7 @@ public class ItemsController {
 
         final ItemsDAO itemsDao = new ItemsDAO(context);
 
-        itemsDao.getActiveItemsByIndepedence(independence, new ResultListener<List<Item>>() {
+        itemsDao.getActiveItemsByIndependenceWithResultListener(independence, new ResultListener<List<Item>>() {
             @Override
             public void finish(List<Item> result) {
 
@@ -145,5 +145,13 @@ public class ItemsController {
                 });
             }
         });
+    }
+
+    public List<Item> getActiveItemsByIndependence(Context context, Integer independence) {
+
+        ItemsDAO itemsDao = new ItemsDAO(context);
+
+        return  itemsDao.getActiveItemsByIndependence(independence);
+
     }
 }

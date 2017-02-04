@@ -26,6 +26,7 @@ public class ItemsDAO{
     private Context context;
     private DatabaseHelper databaseHelper;
 
+
     public ItemsDAO (Context context){
         this.context = context;
         databaseHelper = new DatabaseHelper(context);
@@ -385,15 +386,15 @@ public class ItemsDAO{
 
     }
 
-    public void getActiveItemsByIndepedence(Integer independence, ResultListener<List<Item>> resultListenerFromController) {
+    public void getActiveItemsByIndependenceWithResultListener(Integer independence, ResultListener<List<Item>> resultListenerFromController) {
 
-        List<Item> itemList = getItemsByIndependence(independence);
+        List<Item> itemList = getActiveItemsByIndependence(independence);
 
         resultListenerFromController.finish(sortItemsAlphabetically(itemList));
 
     }
 
-    private List<Item> getItemsByIndependence(Integer independence) {
+    public List<Item> getActiveItemsByIndependence(Integer independence) {
 
         List<Item> allActiveItemsList = getActiveItemsFromLocalDB();
         List<Item> itemsByIndependence = new ArrayList<>();
@@ -422,4 +423,5 @@ public class ItemsDAO{
         }
         return itemsByIndependence;
     }
+
 }

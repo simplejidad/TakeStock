@@ -58,12 +58,13 @@ public class MainActivityCommunicator extends AppCompatActivity implements Fragm
     }
 
     @Override
-    public void onItemTouched(Item touchedItem, Integer touchedPosition) {
+    public void onItemTouched(Item touchedItem, Integer touchedPosition, Integer independence) {
 
         FragmentItemsViewPager fragmentItemsViewPager = new FragmentItemsViewPager();
 
         Bundle bundle = new Bundle();
         bundle.putInt(FragmentItemsViewPager.POSITION, touchedPosition);
+        bundle.putInt(FragmentItemList.INDEPENDENCE, independence);
         fragmentItemsViewPager.setArguments(bundle);
 
         FragmentTransaction fragmentTransaction = getSupportFragmentManager().beginTransaction();

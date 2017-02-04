@@ -22,11 +22,11 @@ public class ItemsViewPagerAdapter extends FragmentStatePagerAdapter {
         this.context = context;
     }
 
-    public ItemsViewPagerAdapter(FragmentManager fm, Context context){
+    public ItemsViewPagerAdapter(FragmentManager fm, Context context, Integer independence){
         super(fm);
         this.context = context;
         fragmentList = new ArrayList<>();
-        retrieveItemFragmentLists();
+        retrieveItemFragmentLists(independence);
     }
 
     @Override
@@ -39,10 +39,10 @@ public class ItemsViewPagerAdapter extends FragmentStatePagerAdapter {
         return fragmentList.size();
     }
 
-    public void retrieveItemFragmentLists(){
+    public void retrieveItemFragmentLists(Integer independence){
 
         ItemsController itemsController = new ItemsController();
-        List<Item> items = itemsController.getItemsFromLocalDBsortedAlphabetically(context);
+        List<Item> items = itemsController.getActiveItemsByIndependence(context, independence);
         for(Item item : items){
             fragmentList.add(FragmentItemDetail.provideFragment(item, items.indexOf(item)));
         }

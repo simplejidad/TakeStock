@@ -13,6 +13,7 @@ import com.santiagogil.takestock.R;
 public class FragmentItemsViewPager extends Fragment {
 
     private ViewPager itemsViewPager;
+    private Bundle bundle;
 
     public static final String POSITION = "Position";
 
@@ -26,10 +27,10 @@ public class FragmentItemsViewPager extends Fragment {
                              Bundle savedInstanceState) {
 
         View view = inflater.inflate(R.layout.fragment_items_viewpager, container, false);
+        bundle = getArguments();
         itemsViewPager = (ViewPager) view.findViewById(R.id.itemsViewPager);
-        ItemsViewPagerAdapter itemsViewPagerAdapter = new ItemsViewPagerAdapter(getChildFragmentManager(), getContext());
+        ItemsViewPagerAdapter itemsViewPagerAdapter = new ItemsViewPagerAdapter(getChildFragmentManager(), getContext(), bundle.getInt(FragmentItemList.INDEPENDENCE));
         itemsViewPager.setAdapter(itemsViewPagerAdapter);
-        Bundle bundle = getArguments();
         itemsViewPager.setCurrentItem(bundle.getInt(POSITION));
         return view;
     }
