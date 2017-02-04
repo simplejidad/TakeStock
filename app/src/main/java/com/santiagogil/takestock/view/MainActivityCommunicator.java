@@ -16,17 +16,14 @@ import com.santiagogil.takestock.model.pojos.Item;
 
 import java.util.List;
 
-public class MainActivityCommunicator extends AppCompatActivity implements FragmentMainView.FragmentActivityCommunicator, FragmentItemDetail.FragmentActivityCommunicator {
-
-    private ItemsController itemsController;
-    private List<Item> items;
+public class MainActivityCommunicator extends AppCompatActivity implements FragmentItemList.FragmentActivityCommunicator, FragmentItemDetail.FragmentActivityCommunicator {
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_main);
 
-        Fragment fragmentMainView = new FragmentMainView();
+        Fragment fragmentMainView = new FragmentItemListsViewPager();
         FragmentManager fragmentManager = this.getSupportFragmentManager();
         FragmentTransaction fragmentTransaction = fragmentManager.beginTransaction();
         fragmentTransaction.replace(R.id.fragment_holder, fragmentMainView);
@@ -37,10 +34,10 @@ public class MainActivityCommunicator extends AppCompatActivity implements Fragm
     @Override
     public void refreshFragmentMainView(Integer position) {
 
-        FragmentMainView fragmentMainView = new FragmentMainView();
+        FragmentItemListsViewPager fragmentMainView = new FragmentItemListsViewPager();
         FragmentManager fragmentManager = getSupportFragmentManager();
         Bundle bundle = new Bundle();
-        bundle.putInt(FragmentMainView.POSITION, position);
+        bundle.putInt(FragmentItemList.POSITION, position);
         fragmentMainView.setArguments(bundle);
         FragmentTransaction fragmentTransaction = fragmentManager.beginTransaction();
         fragmentTransaction.replace(R.id.fragment_holder, fragmentMainView);

@@ -384,4 +384,42 @@ public class ItemsDAO{
         firebaseDatabase.getReference().child(DatabaseHelper.TABLEITEMS).child(itemID).child(DatabaseHelper.CONSUMPTIONRATE).setValue(consumptionRate);
 
     }
+
+    public void getActiveItemsByIndepedence(Integer independence, ResultListener<List<Item>> resultListenerFromController) {
+
+        List<Item> itemList = getItemsByIndependence(independence);
+
+        resultListenerFromController.finish(sortItemsAlphabetically(itemList));
+
+    }
+
+    private List<Item> getItemsByIndependence(Integer independence) {
+
+        List<Item> allActiveItemsList = getActiveItemsFromLocalDB();
+        List<Item> itemsByIndependence = new ArrayList<>();
+        if (independence == -1){
+            itemsByIndependence = allActiveItemsList;
+        }
+        else if (independence == 0){
+            for(Item item : allActiveItemsList){
+                    if(item.getStock().equals(0)){
+                        itemsByIndependence.add(item);
+                }
+            }
+
+        }
+        else{
+            for(Item item : allActiveItemsList){
+                if(item.getStock().equals(0)){
+                    itemsByIndependence.add(item);
+                }
+                else {
+                    if((item.getConsumptionRate()*item.getStock()) < independence ){
+                    itemsByIndependence.add(item);
+                    }
+                }
+            }
+        }
+        return itemsByIndependence;
+    }
 }

@@ -116,4 +116,34 @@ public class ItemsController {
         ItemsDAO itemsDAO = new ItemsDAO(context);
         return itemsDAO.getItemFromLocalDB(itemID);
     }
+
+    public List<Item> sortItemsAlphabetically(Context context, List<Item> itemList){
+
+        ItemsDAO itemsDAO = new ItemsDAO(context);
+        return itemsDAO.sortItemsAlphabetically(itemList);
+    }
+
+    public void getActiveItemsByIndependence(Context context, Integer independence, final ResultListener<List<Item>> listenerFromView) {
+
+        final ItemsDAO itemsDao = new ItemsDAO(context);
+
+        itemsDao.getActiveItemsByIndepedence(independence, new ResultListener<List<Item>>() {
+            @Override
+            public void finish(List<Item> result) {
+
+                if (result.size() > 0) {
+
+                    listenerFromView.finish(result);
+
+                } else itemsDao.getItemsFromFirebase(new ResultListener<List<Item>>() {
+                    @Override
+                    public void finish(List<Item> result) {
+                        itemsDao.addItemsToLocalDatabase(result);
+
+                        listenerFromView.finish(result);
+                    }
+                });
+            }
+        });
+    }
 }

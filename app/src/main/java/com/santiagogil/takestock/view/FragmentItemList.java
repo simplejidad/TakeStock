@@ -1,9 +1,11 @@
 package com.santiagogil.takestock.view;
 
+
 import android.content.Context;
 import android.os.Bundle;
 import android.support.annotation.Nullable;
 import android.support.v4.app.Fragment;
+import android.support.v4.view.ViewPager;
 import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
 import android.view.LayoutInflater;
@@ -13,6 +15,7 @@ import android.view.WindowManager;
 import android.view.inputmethod.InputMethodManager;
 import android.widget.Button;
 import android.widget.EditText;
+import android.widget.TextView;
 import android.widget.Toast;
 
 import com.santiagogil.takestock.R;
@@ -24,36 +27,58 @@ import com.santiagogil.takestock.util.ResultListener;
 
 import java.util.List;
 
-public class FragmentMainView extends Fragment implements View.OnClickListener{
+
+
+public class FragmentItemList extends Fragment implements View.OnClickListener{
+
 
     private ItemsController itemsController;
     private RecyclerView recyclerView;
     private EditText editTextAddItem;
     private ItemRecyclerAdapter itemRecyclerAdapter;
     private ConsumptionsController consumptionsController;
+    private TextView title;
 
+    public static final String TITLE = "title";
+    public static final String INDEPENDENCE = "independence";
     public static final String POSITION = "position";
+
+    public static FragmentItemList getfragmentItemList(String title, Integer independence, Integer position){
+
+        FragmentItemList fragmentItemList = new FragmentItemList();
+        Bundle bundle = new Bundle();
+        bundle.putString(TITLE, title);
+        bundle.putInt(INDEPENDENCE, independence);
+        bundle.putInt(POSITION, position);
+
+        fragmentItemList.setArguments(bundle);
+
+        return fragmentItemList;
+    }
 
     @Nullable
     @Override
     public View onCreateView(LayoutInflater inflater, final ViewGroup container, Bundle savedInstanceState) {
 
-        final View view = inflater.inflate(R.layout.fragment_main_view, container, false);
+        final View view = inflater.inflate(R.layout.fragment_item_list, container, false);
+        title = (TextView) view.findViewById(R.id.textViewTitle);
+        Bundle bundle = getArguments();
+        title.setText(bundle.getString(TITLE));
         itemsController = new ItemsController();
         recyclerView = (RecyclerView) view.findViewById(R.id.recyclerViewItems);
-        itemRecyclerAdapter = new ItemRecyclerAdapter(getContext(), this, new ItemListener());
+        itemRecyclerAdapter = new ItemRecyclerAdapter(getContext(), this, new com.santiagogil.takestock.view.FragmentItemList.ItemListener());
         recyclerView.setAdapter(itemRecyclerAdapter);
         LinearLayoutManager linearLayoutManager = new LinearLayoutManager(getContext());
         linearLayoutManager.setOrientation(LinearLayoutManager.VERTICAL);
         recyclerView.setLayoutManager(linearLayoutManager);
         this.getActivity().getWindow().setSoftInputMode(WindowManager.LayoutParams.SOFT_INPUT_STATE_HIDDEN);
 
-        itemsController.getActiveItemsSortedAlphabetically(getContext(), new ResultListener<List<Item>>() {
+        itemsController.getActiveItemsByIndependence(getContext(), bundle.getInt(INDEPENDENCE), new ResultListener<List<Item>>() {
             @Override
             public void finish(List<Item> result) {
+                result = itemsController.sortItemsAlphabetically(getContext(), result);
                 itemRecyclerAdapter.setItems(result);
                 itemRecyclerAdapter.notifyDataSetChanged();
-
 
                 Button buttonNewItem = (Button) view.findViewById(R.id.buttonNewItem);
                 editTextAddItem = (EditText) view.findViewById(R.id.editText);
@@ -123,7 +148,7 @@ public class FragmentMainView extends Fragment implements View.OnClickListener{
             Integer touchedPosition = recyclerView.getChildAdapterPosition(view);
             Item touchedItem = itemRecyclerAdapter.getItemAtPosition(touchedPosition);
 
-            FragmentActivityCommunicator fragmentActivityCommunicator = (FragmentActivityCommunicator) getActivity();
+            com.santiagogil.takestock.view.FragmentItemList.FragmentActivityCommunicator fragmentActivityCommunicator = (com.santiagogil.takestock.view.FragmentItemList.FragmentActivityCommunicator) getActivity();
             fragmentActivityCommunicator.onItemTouched(touchedItem, touchedPosition);
 
         }
