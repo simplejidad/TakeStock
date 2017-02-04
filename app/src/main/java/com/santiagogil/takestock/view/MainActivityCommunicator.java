@@ -1,10 +1,14 @@
 package com.santiagogil.takestock.view;
 
+import android.os.Bundle;
+import android.support.annotation.NonNull;
+import android.support.design.widget.NavigationView;
 import android.support.v4.app.Fragment;
 import android.support.v4.app.FragmentManager;
 import android.support.v4.app.FragmentTransaction;
 import android.support.v7.app.AppCompatActivity;
-import android.os.Bundle;
+import android.view.MenuItem;
+
 
 import com.santiagogil.takestock.R;
 import com.santiagogil.takestock.controller.ItemsController;
@@ -76,5 +80,14 @@ public class MainActivityCommunicator extends AppCompatActivity implements Fragm
     public void onBackPressed() {
         super.onBackPressed();
     }
+
+    private class NavigationViewListener implements NavigationView.OnNavigationItemSelectedListener {
+
+        @Override
+        public boolean onNavigationItemSelected(@NonNull MenuItem item) {
+            return false;
+        }
+    }
+
 }
 
