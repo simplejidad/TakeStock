@@ -44,21 +44,20 @@
                     android:layout_height="wrap_content"
                     android:layout_weight="8"
                     android:text="@string/description"
-                    android:layout_margin="5dp"
-                    android:textSize="18dp"
-                    android:layout_gravity="top"
-                    android:layout_centerVertical="true"
+                    android:layout_marginLeft="5dp"
+                    android:layout_marginStart="5dp"
+                    android:textSize="18sp"
+                    android:layout_gravity="center_vertical"
                     />
 
                 <TextView
-                    android:textSize="18dp"
+                    android:textSize="18sp"
                     android:id="@+id/textViewX"
                     android:layout_gravity="center"
-                    android:layout_toRightOf="@+id/textViewItemName"
                     android:layout_width="0dp"
                     android:layout_weight="1"
                     android:layout_height="wrap_content"
-                    android:text="x"
+                    android:text="@string/by"
                     android:layout_margin="5dp"
 
                     />
@@ -69,9 +68,8 @@
                     android:layout_weight="1.5"
                     android:layout_gravity="center"
                     android:layout_height="wrap_content"
-                    android:text="0"
-                    android:textSize="18dp"
-                    android:layout_toRightOf="@+id/textViewX"
+                    android:text="@string/zero"
+                    android:textSize="18sp"
                     android:layout_margin="5dp"
                     />
 
@@ -81,11 +79,10 @@
                 android:id="@+id/textViewIndependence"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
-                android:text="Independence: "
-                android:layout_margin="5dp"
-                android:textSize="18dp"
-                android:layout_gravity="top"
-                android:layout_centerVertical="true"
+                android:text="@string/independence"
+                android:layout_marginLeft="5dp"
+                android:layout_marginStart="5dp"
+                android:textSize="18sp"
                 />
 
         </LinearLayout>
@@ -95,9 +92,8 @@
             android:layout_width="0dp"
             android:layout_weight="3"
             android:layout_height="match_parent"
-            android:text="+"
-            android:textSize="18dp"
-            android:layout_alignParentRight="true"
+            android:text="@string/plus_sign"
+            android:textSize="18sp"
             />
 
     </LinearLayout>
