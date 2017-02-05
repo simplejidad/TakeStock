@@ -77,9 +77,11 @@ public class ItemRecyclerAdapter extends RecyclerView.Adapter implements View.On
         private Button buttonAdd;
         private Context context;
         private View.OnClickListener onStockModifiedListener;
+        private View itemView;
 
         public ItemViewHolder(View itemView, Context context, View.OnClickListener onStockModifiedListener) {
             super(itemView);
+
             textViewItemName = (TextView) itemView.findViewById(R.id.textViewItemName);
             textViewStock = (TextView) itemView.findViewById(R.id.textViewStock);
             textViewIndependence = (TextView) itemView.findViewById(R.id.textViewIndependence);
@@ -88,10 +90,12 @@ public class ItemRecyclerAdapter extends RecyclerView.Adapter implements View.On
             buttonSubtract = (Button) itemView.findViewById(R.id.buttonSubtract);
             this.context = context;
             this.onStockModifiedListener = onStockModifiedListener;
+            this.itemView = itemView;
         }
 
         public void loadItem(final Item item){
 
+            final ItemViewHolder itemViewHolder = this;
             textViewItemName.setText(item.getName());
             String itemStock = item.getStock().toString();
             textViewStock.setText(itemStock);
@@ -100,10 +104,10 @@ public class ItemRecyclerAdapter extends RecyclerView.Adapter implements View.On
                 @Override
                 public void onClick(View view) {
                     increaseItemStock(item);
-                    onStockModifiedListener.onClick(buttonAdd);
+                    onStockModifiedListener.onClick(itemView);
                 }
             });
-            buttonAdd.setText("+ " + item.getMinimumPurchaceQuantity());
+            buttonAdd.setText("+" + item.getMinimumPurchaceQuantity());
             buttonSubtract.setOnClickListener(new View.OnClickListener() {
                 @Override
                 public void onClick(View view) {

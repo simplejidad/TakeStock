@@ -55,8 +55,14 @@ public class ConsumptionsController {
 
     public Integer getItemConsumptionRate(Context context, String itemID){
 
+        ItemsController itemsController = new ItemsController();
         ConsumptionsDAO consumptionsDAO = new ConsumptionsDAO(context);
-        return consumptionsDAO.getItemConsumptionRate(itemID);
+        List<Consumption> consumptionList = consumptionsDAO.getItemConsumptionList(itemID);
+        if(consumptionList.size() > 1){
+            return consumptionsDAO.getItemConsumptionRate(itemID);
+        } else {
+            return itemsController.getItemConsumptionRate(context, itemID);
+        }
 
     }
 

@@ -60,11 +60,11 @@ public class ItemsDAO{
 
     }
 
-    public void getActiveItemsFromLocalDBSortedAlphabetically(final ResultListener<List<Item>> listenerFromController){
+    public void getActiveItemsFromLocalDBWithResultListener(final ResultListener<List<Item>> listenerFromController){
 
         List<Item> itemList = getActiveItemsFromLocalDB();
 
-        listenerFromController.finish(sortItemsAlphabetically(itemList));
+        listenerFromController.finish(itemList);
 
     }
 
@@ -396,32 +396,35 @@ public class ItemsDAO{
 
     public List<Item> getActiveItemsByIndependence(Integer independence) {
 
-        List<Item> allActiveItemsList = getActiveItemsFromLocalDB();
         List<Item> itemsByIndependence = new ArrayList<>();
-        if (independence == -1){
-            itemsByIndependence = allActiveItemsList;
-        }
-        else if (independence == 0){
-            for(Item item : allActiveItemsList){
-                    if(item.getStock().equals(0)){
-                        itemsByIndependence.add(item);
-                }
-            }
 
+        for(Item item : getActiveItemsFromLocalDB()){
+              if(item.getStock() == 0 || (item.getIndependence()) < independence ){
+                itemsByIndependence.add(item);
+              }
         }
-        else{
-            for(Item item : allActiveItemsList){
-                if(item.getStock().equals(0)){
-                    itemsByIndependence.add(item);
-                }
-                else {
-                    if((item.getConsumptionRate()*item.getStock()) < independence ){
-                    itemsByIndependence.add(item);
-                    }
-                }
-            }
-        }
-        return sortItemsAlphabetically(itemsByIndependence);
+
+        return itemsByIndependence;
     }
 
+    public List<Item> sortItemsByIndependence(List<Item> itemList) {
+
+        if(itemList.size() > 1){
+
+            Collections.sort(itemList, new Comparator<Item>(){
+                public int compare (Item o1, Item o2){
+                    return o1.getIndependence().compareTo(o2.getIndependence());
+                }
+            });
+        }
+
+        return itemList;
+
+    }
+
+
+    public Integer getItemConsumptionRate(String itemID) {
+
+        return getItemFromLocalDB(itemID).getConsumptionRate();
+    }
 }

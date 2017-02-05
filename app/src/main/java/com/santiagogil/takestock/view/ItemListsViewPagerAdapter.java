@@ -32,7 +32,8 @@ public class ItemListsViewPagerAdapter extends FragmentStatePagerAdapter {
 
     public void retrieveFragments(){
 
-        fragmentItemListList.add(FragmentItemList.getfragmentItemList("Todos", -1, 0));
+        fragmentItemListList.add(FragmentItemList.getfragmentItemList("All Items A-Z", -1, 0));
+        fragmentItemListList.add(FragmentItemList.getfragmentItemList("All Items by Independence", -2, 0));
         fragmentItemListList.add(FragmentItemList.getfragmentItemList("Stock 0", 0, 0));
         fragmentItemListList.add(FragmentItemList.getfragmentItemList("Un Mes", 30, 0));
         fragmentItemListList.add(FragmentItemList.getfragmentItemList("Mucho", 500, 0));

@@ -2,60 +2,17 @@ package com.santiagogil.takestock.controller;
 
 import android.content.Context;
 
+import com.santiagogil.takestock.model.daos.ConsumptionsDAO;
 import com.santiagogil.takestock.model.daos.ItemsDAO;
+import com.santiagogil.takestock.model.pojos.Consumption;
 import com.santiagogil.takestock.model.pojos.Item;
 import com.santiagogil.takestock.util.ResultListener;
 
+import java.util.ArrayList;
 import java.util.List;
 
 
 public class ItemsController {
-
-    public void getItemsSortedAlphabetically(final Context context, final ResultListener<List<Item>> listenerFromView) {
-        final ItemsDAO itemsDao = new ItemsDAO(context);
-
-        itemsDao.getAllItemsFromLocalDBSortedAlphabetically(new ResultListener<List<Item>>() {
-            @Override
-            public void finish(List<Item> result) {
-
-                if (result.size() > 0) {
-
-                    listenerFromView.finish(result);
-
-                } else itemsDao.getItemsFromFirebase(new ResultListener<List<Item>>() {
-                    @Override
-                    public void finish(List<Item> result) {
-                        itemsDao.addItemsToLocalDatabase(result);
-
-                        listenerFromView.finish(result);
-                    }
-                });
-            }
-        });
-    }
-
-    public void getActiveItemsSortedAlphabetically(final Context context, final ResultListener<List<Item>> listenerFromView) {
-        final ItemsDAO itemsDao = new ItemsDAO(context);
-
-        itemsDao.getActiveItemsFromLocalDBSortedAlphabetically(new ResultListener<List<Item>>() {
-            @Override
-            public void finish(List<Item> result) {
-
-                if (result.size() > 0) {
-
-                    listenerFromView.finish(result);
-
-                } else itemsDao.getItemsFromFirebase(new ResultListener<List<Item>>() {
-                    @Override
-                    public void finish(List<Item> result) {
-                        itemsDao.addItemsToLocalDatabase(result);
-
-                        listenerFromView.finish(result);
-                    }
-                });
-            }
-        });
-    }
 
     public void deleteItemFromDatabases(Context context, String itemID){
         ItemsDAO itemsDAO = new ItemsDAO(context);
@@ -82,16 +39,6 @@ public class ItemsController {
         itemsDAO.decreaseItemStock(item);
     }
 
-    public List<Item> getItemsFromLocalDBsortedAlphabetically(Context context){
-        ItemsDAO itemsDAO = new ItemsDAO(context);
-        return itemsDAO.getAllItemsFromLocalDBSortedAlphabetically();
-    }
-
-    public List<Item> getItemsFromLocalDatabase(Context context){
-        ItemsDAO itemsDAO = new ItemsDAO(context);
-        return itemsDAO.getAllItemsFromLocalDB();
-    }
-
     public void addItemToLocalDatabase(Context context, Item item){
         ItemsDAO itemsDAO = new ItemsDAO(context);
         itemsDAO.addItemToLocalDB(item);
@@ -99,11 +46,13 @@ public class ItemsController {
 
     public void updateItemConsumptionDate(Context context, String itemID){
 
-        ConsumptionsController consumptionsController = new ConsumptionsController();
-        Integer updatedConsumptionRate = consumptionsController.getItemConsumptionRate(context, itemID);
         ItemsDAO itemsDAO = new ItemsDAO(context);
-        itemsDAO.updateItemConsumptionRateInDatabases(itemID, updatedConsumptionRate);
-
+        ConsumptionsController consumptionsController = new ConsumptionsController();
+        List<Consumption> consumptions = consumptionsController.getItemConsumptionList(context, itemID);
+        if(consumptions.size() > 1){
+            Integer updatedConsumptionRate = consumptionsController.getItemConsumptionRate(context, itemID);
+            itemsDAO.updateItemConsumptionRateInDatabases(itemID, updatedConsumptionRate);
+        }
     }
 
     public void updateItemDetails(Context context, String itemID, String itemName, Integer itemStock, Integer itemConsumptionRate, Integer itemMinimumPurchace, Boolean itemActiveStatus ){
@@ -123,35 +72,54 @@ public class ItemsController {
         return itemsDAO.sortItemsAlphabetically(itemList);
     }
 
-    public void getActiveItemsByIndependence(Context context, Integer independence, final ResultListener<List<Item>> listenerFromView) {
-
-        final ItemsDAO itemsDao = new ItemsDAO(context);
-
-        itemsDao.getActiveItemsByIndependenceWithResultListener(independence, new ResultListener<List<Item>>() {
-            @Override
-            public void finish(List<Item> result) {
-
-                if (result.size() > 0) {
-
-                    listenerFromView.finish(result);
-
-                } else itemsDao.getItemsFromFirebase(new ResultListener<List<Item>>() {
-                    @Override
-                    public void finish(List<Item> result) {
-                        itemsDao.addItemsToLocalDatabase(result);
-
-                        listenerFromView.finish(result);
-                    }
-                });
-            }
-        });
-    }
-
     public List<Item> getActiveItemsByIndependence(Context context, Integer independence) {
 
         ItemsDAO itemsDao = new ItemsDAO(context);
+        if(independence == -1){
+            return itemsDao.sortItemsAlphabetically(itemsDao.getActiveItemsFromLocalDB());
+        }
+        if(independence == -2){
+            return itemsDao.sortItemsByIndependence(itemsDao.getActiveItemsFromLocalDB());
+        }
 
         return  itemsDao.getActiveItemsByIndependence(independence);
 
+    }
+
+    public List<Item> sortItemsByIndependence(Context context, List<Item> itemList) {
+
+        ItemsDAO itemsDAO = new ItemsDAO(context);
+        return itemsDAO.sortItemsByIndependence(itemList);
+    }
+
+    public Integer getItemConsumptionRate(Context context, String itemID) {
+
+        ItemsDAO itemsDAO = new ItemsDAO(context);
+        return itemsDAO.getItemConsumptionRate(itemID);
+    }
+
+    public void updateItemsDatabase(final Context context, final ResultListener<List<Item>> listenerFromFragment) {
+
+        ItemsDAO itemsDAO = new ItemsDAO(context);
+
+        List<Item> itemList = itemsDAO.getAllItemsFromLocalDB();
+
+        if (itemList.size() > 0) {
+
+            listenerFromFragment.finish(itemList);
+
+        } else {
+
+            itemsDAO.getItemsFromFirebase(new ResultListener<List<Item>>() {
+                @Override
+                public void finish(List<Item> result) {
+                    for (Item item : result) {
+                        addItemToLocalDatabase(context, item);
+                    }
+                    listenerFromFragment.finish(result);
+                }
+            });
+
+        }
     }
 }

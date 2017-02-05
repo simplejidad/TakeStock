@@ -36,9 +36,13 @@ public class FragmentItemList extends Fragment implements View.OnClickListener{
     private RecyclerView recyclerView;
     private EditText editTextAddItem;
     private ItemRecyclerAdapter itemRecyclerAdapter;
+
+
+
     private ConsumptionsController consumptionsController;
     private TextView title;
     private Bundle bundle;
+    private Integer independence;
 
     public static final String TITLE = "title";
     public static final String INDEPENDENCE = "independence";
@@ -64,6 +68,7 @@ public class FragmentItemList extends Fragment implements View.OnClickListener{
         final View view = inflater.inflate(R.layout.fragment_item_list, container, false);
         title = (TextView) view.findViewById(R.id.textViewTitle);
         bundle = getArguments();
+        independence = bundle.getInt(INDEPENDENCE);
         title.setText(bundle.getString(TITLE));
         itemsController = new ItemsController();
         recyclerView = (RecyclerView) view.findViewById(R.id.recyclerViewItems);
@@ -74,71 +79,85 @@ public class FragmentItemList extends Fragment implements View.OnClickListener{
         recyclerView.setLayoutManager(linearLayoutManager);
         this.getActivity().getWindow().setSoftInputMode(WindowManager.LayoutParams.SOFT_INPUT_STATE_HIDDEN);
 
-        itemsController.getActiveItemsByIndependence(getContext(), bundle.getInt(INDEPENDENCE), new ResultListener<List<Item>>() {
-            @Override
-            public void finish(List<Item> result) {
-                itemRecyclerAdapter.setItems(result);
-                itemRecyclerAdapter.notifyDataSetChanged();
+        List<Item> itemList = itemsController.getActiveItemsByIndependence(getContext(), independence);
 
-                Button buttonNewItem = (Button) view.findViewById(R.id.buttonNewItem);
-                editTextAddItem = (EditText) view.findViewById(R.id.editText);
+        if(independence == -1){
+            itemList = itemsController.sortItemsAlphabetically(getContext(), itemList);
+        }
+        else {
+            itemList = itemsController.sortItemsByIndependence(getContext(), itemList);
+        }
+        itemRecyclerAdapter.setItems(itemList);
+        itemRecyclerAdapter.notifyDataSetChanged();
 
-                buttonNewItem.setOnClickListener(new View.OnClickListener() {
-                    @Override
-                    public void onClick(View view) {
-                        if(editTextAddItem.getText().toString().equals("")){
-                            Toast.makeText(view.getContext(), "Write an item name", Toast.LENGTH_SHORT).show();
-                        } else {
-                            addNewItem(view);
-                        }
+        Button buttonNewItem = (Button) view.findViewById(R.id.buttonNewItem);
+        editTextAddItem = (EditText) view.findViewById(R.id.editText);
 
-                        editTextAddItem.clearFocus();
-                    }
-                });
-
-                Bundle bundle = getArguments();
-                if(bundle != null){
-
-                    Integer position = null;
-
-                    try {
-                        position = bundle.getInt(POSITION);
-                    }catch (Exception e){
-                        Toast.makeText(getContext(), "No position in bundle", Toast.LENGTH_SHORT).show();
+        buttonNewItem.setOnClickListener(new View.OnClickListener() {
+                @Override
+                public void onClick(View view) {
+                    if(editTextAddItem.getText().toString().equals("")){
+                        Toast.makeText(view.getContext(), "Write an item name", Toast.LENGTH_SHORT).show();
+                    } else {
+                        addNewItem(view);
                     }
 
-                    if (position <= itemRecyclerAdapter.getItems().size()){
+                    editTextAddItem.clearFocus();
+                }
+            });
 
-                        recyclerView.scrollToPosition(position);
+            Bundle bundle = getArguments();
+            if(bundle != null){
 
-                    } else if(position > 0){
-                        recyclerView.scrollToPosition(position - 1);
-                    }
+                Integer position = null;
+
+                try {
+                    position = bundle.getInt(POSITION);
+                }catch (Exception e){
+                    Toast.makeText(getContext(), "No position in bundle", Toast.LENGTH_SHORT).show();
+                }
+
+                if (position <= itemRecyclerAdapter.getItems().size()){
+
+                    recyclerView.scrollToPosition(position);
+
+                } else if(position > 0){
+                    recyclerView.scrollToPosition(position - 1);
                 }
             }
-        });
-
-        consumptionsController = new ConsumptionsController();
-        consumptionsController.updateConsumptionsDatabase(getContext(), new ResultListener<List<Consumption>>(){
-            @Override
-            public void finish(List<Consumption> result) {
-
-            }
-        });
 
         return view;
-
     }
 
     @Override
     public void onClick(View view) {
 
-        itemRecyclerAdapter.setItems(itemsController.getActiveItemsByIndependence(getContext(), bundle.getInt(INDEPENDENCE)));
+        Integer touchedPosition = recyclerView.getChildAdapterPosition(view);
+        Item touchedItem = itemRecyclerAdapter.getItemAtPosition(touchedPosition);
+        Item updatedItem = itemsController.getItemFromLocalDatabase(getContext(), touchedItem.getID());
+        updateItem(touchedItem, updatedItem);
         itemRecyclerAdapter.notifyDataSetChanged();
+
+    }
+
+
+
+
+    public void updateItem(Item originalItem, Item updatedItem){
+        originalItem = updatedItem;
     }
 
     public interface FragmentActivityCommunicator {
         void onItemTouched(Item touchedItem, Integer touchedPosition, Integer independence);
+
+    }
+
+    public class StockChangeListener implements View.OnClickListener{
+
+        @Override
+        public void onClick(View view) {
+
+        }
     }
 
     public class ItemListener implements View.OnClickListener {

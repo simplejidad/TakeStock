@@ -11,8 +11,11 @@ import android.view.MenuItem;
 
 
 import com.santiagogil.takestock.R;
+import com.santiagogil.takestock.controller.ConsumptionsController;
 import com.santiagogil.takestock.controller.ItemsController;
+import com.santiagogil.takestock.model.pojos.Consumption;
 import com.santiagogil.takestock.model.pojos.Item;
+import com.santiagogil.takestock.util.ResultListener;
 
 import java.util.List;
 
@@ -28,6 +31,22 @@ public class MainActivityCommunicator extends AppCompatActivity implements Fragm
         FragmentTransaction fragmentTransaction = fragmentManager.beginTransaction();
         fragmentTransaction.replace(R.id.fragment_holder, fragmentMainView);
         fragmentTransaction.commit();
+
+        ItemsController itemsController = new ItemsController();
+        itemsController.updateItemsDatabase(this, new ResultListener<List<Item>>(){
+            @Override
+            public void finish(List<Item> result) {
+
+            }
+        });
+
+        ConsumptionsController consumptionsController = new ConsumptionsController();
+        consumptionsController.updateConsumptionsDatabase(this, new ResultListener<List<Consumption>>(){
+            @Override
+            public void finish(List<Consumption> result) {
+
+            }
+        });
 
     }
 

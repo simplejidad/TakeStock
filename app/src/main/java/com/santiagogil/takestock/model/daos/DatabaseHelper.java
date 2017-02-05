@@ -4,6 +4,9 @@ import android.content.Context;
 import android.database.sqlite.SQLiteDatabase;
 import android.database.sqlite.SQLiteOpenHelper;
 
+import com.santiagogil.takestock.controller.ConsumptionsController;
+import com.santiagogil.takestock.controller.ItemsController;
+
 public class DatabaseHelper extends SQLiteOpenHelper {
 
     //Database
@@ -38,6 +41,7 @@ public class DatabaseHelper extends SQLiteOpenHelper {
     public void onCreate(SQLiteDatabase sqLiteDatabase) {
         sqLiteDatabase.execSQL(CREATE_TABLE_ITEMS);
         sqLiteDatabase.execSQL(CREATE_TABLE_CONSUMPTIONS);
+
     }
 
     private static final String CREATE_TABLE_ITEMS = "CREATE TABLE " + TABLEITEMS + "("

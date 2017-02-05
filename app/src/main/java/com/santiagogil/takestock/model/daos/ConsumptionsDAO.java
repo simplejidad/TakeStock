@@ -13,6 +13,7 @@ import com.google.firebase.database.DatabaseReference;
 import com.google.firebase.database.FirebaseDatabase;
 import com.google.firebase.database.ValueEventListener;
 import com.santiagogil.takestock.model.pojos.Consumption;
+import com.santiagogil.takestock.model.pojos.Item;
 import com.santiagogil.takestock.util.ResultListener;
 
 import java.util.ArrayList;
@@ -98,7 +99,8 @@ public class ConsumptionsDAO{
         SQLiteDatabase database = new DatabaseHelper(context).getReadableDatabase();
 
         String sqlQuery = "SELECT * FROM " + DatabaseHelper.TABLECONSUMPTIONS
-                + " WHERE " + DatabaseHelper.ITEMID + " = " + '"' + itemID + '"';
+                + " WHERE " + DatabaseHelper.ITEMID
+                + " = " + '"' + itemID + '"';
 
         Cursor cursor = database.rawQuery(sqlQuery, null);
 
@@ -229,7 +231,9 @@ public class ConsumptionsDAO{
 
         SQLiteDatabase database = databaseHelper.getReadableDatabase();
 
-        String selectQuery = "SELECT * FROM " + DatabaseHelper.TABLECONSUMPTIONS + " WHERE " + DatabaseHelper.ITEMID + " = " + '"' + itemID + '"';
+        String selectQuery = "SELECT * FROM " + DatabaseHelper.TABLECONSUMPTIONS
+                + " WHERE " + DatabaseHelper.ITEMID
+                + " = " + '"' + itemID + '"';
 
         Cursor cursor = database.rawQuery(selectQuery, null);
         while(cursor.moveToNext()) {

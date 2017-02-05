@@ -5,7 +5,7 @@ import com.santiagogil.takestock.model.daos.DatabaseHelper;
 
 public class Item { //implements Comparable<Item>, Serializable {
 
-    static final Integer DEFAULT_CONSUMPTION_RATE = 90;
+    public static final Integer DEFAULT_CONSUMPTION_RATE = 90;
 
     @PropertyName(DatabaseHelper.ID)
     private String ID;
@@ -91,5 +91,9 @@ public class Item { //implements Comparable<Item>, Serializable {
 
     public void setImage(Integer image) {
         this.image = image;
+    }
+
+    public Integer getIndependence(){
+        return Math.round(getConsumptionRate() * getStock());
     }
 }
