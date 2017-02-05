@@ -135,7 +135,7 @@ public class FragmentItemList extends Fragment implements View.OnClickListener{
         Integer touchedPosition = recyclerView.getChildAdapterPosition(view);
         Item touchedItem = itemRecyclerAdapter.getItemAtPosition(touchedPosition);
         Item updatedItem = itemsController.getItemFromLocalDatabase(getContext(), touchedItem.getID());
-        updateItem(touchedItem, updatedItem);
+        updateRecyclerAdapterItem(touchedPosition, updatedItem);
         itemRecyclerAdapter.notifyDataSetChanged();
 
     }
@@ -143,8 +143,13 @@ public class FragmentItemList extends Fragment implements View.OnClickListener{
 
 
 
-    public void updateItem(Item originalItem, Item updatedItem){
-        originalItem = updatedItem;
+    public void updateRecyclerAdapterItem(Integer itemPosition, Item updatedItem){
+        itemRecyclerAdapter.getItemAtPosition(itemPosition).setActive(updatedItem.getActive());
+        itemRecyclerAdapter.getItemAtPosition(itemPosition).setConsumptionRate(updatedItem.getConsumptionRate());
+        itemRecyclerAdapter.getItemAtPosition(itemPosition).setImage(updatedItem.getImage());
+        itemRecyclerAdapter.getItemAtPosition(itemPosition).setMinimumPurchaceQuantity(updatedItem.getMinimumPurchaceQuantity());
+        itemRecyclerAdapter.getItemAtPosition(itemPosition).setName(updatedItem.getName());
+        itemRecyclerAdapter.getItemAtPosition(itemPosition).setStock(updatedItem.getStock());
     }
 
     public interface FragmentActivityCommunicator {

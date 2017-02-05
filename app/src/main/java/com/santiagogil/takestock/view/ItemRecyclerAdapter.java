@@ -95,7 +95,6 @@ public class ItemRecyclerAdapter extends RecyclerView.Adapter implements View.On
 
         public void loadItem(final Item item){
 
-            final ItemViewHolder itemViewHolder = this;
             textViewItemName.setText(item.getName());
             String itemStock = item.getStock().toString();
             textViewStock.setText(itemStock);
@@ -112,7 +111,8 @@ public class ItemRecyclerAdapter extends RecyclerView.Adapter implements View.On
                 @Override
                 public void onClick(View view) {
                     decreaseItemStock(item);
-                    onStockModifiedListener.onClick(buttonSubtract);
+                    //textViewIndependence.setText(item.getIndependence().toString());
+                    onStockModifiedListener.onClick(itemView);
                 }
             });
 
