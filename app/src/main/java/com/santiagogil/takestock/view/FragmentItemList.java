@@ -77,7 +77,6 @@ public class FragmentItemList extends Fragment implements View.OnClickListener{
         itemsController.getActiveItemsByIndependence(getContext(), bundle.getInt(INDEPENDENCE), new ResultListener<List<Item>>() {
             @Override
             public void finish(List<Item> result) {
-                result = itemsController.sortItemsAlphabetically(getContext(), result);
                 itemRecyclerAdapter.setItems(result);
                 itemRecyclerAdapter.notifyDataSetChanged();
 

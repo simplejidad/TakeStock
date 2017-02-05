@@ -262,7 +262,7 @@ public class ItemsDAO{
 
     public void increaseItemStock(Item item){
 
-        Integer newStock = item.getStock() + 1;
+        Integer newStock = item.getStock() + item.getMinimumPurchaceQuantity();
 
         updateItemStock(item, newStock);
 
@@ -421,7 +421,7 @@ public class ItemsDAO{
                 }
             }
         }
-        return itemsByIndependence;
+        return sortItemsAlphabetically(itemsByIndependence);
     }
 
 }

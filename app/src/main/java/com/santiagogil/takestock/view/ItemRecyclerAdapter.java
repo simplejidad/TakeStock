@@ -41,7 +41,7 @@ public class ItemRecyclerAdapter extends RecyclerView.Adapter implements View.On
     @Override
     public RecyclerView.ViewHolder onCreateViewHolder(ViewGroup parent, int viewType) {
         LayoutInflater inflater = LayoutInflater.from(context);
-        View view = inflater.inflate(R.layout.item_card_view, parent, false);
+        View view = inflater.inflate(R.layout.card_view_item, parent, false);
         view.setOnClickListener(onTouchedItemListener);
         return new ItemViewHolder(view, context, onStockModifiedListener);
     }
@@ -72,6 +72,7 @@ public class ItemRecyclerAdapter extends RecyclerView.Adapter implements View.On
 
         private TextView textViewItemName;
         private TextView textViewStock;
+        private TextView textViewIndependence;
         private Button buttonSubtract;
         private Button buttonAdd;
         private Context context;
@@ -81,6 +82,8 @@ public class ItemRecyclerAdapter extends RecyclerView.Adapter implements View.On
             super(itemView);
             textViewItemName = (TextView) itemView.findViewById(R.id.textViewItemName);
             textViewStock = (TextView) itemView.findViewById(R.id.textViewStock);
+            textViewIndependence = (TextView) itemView.findViewById(R.id.textViewIndependence);
+
             buttonAdd = (Button) itemView.findViewById(R.id.buttonAdd);;
             buttonSubtract = (Button) itemView.findViewById(R.id.buttonSubtract);
             this.context = context;
@@ -92,6 +95,7 @@ public class ItemRecyclerAdapter extends RecyclerView.Adapter implements View.On
             textViewItemName.setText(item.getName());
             String itemStock = item.getStock().toString();
             textViewStock.setText(itemStock);
+            textViewIndependence.setText("Independence: " + Math.round(item.getConsumptionRate()*item.getStock()) + " days");
             buttonAdd.setOnClickListener(new View.OnClickListener() {
                 @Override
                 public void onClick(View view) {

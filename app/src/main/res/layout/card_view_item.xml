@@ -1,0 +1,105 @@
+<?xml version="1.0" encoding="utf-8"?>
+<android.support.v7.widget.CardView xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    android:orientation="vertical"
+    android:layout_width="match_parent"
+    android:layout_height="wrap_content"
+    android:layout_margin="4dp"
+    app:cardCornerRadius="10dp"
+    android:minHeight="50dp">
+
+    <LinearLayout
+        android:layout_width="match_parent"
+        android:layout_height="68dp"
+        android:orientation="horizontal"
+        android:minHeight="50dp"
+        >
+
+        <Button
+            android:id="@+id/buttonSubtract"
+            android:layout_width="0dp"
+            android:layout_weight="3"
+            android:layout_height="match_parent"
+            android:text="@string/minus_sign"
+            android:layout_gravity="center"
+            android:textSize="24sp"
+          />
+
+
+        <LinearLayout
+            android:layout_width="0dp"
+            android:orientation="vertical"
+            android:layout_height="match_parent"
+            android:layout_weight="10"
+            >
+
+            <LinearLayout
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:orientation="horizontal">
+
+                <TextView
+                    android:id="@+id/textViewItemName"
+                    android:layout_width="0dp"
+                    android:layout_height="wrap_content"
+                    android:layout_weight="8"
+                    android:text="@string/description"
+                    android:layout_margin="5dp"
+                    android:textSize="18dp"
+                    android:layout_gravity="top"
+                    android:layout_centerVertical="true"
+                    />
+
+                <TextView
+                    android:textSize="18dp"
+                    android:id="@+id/textViewX"
+                    android:layout_gravity="center"
+                    android:layout_toRightOf="@+id/textViewItemName"
+                    android:layout_width="0dp"
+                    android:layout_weight="1"
+                    android:layout_height="wrap_content"
+                    android:text="x"
+                    android:layout_margin="5dp"
+
+                    />
+
+                <TextView
+                    android:id="@+id/textViewStock"
+                    android:layout_width="0dp"
+                    android:layout_weight="1.5"
+                    android:layout_gravity="center"
+                    android:layout_height="wrap_content"
+                    android:text="0"
+                    android:textSize="18dp"
+                    android:layout_toRightOf="@+id/textViewX"
+                    android:layout_margin="5dp"
+                    />
+
+            </LinearLayout>
+
+            <TextView
+                android:id="@+id/textViewIndependence"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:text="Independence: "
+                android:layout_margin="5dp"
+                android:textSize="18dp"
+                android:layout_gravity="top"
+                android:layout_centerVertical="true"
+                />
+
+        </LinearLayout>
+
+        <Button
+            android:id="@+id/buttonAdd"
+            android:layout_width="0dp"
+            android:layout_weight="3"
+            android:layout_height="match_parent"
+            android:text="+"
+            android:textSize="18dp"
+            android:layout_alignParentRight="true"
+            />
+
+    </LinearLayout>
+
+</android.support.v7.widget.CardView>
