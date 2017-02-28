@@ -16,6 +16,11 @@ import com.google.android.gms.tasks.OnCompleteListener;
 import com.google.android.gms.tasks.Task;
 import com.google.firebase.auth.AuthResult;
 import com.google.firebase.auth.FirebaseAuth;
+import com.google.firebase.database.DataSnapshot;
+import com.google.firebase.database.DatabaseError;
+import com.google.firebase.database.DatabaseReference;
+import com.google.firebase.database.FirebaseDatabase;
+import com.google.firebase.database.ValueEventListener;
 import com.santiagogil.takestock.R;
 
 public class Login_Activity extends AppCompatActivity {
@@ -24,7 +29,9 @@ public class Login_Activity extends AppCompatActivity {
     private EditText editTextPasswordField;
 
     private Button buttonLogin;
+    private Button buttonRegister;
 
+    private DatabaseReference firebase;
     private FirebaseAuth fAuth;
 
     private FirebaseAuth.AuthStateListener authStateListener;
@@ -34,11 +41,14 @@ public class Login_Activity extends AppCompatActivity {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_login);
 
+        firebase = FirebaseDatabase.getInstance().getReference().child("Users");
+
         fAuth = FirebaseAuth.getInstance();
 
         editTextEmailField = (EditText) findViewById(R.id.email);
         editTextPasswordField = (EditText) findViewById(R.id.password);
         buttonLogin = (Button) findViewById(R.id.email_sign_in_button);
+        buttonRegister = (Button) findViewById(R.id.register_button);
 
         authStateListener = new FirebaseAuth.AuthStateListener(){
             @Override
@@ -48,10 +58,6 @@ public class Login_Activity extends AppCompatActivity {
 
                     startActivity(new Intent(Login_Activity.this, MainActivityCommunicator.class));
 
-                } else {
-                    Intent loginIntent = new Intent(Login_Activity.this, RegisterActivity.class);
-                    loginIntent.addFlags(Intent.FLAG_ACTIVITY_CLEAR_TOP);
-                    startActivity(loginIntent);
                 }
             }
         };
@@ -64,6 +70,21 @@ public class Login_Activity extends AppCompatActivity {
             }
         });
 
+        buttonRegister.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+
+                goToRegister();
+            }
+        });
+
+
+    }
+
+    private void goToRegister() {
+
+        Intent registerIntent = new Intent(Login_Activity.this, RegisterActivity.class);
+        startActivity(registerIntent);
     }
 
     @Override
@@ -82,15 +103,45 @@ public class Login_Activity extends AppCompatActivity {
 
             Toast.makeText(this, "Fields Are Empty", Toast.LENGTH_SHORT).show();
 
+        } else{
+
+            fAuth.signInWithEmailAndPassword(email, password).addOnCompleteListener(new OnCompleteListener<AuthResult>() {
+                @Override
+                public void onComplete(@NonNull Task<AuthResult> task) {
+
+                    if(!task.isSuccessful()){
+                        Toast.makeText(Login_Activity.this, "Sign In Problem", Toast.LENGTH_LONG).show();
+                    } else {
+                        checkIfUserExists();
+                    }
+                }
+            });
         }
 
-        fAuth.signInWithEmailAndPassword(email, password).addOnCompleteListener(new OnCompleteListener<AuthResult>() {
-            @Override
-            public void onComplete(@NonNull Task<AuthResult> task) {
 
-                if(!task.isSuccessful()){
-                    Toast.makeText(Login_Activity.this, "Sign In Problem", Toast.LENGTH_LONG).show();
+    }
+
+    private void checkIfUserExists(){
+
+        final String userId = fAuth.getCurrentUser().getUid();
+
+        firebase.addValueEventListener(new ValueEventListener() {
+            @Override
+            public void onDataChange(DataSnapshot dataSnapshot) {
+                if(dataSnapshot.hasChild(userId)){
+
+                    Intent mainIntent = new Intent(Login_Activity.this, MainActivityCommunicator.class);
+                    mainIntent.addFlags(Intent.FLAG_ACTIVITY_CLEAR_TOP);
+                    startActivity(mainIntent);
+
+                } else{
+                    Toast.makeText(Login_Activity.this, "Login Error", Toast.LENGTH_SHORT).show();
                 }
+            }
+
+            @Override
+            public void onCancelled(DatabaseError databaseError) {
+
             }
         });
     }

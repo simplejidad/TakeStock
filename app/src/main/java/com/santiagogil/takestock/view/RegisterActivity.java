@@ -3,6 +3,7 @@ package com.santiagogil.takestock.view;
 import android.app.ProgressDialog;
 import android.content.Intent;
 import android.support.annotation.NonNull;
+import android.support.annotation.Nullable;
 import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
 import android.text.TextUtils;
@@ -35,18 +36,24 @@ public class RegisterActivity extends AppCompatActivity {
 
 
     @Override
-    protected void onCreate(Bundle savedInstanceState) {
+    protected void onCreate(@Nullable Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_register);
 
         editTextNameField = (EditText) findViewById(R.id.name);
         editTextEmailField = (EditText) findViewById(R.id.email);
         editTextPasswordField = (EditText) findViewById(R.id.password);
+        editTextConfirmPasswordField = (EditText) findViewById(R.id.confirmPassword);
         buttonRegister = (Button) findViewById(R.id.email_register_button);
 
         fAuth = FirebaseAuth.getInstance();
 
-        firebase = FirebaseDatabase.getInstance().getReference().child("Users");
+        fAuth.addAuthStateListener(new FirebaseAuth.AuthStateListener() {
+            @Override
+            public void onAuthStateChanged(@NonNull FirebaseAuth firebaseAuth) {
+
+            }
+        });
 
         progressDialog = new ProgressDialog(this);
 
@@ -69,8 +76,6 @@ public class RegisterActivity extends AppCompatActivity {
 
         if(!TextUtils.isEmpty(name) && !TextUtils.isEmpty(email) && !TextUtils.isEmpty(password) && !TextUtils.isEmpty(confirmedPassword)){
 
-
-
             if (password.equals(confirmedPassword)){
 
                 progressDialog.setMessage("Signing Up...");
@@ -83,6 +88,7 @@ public class RegisterActivity extends AppCompatActivity {
 
                             String user_id = fAuth.getCurrentUser().getUid();
 
+                            firebase = FirebaseDatabase.getInstance().getReference().child("Users");
                             DatabaseReference currentUserDB = firebase.child(user_id);
 
                             currentUserDB.child("name").setValue(name);

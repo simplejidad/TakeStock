@@ -45,11 +45,12 @@ public class MainActivityCommunicator extends AppCompatActivity implements Fragm
         setContentView(R.layout.activity_main);
 
         fAuth = FirebaseAuth.getInstance();
+
         authStateListener = new FirebaseAuth.AuthStateListener(){
             @Override
             public void onAuthStateChanged(@NonNull FirebaseAuth firebaseAuth) {
                 if(firebaseAuth.getCurrentUser() == null){
-                    Intent loginIntent = new Intent(MainActivityCommunicator.this, RegisterActivity.class);
+                    Intent loginIntent = new Intent(MainActivityCommunicator.this, Login_Activity.class);
                     loginIntent.addFlags(Intent.FLAG_ACTIVITY_CLEAR_TOP);
                     startActivity(loginIntent);
                 }
@@ -59,7 +60,7 @@ public class MainActivityCommunicator extends AppCompatActivity implements Fragm
         navigationView = (NavigationView) findViewById(R.id.navigationView);
         drawerLayout = (DrawerLayout) findViewById(R.id.drawer_layout);
         NavigationViewListener navigationViewListener = new NavigationViewListener();
-        navigationView.setNavigationItemSelectedListener(navigationViewListener´{+}<z);
+        navigationView.setNavigationItemSelectedListener(navigationViewListener);
 
 
         Fragment fragmentMainView = new FragmentItemListsViewPager();
