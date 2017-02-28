@@ -73,6 +73,11 @@
                 android:text="Register"
                 android:textStyle="bold" />
 
+            <com.google.android.gms.common.SignInButton
+                android:id="@+id/googleButton"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"></com.google.android.gms.common.SignInButton>
+
         </LinearLayout>
     </ScrollView>
 
