@@ -41,10 +41,11 @@ public class Login_Activity extends AppCompatActivity {
 
     private Button buttonLogin;
     private Button buttonRegister;
+    private Button buttonAnonymous;
     private SignInButton googleButton;
 
     private DatabaseReference firebase;
-    private FirebaseAuth fAuth;
+    private FirebaseAuth mAuth;
 
     private FirebaseAuth.AuthStateListener authStateListener;
 
@@ -60,12 +61,13 @@ public class Login_Activity extends AppCompatActivity {
 
         firebase = FirebaseDatabase.getInstance().getReference().child("Users");
 
-        fAuth = FirebaseAuth.getInstance();
+        mAuth = FirebaseAuth.getInstance();
 
         editTextEmailField = (EditText) findViewById(R.id.email);
         editTextPasswordField = (EditText) findViewById(R.id.password);
         buttonLogin = (Button) findViewById(R.id.email_sign_in_button);
         buttonRegister = (Button) findViewById(R.id.register_button);
+        buttonAnonymous = (Button) findViewById(R.id.anonymous_button);
         googleButton = (SignInButton) findViewById(R.id.googleButton);
 
         progressDialog = new ProgressDialog(this);
@@ -95,6 +97,13 @@ public class Login_Activity extends AppCompatActivity {
             public void onClick(View v) {
 
                 goToRegister();
+            }
+        });
+
+        buttonAnonymous.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+                signInAnonymously();
             }
         });
 
@@ -139,7 +148,7 @@ public class Login_Activity extends AppCompatActivity {
     protected void onStart() {
         super.onStart();
 
-        fAuth.addAuthStateListener(authStateListener);
+        mAuth.addAuthStateListener(authStateListener);
     }
 
     private void signInWithGoogle(){
@@ -182,7 +191,7 @@ public class Login_Activity extends AppCompatActivity {
         Log.d(TAG, "firebaseAuthWithGoogle:" + acct.getId());
 
         AuthCredential credential = GoogleAuthProvider.getCredential(acct.getIdToken(), null);
-        fAuth.signInWithCredential(credential)
+        mAuth.signInWithCredential(credential)
                 .addOnCompleteListener(this, new OnCompleteListener<AuthResult>() {
                     @Override
                     public void onComplete(@NonNull Task<AuthResult> task) {
@@ -213,7 +222,7 @@ public class Login_Activity extends AppCompatActivity {
 
         } else{
 
-            fAuth.signInWithEmailAndPassword(email, password).addOnCompleteListener(new OnCompleteListener<AuthResult>() {
+            mAuth.signInWithEmailAndPassword(email, password).addOnCompleteListener(new OnCompleteListener<AuthResult>() {
                 @Override
                 public void onComplete(@NonNull Task<AuthResult> task) {
 
@@ -231,9 +240,9 @@ public class Login_Activity extends AppCompatActivity {
 
     private void checkIfUserExists(){
 
-        if(fAuth.getCurrentUser() != null){
+        if(mAuth.getCurrentUser() != null){
 
-            final String userId = fAuth.getCurrentUser().getUid();
+            final String userId = mAuth.getCurrentUser().getUid();
 
             firebase.addValueEventListener(new ValueEventListener() {
                 @Override
@@ -255,5 +264,35 @@ public class Login_Activity extends AppCompatActivity {
                 }
             });
         }
+    }
+
+    private void signInAnonymously(){
+        mAuth.signInAnonymously()
+                .addOnCompleteListener(this, new OnCompleteListener<AuthResult>() {
+                    @Override
+                    public void onComplete(@NonNull Task<AuthResult> task) {
+                        Log.d(TAG, "signInAnonymously:onComplete:" + task.isSuccessful());
+
+                        if(task.isSuccessful()){
+
+                            String user_id = mAuth.getCurrentUser().getUid();
+
+                            DatabaseReference databaseReference = FirebaseDatabase.getInstance().getReference().child("Users");
+                            DatabaseReference currentUserDB = databaseReference.child(user_id);
+
+                            currentUserDB.child("image").setValue("default");
+
+                            startActivity(new Intent(Login_Activity.this, MainActivityCommunicator.class));
+                        }
+
+                        if (!task.isSuccessful()) {
+                            Log.w(TAG, "signInAnonymously", task.getException());
+                            Toast.makeText(Login_Activity.this, "Authentication failed.",
+                                    Toast.LENGTH_SHORT).show();
+                        }
+
+                        // ...
+                    }
+                });
     }
 }

@@ -14,6 +14,7 @@ import com.google.firebase.database.FirebaseDatabase;
 import com.google.firebase.database.ValueEventListener;
 import com.santiagogil.takestock.model.pojos.Consumption;
 import com.santiagogil.takestock.model.pojos.Item;
+import com.santiagogil.takestock.util.FirebaseHelper;
 import com.santiagogil.takestock.util.ResultListener;
 
 import java.util.ArrayList;
@@ -25,10 +26,13 @@ public class ConsumptionsDAO{
 
     private Context context;
     private DatabaseHelper databaseHelper;
+    private FirebaseHelper firebaseHelper;
 
     public ConsumptionsDAO(Context context) {
         this.context = context;
         databaseHelper = new DatabaseHelper(context);
+        firebaseHelper = new FirebaseHelper();
+
     }
 
     public void addConsumptionToDatabases(String itemID) {
@@ -86,8 +90,8 @@ public class ConsumptionsDAO{
 
     private void addConsumptionToFirebase(Consumption consumption){
 
-        FirebaseDatabase firebaseDatabase = FirebaseDatabase.getInstance();
-        DatabaseReference myRef = firebaseDatabase.getReference();
+
+        DatabaseReference myRef = firebaseHelper.getUserDB();
         myRef.child(DatabaseHelper.TABLECONSUMPTIONS).child(consumption.getID()).child(DatabaseHelper.ID).setValue(consumption.getID());
         myRef.child(DatabaseHelper.TABLECONSUMPTIONS).child(consumption.getID()).child(DatabaseHelper.DATE).setValue(consumption.getDate());
         myRef.child(DatabaseHelper.TABLECONSUMPTIONS).child(consumption.getID()).child(DatabaseHelper.ITEMID).setValue(consumption.getItemID());
@@ -204,8 +208,7 @@ public class ConsumptionsDAO{
 
         final List<Consumption> consumptions = new ArrayList<>();
 
-        FirebaseDatabase firebaseDatabase = FirebaseDatabase.getInstance();
-        DatabaseReference dbRef = firebaseDatabase.getReference().child(DatabaseHelper.TABLECONSUMPTIONS);
+        DatabaseReference dbRef = firebaseHelper.getUserDB().child(DatabaseHelper.TABLECONSUMPTIONS);
 
         dbRef.addListenerForSingleValueEvent(new ValueEventListener()   {
             @Override

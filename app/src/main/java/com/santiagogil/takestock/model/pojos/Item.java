@@ -9,6 +9,8 @@ public class Item { //implements Comparable<Item>, Serializable {
 
     @PropertyName(DatabaseHelper.ID)
     private String ID;
+    @PropertyName(DatabaseHelper.USERID)
+    private String userID;
     @PropertyName(DatabaseHelper.NAME)
     private String name;
     @PropertyName(DatabaseHelper.STOCK)
@@ -92,6 +94,11 @@ public class Item { //implements Comparable<Item>, Serializable {
     public void setImage(Integer image) {
         this.image = image;
     }
+
+    public void setUserID(String userID) {
+        this.userID = userID;
+    }
+
 
     public Integer getIndependence(){
         return Math.round(getConsumptionRate() * getStock());

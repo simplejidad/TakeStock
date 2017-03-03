@@ -73,6 +73,15 @@
                 android:text="Register"
                 android:textStyle="bold" />
 
+            <Button
+                android:id="@+id/anonymous_button"
+                style="?android:textAppearanceSmall"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_marginTop="16dp"
+                android:text="Sign in Anonymously"
+                android:textStyle="bold" />
+
             <com.google.android.gms.common.SignInButton
                 android:id="@+id/googleButton"
                 android:layout_width="wrap_content"

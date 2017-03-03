@@ -17,8 +17,8 @@ import com.google.android.gms.tasks.Task;
 import com.google.firebase.auth.AuthResult;
 import com.google.firebase.auth.FirebaseAuth;
 import com.google.firebase.database.DatabaseReference;
-import com.google.firebase.database.FirebaseDatabase;
 import com.santiagogil.takestock.R;
+import com.santiagogil.takestock.util.FirebaseHelper;
 
 public class RegisterActivity extends AppCompatActivity {
 
@@ -48,12 +48,12 @@ public class RegisterActivity extends AppCompatActivity {
 
         fAuth = FirebaseAuth.getInstance();
 
-        fAuth.addAuthStateListener(new FirebaseAuth.AuthStateListener() {
+/*        fAuth.addAuthStateListener(new FirebaseAuth.AuthStateListener() {
             @Override
             public void onAuthStateChanged(@NonNull FirebaseAuth firebaseAuth) {
 
             }
-        });
+        });*/
 
         progressDialog = new ProgressDialog(this);
 
@@ -88,18 +88,24 @@ public class RegisterActivity extends AppCompatActivity {
 
                             String user_id = fAuth.getCurrentUser().getUid();
 
-                            firebase = FirebaseDatabase.getInstance().getReference().child("Users");
-                            DatabaseReference currentUserDB = firebase.child(user_id);
+                            FirebaseHelper firebaseHelper = new FirebaseHelper();
 
-                            currentUserDB.child("name").setValue(name);
-                            currentUserDB.child("image").setValue("default");
+                            firebaseHelper.getFirebaseDatabase().getReference().child("User").
+                                    child(firebaseHelper.getCurrentUserID()).
+                                    child("image").setValue("default");
+                            firebaseHelper.getFirebaseDatabase().getReference().child("User")
+                                    .child(firebaseHelper.getCurrentUserID())
+                                    .child("name").setValue(name);
 
                             progressDialog.dismiss();
-
                             Intent mainIntent = new Intent(RegisterActivity.this, MainActivityCommunicator.class);
                             mainIntent.addFlags(Intent.FLAG_ACTIVITY_CLEAR_TOP);
                             startActivity(mainIntent);
 
+
+                        } else{
+
+                            Toast.makeText(RegisterActivity.this, "Register Problem", Toast.LENGTH_SHORT).show();
                         }
                     }
                 });
@@ -111,7 +117,6 @@ public class RegisterActivity extends AppCompatActivity {
         }else {
             Toast.makeText(this, "Fields are Empty", Toast.LENGTH_SHORT).show();
         }
-
     }
 
 }
