@@ -34,6 +34,8 @@ public class RegisterActivity extends AppCompatActivity {
 
     private ProgressDialog progressDialog;
 
+    public static final String EMAIL = "email";
+
 
     @Override
     protected void onCreate(@Nullable Bundle savedInstanceState) {
@@ -66,6 +68,12 @@ public class RegisterActivity extends AppCompatActivity {
             }
         });
 
+        Intent intent = getIntent();
+        Bundle bundle = intent.getExtras();
+        if(bundle != null){
+            editTextEmailField.setText(bundle.getString(EMAIL));
+        }
+
     }
     private void startRegister() {
 
@@ -78,38 +86,44 @@ public class RegisterActivity extends AppCompatActivity {
 
             if (password.equals(confirmedPassword)){
 
-                progressDialog.setMessage("Signing Up...");
-                progressDialog.show();
+                if(password.length()<6){
 
-                fAuth.createUserWithEmailAndPassword(email, password).addOnCompleteListener(new OnCompleteListener<AuthResult>() {
-                    @Override
-                    public void onComplete(@NonNull Task<AuthResult> task) {
-                        if(task.isSuccessful()){
+                    Toast.makeText(this, getString(R.string.error_invalid_password) , Toast.LENGTH_SHORT).show();
+                } else {
 
-                            String user_id = fAuth.getCurrentUser().getUid();
+                    progressDialog.setMessage("Signing Up...");
+                    progressDialog.show();
 
-                            FirebaseHelper firebaseHelper = new FirebaseHelper();
+                    fAuth.createUserWithEmailAndPassword(email, password).addOnCompleteListener(new OnCompleteListener<AuthResult>() {
+                        @Override
+                        public void onComplete(@NonNull Task<AuthResult> task) {
+                            if (task.isSuccessful()) {
 
-                            firebaseHelper.getFirebaseDatabase().getReference().child("User").
-                                    child(firebaseHelper.getCurrentUserID()).
-                                    child("image").setValue("default");
-                            firebaseHelper.getFirebaseDatabase().getReference().child("User")
-                                    .child(firebaseHelper.getCurrentUserID())
-                                    .child("name").setValue(name);
+                                String user_id = fAuth.getCurrentUser().getUid();
 
-                            progressDialog.dismiss();
-                            Intent mainIntent = new Intent(RegisterActivity.this, MainActivityCommunicator.class);
-                            mainIntent.addFlags(Intent.FLAG_ACTIVITY_CLEAR_TOP);
-                            startActivity(mainIntent);
+                                FirebaseHelper firebaseHelper = new FirebaseHelper();
+
+                                firebaseHelper.getFirebaseDatabase().getReference().child("User").
+                                        child(firebaseHelper.getCurrentUserID()).
+                                        child("image").setValue("default");
+                                firebaseHelper.getFirebaseDatabase().getReference().child("User")
+                                        .child(firebaseHelper.getCurrentUserID())
+                                        .child("name").setValue(name);
+
+                                progressDialog.dismiss();
+                                Intent mainIntent = new Intent(RegisterActivity.this, MainActivityCommunicator.class);
+                                mainIntent.addFlags(Intent.FLAG_ACTIVITY_CLEAR_TOP);
+                                startActivity(mainIntent);
 
 
-                        } else{
+                            } else {
 
-                            Toast.makeText(RegisterActivity.this, "Register Problem", Toast.LENGTH_SHORT).show();
+                                Toast.makeText(RegisterActivity.this, "Register Problem", Toast.LENGTH_SHORT).show();
+                            }
                         }
-                    }
-                });
+                    });
 
+                }
             }
             else{
                 Toast.makeText(this, "Passwords do not match", Toast.LENGTH_SHORT).show();

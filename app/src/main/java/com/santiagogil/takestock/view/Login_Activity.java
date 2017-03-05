@@ -141,6 +141,9 @@ public class Login_Activity extends AppCompatActivity {
     private void goToRegister() {
 
         Intent registerIntent = new Intent(Login_Activity.this, RegisterActivity.class);
+        Bundle bundle = new Bundle();
+        bundle.putString(RegisterActivity.EMAIL, editTextEmailField.getText().toString());
+        registerIntent.putExtras(bundle);
         startActivity(registerIntent);
     }
 
