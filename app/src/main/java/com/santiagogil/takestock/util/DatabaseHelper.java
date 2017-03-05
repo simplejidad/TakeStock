@@ -1,4 +1,4 @@
-package com.santiagogil.takestock.model.daos;
+package com.santiagogil.takestock.util;
 
 import android.content.Context;
 import android.database.sqlite.SQLiteDatabase;
@@ -16,6 +16,7 @@ public class DatabaseHelper extends SQLiteOpenHelper {
     //Tables
     public static final String TABLEITEMS = "Item";
     public static final String TABLECONSUMPTIONS = "Consumptions";
+    public static final String TABLEUSERS = "Users";
 
     //Columns
     public static final String ID = "ID";

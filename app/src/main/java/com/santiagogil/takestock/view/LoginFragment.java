@@ -5,11 +5,12 @@ import android.app.ProgressDialog;
 import android.content.Intent;
 import android.os.Bundle;
 import android.support.annotation.NonNull;
-import android.support.annotation.Nullable;
-import android.support.v7.app.AppCompatActivity;
+import android.support.v4.app.Fragment;
 import android.text.TextUtils;
 import android.util.Log;
+import android.view.LayoutInflater;
 import android.view.View;
+import android.view.ViewGroup;
 import android.widget.Button;
 import android.widget.EditText;
 import android.widget.Toast;
@@ -33,8 +34,9 @@ import com.google.firebase.database.DatabaseReference;
 import com.google.firebase.database.FirebaseDatabase;
 import com.google.firebase.database.ValueEventListener;
 import com.santiagogil.takestock.R;
+import com.santiagogil.takestock.util.DatabaseHelper;
 
-public class Login_Activity extends AppCompatActivity {
+public class LoginFragment extends Fragment {
 
     private EditText editTextEmailField;
     private EditText editTextPasswordField;
@@ -55,34 +57,29 @@ public class Login_Activity extends AppCompatActivity {
     private ProgressDialog progressDialog;
 
     @Override
-    protected void onCreate(@Nullable Bundle savedInstanceState) {
+    public View onCreateView(LayoutInflater inflater, final ViewGroup container, Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-        setContentView(R.layout.activity_login);
+        View view = inflater.inflate(R.layout.fragment_login, container, false);
 
-        firebase = FirebaseDatabase.getInstance().getReference().child("Users");
+        firebase = FirebaseDatabase.getInstance().getReference().child(DatabaseHelper.TABLEUSERS);
 
         mAuth = FirebaseAuth.getInstance();
 
-        editTextEmailField = (EditText) findViewById(R.id.email);
-        editTextPasswordField = (EditText) findViewById(R.id.password);
-        buttonLogin = (Button) findViewById(R.id.email_sign_in_button);
-        buttonRegister = (Button) findViewById(R.id.register_button);
-        buttonAnonymous = (Button) findViewById(R.id.anonymous_button);
-        googleButton = (SignInButton) findViewById(R.id.googleButton);
-
-        progressDialog = new ProgressDialog(this);
-
-        authStateListener = new FirebaseAuth.AuthStateListener(){
+        mAuth.addAuthStateListener(new FirebaseAuth.AuthStateListener() {
             @Override
             public void onAuthStateChanged(@NonNull FirebaseAuth firebaseAuth) {
 
-                if(firebaseAuth.getCurrentUser() != null){
-
-                    startActivity(new Intent(Login_Activity.this, MainActivityCommunicator.class));
-
-                }
             }
-        };
+        });
+
+        editTextEmailField = (EditText) view.findViewById(R.id.email);
+        editTextPasswordField = (EditText) view.findViewById(R.id.password);
+        buttonLogin = (Button) view.findViewById(R.id.email_sign_in_button);
+        buttonRegister = (Button) view.findViewById(R.id.register_button);
+        buttonAnonymous = (Button) view.findViewById(R.id.anonymous_button);
+        googleButton = (SignInButton) view.findViewById(R.id.googleButton);
+
+        progressDialog = new ProgressDialog(getContext());
 
         buttonLogin.setOnClickListener(new View.OnClickListener() {
             @Override
@@ -96,11 +93,12 @@ public class Login_Activity extends AppCompatActivity {
             @Override
             public void onClick(View v) {
 
-                goToRegister();
+                CallRegisterListerner callRegisterListerner = (CallRegisterListerner) getActivity();
+                callRegisterListerner.goToRegister(editTextEmailField.getText().toString());
             }
         });
 
-        buttonAnonymous.setOnClickListener(new View.OnClickListener() {
+        /*buttonAnonymous.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
                 signInAnonymously();
@@ -114,17 +112,22 @@ public class Login_Activity extends AppCompatActivity {
                 .requestEmail()
                 .build();
 
-        googleApiClient = new GoogleApiClient.Builder(this)
-                .enableAutoManage(this, new GoogleApiClient.OnConnectionFailedListener(){
-                    @Override
-                    public void onConnectionFailed(@NonNull ConnectionResult connectionResult) {
 
-                        Toast.makeText(Login_Activity.this, "Connection Failed", Toast.LENGTH_SHORT).show();
-                        
-                    }
-                })
-                .addApi(Auth.GOOGLE_SIGN_IN_API, gso)
-                .build();
+        try {
+            googleApiClient = new GoogleApiClient.Builder(getContext())
+                    .enableAutoManage(getActivity(), new GoogleApiClient.OnConnectionFailedListener() {
+                        @Override
+                        public void onConnectionFailed(@NonNull ConnectionResult connectionResult) {
+
+                            Toast.makeText(getContext(), "Connection Failed", Toast.LENGTH_SHORT).show();
+
+                        }
+                    })
+                    .addApi(Auth.GOOGLE_SIGN_IN_API, gso)
+                    .build();
+        } catch (IllegalStateException e) {
+            e.printStackTrace();
+        }
 
         googleButton.setOnClickListener(new View.OnClickListener() {
             @Override
@@ -132,26 +135,9 @@ public class Login_Activity extends AppCompatActivity {
 
                 signInWithGoogle();
             }
-        });
+        });*/
 
-
-    }
-
-
-    private void goToRegister() {
-
-        Intent registerIntent = new Intent(Login_Activity.this, RegisterActivity.class);
-        Bundle bundle = new Bundle();
-        bundle.putString(RegisterActivity.EMAIL, editTextEmailField.getText().toString());
-        registerIntent.putExtras(bundle);
-        startActivity(registerIntent);
-    }
-
-    @Override
-    protected void onStart() {
-        super.onStart();
-
-        mAuth.addAuthStateListener(authStateListener);
+        return view;
     }
 
     private void signInWithGoogle(){
@@ -195,14 +181,14 @@ public class Login_Activity extends AppCompatActivity {
 
         AuthCredential credential = GoogleAuthProvider.getCredential(acct.getIdToken(), null);
         mAuth.signInWithCredential(credential)
-                .addOnCompleteListener(this, new OnCompleteListener<AuthResult>() {
+                .addOnCompleteListener(getActivity(), new OnCompleteListener<AuthResult>() {
                     @Override
                     public void onComplete(@NonNull Task<AuthResult> task) {
                         Log.d(TAG, "signInWithCredential:onComplete:" + task.isSuccessful());
 
                         if(!task.isSuccessful()) {
                             Log.w(TAG, "signiInWithCredential", task.getException());
-                            Toast.makeText(Login_Activity.this, "Authentication Failed",
+                            Toast.makeText(getContext(), "Authentication Failed",
                                     Toast.LENGTH_SHORT).show();
                         }else {
                             checkIfUserExists();
@@ -221,7 +207,7 @@ public class Login_Activity extends AppCompatActivity {
 
         if(TextUtils.isEmpty(email) || TextUtils.isEmpty(password)){
 
-            Toast.makeText(this, "Fields Are Empty", Toast.LENGTH_SHORT).show();
+            Toast.makeText(getContext(), "Fields Are Empty", Toast.LENGTH_SHORT).show();
 
         } else{
 
@@ -230,7 +216,7 @@ public class Login_Activity extends AppCompatActivity {
                 public void onComplete(@NonNull Task<AuthResult> task) {
 
                     if(!task.isSuccessful()){
-                        Toast.makeText(Login_Activity.this, "Sign In Problem", Toast.LENGTH_LONG).show();
+                        Toast.makeText(getContext(), "Sign In Problem", Toast.LENGTH_LONG).show();
                     } else {
                         checkIfUserExists();
                     }
@@ -252,12 +238,12 @@ public class Login_Activity extends AppCompatActivity {
                 public void onDataChange(DataSnapshot dataSnapshot) {
                     if(dataSnapshot.hasChild(userId)){
 
-                        Intent mainIntent = new Intent(Login_Activity.this, MainActivityCommunicator.class);
+                        Intent mainIntent = new Intent(getContext(), MainActivityCommunicator.class);
                         mainIntent.addFlags(Intent.FLAG_ACTIVITY_CLEAR_TOP);
                         startActivity(mainIntent);
 
                     } else{
-                        Toast.makeText(Login_Activity.this, "Login Error", Toast.LENGTH_SHORT).show();
+                        Toast.makeText(getContext(), "Login Error", Toast.LENGTH_SHORT).show();
                     }
                 }
 
@@ -269,9 +255,13 @@ public class Login_Activity extends AppCompatActivity {
         }
     }
 
+    public interface CallRegisterListerner{
+        void goToRegister(String string);
+    }
+
     private void signInAnonymously(){
         mAuth.signInAnonymously()
-                .addOnCompleteListener(this, new OnCompleteListener<AuthResult>() {
+                .addOnCompleteListener(new OnCompleteListener<AuthResult>() {
                     @Override
                     public void onComplete(@NonNull Task<AuthResult> task) {
                         Log.d(TAG, "signInAnonymously:onComplete:" + task.isSuccessful());
@@ -285,12 +275,14 @@ public class Login_Activity extends AppCompatActivity {
 
                             currentUserDB.child("image").setValue("default");
 
-                            startActivity(new Intent(Login_Activity.this, MainActivityCommunicator.class));
+                            Intent intent = new Intent(getContext(), MainActivityCommunicator.class);
+                            intent.addFlags(Intent.FLAG_ACTIVITY_CLEAR_TOP);
+                            startActivity(intent);
                         }
 
                         if (!task.isSuccessful()) {
                             Log.w(TAG, "signInAnonymously", task.getException());
-                            Toast.makeText(Login_Activity.this, "Authentication failed.",
+                            Toast.makeText(getContext(), "Authentication failed.",
                                     Toast.LENGTH_SHORT).show();
                         }
 

@@ -29,12 +29,6 @@ import java.util.List;
 
 public class FragmentItemListsViewPager extends Fragment{
 
-    private ItemsController itemsController;
-    private RecyclerView recyclerView;
-    private EditText editTextAddItem;
-    private ItemRecyclerAdapter itemRecyclerAdapter;
-    private ConsumptionsController consumptionsController;
-
     private ViewPager itemListsViewPager;
     private ViewPager.OnPageChangeListener onPageChangeListener;
     private ItemListsViewPagerAdapter itemListsViewPagerAdapter;

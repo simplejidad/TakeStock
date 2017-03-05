@@ -11,7 +11,7 @@ import android.widget.EditText;
 
 import com.santiagogil.takestock.R;
 import com.santiagogil.takestock.controller.ItemsController;
-import com.santiagogil.takestock.model.daos.DatabaseHelper;
+import com.santiagogil.takestock.util.DatabaseHelper;
 import com.santiagogil.takestock.model.pojos.Item;
 
 public class FragmentEditItem extends Fragment {

@@ -1,7 +1,7 @@
 package com.santiagogil.takestock.model.pojos;
 
 import com.google.firebase.database.PropertyName;
-import com.santiagogil.takestock.model.daos.DatabaseHelper;
+import com.santiagogil.takestock.util.DatabaseHelper;
 
 public class Item { //implements Comparable<Item>, Serializable {
 

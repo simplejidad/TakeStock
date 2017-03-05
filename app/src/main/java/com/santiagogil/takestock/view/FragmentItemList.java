@@ -156,9 +156,6 @@ public class FragmentItemList extends Fragment implements View.OnClickListener{
 
     }
 
-
-
-
     public void updateRecyclerAdapterItem(Integer itemPosition, Item updatedItem){
         itemRecyclerAdapter.getItemAtPosition(itemPosition).setActive(updatedItem.getActive());
         itemRecyclerAdapter.getItemAtPosition(itemPosition).setConsumptionRate(updatedItem.getConsumptionRate());

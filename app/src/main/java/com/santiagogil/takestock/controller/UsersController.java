@@ -2,7 +2,6 @@ package com.santiagogil.takestock.controller;
 
 import android.content.Context;
 
-import com.santiagogil.takestock.model.daos.DatabaseHelper;
 import com.santiagogil.takestock.model.daos.UsersDAO;
 import com.santiagogil.takestock.util.ResultListener;
 
