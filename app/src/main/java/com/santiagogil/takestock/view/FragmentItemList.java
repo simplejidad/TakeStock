@@ -129,6 +129,22 @@ public class FragmentItemList extends Fragment implements View.OnClickListener{
         return view;
     }
 
+    public void updateItemList(){
+
+        List<Item> itemList = itemsController.getActiveItemsByIndependence(getContext(), independence);
+
+        if(independence == -1){
+            itemList = itemsController.sortItemsAlphabetically(getContext(), itemList);
+        }
+        else {
+            itemList = itemsController.sortItemsByIndependence(getContext(), itemList);
+        }
+        itemRecyclerAdapter.setItems(itemList);
+        itemRecyclerAdapter.notifyDataSetChanged();
+
+
+    }
+
     @Override
     public void onClick(View view) {
 

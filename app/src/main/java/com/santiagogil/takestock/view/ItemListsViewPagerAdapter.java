@@ -38,4 +38,8 @@ public class ItemListsViewPagerAdapter extends FragmentStatePagerAdapter {
         fragmentItemListList.add(FragmentItemList.getfragmentItemList("Un Mes", 30, 0));
         fragmentItemListList.add(FragmentItemList.getfragmentItemList("Mucho", 500, 0));
     }
+
+    public List<FragmentItemList> getFragmentItemListList() {
+        return fragmentItemListList;
+    }
 }
