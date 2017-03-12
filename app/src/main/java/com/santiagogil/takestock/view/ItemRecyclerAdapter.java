@@ -17,7 +17,7 @@ import com.santiagogil.takestock.model.pojos.Item;
 import java.util.ArrayList;
 import java.util.List;
 
-public class ItemRecyclerAdapter extends RecyclerView.Adapter implements View.OnClickListener{
+public class ItemRecyclerAdapter extends RecyclerView.Adapter{
 
     private List<Item> items;
     private Context context;
@@ -63,11 +63,6 @@ public class ItemRecyclerAdapter extends RecyclerView.Adapter implements View.On
         this.items = items;
     }
 
-    @Override
-    public void onClick(View view) {
-
-    }
-
     static class ItemViewHolder extends RecyclerView.ViewHolder {
 
         private TextView textViewItemName;
@@ -86,7 +81,7 @@ public class ItemRecyclerAdapter extends RecyclerView.Adapter implements View.On
             textViewStock = (TextView) itemView.findViewById(R.id.textViewStock);
             textViewIndependence = (TextView) itemView.findViewById(R.id.textViewIndependence);
 
-            buttonAdd = (Button) itemView.findViewById(R.id.buttonAdd);;
+            buttonAdd = (Button) itemView.findViewById(R.id.buttonAdd);
             buttonSubtract = (Button) itemView.findViewById(R.id.buttonSubtract);
             this.context = context;
             this.onStockModifiedListener = onStockModifiedListener;

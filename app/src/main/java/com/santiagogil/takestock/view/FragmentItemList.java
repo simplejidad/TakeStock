@@ -72,7 +72,7 @@ public class FragmentItemList extends Fragment implements View.OnClickListener{
         title.setText(bundle.getString(TITLE));
         itemsController = new ItemsController();
         recyclerView = (RecyclerView) view.findViewById(R.id.recyclerViewItems);
-        itemRecyclerAdapter = new ItemRecyclerAdapter(getContext(), this, new FragmentItemList.ItemListener());
+        itemRecyclerAdapter = new ItemRecyclerAdapter(getContext(), FragmentItemList.this, FragmentItemList.this);
         recyclerView.setAdapter(itemRecyclerAdapter);
         LinearLayoutManager linearLayoutManager = new LinearLayoutManager(getContext());
         linearLayoutManager.setOrientation(LinearLayoutManager.VERTICAL);
