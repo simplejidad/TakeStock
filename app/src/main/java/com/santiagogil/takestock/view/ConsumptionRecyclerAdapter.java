@@ -9,7 +9,9 @@ import android.widget.TextView;
 
 import com.santiagogil.takestock.R;
 import com.santiagogil.takestock.model.pojos.Consumption;
+import com.santiagogil.takestock.util.DateHelper;
 
+import java.util.Date;
 import java.util.List;
 
 public class ConsumptionRecyclerAdapter extends RecyclerView.Adapter {
@@ -17,8 +19,10 @@ public class ConsumptionRecyclerAdapter extends RecyclerView.Adapter {
     private List<Consumption> consumptionList;
     private Context context;
 
+
     public ConsumptionRecyclerAdapter(Context context) {
         this.context = context;
+
     }
 
     @Override
@@ -48,15 +52,17 @@ public class ConsumptionRecyclerAdapter extends RecyclerView.Adapter {
     static class ConsumptionViewHolder extends RecyclerView.ViewHolder {
 
         private TextView textViewConsumptionDate;
+        private DateHelper dateHelper;
 
         public ConsumptionViewHolder(View consumptionView) {
             super(consumptionView);
             textViewConsumptionDate = (TextView) consumptionView.findViewById(R.id.textViewConsumptionDate);
+            dateHelper = new DateHelper();
         }
 
         public void loadConsumption(Consumption consumption){
 
-            textViewConsumptionDate.setText(consumption.getDate().toString());
+            textViewConsumptionDate.setText(dateHelper.ConvertIntegerToFormattedDate(consumption.getDate()));
 
         }
     }

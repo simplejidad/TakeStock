@@ -1,16 +1,15 @@
-package com.santiagogil.takestock.view;
+package com.santiagogil.takestock.view.onboarding;
 
 import android.content.Intent;
-import android.support.annotation.NonNull;
 import android.support.v4.app.Fragment;
 import android.support.v4.app.FragmentManager;
 import android.support.v4.app.FragmentTransaction;
 import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
 
-import com.google.android.gms.auth.api.Auth;
 import com.google.firebase.auth.FirebaseAuth;
 import com.santiagogil.takestock.R;
+import com.santiagogil.takestock.view.MainActivityCommunicator;
 
 public class OnboardingActivity extends AppCompatActivity implements LoginFragment.CallRegisterListerner {
 

@@ -1,4 +1,4 @@
-package com.santiagogil.takestock.view;
+package com.santiagogil.takestock.view.onboarding;
 
 
 import android.app.ProgressDialog;
@@ -35,6 +35,7 @@ import com.google.firebase.database.FirebaseDatabase;
 import com.google.firebase.database.ValueEventListener;
 import com.santiagogil.takestock.R;
 import com.santiagogil.takestock.util.DatabaseHelper;
+import com.santiagogil.takestock.view.MainActivityCommunicator;
 
 public class LoginFragment extends Fragment {
 

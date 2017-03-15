@@ -16,8 +16,7 @@ public class DatabaseHelper extends SQLiteOpenHelper {
     //Tables
     public static final String TABLEITEMS = "Items";
     public static final String TABLECONSUMPTIONS = "Consumptions";
-}{+´´´´´´´´´´´´´´´´  public static final String
-}4TABLEUSERS = "Users";
+    public static final String TABLEUSERS = "Users";
 
     //Columns
     public static final String ID = "ID";

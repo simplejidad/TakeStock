@@ -20,6 +20,7 @@ import com.santiagogil.takestock.controller.ItemsController;
 import com.santiagogil.takestock.model.pojos.Consumption;
 import com.santiagogil.takestock.model.pojos.Item;
 import com.santiagogil.takestock.util.ResultListener;
+import com.santiagogil.takestock.view.onboarding.OnboardingActivity;
 
 import java.util.List;
 
@@ -56,7 +57,8 @@ public class MainActivityCommunicator extends AppCompatActivity implements Fragm
         navigationView.setNavigationItemSelectedListener(navigationViewListener);
 
 
-        Fragment fragmentMainView = new FragmentItemListsViewPager();
+        FragmentItemListsViewPager fragmentMainView = new FragmentItemListsViewPager();
+        fragmentMainView.setFragmentActivityCommunicator(MainActivityCommunicator.this);
         FragmentManager fragmentManager = this.getSupportFragmentManager();
         FragmentTransaction fragmentTransaction = fragmentManager.beginTransaction();
         fragmentTransaction.replace(R.id.fragment_holder, fragmentMainView);
@@ -78,12 +80,15 @@ public class MainActivityCommunicator extends AppCompatActivity implements Fragm
             }
         });
 
+        this.setTitle(this.getTitle() + fAuth.getCurrentUser().getDisplayName());
+
     }
 
     @Override
     public void refreshFragmentMainView(Integer position) {
 
         FragmentItemListsViewPager fragmentMainView = new FragmentItemListsViewPager();
+        fragmentMainView.setFragmentActivityCommunicator(MainActivityCommunicator.this);
         FragmentManager fragmentManager = getSupportFragmentManager();
         Bundle bundle = new Bundle();
         bundle.putInt(FragmentItemList.POSITION, position);

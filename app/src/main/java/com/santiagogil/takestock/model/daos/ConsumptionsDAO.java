@@ -13,6 +13,7 @@ import com.google.firebase.database.DatabaseReference;
 import com.google.firebase.database.ValueEventListener;
 import com.santiagogil.takestock.model.pojos.Consumption;
 import com.santiagogil.takestock.util.DatabaseHelper;
+import com.santiagogil.takestock.util.DateHelper;
 import com.santiagogil.takestock.util.FirebaseHelper;
 import com.santiagogil.takestock.util.ResultListener;
 
@@ -31,7 +32,6 @@ public class ConsumptionsDAO{
         this.context = context;
         databaseHelper = new DatabaseHelper(context);
         firebaseHelper = new FirebaseHelper();
-
     }
 
     public void addConsumptionToDatabases(String itemID) {
@@ -64,7 +64,8 @@ public class ConsumptionsDAO{
 
     public Integer currentDateInDays(){
 
-        return (Integer) (int) (System.currentTimeMillis()/1000/60/60/24);
+        DateHelper dateHelper = new DateHelper();
+        return dateHelper.currentDateInIntegerFromMilliseconds();
     }
 
     public String addConsumptionToLocalDB(String itemID){

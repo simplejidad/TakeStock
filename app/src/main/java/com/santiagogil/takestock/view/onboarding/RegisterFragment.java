@@ -1,4 +1,4 @@
-package com.santiagogil.takestock.view;
+package com.santiagogil.takestock.view.onboarding;
 
 import android.app.ProgressDialog;
 import android.content.Intent;
@@ -20,6 +20,7 @@ import com.google.firebase.auth.FirebaseAuth;
 import com.google.firebase.database.DatabaseReference;
 import com.santiagogil.takestock.R;
 import com.santiagogil.takestock.util.FirebaseHelper;
+import com.santiagogil.takestock.view.MainActivityCommunicator;
 
 public class RegisterFragment extends Fragment {
 

@@ -12,12 +12,17 @@ public class ItemListsViewPagerAdapter extends FragmentStatePagerAdapter {
 
     private List<FragmentItemList> fragmentItemListList;
     private Context context;
+    private FragmentItemList.FragmentActivityCommunicator fragmentActivityCommunicator;
 
-    public ItemListsViewPagerAdapter(FragmentManager fm, Context context) {
+
+
+    public ItemListsViewPagerAdapter(FragmentManager fm, Context context, FragmentItemList.FragmentActivityCommunicator fragmentActivityCommunicator) {
         super(fm);
         this.context = context;
         fragmentItemListList = new ArrayList<>();
+        this.fragmentActivityCommunicator = fragmentActivityCommunicator;
         retrieveFragments();
+
     }
 
     @Override
@@ -32,14 +37,15 @@ public class ItemListsViewPagerAdapter extends FragmentStatePagerAdapter {
 
     public void retrieveFragments(){
 
-        fragmentItemListList.add(FragmentItemList.getfragmentItemList("All Items A-Z", -1, 0));
-        fragmentItemListList.add(FragmentItemList.getfragmentItemList("All Items by Independence", -2, 0));
-        fragmentItemListList.add(FragmentItemList.getfragmentItemList("Stock 0", 0, 0));
-        fragmentItemListList.add(FragmentItemList.getfragmentItemList("Un Mes", 30, 0));
-        fragmentItemListList.add(FragmentItemList.getfragmentItemList("Mucho", 500, 0));
+        fragmentItemListList.add(FragmentItemList.getfragmentItemList("All Items A-Z", -1, 0, fragmentActivityCommunicator));
+        fragmentItemListList.add(FragmentItemList.getfragmentItemList("All Items by Independence", -2, 0, fragmentActivityCommunicator));
+        fragmentItemListList.add(FragmentItemList.getfragmentItemList("Stock 0", 0, 0, fragmentActivityCommunicator));
+        fragmentItemListList.add(FragmentItemList.getfragmentItemList("Un Mes", 30, 0, fragmentActivityCommunicator));
+        fragmentItemListList.add(FragmentItemList.getfragmentItemList("Mucho", 500, 0, fragmentActivityCommunicator));
     }
 
     public List<FragmentItemList> getFragmentItemListList() {
         return fragmentItemListList;
     }
+
 }

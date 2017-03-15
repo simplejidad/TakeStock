@@ -22,16 +22,16 @@ public class ItemRecyclerAdapter extends RecyclerView.Adapter{
     private List<Item> items;
     private Context context;
     private View.OnClickListener onStockModifiedListener;
-    private View.OnClickListener onTouchedItemListener;
+    private View.OnClickListener onItemTouchedListener;
 
     public List<Item> getItems() {
         return items;
     }
 
-    public ItemRecyclerAdapter(Context context, View.OnClickListener onStockModifiedListener, View.OnClickListener onTouchedItemListener) {
+    public ItemRecyclerAdapter(Context context, View.OnClickListener onStockModifiedListener, View.OnClickListener onItemTouchedListener) {
         this.context = context;
         this.onStockModifiedListener = onStockModifiedListener;
-        this.onTouchedItemListener = onTouchedItemListener;
+        this.onItemTouchedListener = onItemTouchedListener;
         this.items = new ArrayList<>();
 
     }
@@ -42,7 +42,7 @@ public class ItemRecyclerAdapter extends RecyclerView.Adapter{
     public RecyclerView.ViewHolder onCreateViewHolder(ViewGroup parent, int viewType) {
         LayoutInflater inflater = LayoutInflater.from(context);
         View view = inflater.inflate(R.layout.card_view_item, parent, false);
-        view.setOnClickListener(onTouchedItemListener);
+        view.setOnClickListener(onItemTouchedListener);
         return new ItemViewHolder(view, context, onStockModifiedListener);
     }
 

@@ -9,6 +9,7 @@ import android.support.v4.view.ViewPager;
 import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
 import android.view.LayoutInflater;
+import android.view.MotionEvent;
 import android.view.View;
 import android.view.ViewGroup;
 import android.view.WindowManager;
@@ -29,28 +30,29 @@ import java.util.List;
 
 
 
-public class FragmentItemList extends Fragment implements View.OnClickListener{
+public class FragmentItemList extends Fragment {
 
 
     private ItemsController itemsController;
     private RecyclerView recyclerView;
     private EditText editTextAddItem;
     private ItemRecyclerAdapter itemRecyclerAdapter;
-
-
-
-    private ConsumptionsController consumptionsController;
     private TextView title;
+
+
     private Bundle bundle;
     private Integer independence;
+    private FragmentActivityCommunicator fragmentActivityCommunicator;
 
     public static final String TITLE = "title";
     public static final String INDEPENDENCE = "independence";
     public static final String POSITION = "position";
 
-    public static FragmentItemList getfragmentItemList(String title, Integer independence, Integer position){
+
+    public static FragmentItemList getfragmentItemList(String title, Integer independence, Integer position, FragmentActivityCommunicator fragmentActivityCommunicator) {
 
         FragmentItemList fragmentItemList = new FragmentItemList();
+        fragmentItemList.setFragmentActivityCommunicator(fragmentActivityCommunicator);
         Bundle bundle = new Bundle();
         bundle.putString(TITLE, title);
         bundle.putInt(INDEPENDENCE, independence);
@@ -72,7 +74,7 @@ public class FragmentItemList extends Fragment implements View.OnClickListener{
         title.setText(bundle.getString(TITLE));
         itemsController = new ItemsController();
         recyclerView = (RecyclerView) view.findViewById(R.id.recyclerViewItems);
-        itemRecyclerAdapter = new ItemRecyclerAdapter(getContext(), FragmentItemList.this, FragmentItemList.this);
+        itemRecyclerAdapter = new ItemRecyclerAdapter(getContext(), new OnItemStockChangedListener(), new OnItemTouchedListener());
         recyclerView.setAdapter(itemRecyclerAdapter);
         LinearLayoutManager linearLayoutManager = new LinearLayoutManager(getContext());
         linearLayoutManager.setOrientation(LinearLayoutManager.VERTICAL);
@@ -81,10 +83,9 @@ public class FragmentItemList extends Fragment implements View.OnClickListener{
 
         List<Item> itemList = itemsController.getActiveItemsByIndependence(getContext(), independence);
 
-        if(independence == -1){
+        if (independence == -1) {
             itemList = itemsController.sortItemsAlphabetically(getContext(), itemList);
-        }
-        else {
+        } else {
             itemList = itemsController.sortItemsByIndependence(getContext(), itemList);
         }
         itemRecyclerAdapter.setItems(itemList);
@@ -94,49 +95,48 @@ public class FragmentItemList extends Fragment implements View.OnClickListener{
         editTextAddItem = (EditText) view.findViewById(R.id.editText);
 
         buttonNewItem.setOnClickListener(new View.OnClickListener() {
-                @Override
-                public void onClick(View view) {
-                    if(editTextAddItem.getText().toString().equals("")){
-                        Toast.makeText(view.getContext(), "Write an item name", Toast.LENGTH_SHORT).show();
-                    } else {
-                        addNewItem(view);
-                    }
-
-                    editTextAddItem.clearFocus();
-                }
-            });
-
-            Bundle bundle = getArguments();
-            if(bundle != null){
-
-                Integer position = null;
-
-                try {
-                    position = bundle.getInt(POSITION);
-                }catch (Exception e){
-                    Toast.makeText(getContext(), "No position in bundle", Toast.LENGTH_SHORT).show();
+            @Override
+            public void onClick(View view) {
+                if (editTextAddItem.getText().toString().equals("")) {
+                    Toast.makeText(view.getContext(), "Write an item name", Toast.LENGTH_SHORT).show();
+                } else {
+                    addNewItem(view);
                 }
 
-                if (position <= itemRecyclerAdapter.getItems().size()){
-
-                    recyclerView.scrollToPosition(position);
-
-                } else if(position > 0){
-                    recyclerView.scrollToPosition(position - 1);
-                }
+                editTextAddItem.clearFocus();
             }
+        });
+
+        Bundle bundle = getArguments();
+        if (bundle != null) {
+
+            Integer position = null;
+
+            try {
+                position = bundle.getInt(POSITION);
+            } catch (Exception e) {
+                Toast.makeText(getContext(), "No position in bundle", Toast.LENGTH_SHORT).show();
+            }
+
+            if (position <= itemRecyclerAdapter.getItems().size()) {
+
+                recyclerView.scrollToPosition(position);
+
+            } else if (position > 0) {
+                recyclerView.scrollToPosition(position - 1);
+            }
+        }
 
         return view;
     }
 
-    public void updateItemList(){
+    public void updateItemList() {
 
         List<Item> itemList = itemsController.getActiveItemsByIndependence(getContext(), independence);
 
-        if(independence == -1){
+        if (independence == -1) {
             itemList = itemsController.sortItemsAlphabetically(getContext(), itemList);
-        }
-        else {
+        } else {
             itemList = itemsController.sortItemsByIndependence(getContext(), itemList);
         }
         itemRecyclerAdapter.setItems(itemList);
@@ -145,53 +145,48 @@ public class FragmentItemList extends Fragment implements View.OnClickListener{
 
     }
 
-    @Override
-    public void onClick(View view) {
-
-        Integer touchedPosition = recyclerView.getChildAdapterPosition(view);
-        Item touchedItem = itemRecyclerAdapter.getItemAtPosition(touchedPosition);
-        Item updatedItem = itemsController.getItemFromLocalDatabase(getContext(), touchedItem.getID());
-        updateRecyclerAdapterItem(touchedPosition, updatedItem);
-        itemRecyclerAdapter.notifyDataSetChanged();
-
-    }
-
-    public void updateRecyclerAdapterItem(Integer itemPosition, Item updatedItem){
-        itemRecyclerAdapter.getItemAtPosition(itemPosition).setActive(updatedItem.getActive());
-        itemRecyclerAdapter.getItemAtPosition(itemPosition).setConsumptionRate(updatedItem.getConsumptionRate());
-        itemRecyclerAdapter.getItemAtPosition(itemPosition).setImage(updatedItem.getImage());
-        itemRecyclerAdapter.getItemAtPosition(itemPosition).setMinimumPurchaceQuantity(updatedItem.getMinimumPurchaceQuantity());
-        itemRecyclerAdapter.getItemAtPosition(itemPosition).setName(updatedItem.getName());
-        itemRecyclerAdapter.getItemAtPosition(itemPosition).setStock(updatedItem.getStock());
-    }
-
     public interface FragmentActivityCommunicator {
+
         void onItemTouched(Item touchedItem, Integer touchedPosition, Integer independence);
 
     }
 
-    public class StockChangeListener implements View.OnClickListener{
+    private class OnItemStockChangedListener implements View.OnClickListener {
 
         @Override
         public void onClick(View view) {
 
+            Integer touchedPosition = recyclerView.getChildAdapterPosition(view);
+            Item touchedItem = itemRecyclerAdapter.getItemAtPosition(touchedPosition);
+            Item updatedItem = itemsController.getItemFromLocalDatabase(getContext(), touchedItem.getID());
+            updateRecyclerAdapterItem(touchedPosition, updatedItem);
+            itemRecyclerAdapter.notifyDataSetChanged();
+
+        }
+
+        private void updateRecyclerAdapterItem(Integer itemPosition, Item updatedItem) {
+            itemRecyclerAdapter.getItemAtPosition(itemPosition).setActive(updatedItem.getActive());
+            itemRecyclerAdapter.getItemAtPosition(itemPosition).setConsumptionRate(updatedItem.getConsumptionRate());
+            itemRecyclerAdapter.getItemAtPosition(itemPosition).setImage(updatedItem.getImage());
+            itemRecyclerAdapter.getItemAtPosition(itemPosition).setMinimumPurchaceQuantity(updatedItem.getMinimumPurchaceQuantity());
+            itemRecyclerAdapter.getItemAtPosition(itemPosition).setName(updatedItem.getName());
+            itemRecyclerAdapter.getItemAtPosition(itemPosition).setStock(updatedItem.getStock());
         }
     }
 
-    public class ItemListener implements View.OnClickListener {
+    public class OnItemTouchedListener implements View.OnClickListener {
 
         @Override
         public void onClick(View view) {
             Integer touchedPosition = recyclerView.getChildAdapterPosition(view);
             Item touchedItem = itemRecyclerAdapter.getItemAtPosition(touchedPosition);
-
-            FragmentItemList.FragmentActivityCommunicator fragmentActivityCommunicator = (FragmentItemList.FragmentActivityCommunicator) getActivity();
             fragmentActivityCommunicator.onItemTouched(touchedItem, touchedPosition, bundle.getInt(INDEPENDENCE));
 
         }
     }
 
-    public void addNewItem(View view){
+
+    public void addNewItem(View view) {
         String itemName = editTextAddItem.getText().toString();
         editTextAddItem.setText("");
         Item item = new Item(itemName);
@@ -206,13 +201,19 @@ public class FragmentItemList extends Fragment implements View.OnClickListener{
 
     }
 
-    public Integer findItemPosition(String itemID){
+    public Integer findItemPosition(String itemID) {
         List<Item> items = itemRecyclerAdapter.getItems();
-        for(Item item : items){
-            if(item.getID().equals(itemID)){
-                return(items.indexOf(item));
+        for (Item item : items) {
+            if (item.getID().equals(itemID)) {
+                return (items.indexOf(item));
             }
         }
         return null;
     }
+
+    public void setFragmentActivityCommunicator(FragmentActivityCommunicator fragmentActivityCommunicator) {
+        this.fragmentActivityCommunicator = fragmentActivityCommunicator;
+    }
+
+
 }
