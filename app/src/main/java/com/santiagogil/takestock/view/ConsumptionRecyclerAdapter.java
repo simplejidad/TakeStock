@@ -62,7 +62,7 @@ public class ConsumptionRecyclerAdapter extends RecyclerView.Adapter {
 
         public void loadConsumption(Consumption consumption){
 
-            textViewConsumptionDate.setText(dateHelper.ConvertIntegerToFormattedDate(consumption.getDate()));
+            textViewConsumptionDate.setText(dateHelper.getFormatedDayFromMiliseconds(consumption.getDate()));
 
         }
     }

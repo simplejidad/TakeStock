@@ -4,10 +4,8 @@ import android.content.Intent;
 import android.os.Bundle;
 import android.support.annotation.NonNull;
 import android.support.design.widget.NavigationView;
-import android.support.v4.app.Fragment;
 import android.support.v4.app.FragmentManager;
 import android.support.v4.app.FragmentTransaction;
-import android.support.v4.widget.DrawerLayout;
 import android.support.v7.app.AppCompatActivity;
 import android.view.MenuItem;
 import android.widget.Toast;
@@ -30,7 +28,6 @@ public class MainActivityCommunicator extends AppCompatActivity implements Fragm
     private FirebaseAuth fAuth;
     private FirebaseAuth.AuthStateListener authStateListener;
 
-    private DrawerLayout drawerLayout;
     private NavigationView navigationView;
 
 
@@ -52,7 +49,6 @@ public class MainActivityCommunicator extends AppCompatActivity implements Fragm
         };
 
         navigationView = (NavigationView) findViewById(R.id.navigationView);
-        drawerLayout = (DrawerLayout) findViewById(R.id.drawer_layout);
         NavigationViewListener navigationViewListener = new NavigationViewListener();
         navigationView.setNavigationItemSelectedListener(navigationViewListener);
 
@@ -79,8 +75,6 @@ public class MainActivityCommunicator extends AppCompatActivity implements Fragm
 
             }
         });
-
-        this.setTitle(this.getTitle() + fAuth.getCurrentUser().getDisplayName());
 
     }
 

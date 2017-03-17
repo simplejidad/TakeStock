@@ -51,7 +51,7 @@ public class ConsumptionsDAO{
 
             Consumption consumption = new Consumption();
             consumption.setID(cursor.getString(cursor.getColumnIndex(DatabaseHelper.ID)));
-            consumption.setDate(cursor.getInt(cursor.getColumnIndex(DatabaseHelper.DATE)));
+            consumption.setDate(cursor.getLong(cursor.getColumnIndex(DatabaseHelper.DATE)));
             consumption.setItemID(cursor.getString(cursor.getColumnIndex(DatabaseHelper.ITEMID)));
 
             cursor.close();
@@ -62,11 +62,6 @@ public class ConsumptionsDAO{
         return null;
     }
 
-    public Integer currentDateInDays(){
-
-        DateHelper dateHelper = new DateHelper();
-        return dateHelper.currentDateInIntegerFromMilliseconds();
-    }
 
     public String addConsumptionToLocalDB(String itemID){
 
@@ -77,7 +72,7 @@ public class ConsumptionsDAO{
         String consumptionID = UUID.randomUUID().toString();
 
         row.put(DatabaseHelper.ID, consumptionID);
-        row.put(DatabaseHelper.DATE, currentDateInDays());
+        row.put(DatabaseHelper.DATE, System.currentTimeMillis());
         row.put(DatabaseHelper.ITEMID, itemID);
 
         database.insert(DatabaseHelper.TABLECONSUMPTIONS, null, row);
@@ -108,11 +103,11 @@ public class ConsumptionsDAO{
 
         Cursor cursor = database.rawQuery(sqlQuery, null);
 
-        List<Integer> dates = new ArrayList();
+        List<Long> dates = new ArrayList();
 
         while(cursor.moveToNext()){
 
-            dates.add(cursor.getInt(cursor.getColumnIndex(DatabaseHelper.DATE)));
+            dates.add(cursor.getLong(cursor.getColumnIndex(DatabaseHelper.DATE)));
         }
 
         cursor.close();
@@ -123,7 +118,7 @@ public class ConsumptionsDAO{
 
         for(Integer i = 1; i < dates.size(); i++){
 
-            differences.add(dates.get(i) - dates.get(i-1));
+            differences.add(fromMiliseccondsToInteger(dates.get(i) - dates.get(i-1)));
 
         }
 
@@ -138,6 +133,10 @@ public class ConsumptionsDAO{
         }
 
         return consumptionRate;
+    }
+
+    public Integer fromMiliseccondsToInteger(Long miliseconds){
+       return (Integer) (int) (miliseconds/1000/60/60/24);
     }
 
     public void addConsumptionToLocalDB(Consumption consumption) {
@@ -193,7 +192,7 @@ public class ConsumptionsDAO{
 
             Consumption consumption = new Consumption();
             consumption.setID(cursor.getString(cursor.getColumnIndex(DatabaseHelper.ID)));
-            consumption.setDate(cursor.getInt(cursor.getColumnIndex(DatabaseHelper.DATE)));
+            consumption.setDate(cursor.getLong(cursor.getColumnIndex(DatabaseHelper.DATE)));
             consumption.setItemID(cursor.getString(cursor.getColumnIndex(DatabaseHelper.ITEMID)));
 
             consumptions.add(consumption);
@@ -243,7 +242,7 @@ public class ConsumptionsDAO{
 
             Consumption consumption = new Consumption();
             consumption.setID(cursor.getString(cursor.getColumnIndex(DatabaseHelper.ID)));
-            consumption.setDate(cursor.getInt(cursor.getColumnIndex(DatabaseHelper.DATE)));
+            consumption.setDate(cursor.getLong(cursor.getColumnIndex(DatabaseHelper.DATE)));
             consumption.setItemID(cursor.getString(cursor.getColumnIndex(DatabaseHelper.ITEMID)));
 
             consumptionList.add(consumption);

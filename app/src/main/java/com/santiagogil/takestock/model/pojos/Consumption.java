@@ -13,7 +13,7 @@ public class Consumption {
     private String ID;
 
     @PropertyName(DatabaseHelper.DATE)
-    private Integer date;
+    private Long date;
 
     @PropertyName(DatabaseHelper.ITEMID)
     private String itemID;
@@ -28,7 +28,7 @@ public class Consumption {
         this.ID = ID;
     }
 
-    public void setDate(Integer date) {
+    public void setDate(Long date) {
         this.date = date;
     }
 
@@ -41,7 +41,7 @@ public class Consumption {
         return ID;
     }
 
-    public Integer getDate() {
+    public Long getDate() {
         return date;
     }
 

@@ -10,24 +10,13 @@ public class DateHelper {
     public static String dateFormat = "dd-MM-yyyy";
     private static SimpleDateFormat simpleDateFormat = new SimpleDateFormat(dateFormat);
 
-    public String ConvertIntegerToFormattedDate(Integer dateInInteger){
+    public String getFormatedDayFromMiliseconds(Long miliseconds){
 
-        Date date = new Date(integerToMiliseconds(dateInInteger));
+        Date date = new Date(miliseconds);
 
-        GregorianCalendar gregorianCalendar = new GregorianCalendar();
-        gregorianCalendar.setTime(date);
-
-        return simpleDateFormat.format(gregorianCalendar.getTime());
+        return simpleDateFormat.format(date);
     }
 
-    public Long integerToMiliseconds(Integer dateInInteger){
 
-        return Long.valueOf(dateInInteger * 1000*60*60*24);
-    }
-
-    public Integer currentDateInIntegerFromMilliseconds(){
-
-        return (Integer) (int) (System.currentTimeMillis()/1000/60/60/24);
-    }
 
 }
