@@ -60,7 +60,7 @@ public class ItemsController {
             Integer updatedConsumptionRate = consumptionsController.getItemConsumptionRate(context, itemID);
             itemsDAO.updateItemConsumptionRateInDatabases(itemID, updatedConsumptionRate);
         }
-        if(consumptions.size() == 0){
+        if(consumptions.size() == 0 || consumptions.size() == 1){
             itemsDAO.updateItemConsumptionRateInDatabases(itemID, Item.DEFAULT_CONSUMPTION_RATE);
         }
     }
