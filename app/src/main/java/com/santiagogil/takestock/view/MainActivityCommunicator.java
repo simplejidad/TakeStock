@@ -12,14 +12,21 @@ import android.widget.Toast;
 
 
 import com.google.firebase.auth.FirebaseAuth;
+import com.google.firebase.database.DataSnapshot;
+import com.google.firebase.database.DatabaseError;
+import com.google.firebase.database.DatabaseReference;
+import com.google.firebase.database.ValueEventListener;
 import com.santiagogil.takestock.R;
 import com.santiagogil.takestock.controller.ConsumptionsController;
 import com.santiagogil.takestock.controller.ItemsController;
 import com.santiagogil.takestock.model.pojos.Consumption;
 import com.santiagogil.takestock.model.pojos.Item;
+import com.santiagogil.takestock.util.DatabaseHelper;
+import com.santiagogil.takestock.util.FirebaseHelper;
 import com.santiagogil.takestock.util.ResultListener;
 import com.santiagogil.takestock.view.onboarding.OnboardingActivity;
 
+import java.util.ArrayList;
 import java.util.List;
 
 public class MainActivityCommunicator extends AppCompatActivity implements FragmentItemList.FragmentActivityCommunicator, FragmentItemDetail.FragmentActivityCommunicator {
@@ -34,6 +41,8 @@ public class MainActivityCommunicator extends AppCompatActivity implements Fragm
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_main);
+
+        //updateFirebaseDBNames();
 
         fAuth = FirebaseAuth.getInstance();
 
@@ -154,6 +163,25 @@ public class MainActivityCommunicator extends AppCompatActivity implements Fragm
 
         fAuth.signOut();
         Toast.makeText(this, "Logged out", Toast.LENGTH_SHORT).show();
+    }
+
+    private void updateFirebaseDBNames(){
+
+
+        FirebaseHelper firebaseHelper = new FirebaseHelper();
+
+        DatabaseReference updateUser1 = firebaseHelper.getFirebaseDatabase().getReference().child(DatabaseHelper.TABLEUSERS).child("4yXCcx84YobNncJquPpzby4VxG63");
+
+        updateUser1.child(DatabaseHelper.IMAGE).setValue("default");
+        updateUser1.child(DatabaseHelper.NAME).setValue("Santiago");
+
+        DatabaseReference updateUser2 = firebaseHelper.getFirebaseDatabase().getReference().child(DatabaseHelper.TABLEUSERS).child("nyfcAr49fXg7kCOk3ixGE69FyWf1");
+
+        updateUser2.child(DatabaseHelper.IMAGE).setValue("default");
+        updateUser2.child(DatabaseHelper.NAME).setValue("Testing");
+
+        firebaseHelper.getFirebaseDatabase().getReference().child("User").removeValue();
+
     }
 
 

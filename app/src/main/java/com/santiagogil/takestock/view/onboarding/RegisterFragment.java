@@ -19,6 +19,7 @@ import com.google.firebase.auth.AuthResult;
 import com.google.firebase.auth.FirebaseAuth;
 import com.google.firebase.database.DatabaseReference;
 import com.santiagogil.takestock.R;
+import com.santiagogil.takestock.util.DatabaseHelper;
 import com.santiagogil.takestock.util.FirebaseHelper;
 import com.santiagogil.takestock.view.MainActivityCommunicator;
 
@@ -95,16 +96,14 @@ public class RegisterFragment extends Fragment {
                         public void onComplete(@NonNull Task<AuthResult> task) {
                             if (task.isSuccessful()) {
 
-                                String user_id = fAuth.getCurrentUser().getUid();
-
                                 FirebaseHelper firebaseHelper = new FirebaseHelper();
 
-                                firebaseHelper.getFirebaseDatabase().getReference().child("User").
+                                firebaseHelper.getFirebaseDatabase().getReference().child(DatabaseHelper.TABLEUSERS).
                                         child(firebaseHelper.getCurrentUserID()).
-                                        child("image").setValue("default");
-                                firebaseHelper.getFirebaseDatabase().getReference().child("User")
+                                        child(DatabaseHelper.IMAGE).setValue("default");
+                                firebaseHelper.getFirebaseDatabase().getReference().child(DatabaseHelper.TABLEUSERS)
                                         .child(firebaseHelper.getCurrentUserID())
-                                        .child("name").setValue(name);
+                                        .child(DatabaseHelper.NAME).setValue(name);
 
                                 progressDialog.dismiss();
                                 Intent mainIntent = new Intent(getContext(), MainActivityCommunicator.class);
