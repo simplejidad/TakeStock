@@ -174,7 +174,7 @@ public class FragmentItemList extends Fragment {
         }
     }
 
-    public class OnItemTouchedListener implements View.OnClickListener {
+    private class OnItemTouchedListener implements View.OnClickListener {
 
         @Override
         public void onClick(View view) {

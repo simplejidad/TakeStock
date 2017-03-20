@@ -12,11 +12,19 @@
 
         <TextView
             android:id="@+id/textViewConsumptionDate"
-            android:layout_width="match_parent"
+            android:layout_width="0dp"
+            android:layout_weight="7"
             android:layout_height="wrap_content"
             android:text="Lorem Ipsum"
             android:textSize="24sp"
             android:gravity="center_horizontal"/>
+
+        <Button
+            android:id="@+id/button_delete"
+            android:layout_width="0dp"
+            android:layout_weight="2"
+            android:layout_height="wrap_content"
+            android:text="Delete"/>
 
     </LinearLayout>
 

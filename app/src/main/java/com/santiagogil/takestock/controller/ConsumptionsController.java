@@ -77,6 +77,11 @@ public class ConsumptionsController {
 
     }
 
+    public void deleteConsumption(Context context, Consumption consumption){
+        ConsumptionsDAO consumptionsDAO = new ConsumptionsDAO(context);
+        consumptionsDAO.deleteConsumption(consumption);
+    }
+
 
 }
 

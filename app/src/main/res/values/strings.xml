@@ -10,10 +10,11 @@
     <string name="current_stock">Current Stock</string>
     <string name="minus_sign">-</string>
     <string name="plus_sign">+</string>
-    <string name="independence">Independence</string>
+    <string name="independence">Independence:</string>
     <string name="by">x</string>
     <string name="zero">0</string>
     <string name="title_activity_login">Sign in</string>
+    <string name="consumed_on_these_dates">Consumed on these dates:</string>
 
     <!-- Strings related to login -->
     <string name="prompt_email">Email</string>

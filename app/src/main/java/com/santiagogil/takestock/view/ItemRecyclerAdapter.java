@@ -130,7 +130,7 @@ public class ItemRecyclerAdapter extends RecyclerView.Adapter{
                 itemsController.decreaseItemStock(context, item);
                 ConsumptionsController consumptionsController = new ConsumptionsController();
                 consumptionsController.addConsumptionToDatabases(context, item.getID());
-                itemsController.updateItemConsumptionDate(context, item.getID());
+                itemsController.updateItemConsumptionRate(context, item.getID());
             }
         }
     }

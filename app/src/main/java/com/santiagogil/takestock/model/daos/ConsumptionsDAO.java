@@ -11,9 +11,9 @@ import com.google.firebase.database.DataSnapshot;
 import com.google.firebase.database.DatabaseError;
 import com.google.firebase.database.DatabaseReference;
 import com.google.firebase.database.ValueEventListener;
+import com.santiagogil.takestock.controller.ItemsController;
 import com.santiagogil.takestock.model.pojos.Consumption;
 import com.santiagogil.takestock.util.DatabaseHelper;
-import com.santiagogil.takestock.util.DateHelper;
 import com.santiagogil.takestock.util.FirebaseHelper;
 import com.santiagogil.takestock.util.ResultListener;
 
@@ -154,6 +154,41 @@ public class ConsumptionsDAO{
         database.close();
 
     }
+
+    public void deleteConsumption(Consumption consumption) {
+
+        deleteConsumptionFromLocalDatabase(consumption);
+        deleteConsumptionFromFirebase(consumption);
+        ItemsController itemsController = new ItemsController();
+        itemsController.increaseItemStock(context, consumption.getItemID());
+        itemsController.updateItemConsumptionRate(context, consumption.getItemID());
+
+
+    }
+
+    private void deleteConsumptionFromLocalDatabase(Consumption consumption) {
+
+        SQLiteDatabase database = databaseHelper.getWritableDatabase();
+
+        try {
+
+            database.delete(DatabaseHelper.TABLECONSUMPTIONS, DatabaseHelper.ID + " = " + '"' + consumption.getID() + '"', null);
+            database.close();
+
+        } catch (Exception e){
+
+            e.printStackTrace();
+
+        }
+    }
+
+    private void deleteConsumptionFromFirebase(Consumption consumption) {
+
+        DatabaseReference userDB = firebaseHelper.getUserDB();
+        userDB.child(DatabaseHelper.TABLECONSUMPTIONS).child(consumption.getID()).removeValue();
+    }
+
+
 
     private class AddConsumptionToFirebaseTask extends AsyncTask <String, Void, Void>{
 

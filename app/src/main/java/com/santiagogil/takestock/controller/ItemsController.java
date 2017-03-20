@@ -33,6 +33,13 @@ public class ItemsController {
 
     }
 
+    public void increaseItemStock(Context context, String itemID){
+
+        ItemsDAO itemsDao = new ItemsDAO(context);
+        itemsDao.increaseItemStock(itemID);
+
+    }
+
     public void decreaseItemStock(Context context, Item item){
 
         ItemsDAO itemsDAO = new ItemsDAO(context);
@@ -44,7 +51,7 @@ public class ItemsController {
         itemsDAO.addItemToLocalDB(item);
     }
 
-    public void updateItemConsumptionDate(Context context, String itemID){
+    public void updateItemConsumptionRate(Context context, String itemID){
 
         ItemsDAO itemsDAO = new ItemsDAO(context);
         ConsumptionsController consumptionsController = new ConsumptionsController();
@@ -52,6 +59,9 @@ public class ItemsController {
         if(consumptions.size() > 1){
             Integer updatedConsumptionRate = consumptionsController.getItemConsumptionRate(context, itemID);
             itemsDAO.updateItemConsumptionRateInDatabases(itemID, updatedConsumptionRate);
+        }
+        if(consumptions.size() == 0){
+            itemsDAO.updateItemConsumptionRateInDatabases(itemID, Item.DEFAULT_CONSUMPTION_RATE);
         }
     }
 

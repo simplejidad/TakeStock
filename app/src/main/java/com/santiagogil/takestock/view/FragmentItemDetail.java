@@ -15,6 +15,7 @@ import android.widget.Toast;
 import com.santiagogil.takestock.R;
 import com.santiagogil.takestock.controller.ConsumptionsController;
 import com.santiagogil.takestock.controller.ItemsController;
+import com.santiagogil.takestock.model.pojos.Consumption;
 import com.santiagogil.takestock.util.DatabaseHelper;
 import com.santiagogil.takestock.model.pojos.Item;
 
@@ -36,6 +37,7 @@ public class FragmentItemDetail extends Fragment {
     private TextView textViewItemStock;
     private TextView textViewMinimumPurchace;
     private TextView textViewConsumptionRate;
+    private TextView textViewIndependence;
     private View fragmentView;
     private Button deleteButton;
     private Button editButton;
@@ -45,6 +47,7 @@ public class FragmentItemDetail extends Fragment {
     private ConsumptionsController consumptionsController;
     private ItemsController itemController;
     private Item item;
+    private Bundle bundle;
 
     static final String POSITION = "position";
 
@@ -53,23 +56,51 @@ public class FragmentItemDetail extends Fragment {
     public View onCreateView(LayoutInflater inflater, @Nullable ViewGroup container, @Nullable Bundle savedInstanceState) {
         fragmentView = inflater.inflate(R.layout.fragment_item_detail, container, false);
 
-        final Bundle bundle = getArguments();
-
+        bundle = getArguments();
         itemController = new ItemsController();
         item = itemController.getItemFromLocalDatabase(getContext(), bundle.getString(DatabaseHelper.ID));
 
-        textViewItemName = (TextView) fragmentView.findViewById(R.id.textViewItemName);
-        textViewItemStock = (TextView) fragmentView.findViewById(R.id.textViewStock);
-        textViewConsumptionRate = (TextView) fragmentView.findViewById(R.id.textViewConsumptionRate);
-        textViewMinimumPurchace = (TextView) fragmentView.findViewById(R.id.textViewMinimumPurchaceAmmount);
-        backButton = (Button) fragmentView.findViewById(R.id.buttonBack);
+        loadLayoutComponents();
+
+        setOnClickListeners();
+
+        updateFieldsWithItemDetails();
+
+        loadRecyclerView();
+
+
+        return fragmentView;
+    }
+
+    private void updateFieldsWithItemDetails() {
+
+        textViewItemName.setText(item.getName());
+        textViewItemStock.setText(item.getStock().toString());
+        textViewMinimumPurchace.setText(item.getMinimumPurchaceQuantity().toString());
+        textViewConsumptionRate.setText(item.getConsumptionRate().toString());
+        textViewIndependence.setText(item.getIndependence().toString());
+    }
+
+    private void loadRecyclerView() {
+
+        recyclerView = (RecyclerView) fragmentView.findViewById(R.id.recyclerViewConsumptions);
+        consumptionRecyclerAdapter = new ConsumptionRecyclerAdapter(getContext(), new OnConsumptionDeletedListener());
+        consumptionsController = new ConsumptionsController();
+        consumptionRecyclerAdapter.setConsumptionList(consumptionsController.getItemConsumptionList(getContext(), bundle.getString(DatabaseHelper.ID)));
+        recyclerView.setAdapter(consumptionRecyclerAdapter);
+        LinearLayoutManager linearLayoutManager = new LinearLayoutManager(getContext());
+        linearLayoutManager.setOrientation(LinearLayoutManager.VERTICAL);
+        recyclerView.setLayoutManager(linearLayoutManager);
+    }
+
+    private void setOnClickListeners() {
+
         backButton.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
                 getActivity().onBackPressed();
             }
         });
-        deleteButton = (Button) fragmentView.findViewById(R.id.buttonDeleteItem);
         deleteButton.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
@@ -80,7 +111,7 @@ public class FragmentItemDetail extends Fragment {
                 fragmentActivityCommunicator.refreshFragmentMainView(bundle.getInt(POSITION));
             }
         });
-        editButton = (Button) fragmentView.findViewById(R.id.buttonEditItem);
+
         editButton.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
@@ -90,27 +121,41 @@ public class FragmentItemDetail extends Fragment {
 
             }
         });
+    }
 
-        textViewItemName.setText(item.getName());
-        textViewItemStock.setText(item.getStock().toString());
-        textViewMinimumPurchace.setText(item.getMinimumPurchaceQuantity().toString());
-        textViewConsumptionRate.setText(item.getConsumptionRate().toString());
+    private void loadLayoutComponents() {
 
 
-        recyclerView = (RecyclerView) fragmentView.findViewById(R.id.recyclerViewConsumptions);
-        consumptionRecyclerAdapter = new ConsumptionRecyclerAdapter(getContext());
-        consumptionsController = new ConsumptionsController();
-        consumptionRecyclerAdapter.setConsumptionList(consumptionsController.getItemConsumptionList(getContext(), bundle.getString(DatabaseHelper.ID)));
-        recyclerView.setAdapter(consumptionRecyclerAdapter);
-        LinearLayoutManager linearLayoutManager = new LinearLayoutManager(getContext());
-        linearLayoutManager.setOrientation(LinearLayoutManager.VERTICAL);
-        recyclerView.setLayoutManager(linearLayoutManager);
+        textViewItemName = (TextView) fragmentView.findViewById(R.id.textViewItemName);
+        textViewItemStock = (TextView) fragmentView.findViewById(R.id.textViewStock);
+        textViewConsumptionRate = (TextView) fragmentView.findViewById(R.id.textViewConsumptionRate);
+        textViewMinimumPurchace = (TextView) fragmentView.findViewById(R.id.textViewMinimumPurchaceAmmount);
+        textViewIndependence = (TextView) fragmentView.findViewById(R.id.text_view_independence);
+        backButton = (Button) fragmentView.findViewById(R.id.buttonBack);
+        deleteButton = (Button) fragmentView.findViewById(R.id.buttonDeleteItem);
+        editButton = (Button) fragmentView.findViewById(R.id.buttonEditItem);
 
-        return fragmentView;
     }
 
     public interface FragmentActivityCommunicator{
         void refreshFragmentMainView(Integer position);
         void showFragmentEditItem(Bundle bundle);
     }
+
+    public class OnConsumptionDeletedListener{
+
+        public void onConsumptionDeleted(Consumption consumption) {
+            ConsumptionsController consumptionsController = new ConsumptionsController();
+            consumptionsController.deleteConsumption(getContext(), consumption);
+            consumptionRecyclerAdapter.setConsumptionList(consumptionsController.getItemConsumptionList(getContext(), bundle.getString(DatabaseHelper.ID)));
+            consumptionRecyclerAdapter.notifyDataSetChanged();
+
+            item = itemController.getItemFromLocalDatabase(getContext(), bundle.getString(DatabaseHelper.ID));
+
+            updateFieldsWithItemDetails();
+
+        }
+    }
+
+
 }

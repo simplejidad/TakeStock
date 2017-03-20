@@ -22,12 +22,12 @@
 
     <LinearLayout
         android:layout_width="match_parent"
-        android:layout_height="40dp"
+        android:layout_height="wrap_content"
         android:layout_margin="5dp">
 
         <TextView
             android:layout_width="wrap_content"
-            android:layout_height="match_parent"
+            android:layout_height="wrap_content"
             android:text="@string/current_stock"
             android:textSize="24sp"
             android:layout_marginRight="5dp"
@@ -45,12 +45,12 @@
     </LinearLayout>
     <LinearLayout
         android:layout_width="match_parent"
-        android:layout_height="40dp"
+        android:layout_height="wrap_content"
         android:layout_margin="5dp">
 
         <TextView
             android:layout_width="wrap_content"
-            android:layout_height="match_parent"
+            android:layout_height="wrap_content"
             android:text="@string/consumption_rate"
             android:textSize="24dp"
             android:layout_marginRight="5dp"
@@ -58,8 +58,8 @@
 
         <TextView
             android:id="@+id/textViewConsumptionRate"
-            android:layout_height="match_parent"
-            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_width="wrap_content"
             android:textSize="24dp"
             android:text="@string/lorem_ipsum"
             />
@@ -68,12 +68,12 @@
     </LinearLayout>
     <LinearLayout
         android:layout_width="match_parent"
-        android:layout_height="40dp"
+        android:layout_height="wrap_content"
         android:layout_margin="5dp">
 
         <TextView
             android:layout_width="wrap_content"
-            android:layout_height="match_parent"
+            android:layout_height="wrap_content"
             android:text="@string/minimum_purchace_ammount"
             android:textSize="24dp"
             android:layout_marginRight="5dp"
@@ -81,8 +81,32 @@
 
         <TextView
             android:id="@+id/textViewMinimumPurchaceAmmount"
-            android:layout_height="match_parent"
-            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_width="wrap_content"
+            android:textSize="24dp"
+            android:text="@string/lorem_ipsum"
+            />
+
+
+    </LinearLayout>
+
+    <LinearLayout
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_margin="5dp">
+
+        <TextView
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:text="@string/independence"
+            android:textSize="24dp"
+            android:layout_marginRight="5dp"
+            />
+
+        <TextView
+            android:id="@+id/text_view_independence"
+            android:layout_height="wrap_content"
+            android:layout_width="wrap_content"
             android:textSize="24dp"
             android:text="@string/lorem_ipsum"
             />
@@ -117,6 +141,14 @@
             android:text="Delete"/>
 
     </LinearLayout>
+
+    <TextView
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_gravity="center_horizontal"
+        android:text="@string/consumed_on_these_dates"
+        android:textSize="24sp"
+        android:gravity="center_horizontal"/>
 
     <android.support.v7.widget.RecyclerView
         android:id="@+id/recyclerViewConsumptions"

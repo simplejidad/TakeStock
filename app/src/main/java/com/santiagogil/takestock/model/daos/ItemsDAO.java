@@ -250,6 +250,16 @@ public class ItemsDAO{
 
     }
 
+    public void increaseItemStock(String itemID){
+
+        Item item = getItemFromLocalDB(itemID);
+
+        Integer newStock = item.getStock() + item.getMinimumPurchaceQuantity();
+
+        updateItemStock(item, newStock);
+
+    }
+
     public void decreaseItemStock(Item item){
 
         Integer newStock = item.getStock() - 1;

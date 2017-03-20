@@ -18,7 +18,7 @@ public class Consumption {
     @PropertyName(DatabaseHelper.ITEMID)
     private String itemID;
 
-    private String userID;
+    
 
     public Consumption(){
 
