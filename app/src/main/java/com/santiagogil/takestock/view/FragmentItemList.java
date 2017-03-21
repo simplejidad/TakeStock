@@ -38,6 +38,7 @@ public class FragmentItemList extends Fragment {
     private EditText editTextAddItem;
     private ItemRecyclerAdapter itemRecyclerAdapter;
     private TextView title;
+    private Button buttonNewItem;
 
 
     private Bundle bundle;
@@ -68,19 +69,21 @@ public class FragmentItemList extends Fragment {
     public View onCreateView(LayoutInflater inflater, final ViewGroup container, Bundle savedInstanceState) {
 
         final View view = inflater.inflate(R.layout.fragment_item_list, container, false);
-        title = (TextView) view.findViewById(R.id.textViewTitle);
+
+        loadComponents(view);
+
+
         bundle = getArguments();
         independence = bundle.getInt(INDEPENDENCE);
         title.setText(bundle.getString(TITLE));
-        itemsController = new ItemsController();
-        recyclerView = (RecyclerView) view.findViewById(R.id.recyclerViewItems);
-        itemRecyclerAdapter = new ItemRecyclerAdapter(getContext(), new OnItemStockChangedListener(), new OnItemTouchedListener());
-        recyclerView.setAdapter(itemRecyclerAdapter);
-        LinearLayoutManager linearLayoutManager = new LinearLayoutManager(getContext());
-        linearLayoutManager.setOrientation(LinearLayoutManager.VERTICAL);
-        recyclerView.setLayoutManager(linearLayoutManager);
+
         this.getActivity().getWindow().setSoftInputMode(WindowManager.LayoutParams.SOFT_INPUT_STATE_HIDDEN);
 
+        loadRecyclerView(view);
+
+
+
+        itemsController = new ItemsController();
         List<Item> itemList = itemsController.getActiveItemsByIndependence(getContext(), independence);
 
         if (independence == -1) {
@@ -88,11 +91,11 @@ public class FragmentItemList extends Fragment {
         } else {
             itemList = itemsController.sortItemsByIndependence(getContext(), itemList);
         }
+
         itemRecyclerAdapter.setItems(itemList);
         itemRecyclerAdapter.notifyDataSetChanged();
 
-        Button buttonNewItem = (Button) view.findViewById(R.id.buttonNewItem);
-        editTextAddItem = (EditText) view.findViewById(R.id.editText);
+
 
         buttonNewItem.setOnClickListener(new View.OnClickListener() {
             @Override
@@ -107,7 +110,13 @@ public class FragmentItemList extends Fragment {
             }
         });
 
-        Bundle bundle = getArguments();
+        updateRecyclerViewPosition();
+
+        return view;
+    }
+
+    private void updateRecyclerViewPosition() {
+
         if (bundle != null) {
 
             Integer position = null;
@@ -126,8 +135,23 @@ public class FragmentItemList extends Fragment {
                 recyclerView.scrollToPosition(position - 1);
             }
         }
+    }
 
-        return view;
+    private void loadRecyclerView(View view) {
+
+        recyclerView = (RecyclerView) view.findViewById(R.id.recyclerViewItems);
+        itemRecyclerAdapter = new ItemRecyclerAdapter(getContext(), new OnItemStockChangedListener(), new OnItemTouchedListener());
+        recyclerView.setAdapter(itemRecyclerAdapter);
+        LinearLayoutManager linearLayoutManager = new LinearLayoutManager(getContext());
+        linearLayoutManager.setOrientation(LinearLayoutManager.VERTICAL);
+        recyclerView.setLayoutManager(linearLayoutManager);
+    }
+
+    private void loadComponents(View view) {
+
+        title = (TextView) view.findViewById(R.id.textViewTitle);
+        buttonNewItem = (Button) view.findViewById(R.id.buttonNewItem);
+        editTextAddItem = (EditText) view.findViewById(R.id.editText);
     }
 
     public void updateItemList() {

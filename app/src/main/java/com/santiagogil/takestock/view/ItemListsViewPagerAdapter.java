@@ -1,6 +1,5 @@
 package com.santiagogil.takestock.view;
 
-import android.content.Context;
 import android.support.v4.app.Fragment;
 import android.support.v4.app.FragmentManager;
 import android.support.v4.app.FragmentStatePagerAdapter;
@@ -11,14 +10,12 @@ import java.util.List;
 public class ItemListsViewPagerAdapter extends FragmentStatePagerAdapter {
 
     private List<FragmentItemList> fragmentItemListList;
-    private Context context;
     private FragmentItemList.FragmentActivityCommunicator fragmentActivityCommunicator;
 
 
 
-    public ItemListsViewPagerAdapter(FragmentManager fm, Context context, FragmentItemList.FragmentActivityCommunicator fragmentActivityCommunicator) {
+    public ItemListsViewPagerAdapter(FragmentManager fm, FragmentItemList.FragmentActivityCommunicator fragmentActivityCommunicator) {
         super(fm);
-        this.context = context;
         fragmentItemListList = new ArrayList<>();
         this.fragmentActivityCommunicator = fragmentActivityCommunicator;
         retrieveFragments();

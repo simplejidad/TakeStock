@@ -242,6 +242,37 @@ public class ItemsDAO{
         return items;
     }
 
+    public List<Item> getInactiveItemsFromLocalDB() {
+
+        SQLiteDatabase database = databaseHelper.getReadableDatabase();
+
+        String selectQuery = "SELECT * FROM " + DatabaseHelper.TABLEITEMS + " WHERE " + DatabaseHelper.ACTIVE
+                + " = " + '"' + DatabaseHelper.ACTIVE_FALSE + '"' + " AND " + DatabaseHelper.USERID + " = " + '"'
+                +  firebaseHelper.getCurrentUserID() + '"';
+        Cursor cursor = database.rawQuery(selectQuery, null);
+
+        List<Item> items = new ArrayList<>();
+
+        while (cursor.moveToNext()) {
+
+            Item item = new Item();
+            item.setID(cursor.getString(cursor.getColumnIndex(DatabaseHelper.ID)));
+            item.setUserID(cursor.getString(cursor.getColumnIndex(DatabaseHelper.USERID)));
+            item.setImage(cursor.getInt(cursor.getColumnIndex(DatabaseHelper.IMAGE)));
+            item.setMinimumPurchaceQuantity(cursor.getInt(cursor.getColumnIndex(DatabaseHelper.MINIMUMPURCHACEQUANTITY)));
+            item.setName(cursor.getString(cursor.getColumnIndex(DatabaseHelper.NAME)));
+            item.setStock(cursor.getInt(cursor.getColumnIndex(DatabaseHelper.STOCK)));
+            item.setConsumptionRate(cursor.getInt(cursor.getColumnIndex(DatabaseHelper.CONSUMPTIONRATE)));
+            item.setActive(cursor.getInt(cursor.getColumnIndex(DatabaseHelper.ACTIVE))<0);
+
+            items.add(item);
+
+        }
+        cursor.close();
+        database.close();
+        return items;
+    }
+
     public void increaseItemStock(Item item){
 
         Integer newStock = item.getStock() + item.getMinimumPurchaceQuantity();

@@ -19,7 +19,7 @@ public class FragmentItemListsViewPager extends Fragment{
 
         View view = inflater.inflate(R.layout.fragment_item_lists_view_pager, container, false);
         itemListsViewPager = (ViewPager) view.findViewById(R.id.viewPagerItemLists);
-        itemListsViewPagerAdapter = new ItemListsViewPagerAdapter(getChildFragmentManager(), getContext(), fragmentActivityCommunicator);
+        itemListsViewPagerAdapter = new ItemListsViewPagerAdapter(getChildFragmentManager(), fragmentActivityCommunicator);
         itemListsViewPager.setAdapter(itemListsViewPagerAdapter);
 
         onPageChangeListener = new ViewPager.OnPageChangeListener() {
