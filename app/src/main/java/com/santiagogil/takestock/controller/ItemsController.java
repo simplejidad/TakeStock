@@ -85,12 +85,6 @@ public class ItemsController {
     public List<Item> getActiveItemsByIndependence(Context context, Integer independence) {
 
         ItemsDAO itemsDao = new ItemsDAO(context);
-        if(independence == -1){
-            return itemsDao.sortItemsAlphabetically(itemsDao.getActiveItemsFromLocalDB());
-        }
-        if(independence == -2){
-            return itemsDao.sortItemsByIndependence(itemsDao.getActiveItemsFromLocalDB());
-        }
 
         return  itemsDao.getActiveItemsByIndependence(independence);
 
@@ -131,5 +125,22 @@ public class ItemsController {
             });
 
         }
+    }
+
+    public List<Item> getAllActiveItems(Context context) {
+
+        ItemsDAO itemsDao = new ItemsDAO(context);
+        return itemsDao.getActiveItemsFromLocalDB();
+    }
+
+    public List<Item> getAllItemsWithStockZero(Context context) {
+        ItemsDAO itemsDAO = new ItemsDAO(context);
+        return itemsDAO.getAllItemsWithStockZero();
+    }
+
+    public List<Item> sortItemsByConsumptionRate(Context context, List<Item> itemList) {
+
+        ItemsDAO itemsDAO = new ItemsDAO(context);
+        return itemsDAO.sortItemsByConsumptionRate(itemList);
     }
 }

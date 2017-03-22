@@ -251,26 +251,8 @@ public class ItemsDAO{
                 +  firebaseHelper.getCurrentUserID() + '"';
         Cursor cursor = database.rawQuery(selectQuery, null);
 
-        List<Item> items = new ArrayList<>();
-
-        while (cursor.moveToNext()) {
-
-            Item item = new Item();
-            item.setID(cursor.getString(cursor.getColumnIndex(DatabaseHelper.ID)));
-            item.setUserID(cursor.getString(cursor.getColumnIndex(DatabaseHelper.USERID)));
-            item.setImage(cursor.getInt(cursor.getColumnIndex(DatabaseHelper.IMAGE)));
-            item.setMinimumPurchaceQuantity(cursor.getInt(cursor.getColumnIndex(DatabaseHelper.MINIMUMPURCHACEQUANTITY)));
-            item.setName(cursor.getString(cursor.getColumnIndex(DatabaseHelper.NAME)));
-            item.setStock(cursor.getInt(cursor.getColumnIndex(DatabaseHelper.STOCK)));
-            item.setConsumptionRate(cursor.getInt(cursor.getColumnIndex(DatabaseHelper.CONSUMPTIONRATE)));
-            item.setActive(cursor.getInt(cursor.getColumnIndex(DatabaseHelper.ACTIVE))<0);
-
-            items.add(item);
-
-        }
-        cursor.close();
         database.close();
-        return items;
+        return creteItemListFromCursor(cursor);
     }
 
     public void increaseItemStock(Item item){
@@ -446,5 +428,58 @@ public class ItemsDAO{
     public Integer getItemConsumptionRate(String itemID) {
 
         return getItemFromLocalDB(itemID).getConsumptionRate();
+    }
+
+    public List<Item> getAllItemsWithStockZero() {
+
+        SQLiteDatabase database = databaseHelper.getReadableDatabase();
+
+        String selectQuery = "SELECT * FROM " + DatabaseHelper.TABLEITEMS + " WHERE " + DatabaseHelper.ACTIVE
+                + " = " + '"' + DatabaseHelper.ACTIVE_TRUE + '"' + " AND " + DatabaseHelper.USERID + " = " + '"'
+                +  firebaseHelper.getCurrentUserID() + '"' + " AND " + DatabaseHelper.STOCK + " = " + '"'
+                +  0 + '"' ;
+        Cursor cursor = database.rawQuery(selectQuery, null);
+
+        database.close();
+
+        return creteItemListFromCursor(cursor);
+    }
+
+    private List<Item> creteItemListFromCursor(Cursor cursor){
+
+        List<Item> items = new ArrayList<>();
+
+        while (cursor.moveToNext()) {
+
+            Item item = new Item();
+            item.setID(cursor.getString(cursor.getColumnIndex(DatabaseHelper.ID)));
+            item.setUserID(cursor.getString(cursor.getColumnIndex(DatabaseHelper.USERID)));
+            item.setImage(cursor.getInt(cursor.getColumnIndex(DatabaseHelper.IMAGE)));
+            item.setMinimumPurchaceQuantity(cursor.getInt(cursor.getColumnIndex(DatabaseHelper.MINIMUMPURCHACEQUANTITY)));
+            item.setName(cursor.getString(cursor.getColumnIndex(DatabaseHelper.NAME)));
+            item.setStock(cursor.getInt(cursor.getColumnIndex(DatabaseHelper.STOCK)));
+            item.setConsumptionRate(cursor.getInt(cursor.getColumnIndex(DatabaseHelper.CONSUMPTIONRATE)));
+            item.setActive(cursor.getInt(cursor.getColumnIndex(DatabaseHelper.ACTIVE))>0);
+
+            items.add(item);
+
+        }
+        cursor.close();
+
+        return items;
+    }
+
+    public List<Item> sortItemsByConsumptionRate(List<Item> itemList) {
+
+        if(itemList.size() > 1){
+
+            Collections.sort(itemList, new Comparator<Item>(){
+                public int compare (Item o1, Item o2){
+                    return o1.getConsumptionRate().compareTo(o2.getConsumptionRate());
+                }
+            });
+        }
+
+        return itemList;
     }
 }
