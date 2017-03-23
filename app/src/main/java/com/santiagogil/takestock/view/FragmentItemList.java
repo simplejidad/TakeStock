@@ -65,6 +65,7 @@ public class FragmentItemList extends Fragment {
     @Override
     public View onCreateView(LayoutInflater inflater, final ViewGroup container, Bundle savedInstanceState) {
 
+        Toast.makeText(getContext(), "Creating View", Toast.LENGTH_SHORT).show();
         final View view = inflater.inflate(R.layout.fragment_item_list, container, false);
 
         loadComponents(view);
@@ -231,6 +232,5 @@ public class FragmentItemList extends Fragment {
     public void setFragmentActivityCommunicator(FragmentActivityCommunicator fragmentActivityCommunicator) {
         this.fragmentActivityCommunicator = fragmentActivityCommunicator;
     }
-
-
+    
 }

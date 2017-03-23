@@ -126,7 +126,7 @@ public class MainActivityCommunicator extends AppCompatActivity implements Fragm
         fragmentItemsViewPager.setArguments(bundle);
 
         FragmentTransaction fragmentTransaction = getSupportFragmentManager().beginTransaction();
-        fragmentTransaction.replace(R.id.fragment_holder, fragmentItemsViewPager);
+        fragmentTransaction.add(R.id.fragment_holder, fragmentItemsViewPager);
         fragmentTransaction.addToBackStack(null);
         fragmentTransaction.commit();
 

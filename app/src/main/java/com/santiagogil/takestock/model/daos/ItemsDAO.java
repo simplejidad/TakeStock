@@ -364,19 +364,14 @@ public class ItemsDAO{
 
     public void deleteItemFromLocalDB(String itemID){
 
-        SQLiteDatabase database = databaseHelper.getWritableDatabase();
+        SQLiteDatabase database =  databaseHelper.getWritableDatabase();
 
-        try {
+        ContentValues contentValues = new ContentValues();
+        contentValues.put(DatabaseHelper.ACTIVE, DatabaseHelper.ACTIVE_FALSE);
 
-            database.delete(DatabaseHelper.TABLEITEMS, DatabaseHelper.ID + " = " + '"' + itemID + '"' + " AND " + DatabaseHelper.USERID + " = " + '"'
-                    +  firebaseHelper.getCurrentUserID() + '"', null);
-            database.close();
+        database.update(DatabaseHelper.TABLEITEMS,  contentValues, DatabaseHelper.ID + " = " + '"' + itemID + '"' , null);
 
-        } catch (Exception e){
-
-            e.printStackTrace();
-
-        }
+        database.close();
     }
 
     public void updateItemConsumptionRateInDatabases(String itemID, Integer consumptionRate){
