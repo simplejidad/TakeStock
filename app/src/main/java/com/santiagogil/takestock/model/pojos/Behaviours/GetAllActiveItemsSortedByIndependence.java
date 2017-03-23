@@ -7,11 +7,11 @@ import com.santiagogil.takestock.model.pojos.Item;
 
 import java.util.List;
 
-public class GetAllActiveItemsOrderedByIndependence implements BehaviourGetItemList {
+public class GetAllActiveItemsSortedByIndependence implements BehaviourGetItemList {
 
     private Context context;
 
-    public GetAllActiveItemsOrderedByIndependence(Context context) {
+    public GetAllActiveItemsSortedByIndependence(Context context) {
         this.context = context;
     }
 
@@ -19,8 +19,7 @@ public class GetAllActiveItemsOrderedByIndependence implements BehaviourGetItemL
     public List<Item> getItemList() {
 
         ItemsController itemsController = new ItemsController();
-        itemsController.sortItemsByIndependence(context, itemsController.getAllActiveItems(context));
-        return null;
+        return itemsController.sortItemsByIndependence(context, itemsController.getAllActiveItems(context));
 
     }
 }

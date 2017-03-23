@@ -5,11 +5,9 @@ import android.content.Context;
 import android.os.Bundle;
 import android.support.annotation.Nullable;
 import android.support.v4.app.Fragment;
-import android.support.v4.view.ViewPager;
 import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
 import android.view.LayoutInflater;
-import android.view.MotionEvent;
 import android.view.View;
 import android.view.ViewGroup;
 import android.view.WindowManager;
@@ -20,11 +18,9 @@ import android.widget.TextView;
 import android.widget.Toast;
 
 import com.santiagogil.takestock.R;
-import com.santiagogil.takestock.controller.ConsumptionsController;
 import com.santiagogil.takestock.controller.ItemsController;
-import com.santiagogil.takestock.model.pojos.Consumption;
+import com.santiagogil.takestock.model.pojos.Behaviours.BehaviourGetItemList;
 import com.santiagogil.takestock.model.pojos.Item;
-import com.santiagogil.takestock.util.ResultListener;
 
 import java.util.List;
 
@@ -32,32 +28,33 @@ import java.util.List;
 
 public class FragmentItemList extends Fragment {
 
-
-    private ItemsController itemsController;
     private RecyclerView recyclerView;
     private EditText editTextAddItem;
     private ItemRecyclerAdapter itemRecyclerAdapter;
     private TextView title;
     private Button buttonNewItem;
+    private BehaviourGetItemList behaviourGetItemList;
 
 
     private Bundle bundle;
-    private Integer independence;
+    //private Integer independence;
     private FragmentActivityCommunicator fragmentActivityCommunicator;
 
     public static final String TITLE = "title";
-    public static final String INDEPENDENCE = "independence";
+    //public static final String INDEPENDENCE = "independence";
     public static final String POSITION = "position";
+    public static final String BEHAVIOURGETITEMLIST = "behaviourGetList";
 
 
-    public static FragmentItemList getfragmentItemList(String title, Integer independence, Integer position, FragmentActivityCommunicator fragmentActivityCommunicator) {
+    public static FragmentItemList getfragmentItemList(String title, BehaviourGetItemList behaviourGetItemList, Integer position, FragmentActivityCommunicator fragmentActivityCommunicator) {
 
         FragmentItemList fragmentItemList = new FragmentItemList();
         fragmentItemList.setFragmentActivityCommunicator(fragmentActivityCommunicator);
         Bundle bundle = new Bundle();
         bundle.putString(TITLE, title);
-        bundle.putInt(INDEPENDENCE, independence);
         bundle.putInt(POSITION, position);
+        //bundle.putInt(INDEPENDENCE, independence);
+        bundle.putSerializable(BEHAVIOURGETITEMLIST, behaviourGetItemList);
 
         fragmentItemList.setArguments(bundle);
 
@@ -74,8 +71,9 @@ public class FragmentItemList extends Fragment {
 
 
         bundle = getArguments();
-        independence = bundle.getInt(INDEPENDENCE);
+        //independence = bundle.getInt(INDEPENDENCE);
         title.setText(bundle.getString(TITLE));
+        behaviourGetItemList = (BehaviourGetItemList) bundle.getSerializable(BEHAVIOURGETITEMLIST);
 
         this.getActivity().getWindow().setSoftInputMode(WindowManager.LayoutParams.SOFT_INPUT_STATE_HIDDEN);
 
@@ -83,16 +81,16 @@ public class FragmentItemList extends Fragment {
 
 
 
-        itemsController = new ItemsController();
+       /* itemsController = new ItemsController();
         List<Item> itemList = itemsController.getActiveItemsByIndependence(getContext(), independence);
-
-        if (independence == -1) {
+*/
+     /*   if (independence == -1) {
             itemList = itemsController.sortItemsAlphabetically(getContext(), itemList);
         } else {
             itemList = itemsController.sortItemsByIndependence(getContext(), itemList);
-        }
+        }*/
 
-        itemRecyclerAdapter.setItems(itemList);
+        itemRecyclerAdapter.setItems(behaviourGetItemList.getItemList());
         itemRecyclerAdapter.notifyDataSetChanged();
 
 
@@ -156,14 +154,7 @@ public class FragmentItemList extends Fragment {
 
     public void updateItemList() {
 
-        List<Item> itemList = itemsController.getActiveItemsByIndependence(getContext(), independence);
-
-        if (independence == -1) {
-            itemList = itemsController.sortItemsAlphabetically(getContext(), itemList);
-        } else {
-            itemList = itemsController.sortItemsByIndependence(getContext(), itemList);
-        }
-        itemRecyclerAdapter.setItems(itemList);
+        itemRecyclerAdapter.setItems(behaviourGetItemList.getItemList());
         itemRecyclerAdapter.notifyDataSetChanged();
 
 
@@ -171,7 +162,7 @@ public class FragmentItemList extends Fragment {
 
     public interface FragmentActivityCommunicator {
 
-        void onItemTouched(Item touchedItem, Integer touchedPosition, Integer independence);
+        void onItemTouched(Item touchedItem, Integer touchedPosition, BehaviourGetItemList behaviourGetItemList);
 
     }
 
@@ -180,6 +171,7 @@ public class FragmentItemList extends Fragment {
         @Override
         public void onClick(View view) {
 
+            ItemsController itemsController = new ItemsController();
             Integer touchedPosition = recyclerView.getChildAdapterPosition(view);
             Item touchedItem = itemRecyclerAdapter.getItemAtPosition(touchedPosition);
             Item updatedItem = itemsController.getItemFromLocalDatabase(getContext(), touchedItem.getID());
@@ -204,7 +196,7 @@ public class FragmentItemList extends Fragment {
         public void onClick(View view) {
             Integer touchedPosition = recyclerView.getChildAdapterPosition(view);
             Item touchedItem = itemRecyclerAdapter.getItemAtPosition(touchedPosition);
-            fragmentActivityCommunicator.onItemTouched(touchedItem, touchedPosition, bundle.getInt(INDEPENDENCE));
+            fragmentActivityCommunicator.onItemTouched(touchedItem, touchedPosition, (BehaviourGetItemList) bundle.getSerializable(BEHAVIOURGETITEMLIST));
 
         }
     }
@@ -213,10 +205,11 @@ public class FragmentItemList extends Fragment {
     public void addNewItem(View view) {
         String itemName = editTextAddItem.getText().toString();
         editTextAddItem.setText("");
+        ItemsController itemsController = new ItemsController();
         Item item = new Item(itemName);
         String newItemID = itemsController.addItemToDatabases(view.getContext(), item);
         //TODO: check if item already exists
-        List<Item> items = itemsController.getActiveItemsByIndependence(getContext(), bundle.getInt(INDEPENDENCE));
+        List<Item> items = behaviourGetItemList.getItemList();
         itemRecyclerAdapter.setItems(items);
         itemRecyclerAdapter.notifyDataSetChanged();
         InputMethodManager inputMethodManager = (InputMethodManager) getActivity().getSystemService(Context.INPUT_METHOD_SERVICE);

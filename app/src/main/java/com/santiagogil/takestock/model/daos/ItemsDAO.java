@@ -251,8 +251,11 @@ public class ItemsDAO{
                 +  firebaseHelper.getCurrentUserID() + '"';
         Cursor cursor = database.rawQuery(selectQuery, null);
 
+        List<Item> itemList = creteItemListFromCursor(cursor);
+
+        cursor.close();
         database.close();
-        return creteItemListFromCursor(cursor);
+        return itemList;
     }
 
     public void increaseItemStock(Item item){
@@ -440,9 +443,12 @@ public class ItemsDAO{
                 +  0 + '"' ;
         Cursor cursor = database.rawQuery(selectQuery, null);
 
+        List<Item> itemList = creteItemListFromCursor(cursor);
+
+        cursor.close();
         database.close();
 
-        return creteItemListFromCursor(cursor);
+        return itemList;
     }
 
     private List<Item> creteItemListFromCursor(Cursor cursor){
@@ -464,7 +470,7 @@ public class ItemsDAO{
             items.add(item);
 
         }
-        cursor.close();
+        //cursor.close();
 
         return items;
     }

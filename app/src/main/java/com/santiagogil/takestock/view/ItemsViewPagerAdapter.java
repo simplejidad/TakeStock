@@ -4,10 +4,8 @@ import android.content.Context;
 import android.support.v4.app.Fragment;
 import android.support.v4.app.FragmentManager;
 import android.support.v4.app.FragmentStatePagerAdapter;
-import android.support.v4.view.ViewPager;
-import android.support.v7.widget.RecyclerView;
 
-import com.santiagogil.takestock.controller.ItemsController;
+import com.santiagogil.takestock.model.pojos.Behaviours.BehaviourGetItemList;
 import com.santiagogil.takestock.model.pojos.Item;
 
 import java.util.ArrayList;
@@ -17,16 +15,18 @@ public class ItemsViewPagerAdapter extends FragmentStatePagerAdapter {
 
     private List<Fragment> fragmentList;
     private Context context;
+    private BehaviourGetItemList behaviourGetItemList;
 
     public void setContext(Context context) {
         this.context = context;
     }
 
-    public ItemsViewPagerAdapter(FragmentManager fm, Context context, Integer independence){
+    public ItemsViewPagerAdapter(FragmentManager fm, Context context, BehaviourGetItemList behaviourGetItemList){
         super(fm);
         this.context = context;
         fragmentList = new ArrayList<>();
-        retrieveItemFragmentLists(independence);
+        this.behaviourGetItemList = behaviourGetItemList;
+        populateFragmentList();
     }
 
     @Override
@@ -39,10 +39,9 @@ public class ItemsViewPagerAdapter extends FragmentStatePagerAdapter {
         return fragmentList.size();
     }
 
-    public void retrieveItemFragmentLists(Integer independence){
+    public void populateFragmentList(){
 
-        ItemsController itemsController = new ItemsController();
-        List<Item> items = itemsController.getActiveItemsByIndependence(context, independence);
+        List<Item> items = behaviourGetItemList.getItemList();
         for(Item item : items){
             fragmentList.add(FragmentItemDetail.provideFragment(item, items.indexOf(item)));
         }

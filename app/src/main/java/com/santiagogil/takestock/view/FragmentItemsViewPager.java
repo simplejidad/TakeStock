@@ -9,6 +9,7 @@ import android.view.View;
 import android.view.ViewGroup;
 
 import com.santiagogil.takestock.R;
+import com.santiagogil.takestock.model.pojos.Behaviours.BehaviourGetItemList;
 
 public class FragmentItemsViewPager extends Fragment {
 
@@ -29,7 +30,7 @@ public class FragmentItemsViewPager extends Fragment {
         View view = inflater.inflate(R.layout.fragment_items_viewpager, container, false);
         bundle = getArguments();
         itemsViewPager = (ViewPager) view.findViewById(R.id.itemsViewPager);
-        ItemsViewPagerAdapter itemsViewPagerAdapter = new ItemsViewPagerAdapter(getChildFragmentManager(), getContext(), bundle.getInt(FragmentItemList.INDEPENDENCE));
+        ItemsViewPagerAdapter itemsViewPagerAdapter = new ItemsViewPagerAdapter(getChildFragmentManager(), getContext(), (BehaviourGetItemList) bundle.getSerializable(FragmentItemList.BEHAVIOURGETITEMLIST));
         itemsViewPager.setAdapter(itemsViewPagerAdapter);
         itemsViewPager.setCurrentItem(bundle.getInt(POSITION));
         return view;

@@ -19,6 +19,7 @@ import com.google.firebase.database.ValueEventListener;
 import com.santiagogil.takestock.R;
 import com.santiagogil.takestock.controller.ConsumptionsController;
 import com.santiagogil.takestock.controller.ItemsController;
+import com.santiagogil.takestock.model.pojos.Behaviours.BehaviourGetItemList;
 import com.santiagogil.takestock.model.pojos.Consumption;
 import com.santiagogil.takestock.model.pojos.Item;
 import com.santiagogil.takestock.util.DatabaseHelper;
@@ -115,13 +116,13 @@ public class MainActivityCommunicator extends AppCompatActivity implements Fragm
     }
 
     @Override
-    public void onItemTouched(Item touchedItem, Integer touchedPosition, Integer independence) {
+    public void onItemTouched(Item touchedItem, Integer touchedPosition, BehaviourGetItemList behaviourGetItemList) {
 
         FragmentItemsViewPager fragmentItemsViewPager = new FragmentItemsViewPager();
 
         Bundle bundle = new Bundle();
         bundle.putInt(FragmentItemsViewPager.POSITION, touchedPosition);
-        bundle.putInt(FragmentItemList.INDEPENDENCE, independence);
+        bundle.putSerializable(FragmentItemList.BEHAVIOURGETITEMLIST, behaviourGetItemList);
         fragmentItemsViewPager.setArguments(bundle);
 
         FragmentTransaction fragmentTransaction = getSupportFragmentManager().beginTransaction();

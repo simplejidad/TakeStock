@@ -20,7 +20,7 @@ public class GetAllInactiveItemsAlphabetically implements BehaviourGetItemList{
     public List<Item> getItemList() {
 
         ItemsController itemsController = new ItemsController();
-        return itemsController.sortItemsAlphabetically(context, itemsController.getAllActiveItems(context));
+        return itemsController.sortItemsAlphabetically(context, itemsController.getAllInactiveItems(context));
 
     }
 }

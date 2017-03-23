@@ -143,4 +143,10 @@ public class ItemsController {
         ItemsDAO itemsDAO = new ItemsDAO(context);
         return itemsDAO.sortItemsByConsumptionRate(itemList);
     }
+
+    public List<Item> getAllInactiveItems(Context context) {
+
+        ItemsDAO itemsDAO = new ItemsDAO(context);
+        return itemsDAO.getInactiveItemsFromLocalDB();
+    }
 }

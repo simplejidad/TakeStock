@@ -13,13 +13,10 @@ public class ItemListsViewPagerAdapter extends FragmentStatePagerAdapter {
     private FragmentItemList.FragmentActivityCommunicator fragmentActivityCommunicator;
 
 
-
     public ItemListsViewPagerAdapter(FragmentManager fm, FragmentItemList.FragmentActivityCommunicator fragmentActivityCommunicator) {
         super(fm);
         fragmentItemListList = new ArrayList<>();
         this.fragmentActivityCommunicator = fragmentActivityCommunicator;
-        retrieveFragments();
-
     }
 
     @Override
@@ -30,15 +27,6 @@ public class ItemListsViewPagerAdapter extends FragmentStatePagerAdapter {
     @Override
     public int getCount() {
         return fragmentItemListList.size();
-    }
-
-    public void retrieveFragments(){
-
-        fragmentItemListList.add(FragmentItemList.getfragmentItemList("All Items A-Z", -1, 0, fragmentActivityCommunicator));
-        fragmentItemListList.add(FragmentItemList.getfragmentItemList("All Items by Independence", -2, 0, fragmentActivityCommunicator));
-        fragmentItemListList.add(FragmentItemList.getfragmentItemList("Stock 0", 0, 0, fragmentActivityCommunicator));
-        fragmentItemListList.add(FragmentItemList.getfragmentItemList("Un Mes", 30, 0, fragmentActivityCommunicator));
-        fragmentItemListList.add(FragmentItemList.getfragmentItemList("Mucho", 500, 0, fragmentActivityCommunicator));
     }
 
     public List<FragmentItemList> getFragmentItemListList() {
