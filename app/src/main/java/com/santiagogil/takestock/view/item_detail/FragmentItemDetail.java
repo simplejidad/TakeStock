@@ -79,6 +79,11 @@ public class FragmentItemDetail extends Fragment {
         textViewMinimumPurchace.setText(item.getMinimumPurchaceQuantity().toString());
         textViewConsumptionRate.setText(item.getConsumptionRate().toString());
         textViewIndependence.setText(item.getIndependence().toString());
+        if(item.getActive()){
+            deleteButton.setText("DELETE");
+        } else {
+            deleteButton.setText("RESTORE");
+        }
     }
 
     private void loadRecyclerView() {
@@ -101,16 +106,22 @@ public class FragmentItemDetail extends Fragment {
                 getActivity().onBackPressed();
             }
         });
+
         deleteButton.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View view) {
-                ItemsController itemsController = new ItemsController();
-                itemsController.deleteItemFromDatabases(getContext(), item.getID());
-                Toast.makeText(getContext(), "Item Deleted", Toast.LENGTH_SHORT).show();
-                FragmentActivityCommunicator fragmentActivityCommunicator = (FragmentActivityCommunicator) getActivity();
-                fragmentActivityCommunicator.refreshFragmentMainView(bundle.getInt(POSITION));
-            }
-        });
+                @Override
+                public void onClick(View view) {
+                    ItemsController itemsController = new ItemsController();
+                    itemsController.toggleItemIsActiveInDatabases(getContext(), item.getID());
+                    item.setActive(!item.getActive());
+                    if (item.getActive()){
+                    Toast.makeText(getContext(), "Item Restored", Toast.LENGTH_SHORT).show();
+                    } else{
+                        Toast.makeText(getContext(), "Item Deleted", Toast.LENGTH_SHORT).show();
+                    }
+                    updateFieldsWithItemDetails();
+                }
+            });
+
 
         editButton.setOnClickListener(new View.OnClickListener() {
             @Override

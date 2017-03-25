@@ -2,21 +2,19 @@ package com.santiagogil.takestock.controller;
 
 import android.content.Context;
 
-import com.santiagogil.takestock.model.daos.ConsumptionsDAO;
 import com.santiagogil.takestock.model.daos.ItemsDAO;
 import com.santiagogil.takestock.model.pojos.Consumption;
 import com.santiagogil.takestock.model.pojos.Item;
 import com.santiagogil.takestock.util.ResultListener;
 
-import java.util.ArrayList;
 import java.util.List;
 
 
 public class ItemsController {
 
-    public void deleteItemFromDatabases(Context context, String itemID){
+    public void toggleItemIsActiveInDatabases(Context context, String itemID){
         ItemsDAO itemsDAO = new ItemsDAO(context);
-        itemsDAO.deleteItemFromDatabases(itemID);
+        itemsDAO.toggleItemIsActiveInDatabases(itemID);
 
     }
 
@@ -148,5 +146,8 @@ public class ItemsController {
 
         ItemsDAO itemsDAO = new ItemsDAO(context);
         return itemsDAO.getInactiveItemsFromLocalDB();
+    }
+
+    public void activateItemInDatabases(Context context, String id) {
     }
 }

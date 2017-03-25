@@ -349,29 +349,55 @@ public class ItemsDAO{
         }
     }
 
-    public void deleteItemFromDatabases(String itemID){
+    public void toggleItemIsActiveInDatabases(String itemID){
 
-        deleteItemFromLocalDB(itemID);
-        deleteItemFromFirebase(itemID);
+        Item item = getItemFromLocalDB(itemID);
+
+        toggleItemIsActiveInLocalDB(item);
+        toggleItemIsActiveOnFirebase(item);
 
     }
 
-    public void deleteItemFromFirebase(String itemID) {
+    public void toggleItemIsActiveOnFirebase(Item item) {
 
         DatabaseReference myRef = firebaseHelper.getUserDB();
-        myRef.child(DatabaseHelper.TABLEITEMS).child(itemID).child(DatabaseHelper.ACTIVE).setValue(false);
+
+        if (item.getActive()){
+
+            myRef.child(DatabaseHelper.TABLEITEMS).child(item.getID()).child(DatabaseHelper.ACTIVE).setValue(false);
+
+        } else {
+            myRef.child(DatabaseHelper.TABLEITEMS).child(item.getID()).child(DatabaseHelper.ACTIVE).setValue(true);
+        }
     }
 
-    public void deleteItemFromLocalDB(String itemID){
+    public void toggleItemIsActiveInLocalDB(Item item){
 
-        SQLiteDatabase database =  databaseHelper.getWritableDatabase();
 
-        ContentValues contentValues = new ContentValues();
-        contentValues.put(DatabaseHelper.ACTIVE, DatabaseHelper.ACTIVE_FALSE);
 
-        database.update(DatabaseHelper.TABLEITEMS,  contentValues, DatabaseHelper.ID + " = " + '"' + itemID + '"' , null);
+        if (item.getActive()){
 
-        database.close();
+            SQLiteDatabase database =  databaseHelper.getWritableDatabase();
+
+            ContentValues contentValues = new ContentValues();
+            contentValues.put(DatabaseHelper.ACTIVE, DatabaseHelper.ACTIVE_FALSE);
+
+            database.update(DatabaseHelper.TABLEITEMS,  contentValues, DatabaseHelper.ID + " = " + '"' + item.getID() + '"' , null);
+
+            database.close();
+
+        } else {
+            SQLiteDatabase database =  databaseHelper.getWritableDatabase();
+
+            ContentValues contentValues = new ContentValues();
+            contentValues.put(DatabaseHelper.ACTIVE, DatabaseHelper.ACTIVE_TRUE);
+
+            database.update(DatabaseHelper.TABLEITEMS,  contentValues, DatabaseHelper.ID + " = " + '"' + item.getID() + '"' , null);
+
+            database.close();
+        }
+
+
     }
 
     public void updateItemConsumptionRateInDatabases(String itemID, Integer consumptionRate){
