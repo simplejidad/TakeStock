@@ -134,6 +134,11 @@ public class MainActivityCommunicator extends AppCompatActivity implements Fragm
 
     @Override
     public void onBackPressed() {
+
+        int fragments = getFragmentManager().getBackStackEntryCount();
+        if (fragments == 0) {
+            moveTaskToBack(true);
+        }
         super.onBackPressed();
     }
 

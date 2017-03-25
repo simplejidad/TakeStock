@@ -64,7 +64,7 @@ public class FragmentItemList extends Fragment {
     @Nullable
     @Override
     public View onCreateView(LayoutInflater inflater, final ViewGroup container, Bundle savedInstanceState) {
-        
+
         final View view = inflater.inflate(R.layout.fragment_item_list, container, false);
 
         loadComponents(view);
