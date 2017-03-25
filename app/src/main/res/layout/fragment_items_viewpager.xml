@@ -2,7 +2,7 @@
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
-    tools:context="com.santiagogil.takestock.view.FragmentItemsViewPager">
+    tools:context=".view.item_detail.FragmentItemsViewPager">
 
     <!-- TODO: Update blank fragment layout -->
     <android.support.v4.view.ViewPager

@@ -1,4 +1,4 @@
-package com.santiagogil.takestock.view;
+package com.santiagogil.takestock.view.item_lists;
 
 import android.os.Bundle;
 import android.support.v4.app.Fragment;
@@ -6,7 +6,6 @@ import android.support.v4.view.ViewPager;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
-import android.widget.Toast;
 
 import com.santiagogil.takestock.R;
 import com.santiagogil.takestock.model.pojos.Behaviours.BehaviourGetItemList;

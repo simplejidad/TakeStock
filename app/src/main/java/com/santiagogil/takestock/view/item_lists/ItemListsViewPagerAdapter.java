@@ -1,4 +1,4 @@
-package com.santiagogil.takestock.view;
+package com.santiagogil.takestock.view.item_lists;
 
 import android.support.v4.app.Fragment;
 import android.support.v4.app.FragmentManager;

@@ -1,4 +1,4 @@
-package com.santiagogil.takestock.view;
+package com.santiagogil.takestock.view.item_lists;
 
 import android.content.Context;
 import android.support.v7.widget.RecyclerView;

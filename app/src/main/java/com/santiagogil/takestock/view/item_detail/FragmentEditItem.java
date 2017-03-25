@@ -1,4 +1,4 @@
-package com.santiagogil.takestock.view;
+package com.santiagogil.takestock.view.item_detail;
 
 import android.os.Bundle;
 import android.support.annotation.Nullable;

@@ -1,4 +1,4 @@
-package com.santiagogil.takestock.view;
+package com.santiagogil.takestock.view.item_detail;
 
 
 import android.os.Bundle;
@@ -10,6 +10,7 @@ import android.view.ViewGroup;
 
 import com.santiagogil.takestock.R;
 import com.santiagogil.takestock.model.pojos.Behaviours.BehaviourGetItemList;
+import com.santiagogil.takestock.view.item_lists.FragmentItemList;
 
 public class FragmentItemsViewPager extends Fragment {
 
