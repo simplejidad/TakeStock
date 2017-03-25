@@ -5,9 +5,10 @@ import android.content.Context;
 import com.santiagogil.takestock.controller.ItemsController;
 import com.santiagogil.takestock.model.pojos.Item;
 
+import java.io.Serializable;
 import java.util.List;
 
-public class GetAllActiveItemsAlphabetically implements BehaviourGetItemList{
+public class GetAllActiveItemsAlphabetically implements BehaviourGetItemList {
 
     private Context context;
 
