@@ -10,6 +10,7 @@ import android.view.ViewGroup;
 import com.santiagogil.takestock.R;
 import com.santiagogil.takestock.model.pojos.Behaviours.BehaviourGetItemList;
 import com.santiagogil.takestock.model.pojos.Behaviours.GetActiveItemsByIndependence;
+import com.santiagogil.takestock.model.pojos.Behaviours.GetActiveItemsSortedByConsumptionRate;
 import com.santiagogil.takestock.model.pojos.Behaviours.GetAllActiveItemsAlphabetically;
 import com.santiagogil.takestock.model.pojos.Behaviours.GetAllActiveItemsSortedByIndependence;
 import com.santiagogil.takestock.model.pojos.Behaviours.GetAllActiveItemsWithStockZero;
@@ -26,7 +27,7 @@ public class FragmentItemListsViewPager extends Fragment{
 
         View view = inflater.inflate(R.layout.fragment_item_lists_view_pager, container, false);
         itemListsViewPager = (ViewPager) view.findViewById(R.id.viewPagerItemLists);
-        itemListsViewPagerAdapter = new ItemListsViewPagerAdapter(getChildFragmentManager(), fragmentActivityCommunicator);
+        itemListsViewPagerAdapter = new ItemListsViewPagerAdapter(getChildFragmentManager());
 
         populateFragmentListOnViewPagerAdapter();
 
@@ -56,20 +57,22 @@ public class FragmentItemListsViewPager extends Fragment{
     private void populateFragmentListOnViewPagerAdapter() {
 
         BehaviourGetItemList getAllActiveItemsAlphabetically = new GetAllActiveItemsAlphabetically(getContext());
-        BehaviourGetItemList getActiveItemsByIndependenceZero = new GetActiveItemsByIndependence(getContext(), 0);
+        //BehaviourGetItemList getActiveItemsByIndependenceZero = new GetActiveItemsByIndependence(getContext(), 0);
         BehaviourGetItemList getAllActiveItemsSortedByIndependence = new GetAllActiveItemsSortedByIndependence(getContext());
         BehaviourGetItemList getActiveItemsByIndependenceOneMonth = new GetActiveItemsByIndependence(getContext(), 30);
         BehaviourGetItemList getActiveItemsByIndependenceThreeMonths = new GetActiveItemsByIndependence(getContext(), 90);
         BehaviourGetItemList getDeletedItems = new GetAllInactiveItemsAlphabetically(getContext());
         BehaviourGetItemList getAllActiveItemsWithStockZero = new GetAllActiveItemsWithStockZero(getContext());
+        BehaviourGetItemList getAllActiveItemsSortedByConsumptionRate = new GetActiveItemsSortedByConsumptionRate(getContext());
 
         itemListsViewPagerAdapter.getFragmentItemListList().add(FragmentItemList.getfragmentItemList("All Items A-Z", getAllActiveItemsAlphabetically, 0, fragmentActivityCommunicator));
         itemListsViewPagerAdapter.getFragmentItemListList().add(FragmentItemList.getfragmentItemList("All Items by Independence", getAllActiveItemsSortedByIndependence, 0, fragmentActivityCommunicator));
         itemListsViewPagerAdapter.getFragmentItemListList().add(FragmentItemList.getfragmentItemList("Stock 0", getAllActiveItemsWithStockZero, 0, fragmentActivityCommunicator));
-        itemListsViewPagerAdapter.getFragmentItemListList().add(FragmentItemList.getfragmentItemList("Independence 0", getActiveItemsByIndependenceZero, 0, fragmentActivityCommunicator));
+        //itemListsViewPagerAdapter.getFragmentItemListList().add(FragmentItemList.getfragmentItemList("Independence 0", getActiveItemsByIndependenceZero, 0, fragmentActivityCommunicator));
         itemListsViewPagerAdapter.getFragmentItemListList().add(FragmentItemList.getfragmentItemList("Menos de Un Mes", getActiveItemsByIndependenceOneMonth, 0, fragmentActivityCommunicator));
         itemListsViewPagerAdapter.getFragmentItemListList().add(FragmentItemList.getfragmentItemList("Menos de Tres Meses", getActiveItemsByIndependenceThreeMonths, 0, fragmentActivityCommunicator));
         itemListsViewPagerAdapter.getFragmentItemListList().add(FragmentItemList.getfragmentItemList("Deleted Items", getDeletedItems, 0, fragmentActivityCommunicator));
+        itemListsViewPagerAdapter.getFragmentItemListList().add(FragmentItemList.getfragmentItemList("By Consumption Rate", getAllActiveItemsSortedByConsumptionRate, 0, fragmentActivityCommunicator ));
     }
 
     @Override

@@ -10,13 +10,13 @@ import java.util.List;
 public class ItemListsViewPagerAdapter extends FragmentStatePagerAdapter {
 
     private List<FragmentItemList> fragmentItemListList;
-    private FragmentItemList.FragmentActivityCommunicator fragmentActivityCommunicator;
+    //private FragmentItemList.FragmentActivityCommunicator fragmentActivityCommunicator;
 
 
-    public ItemListsViewPagerAdapter(FragmentManager fm, FragmentItemList.FragmentActivityCommunicator fragmentActivityCommunicator) {
+    public ItemListsViewPagerAdapter(FragmentManager fm) {
         super(fm);
         fragmentItemListList = new ArrayList<>();
-        this.fragmentActivityCommunicator = fragmentActivityCommunicator;
+        //this.fragmentActivityCommunicator = fragmentActivityCommunicator;
     }
 
     @Override
