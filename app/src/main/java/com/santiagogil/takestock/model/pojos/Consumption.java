@@ -3,6 +3,8 @@ package com.santiagogil.takestock.model.pojos;
 import com.google.firebase.database.PropertyName;
 import com.santiagogil.takestock.util.DatabaseHelper;
 
+import java.util.Date;
+
 /**
  * Created by digitalhouse on 24/12/16.
  */
@@ -47,5 +49,9 @@ public class Consumption {
 
     public String getItemID() {
         return itemID;
+    }
+
+    public Date getDateAsDateObject(){
+        return new Date(getDate());
     }
 }

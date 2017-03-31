@@ -36,4 +36,9 @@ public class FragmentItemsViewPager extends Fragment {
         itemsViewPager.setCurrentItem(bundle.getInt(POSITION));
         return view;
     }
+
+    @Override
+    public void onPause() {
+        super.onPause();
+    }
 }

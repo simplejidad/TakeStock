@@ -17,8 +17,10 @@ import com.santiagogil.takestock.util.DatabaseHelper;
 import com.santiagogil.takestock.util.FirebaseHelper;
 import com.santiagogil.takestock.util.ResultListener;
 
+import java.lang.reflect.Array;
 import java.util.ArrayList;
 import java.util.Collections;
+import java.util.Comparator;
 import java.util.List;
 import java.util.UUID;
 
@@ -235,7 +237,9 @@ public class ConsumptionsDAO{
 
         cursor.close();
         database.close();
+
         return consumptions;
+
     }
 
     public void getConsumptionsFromFirebase(final ResultListener<List<Consumption>> resultListener){
@@ -287,6 +291,30 @@ public class ConsumptionsDAO{
             database.close();
             return consumptionList;
         }
+
+    public List<Consumption> getSortedConsumptionsByDateDescending(List<Consumption> consumptions){
+
+        List<Consumption> sortedConsumptions = new ArrayList<>();
+
+        if(consumptions.size() > 1){
+
+            Collections.sort(consumptions, new Comparator<Consumption>(){
+                public int compare (Consumption o1, Consumption o2){
+                    return o1.getDate().compareTo(o2.getDate());
+                }
+            });
+
+
+            for(Integer i = consumptions.size() - 1; i>= 0; i--){
+                sortedConsumptions.add(consumptions.get(i));
+            }
+
+            return  sortedConsumptions;
+        }
+
+        return consumptions;
+
+    }
 
 }
 

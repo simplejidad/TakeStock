@@ -232,4 +232,9 @@ public class FragmentItemList extends Fragment {
         this.fragmentActivityCommunicator = fragmentActivityCommunicator;
     }
 
+    @Override
+    public void onPause() {
+        super.onPause();
+    }
+
 }

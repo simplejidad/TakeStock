@@ -81,4 +81,6 @@ public class ConsumptionRecyclerAdapter extends RecyclerView.Adapter {
 
         }
     }
+
+
 }

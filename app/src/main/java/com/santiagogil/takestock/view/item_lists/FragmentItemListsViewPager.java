@@ -65,6 +65,7 @@ public class FragmentItemListsViewPager extends Fragment{
         BehaviourGetItemList getAllActiveItemsWithStockZero = new GetAllActiveItemsWithStockZero(getContext());
         BehaviourGetItemList getAllActiveItemsSortedByConsumptionRate = new GetActiveItemsSortedByConsumptionRate(getContext());
 
+        itemListsViewPagerAdapter.getFragmentItemListList().add(FragmentItemList.getfragmentItemList("By Consumption Rate", getAllActiveItemsSortedByConsumptionRate, 0, fragmentActivityCommunicator ));
         itemListsViewPagerAdapter.getFragmentItemListList().add(FragmentItemList.getfragmentItemList("All Items A-Z", getAllActiveItemsAlphabetically, 0, fragmentActivityCommunicator));
         itemListsViewPagerAdapter.getFragmentItemListList().add(FragmentItemList.getfragmentItemList("All Items by Independence", getAllActiveItemsSortedByIndependence, 0, fragmentActivityCommunicator));
         itemListsViewPagerAdapter.getFragmentItemListList().add(FragmentItemList.getfragmentItemList("Stock 0", getAllActiveItemsWithStockZero, 0, fragmentActivityCommunicator));
@@ -72,7 +73,6 @@ public class FragmentItemListsViewPager extends Fragment{
         itemListsViewPagerAdapter.getFragmentItemListList().add(FragmentItemList.getfragmentItemList("Menos de Un Mes", getActiveItemsByIndependenceOneMonth, 0, fragmentActivityCommunicator));
         itemListsViewPagerAdapter.getFragmentItemListList().add(FragmentItemList.getfragmentItemList("Menos de Tres Meses", getActiveItemsByIndependenceThreeMonths, 0, fragmentActivityCommunicator));
         itemListsViewPagerAdapter.getFragmentItemListList().add(FragmentItemList.getfragmentItemList("Deleted Items", getDeletedItems, 0, fragmentActivityCommunicator));
-        itemListsViewPagerAdapter.getFragmentItemListList().add(FragmentItemList.getfragmentItemList("By Consumption Rate", getAllActiveItemsSortedByConsumptionRate, 0, fragmentActivityCommunicator ));
     }
 
     @Override
@@ -84,6 +84,11 @@ public class FragmentItemListsViewPager extends Fragment{
 
     public void setFragmentActivityCommunicator(FragmentItemList.FragmentActivityCommunicator fragmentActivityCommunicator) {
         this.fragmentActivityCommunicator = fragmentActivityCommunicator;
+    }
+
+    @Override
+    public void onPause() {
+        super.onPause();
     }
 
 }

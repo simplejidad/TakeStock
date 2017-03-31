@@ -77,8 +77,6 @@ public class LoginFragment extends Fragment {
         editTextPasswordField = (EditText) view.findViewById(R.id.password);
         buttonLogin = (Button) view.findViewById(R.id.email_sign_in_button);
         buttonRegister = (Button) view.findViewById(R.id.register_button);
-        buttonAnonymous = (Button) view.findViewById(R.id.anonymous_button);
-        googleButton = (SignInButton) view.findViewById(R.id.googleButton);
 
         progressDialog = new ProgressDialog(getContext());
 

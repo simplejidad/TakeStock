@@ -82,6 +82,10 @@ public class ConsumptionsController {
         consumptionsDAO.deleteConsumption(consumption);
     }
 
+    public List<Consumption> sortedItemConsumptionList(Context context, String itemID){
+        ConsumptionsDAO consumptionsDAO = new ConsumptionsDAO(context);
+        return consumptionsDAO.getSortedConsumptionsByDateDescending(getItemConsumptionList(context, itemID));
 
+    }
 }
 

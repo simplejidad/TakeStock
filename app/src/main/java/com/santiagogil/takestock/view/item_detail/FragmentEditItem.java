@@ -92,4 +92,9 @@ public class FragmentEditItem extends Fragment {
             return null;
         }
     }
+
+    @Override
+    public void onPause() {
+        super.onPause();
+    }
 }

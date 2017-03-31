@@ -91,7 +91,7 @@ public class FragmentItemDetail extends Fragment {
         recyclerView = (RecyclerView) fragmentView.findViewById(R.id.recyclerViewConsumptions);
         consumptionRecyclerAdapter = new ConsumptionRecyclerAdapter(getContext(), new OnConsumptionDeletedListener());
         consumptionsController = new ConsumptionsController();
-        consumptionRecyclerAdapter.setConsumptionList(consumptionsController.getItemConsumptionList(getContext(), bundle.getString(DatabaseHelper.ID)));
+        consumptionRecyclerAdapter.setConsumptionList(consumptionsController.sortedItemConsumptionList(getContext(), bundle.getString(DatabaseHelper.ID)));
         recyclerView.setAdapter(consumptionRecyclerAdapter);
         LinearLayoutManager linearLayoutManager = new LinearLayoutManager(getContext());
         linearLayoutManager.setOrientation(LinearLayoutManager.VERTICAL);
@@ -166,6 +166,11 @@ public class FragmentItemDetail extends Fragment {
             updateFieldsWithItemDetails();
 
         }
+    }
+
+    @Override
+    public void onPause() {
+        super.onPause();
     }
 
 
