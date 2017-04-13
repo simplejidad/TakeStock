@@ -1,5 +1,6 @@
 package com.santiagogil.takestock.model.pojos.Behaviours;
 
+import android.content.Context;
 import android.os.Parcelable;
 
 import com.santiagogil.takestock.model.pojos.Item;
@@ -9,5 +10,5 @@ import java.util.List;
 
 public interface BehaviourGetItemList extends Serializable{
 
-    List<Item> getItemList();
+    List<Item> getItemList(Context context);
 }

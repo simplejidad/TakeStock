@@ -10,14 +10,8 @@ import java.util.List;
 
 public class GetAllActiveItemsSortedByIndependence implements BehaviourGetItemList {
 
-    private Context context;
-
-    public GetAllActiveItemsSortedByIndependence(Context context) {
-        this.context = context;
-    }
-
     @Override
-    public List<Item> getItemList() {
+    public List<Item> getItemList(Context context) {
 
         ItemsController itemsController = new ItemsController();
         return itemsController.sortItemsByIndependence(context, itemsController.getAllActiveItems(context));

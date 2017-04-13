@@ -10,14 +10,8 @@ import java.util.List;
 
 public class GetAllActiveItemsAlphabetically implements BehaviourGetItemList {
 
-    private Context context;
-
-    public GetAllActiveItemsAlphabetically(Context context) {
-        this.context = context;
-    }
-
     @Override
-    public List<Item> getItemList() {
+    public List<Item> getItemList(Context context) {
 
         ItemsController itemsController = new ItemsController();
         return itemsController.sortItemsAlphabetically(context, itemsController.getAllActiveItems(context));

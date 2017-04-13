@@ -71,14 +71,6 @@ public class MainActivityCommunicator extends AppCompatActivity implements Fragm
         fragmentTransaction.replace(R.id.fragment_holder, fragmentMainView);
         fragmentTransaction.commit();
 
-        ItemsController itemsController = new ItemsController();
-        itemsController.updateItemsDatabase(this, new ResultListener<List<Item>>(){
-            @Override
-            public void finish(List<Item> result) {
-
-            }
-        });
-
         ConsumptionsController consumptionsController = new ConsumptionsController();
         consumptionsController.updateConsumptionsDatabase(this, new ResultListener<List<Consumption>>(){
             @Override

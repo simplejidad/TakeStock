@@ -90,7 +90,7 @@ public class FragmentItemList extends Fragment {
             itemList = itemsController.sortItemsByIndependence(getContext(), itemList);
         }*/
 
-        itemRecyclerAdapter.setItems(behaviourGetItemList.getItemList());
+        itemRecyclerAdapter.setItems(behaviourGetItemList.getItemList(getContext()));
         itemRecyclerAdapter.notifyDataSetChanged();
 
 
@@ -154,7 +154,7 @@ public class FragmentItemList extends Fragment {
 
     public void updateItemList() {
 
-        itemRecyclerAdapter.setItems(behaviourGetItemList.getItemList());
+        itemRecyclerAdapter.setItems(behaviourGetItemList.getItemList(getContext()));
         itemRecyclerAdapter.notifyDataSetChanged();
 
 
@@ -209,7 +209,7 @@ public class FragmentItemList extends Fragment {
         Item item = new Item(itemName);
         String newItemID = itemsController.addItemToDatabases(view.getContext(), item);
         //TODO: check if item already exists
-        List<Item> items = behaviourGetItemList.getItemList();
+        List<Item> items = behaviourGetItemList.getItemList(getContext());
         itemRecyclerAdapter.setItems(items);
         itemRecyclerAdapter.notifyDataSetChanged();
         InputMethodManager inputMethodManager = (InputMethodManager) getActivity().getSystemService(Context.INPUT_METHOD_SERVICE);

@@ -10,16 +10,14 @@ import java.util.List;
 
 public class GetActiveItemsByIndependence implements BehaviourGetItemList {
 
-    private Context context;
     private Integer independence;
 
-    public GetActiveItemsByIndependence(Context context, Integer independence) {
+    public GetActiveItemsByIndependence(Integer independence) {
         this.independence = independence;
-        this.context = context;
     }
 
     @Override
-    public List<Item> getItemList() {
+    public List<Item> getItemList(Context context) {
 
         ItemsController itemsController = new ItemsController();
         return itemsController.getActiveItemsByIndependence(context, independence);

@@ -56,14 +56,14 @@ public class FragmentItemListsViewPager extends Fragment{
 
     private void populateFragmentListOnViewPagerAdapter() {
 
-        BehaviourGetItemList getAllActiveItemsAlphabetically = new GetAllActiveItemsAlphabetically(getContext());
+        BehaviourGetItemList getAllActiveItemsAlphabetically = new GetAllActiveItemsAlphabetically();
         //BehaviourGetItemList getActiveItemsByIndependenceZero = new GetActiveItemsByIndependence(getContext(), 0);
-        BehaviourGetItemList getAllActiveItemsSortedByIndependence = new GetAllActiveItemsSortedByIndependence(getContext());
-        BehaviourGetItemList getActiveItemsByIndependenceOneMonth = new GetActiveItemsByIndependence(getContext(), 30);
-        BehaviourGetItemList getActiveItemsByIndependenceThreeMonths = new GetActiveItemsByIndependence(getContext(), 90);
-        BehaviourGetItemList getDeletedItems = new GetAllInactiveItemsAlphabetically(getContext());
-        BehaviourGetItemList getAllActiveItemsWithStockZero = new GetAllActiveItemsWithStockZero(getContext());
-        BehaviourGetItemList getAllActiveItemsSortedByConsumptionRate = new GetActiveItemsSortedByConsumptionRate(getContext());
+        BehaviourGetItemList getAllActiveItemsSortedByIndependence = new GetAllActiveItemsSortedByIndependence();
+        BehaviourGetItemList getActiveItemsByIndependenceOneMonth = new GetActiveItemsByIndependence(30);
+        BehaviourGetItemList getActiveItemsByIndependenceThreeMonths = new GetActiveItemsByIndependence(90);
+        BehaviourGetItemList getDeletedItems = new GetAllInactiveItemsAlphabetically();
+        BehaviourGetItemList getAllActiveItemsWithStockZero = new GetAllActiveItemsWithStockZero();
+        BehaviourGetItemList getAllActiveItemsSortedByConsumptionRate = new GetActiveItemsSortedByConsumptionRate();
 
         itemListsViewPagerAdapter.getFragmentItemListList().add(FragmentItemList.getfragmentItemList("By Consumption Rate", getAllActiveItemsSortedByConsumptionRate, 0, fragmentActivityCommunicator ));
         itemListsViewPagerAdapter.getFragmentItemListList().add(FragmentItemList.getfragmentItemList("All Items A-Z", getAllActiveItemsAlphabetically, 0, fragmentActivityCommunicator));

@@ -41,7 +41,7 @@ public class ItemsViewPagerAdapter extends FragmentStatePagerAdapter {
 
     public void populateFragmentList(){
 
-        List<Item> items = behaviourGetItemList.getItemList();
+        List<Item> items = behaviourGetItemList.getItemList(context);
         for(Item item : items){
             fragmentList.add(FragmentItemDetail.provideFragment(item, items.indexOf(item)));
         }

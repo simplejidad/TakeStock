@@ -34,8 +34,13 @@ import com.google.firebase.database.DatabaseReference;
 import com.google.firebase.database.FirebaseDatabase;
 import com.google.firebase.database.ValueEventListener;
 import com.santiagogil.takestock.R;
+import com.santiagogil.takestock.controller.ItemsController;
+import com.santiagogil.takestock.model.pojos.Item;
 import com.santiagogil.takestock.util.DatabaseHelper;
+import com.santiagogil.takestock.util.ResultListener;
 import com.santiagogil.takestock.view.MainActivityCommunicator;
+
+import java.util.List;
 
 public class LoginFragment extends Fragment {
 
@@ -237,9 +242,18 @@ public class LoginFragment extends Fragment {
                 public void onDataChange(DataSnapshot dataSnapshot) {
                     if(dataSnapshot.hasChild(userId)){
 
-                        Intent mainIntent = new Intent(getContext(), MainActivityCommunicator.class);
-                        mainIntent.addFlags(Intent.FLAG_ACTIVITY_CLEAR_TOP);
-                        startActivity(mainIntent);
+                        ItemsController itemsController = new ItemsController();
+                        itemsController.updateItemsDatabase(getContext(), new ResultListener<List<Item>>(){
+                            @Override
+                            public void finish(List<Item> result) {
+                                Toast.makeText(getContext(), "Items Updated", Toast.LENGTH_SHORT).show();
+
+                                progressDialog.dismiss();
+                                Intent mainIntent = new Intent(getContext(), MainActivityCommunicator.class);
+                                mainIntent.addFlags(Intent.FLAG_ACTIVITY_CLEAR_TOP);
+                                startActivity(mainIntent);
+                            }
+                        });
 
                     } else{
                         Toast.makeText(getContext(), "Login Error", Toast.LENGTH_SHORT).show();
@@ -267,16 +281,17 @@ public class LoginFragment extends Fragment {
 
                         if(task.isSuccessful()){
 
-                            String user_id = mAuth.getCurrentUser().getUid();
+                            ItemsController itemsController = new ItemsController();
+                            itemsController.updateItemsDatabase(getContext(), new ResultListener<List<Item>>(){
+                                @Override
+                                public void finish(List<Item> result) {
+                                    Toast.makeText(getContext(), "Items Updated", Toast.LENGTH_SHORT).show();
 
-                            DatabaseReference databaseReference = FirebaseDatabase.getInstance().getReference().child("Users");
-                            DatabaseReference currentUserDB = databaseReference.child(user_id);
-
-                            currentUserDB.child("image").setValue("default");
-
-                            Intent intent = new Intent(getContext(), MainActivityCommunicator.class);
-                            intent.addFlags(Intent.FLAG_ACTIVITY_CLEAR_TOP);
-                            startActivity(intent);
+                                    Intent intent = new Intent(getContext(), MainActivityCommunicator.class);
+                                    intent.addFlags(Intent.FLAG_ACTIVITY_CLEAR_TOP);
+                                    startActivity(intent);
+                                }
+                            });
                         }
 
                         if (!task.isSuccessful()) {

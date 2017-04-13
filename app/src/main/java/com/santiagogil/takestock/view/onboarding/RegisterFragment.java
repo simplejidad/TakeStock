@@ -19,9 +19,14 @@ import com.google.firebase.auth.AuthResult;
 import com.google.firebase.auth.FirebaseAuth;
 import com.google.firebase.database.DatabaseReference;
 import com.santiagogil.takestock.R;
+import com.santiagogil.takestock.controller.ItemsController;
+import com.santiagogil.takestock.model.pojos.Item;
 import com.santiagogil.takestock.util.DatabaseHelper;
 import com.santiagogil.takestock.util.FirebaseHelper;
+import com.santiagogil.takestock.util.ResultListener;
 import com.santiagogil.takestock.view.MainActivityCommunicator;
+
+import java.util.List;
 
 public class RegisterFragment extends Fragment {
 
@@ -105,11 +110,18 @@ public class RegisterFragment extends Fragment {
                                         .child(firebaseHelper.getCurrentUserID())
                                         .child(DatabaseHelper.NAME).setValue(name);
 
-                                progressDialog.dismiss();
-                                Intent mainIntent = new Intent(getContext(), MainActivityCommunicator.class);
-                                mainIntent.addFlags(Intent.FLAG_ACTIVITY_CLEAR_TOP);
-                                startActivity(mainIntent);
+                                ItemsController itemsController = new ItemsController();
+                                itemsController.updateItemsDatabase(getContext(), new ResultListener<List<Item>>(){
+                                    @Override
+                                    public void finish(List<Item> result) {
+                                        Toast.makeText(getContext(), "Items Updated", Toast.LENGTH_SHORT).show();
 
+                                        progressDialog.dismiss();
+                                        Intent mainIntent = new Intent(getContext(), MainActivityCommunicator.class);
+                                        mainIntent.addFlags(Intent.FLAG_ACTIVITY_CLEAR_TOP);
+                                        startActivity(mainIntent);
+                                    }
+                                });
 
                             } else {
 

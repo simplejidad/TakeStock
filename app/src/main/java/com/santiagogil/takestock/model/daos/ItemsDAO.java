@@ -86,7 +86,6 @@ public class ItemsDAO{
 
     }
 
-
     public List<Item> sortItemsAlphabetically(List<Item> itemList) {
 
         if(itemList.size() > 1){
@@ -187,7 +186,8 @@ public class ItemsDAO{
 
         SQLiteDatabase database = databaseHelper.getReadableDatabase();
 
-        String selectQuery = "SELECT * FROM " + DatabaseHelper.TABLEITEMS;
+        String selectQuery = "SELECT * FROM " + DatabaseHelper.TABLEITEMS + " WHERE " + DatabaseHelper.USERID + " = " + '"'
+                +  firebaseHelper.getCurrentUserID() + '"';
         Cursor cursor = database.rawQuery(selectQuery, null);
 
         List<Item> items = new ArrayList<>();
@@ -447,7 +447,6 @@ public class ItemsDAO{
         return itemList;
 
     }
-
 
     public Integer getItemConsumptionRate(String itemID) {
 

@@ -9,14 +9,8 @@ import java.util.List;
 
 public class GetAllItemsSortedByConsumptionRate implements BehaviourGetItemList {
 
-    private Context context;
-
-    public GetAllItemsSortedByConsumptionRate(Context context) {
-        this.context = context;
-    }
-
     @Override
-    public List<Item> getItemList() {
+    public List<Item> getItemList(Context context) {
         ItemsController itemsController = new ItemsController();
         return itemsController.sortItemsByConsumptionRate(context, itemsController.getAllActiveItems(context));
     }
