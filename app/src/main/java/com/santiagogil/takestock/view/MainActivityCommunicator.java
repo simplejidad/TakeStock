@@ -44,8 +44,6 @@ public class MainActivityCommunicator extends AppCompatActivity implements Fragm
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_main);
 
-        Toast.makeText(this, "onCreate", Toast.LENGTH_SHORT).show();
-
         //updateFirebaseDBNames();
 
         fAuth = FirebaseAuth.getInstance();
@@ -156,9 +154,6 @@ public class MainActivityCommunicator extends AppCompatActivity implements Fragm
     protected void onStart() {
         super.onStart();
         fAuth.addAuthStateListener(authStateListener);
-        Toast.makeText(this, "onStart", Toast.LENGTH_SHORT).show();
-
-
     }
 
     private void logout() {
