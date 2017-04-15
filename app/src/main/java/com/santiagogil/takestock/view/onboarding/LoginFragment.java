@@ -181,6 +181,8 @@ public class LoginFragment extends Fragment {
 
     private void firebaseAuthWithGoogle(GoogleSignInAccount acct) {
 
+        progressDialog.show();
+
         Log.d(TAG, "firebaseAuthWithGoogle:" + acct.getId());
 
         AuthCredential credential = GoogleAuthProvider.getCredential(acct.getIdToken(), null);
@@ -198,7 +200,6 @@ public class LoginFragment extends Fragment {
                             checkIfUserExists();
                         }
 
-                        progressDialog.show();
                     }
                 });
 
@@ -252,8 +253,11 @@ public class LoginFragment extends Fragment {
                                 Intent mainIntent = new Intent(getContext(), MainActivityCommunicator.class);
                                 mainIntent.addFlags(Intent.FLAG_ACTIVITY_CLEAR_TOP);
                                 startActivity(mainIntent);
+
                             }
                         });
+
+                        getActivity().finish();
 
                     } else{
                         Toast.makeText(getContext(), "Login Error", Toast.LENGTH_SHORT).show();

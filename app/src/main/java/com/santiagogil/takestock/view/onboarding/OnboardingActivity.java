@@ -6,6 +6,7 @@ import android.support.v4.app.FragmentManager;
 import android.support.v4.app.FragmentTransaction;
 import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
+import android.widget.Toast;
 
 import com.google.firebase.auth.FirebaseAuth;
 import com.santiagogil.takestock.R;
@@ -36,6 +37,7 @@ public class OnboardingActivity extends AppCompatActivity implements LoginFragme
             Intent intent = new Intent(OnboardingActivity.this, MainActivityCommunicator.class);
             intent.addFlags(Intent.FLAG_ACTIVITY_CLEAR_TOP);
             startActivity(intent);
+            finish();
         }
     }
 
@@ -53,5 +55,4 @@ public class OnboardingActivity extends AppCompatActivity implements LoginFragme
         fragmentTransaction.commit();
 
     }
-
 }
