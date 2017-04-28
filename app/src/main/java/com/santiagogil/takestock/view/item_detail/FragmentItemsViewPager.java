@@ -18,6 +18,8 @@ public class FragmentItemsViewPager extends Fragment {
     private Bundle bundle;
 
     public static final String POSITION = "Position";
+    public static final String BEHAVIOURGETITEMLIST = "behaviourGetList";
+    public static final String ITEMID = "ItemID";
 
     public FragmentItemsViewPager() {
         // Required empty public constructor
@@ -33,12 +35,10 @@ public class FragmentItemsViewPager extends Fragment {
         itemsViewPager = (ViewPager) view.findViewById(R.id.itemsViewPager);
         ItemsViewPagerAdapter itemsViewPagerAdapter = new ItemsViewPagerAdapter(getChildFragmentManager(), getContext(), (BehaviourGetItemList) bundle.getSerializable(FragmentItemList.BEHAVIOURGETITEMLIST));
         itemsViewPager.setAdapter(itemsViewPagerAdapter);
-        itemsViewPager.setCurrentItem(bundle.getInt(POSITION));
+        Integer touchedItemPosition = itemsViewPagerAdapter.getTouchedItemPosition(bundle.getString(ITEMID));
+        itemsViewPager.setCurrentItem(touchedItemPosition);
         return view;
     }
 
-    @Override
-    public void onPause() {
-        super.onPause();
-    }
+
 }

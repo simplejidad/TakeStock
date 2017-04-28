@@ -37,11 +37,9 @@ public class FragmentItemList extends Fragment {
 
 
     private Bundle bundle;
-    //private Integer independence;
     private FragmentActivityCommunicator fragmentActivityCommunicator;
 
     public static final String TITLE = "title";
-    //public static final String INDEPENDENCE = "independence";
     public static final String POSITION = "position";
     public static final String BEHAVIOURGETITEMLIST = "behaviourGetList";
 
@@ -53,7 +51,6 @@ public class FragmentItemList extends Fragment {
         Bundle bundle = new Bundle();
         bundle.putString(TITLE, title);
         bundle.putInt(POSITION, position);
-        //bundle.putInt(INDEPENDENCE, independence);
         bundle.putSerializable(BEHAVIOURGETITEMLIST, behaviourGetItemList);
 
         fragmentItemList.setArguments(bundle);

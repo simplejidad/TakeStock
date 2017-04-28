@@ -114,8 +114,8 @@ public class MainActivityCommunicator extends AppCompatActivity implements Fragm
         FragmentItemsViewPager fragmentItemsViewPager = new FragmentItemsViewPager();
 
         Bundle bundle = new Bundle();
-        bundle.putInt(FragmentItemsViewPager.POSITION, touchedPosition);
-        bundle.putSerializable(FragmentItemList.BEHAVIOURGETITEMLIST, behaviourGetItemList);
+        bundle.putSerializable(FragmentItemsViewPager.BEHAVIOURGETITEMLIST, behaviourGetItemList);
+        bundle.putString(FragmentItemsViewPager.ITEMID, touchedItem.getID());
         fragmentItemsViewPager.setArguments(bundle);
 
         FragmentTransaction fragmentTransaction = getSupportFragmentManager().beginTransaction();

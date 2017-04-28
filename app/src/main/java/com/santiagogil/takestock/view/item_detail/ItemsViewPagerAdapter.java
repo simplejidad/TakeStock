@@ -14,6 +14,7 @@ import java.util.List;
 public class ItemsViewPagerAdapter extends FragmentStatePagerAdapter {
 
     private List<Fragment> fragmentList;
+    private List<Item> itemList;
     private Context context;
     private BehaviourGetItemList behaviourGetItemList;
 
@@ -26,6 +27,7 @@ public class ItemsViewPagerAdapter extends FragmentStatePagerAdapter {
         this.context = context;
         fragmentList = new ArrayList<>();
         this.behaviourGetItemList = behaviourGetItemList;
+        this.itemList = behaviourGetItemList.getItemList(context);
         populateFragmentList();
     }
 
@@ -41,9 +43,19 @@ public class ItemsViewPagerAdapter extends FragmentStatePagerAdapter {
 
     public void populateFragmentList(){
 
-        List<Item> items = behaviourGetItemList.getItemList(context);
-        for(Item item : items){
-            fragmentList.add(FragmentItemDetail.provideFragment(item, items.indexOf(item)));
+        for(Item item : itemList){
+            fragmentList.add(FragmentItemDetail.provideFragment(item, itemList.indexOf(item)));
         }
+    }
+
+    public Integer getTouchedItemPosition(String itemID){
+
+        for (Item item : itemList){
+            if(item.getID().equals(itemID)){
+                return itemList.indexOf(item);
+            }
+        }
+
+        return 0;
     }
 }
