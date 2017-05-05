@@ -1,12 +1,13 @@
 package com.santiagogil.takestock.view.onboarding;
 
 import android.content.Intent;
+import android.content.SharedPreferences;
+import android.preference.PreferenceManager;
 import android.support.v4.app.Fragment;
 import android.support.v4.app.FragmentManager;
 import android.support.v4.app.FragmentTransaction;
 import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
-import android.widget.Toast;
 
 import com.google.firebase.auth.FirebaseAuth;
 import com.santiagogil.takestock.R;
@@ -18,11 +19,39 @@ public class OnboardingActivity extends AppCompatActivity implements LoginFragme
     private FirebaseAuth mAuth;
     private FragmentManager fragmentManager;
 
+    public SharedPreferences appPreferences;
+    boolean isAppInstalled = false;
+
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_onboarding);
+
+        appPreferences = PreferenceManager.getDefaultSharedPreferences(this);
+        isAppInstalled = appPreferences.getBoolean("isAppInstalled",false);
+        if(isAppInstalled==false){
+
+            //  create short code
+
+            Intent shortcutIntent = new Intent(getApplicationContext(),MainActivityCommunicator.class);
+            shortcutIntent.setAction(Intent.ACTION_MAIN);
+            Intent intent = new Intent();
+            intent.putExtra(Intent.EXTRA_SHORTCUT_INTENT, shortcutIntent);
+            intent.putExtra(Intent.EXTRA_SHORTCUT_NAME, "AppShortcut");
+            intent.putExtra(Intent.EXTRA_SHORTCUT_ICON_RESOURCE, Intent.ShortcutIconResource
+                    .fromContext(getApplicationContext(), R.mipmap.ic_launcher));
+            intent.setAction("com.android.launcher.action.INSTALL_SHORTCUT");
+            getApplicationContext().sendBroadcast(intent);
+
+            //Make preference true
+
+            SharedPreferences.Editor editor = appPreferences.edit();
+            editor.putBoolean("isAppInstalled", true);
+            editor.commit();
+        }
+
+
 
         fragmentManager = getSupportFragmentManager();
         mAuth = FirebaseAuth.getInstance();
