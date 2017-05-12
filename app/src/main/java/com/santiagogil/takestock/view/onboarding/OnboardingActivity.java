@@ -13,7 +13,7 @@ import com.google.firebase.auth.FirebaseAuth;
 import com.santiagogil.takestock.R;
 import com.santiagogil.takestock.view.MainActivityCommunicator;
 
-public class OnboardingActivity extends AppCompatActivity implements LoginFragment.CallRegisterListerner {
+public class OnboardingActivity extends AppCompatActivity implements LoginFragment.CallRegisterListerner , LoginFragment.OnboardingActivityCommunicator, RegisterFragment.OnboardingActivityCommunicator {
 
     private FirebaseAuth.AuthStateListener authStateListener;
     private FirebaseAuth mAuth;
@@ -57,7 +57,8 @@ public class OnboardingActivity extends AppCompatActivity implements LoginFragme
         mAuth = FirebaseAuth.getInstance();
         if(mAuth.getCurrentUser() == null){
 
-            Fragment loginFragment = new LoginFragment();
+            LoginFragment loginFragment = new LoginFragment();
+            loginFragment.setOnboardingActivityCommunicator(OnboardingActivity.this);
             FragmentTransaction fragmentTransaction = fragmentManager.beginTransaction();
             fragmentTransaction.replace(R.id.fragment_holder, loginFragment);
             fragmentTransaction.commit();
@@ -74,7 +75,8 @@ public class OnboardingActivity extends AppCompatActivity implements LoginFragme
     @Override
     public void goToRegister(String email) {
 
-        Fragment registerFragment = new RegisterFragment();
+        RegisterFragment registerFragment = new RegisterFragment();
+        registerFragment.setOnboardingActivityCommunicator(OnboardingActivity.this);
         Bundle bundle = new Bundle();
         bundle.putString(RegisterFragment.EMAIL, email);
         registerFragment.setArguments(bundle);
@@ -84,4 +86,32 @@ public class OnboardingActivity extends AppCompatActivity implements LoginFragme
         fragmentTransaction.commit();
 
     }
+
+    @Override
+    public void startMainActivity() {
+        Intent mainIntent = new Intent(OnboardingActivity.this, MainActivityCommunicator.class);
+        mainIntent.addFlags(Intent.FLAG_ACTIVITY_CLEAR_TOP);
+        startActivity(mainIntent);
+    }
+
+
+
+/*    @Override
+    protected void onStop() {
+        super.onStop();
+        Toast.makeText(this, "Onboarding Activity Stopped", Toast.LENGTH_SHORT).show();
+
+    }
+
+    @Override
+    protected void onDestroy() {
+        super.onDestroy();
+        Toast.makeText(this, "Onboarding Activity Destroyed", Toast.LENGTH_SHORT).show();
+    }
+
+    @Override
+    protected void onPause() {
+        super.onPause();
+        Toast.makeText(this, "Onboarding Activity Paused", Toast.LENGTH_SHORT).show();
+    }*/
 }

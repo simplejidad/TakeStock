@@ -44,12 +44,11 @@ public class MainActivityCommunicator extends AppCompatActivity implements Fragm
 
         //updateFirebaseDBNames();
 
-        fAuth = FirebaseAuth.getInstance();
 
-        authStateListener = new FirebaseAuth.AuthStateListener(){
+        authStateListener = new FirebaseAuth.AuthStateListener() {
             @Override
             public void onAuthStateChanged(@NonNull FirebaseAuth firebaseAuth) {
-                if(firebaseAuth.getCurrentUser() == null){
+                if (firebaseAuth.getCurrentUser() == null) {
                     Intent intent = new Intent(MainActivityCommunicator.this, OnboardingActivity.class);
                     intent.addFlags(Intent.FLAG_ACTIVITY_CLEAR_TOP);
                     startActivity(intent);
@@ -57,102 +56,114 @@ public class MainActivityCommunicator extends AppCompatActivity implements Fragm
             }
         };
 
-        navigationView = (NavigationView) findViewById(R.id.navigationView);
-        NavigationViewListener navigationViewListener = new NavigationViewListener();
-        navigationView.setNavigationItemSelectedListener(navigationViewListener);
+        fAuth = FirebaseAuth.getInstance();
+
+        if (fAuth.getCurrentUser() == null) {
+
+            Intent intent = new Intent(MainActivityCommunicator.this, OnboardingActivity.class);
+            intent.addFlags(Intent.FLAG_ACTIVITY_CLEAR_TOP);
+            startActivity(intent);
+
+        } else {
+
+            navigationView = (NavigationView) findViewById(R.id.navigationView);
+            NavigationViewListener navigationViewListener = new NavigationViewListener();
+            navigationView.setNavigationItemSelectedListener(navigationViewListener);
 
 
-        FragmentItemListsViewPager fragmentMainView = new FragmentItemListsViewPager();
-        fragmentMainView.setFragmentActivityCommunicator(MainActivityCommunicator.this);
-        FragmentManager fragmentManager = this.getSupportFragmentManager();
-        FragmentTransaction fragmentTransaction = fragmentManager.beginTransaction();
-        fragmentTransaction.replace(R.id.fragment_holder, fragmentMainView);
-        fragmentTransaction.commit();
+            FragmentItemListsViewPager fragmentMainView = new FragmentItemListsViewPager();
+            fragmentMainView.setFragmentActivityCommunicator(MainActivityCommunicator.this);
+            FragmentManager fragmentManager = this.getSupportFragmentManager();
+            FragmentTransaction fragmentTransaction = fragmentManager.beginTransaction();
+            fragmentTransaction.replace(R.id.fragment_holder, fragmentMainView);
+            fragmentTransaction.commit();
 
-        ConsumptionsController consumptionsController = new ConsumptionsController();
-        consumptionsController.updateConsumptionsDatabase(this, new ResultListener<List<Consumption>>(){
-            @Override
-            public void finish(List<Consumption> result) {
+            ConsumptionsController consumptionsController = new ConsumptionsController();
+            consumptionsController.updateConsumptionsDatabase(this, new ResultListener<List<Consumption>>() {
+                @Override
+                public void finish(List<Consumption> result) {
+
+                }
+            });
 
             }
-        });
-
-    }
-
-    @Override
-    public void refreshFragmentMainView(Integer position) {
-
-        FragmentItemListsViewPager fragmentMainView = new FragmentItemListsViewPager();
-        fragmentMainView.setFragmentActivityCommunicator(MainActivityCommunicator.this);
-        FragmentManager fragmentManager = getSupportFragmentManager();
-        Bundle bundle = new Bundle();
-        bundle.putInt(FragmentItemList.POSITION, position);
-        fragmentMainView.setArguments(bundle);
-        FragmentTransaction fragmentTransaction = fragmentManager.beginTransaction();
-        fragmentTransaction.replace(R.id.fragment_holder, fragmentMainView);
-        fragmentTransaction.commit();
-    }
-
-    @Override
-    public void showFragmentEditItem(Bundle bundle) {
-
-        FragmentEditItem fragmentEditItem = new FragmentEditItem();
-        fragmentEditItem.setArguments(bundle);
-        FragmentManager fragmentManager = getSupportFragmentManager();
-        FragmentTransaction fragmentTransaction = fragmentManager.beginTransaction();
-        fragmentTransaction.replace(R.id.fragment_holder, fragmentEditItem);
-        fragmentTransaction.addToBackStack(null);
-        fragmentTransaction.commit();
-
-    }
-
-    @Override
-    public void onItemTouched(Item touchedItem, Integer touchedPosition, BehaviourGetItemList behaviourGetItemList) {
-
-        FragmentItemsViewPager fragmentItemsViewPager = new FragmentItemsViewPager();
-
-        Bundle bundle = new Bundle();
-        bundle.putSerializable(FragmentItemsViewPager.BEHAVIOURGETITEMLIST, behaviourGetItemList);
-        bundle.putString(FragmentItemsViewPager.ITEMID, touchedItem.getID());
-        fragmentItemsViewPager.setArguments(bundle);
-
-        FragmentTransaction fragmentTransaction = getSupportFragmentManager().beginTransaction();
-        fragmentTransaction.add(R.id.fragment_holder, fragmentItemsViewPager);
-        fragmentTransaction.addToBackStack(null);
-        fragmentTransaction.commit();
-
-    }
-
-    @Override
-    public void onBackPressed() {
-
-        int fragments = getSupportFragmentManager().getBackStackEntryCount();
-        if (fragments == 0) {
-            moveTaskToBack(true);
         }
-        super.onBackPressed();
-    }
-
-    private class NavigationViewListener implements NavigationView.OnNavigationItemSelectedListener {
 
         @Override
-        public boolean onNavigationItemSelected(@NonNull MenuItem item) {
+        public void refreshFragmentMainView (Integer position){
 
-            if(item.getItemId() == R.id.action_logout){
-
-                logout();
-            }
-
-
-            return false;
+            FragmentItemListsViewPager fragmentMainView = new FragmentItemListsViewPager();
+            fragmentMainView.setFragmentActivityCommunicator(MainActivityCommunicator.this);
+            FragmentManager fragmentManager = getSupportFragmentManager();
+            Bundle bundle = new Bundle();
+            bundle.putInt(FragmentItemList.POSITION, position);
+            fragmentMainView.setArguments(bundle);
+            FragmentTransaction fragmentTransaction = fragmentManager.beginTransaction();
+            fragmentTransaction.replace(R.id.fragment_holder, fragmentMainView);
+            fragmentTransaction.commit();
         }
-    }
 
-    @Override
-    protected void onStart() {
-        super.onStart();
-        fAuth.addAuthStateListener(authStateListener);
-    }
+        @Override
+        public void showFragmentEditItem (Bundle bundle){
+
+            FragmentEditItem fragmentEditItem = new FragmentEditItem();
+            fragmentEditItem.setArguments(bundle);
+            FragmentManager fragmentManager = getSupportFragmentManager();
+            FragmentTransaction fragmentTransaction = fragmentManager.beginTransaction();
+            fragmentTransaction.replace(R.id.fragment_holder, fragmentEditItem);
+            fragmentTransaction.addToBackStack(null);
+            fragmentTransaction.commit();
+
+        }
+
+        @Override
+        public void onItemTouched (Item touchedItem, Integer touchedPosition, BehaviourGetItemList
+        behaviourGetItemList){
+
+            FragmentItemsViewPager fragmentItemsViewPager = new FragmentItemsViewPager();
+
+            Bundle bundle = new Bundle();
+            bundle.putSerializable(FragmentItemsViewPager.BEHAVIOURGETITEMLIST, behaviourGetItemList);
+            bundle.putString(FragmentItemsViewPager.ITEMID, touchedItem.getID());
+            fragmentItemsViewPager.setArguments(bundle);
+
+            FragmentTransaction fragmentTransaction = getSupportFragmentManager().beginTransaction();
+            fragmentTransaction.add(R.id.fragment_holder, fragmentItemsViewPager);
+            fragmentTransaction.addToBackStack(null);
+            fragmentTransaction.commit();
+
+        }
+
+        @Override
+        public void onBackPressed () {
+
+            int fragments = getSupportFragmentManager().getBackStackEntryCount();
+            if (fragments == 0) {
+                moveTaskToBack(true);
+            }
+            super.onBackPressed();
+        }
+
+        private class NavigationViewListener implements NavigationView.OnNavigationItemSelectedListener {
+
+            @Override
+            public boolean onNavigationItemSelected(@NonNull MenuItem item) {
+
+                if (item.getItemId() == R.id.action_logout) {
+
+                    logout();
+                }
+
+
+                return false;
+            }
+        }
+
+        @Override
+        protected void onStart () {
+            super.onStart();
+            fAuth.addAuthStateListener(authStateListener);
+        }
 
     private void logout() {
 
@@ -160,7 +171,7 @@ public class MainActivityCommunicator extends AppCompatActivity implements Fragm
         Toast.makeText(this, "Logged out", Toast.LENGTH_SHORT).show();
     }
 
-    private void updateFirebaseDBNames(){
+    private void updateFirebaseDBNames() {
 
 
         FirebaseHelper firebaseHelper = new FirebaseHelper();
@@ -179,4 +190,5 @@ public class MainActivityCommunicator extends AppCompatActivity implements Fragm
 
     }
 }
+
 

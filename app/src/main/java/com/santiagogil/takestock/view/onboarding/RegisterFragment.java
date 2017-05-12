@@ -1,6 +1,5 @@
 package com.santiagogil.takestock.view.onboarding;
 
-import android.app.ProgressDialog;
 import android.content.Intent;
 import android.support.annotation.NonNull;
 import android.support.v4.app.Fragment;
@@ -40,9 +39,14 @@ public class RegisterFragment extends Fragment {
     private FirebaseAuth fAuth;
     private DatabaseReference firebase;
 
-    private ProgressDialog progressDialog;
+    private LoginFragment.OnboardingActivityCommunicator onboardingActivityCommunicator;
+
 
     public static final String EMAIL = "email";
+
+    public void setOnboardingActivityCommunicator(LoginFragment.OnboardingActivityCommunicator onboardingActivityCommunicator) {
+        this.onboardingActivityCommunicator = onboardingActivityCommunicator;
+    }
 
 
     @Override
@@ -57,8 +61,6 @@ public class RegisterFragment extends Fragment {
         buttonRegister = (Button) view.findViewById(R.id.email_register_button);
 
         fAuth = FirebaseAuth.getInstance();
-
-        progressDialog = new ProgressDialog(getContext());
 
         buttonRegister.setOnClickListener(new View.OnClickListener(){
             @Override
@@ -93,9 +95,6 @@ public class RegisterFragment extends Fragment {
                     Toast.makeText(getContext(), getString(R.string.error_invalid_password) , Toast.LENGTH_SHORT).show();
                 } else {
 
-                    progressDialog.setMessage("Signing Up...");
-                    progressDialog.show();
-
                     fAuth.createUserWithEmailAndPassword(email, password).addOnCompleteListener(new OnCompleteListener<AuthResult>() {
                         @Override
                         public void onComplete(@NonNull Task<AuthResult> task) {
@@ -116,10 +115,8 @@ public class RegisterFragment extends Fragment {
                                     public void finish(List<Item> result) {
                                         Toast.makeText(getContext(), "Items Updated", Toast.LENGTH_SHORT).show();
 
-                                        progressDialog.dismiss();
-                                        Intent mainIntent = new Intent(getContext(), MainActivityCommunicator.class);
-                                        mainIntent.addFlags(Intent.FLAG_ACTIVITY_CLEAR_TOP);
-                                        startActivity(mainIntent);
+                                        onboardingActivityCommunicator.startMainActivity();
+
                                     }
                                 });
 
@@ -139,5 +136,29 @@ public class RegisterFragment extends Fragment {
             Toast.makeText(getContext(), "Fields are Empty", Toast.LENGTH_SHORT).show();
         }
     }
+
+    public interface OnboardingActivityCommunicator {
+
+        void startMainActivity();
+
+    }
+
+/*    @Override
+    public void onPause() {
+        super.onPause();
+        Toast.makeText(getContext(), "RegisterFragment Paused", Toast.LENGTH_SHORT).show();
+    }
+
+    @Override
+    public void onStop() {
+        super.onStop();
+        Toast.makeText(getContext(), "RegisterFragment Stopped", Toast.LENGTH_SHORT).show();
+    }
+
+    @Override
+    public void onDestroy() {
+        super.onDestroy();
+        Toast.makeText(getContext(), "RegisterFragment Destroyed", Toast.LENGTH_SHORT).show();
+    }*/
 
 }

@@ -1,7 +1,5 @@
 package com.santiagogil.takestock.view.onboarding;
 
-
-import android.app.ProgressDialog;
 import android.content.Intent;
 import android.os.Bundle;
 import android.support.annotation.NonNull;
@@ -60,7 +58,10 @@ public class LoginFragment extends Fragment {
     private static final int RC_SIGN_IN = 1;
     private GoogleApiClient googleApiClient;
     private static final String TAG = "LoginActivity";
-    private ProgressDialog progressDialog;
+
+    private OnboardingActivityCommunicator onboardingActivityCommunicator;
+
+
 
     @Override
     public View onCreateView(LayoutInflater inflater, final ViewGroup container, Bundle savedInstanceState) {
@@ -83,7 +84,6 @@ public class LoginFragment extends Fragment {
         buttonLogin = (Button) view.findViewById(R.id.email_sign_in_button);
         buttonRegister = (Button) view.findViewById(R.id.register_button);
 
-        progressDialog = new ProgressDialog(getContext());
 
         buttonLogin.setOnClickListener(new View.OnClickListener() {
             @Override
@@ -157,9 +157,6 @@ public class LoginFragment extends Fragment {
         if (requestCode == RC_SIGN_IN) {
             GoogleSignInResult result = Auth.GoogleSignInApi.getSignInResultFromIntent(data);
 
-            progressDialog.setMessage("Starting Sign in...");
-            progressDialog.show();
-
             handleSignInResult(result);
         }
     }
@@ -173,15 +170,13 @@ public class LoginFragment extends Fragment {
             //mStatusTextView.setText(getString(R.string.signed_in_fmt, acct.getDisplayName()));
             //updateUI(true);
         } else {
-            progressDialog.dismiss();
+
             // Signed out, show unauthenticated UI.
             //updateUI(false);
         }
     }
 
     private void firebaseAuthWithGoogle(GoogleSignInAccount acct) {
-
-        progressDialog.show();
 
         Log.d(TAG, "firebaseAuthWithGoogle:" + acct.getId());
 
@@ -247,17 +242,11 @@ public class LoginFragment extends Fragment {
                         itemsController.updateItemsDatabase(getContext(), new ResultListener<List<Item>>(){
                             @Override
                             public void finish(List<Item> result) {
-                                Toast.makeText(getContext(), "Items Updated", Toast.LENGTH_SHORT).show();
 
-                                progressDialog.dismiss();
-                                Intent mainIntent = new Intent(getContext(), MainActivityCommunicator.class);
-                                mainIntent.addFlags(Intent.FLAG_ACTIVITY_CLEAR_TOP);
-                                startActivity(mainIntent);
+                                onboardingActivityCommunicator.startMainActivity();
 
                             }
                         });
-
-                        getActivity().finish();
 
                     } else{
                         Toast.makeText(getContext(), "Login Error", Toast.LENGTH_SHORT).show();
@@ -309,5 +298,31 @@ public class LoginFragment extends Fragment {
                 });
     }
 
+    public interface OnboardingActivityCommunicator {
 
+        void startMainActivity();
+
+    }
+
+    public void setOnboardingActivityCommunicator(OnboardingActivityCommunicator onboardingActivityCommunicator) {
+        this.onboardingActivityCommunicator = onboardingActivityCommunicator;
+    }
+
+/*    @Override
+    public void onPause() {
+        super.onPause();
+        Toast.makeText(getContext(), "LoginFragment Paused", Toast.LENGTH_SHORT).show();
+    }
+
+    @Override
+    public void onStop() {
+        super.onStop();
+        Toast.makeText(getContext(), "LoginFragment Stopped", Toast.LENGTH_SHORT).show();
+    }
+
+    @Override
+    public void onDestroy() {
+        super.onDestroy();
+        Toast.makeText(getContext(), "LoginFragment Destroyed", Toast.LENGTH_SHORT).show();
+    }*/
 }
