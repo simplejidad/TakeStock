@@ -23,21 +23,22 @@
             android:orientation="vertical">
 
             <android.support.design.widget.TextInputLayout
+                android:id="@+id/text_input_layout_name"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content">
 
-                <AutoCompleteTextView
+                <EditText
                     android:id="@+id/name"
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
-                    android:hint="Name..."
+                    android:hint="Name"
                     android:maxLines="1"
-                    android:singleLine="true"
                     />
 
             </android.support.design.widget.TextInputLayout>
 
             <android.support.design.widget.TextInputLayout
+                android:id="@+id/text_input_layout_email"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content">
 
@@ -48,14 +49,14 @@
                     android:hint="@string/prompt_email"
                     android:inputType="textEmailAddress"
                     android:maxLines="1"
-                    android:singleLine="true"
                     />
 
             </android.support.design.widget.TextInputLayout>
 
             <android.support.design.widget.TextInputLayout
-            android:layout_width="match_parent"
-            android:layout_height="wrap_content">
+                android:id="@+id/text_input_layout_password"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content">
 
             <EditText
                 android:id="@+id/password"
@@ -67,12 +68,12 @@
                 android:imeOptions="actionUnspecified"
                 android:inputType="textPassword"
                 android:maxLines="1"
-                android:singleLine="true"
                 />
 
         </android.support.design.widget.TextInputLayout>
 
             <android.support.design.widget.TextInputLayout
+                android:id="@+id/text_input_layout_confirm_password"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content">
 
@@ -86,7 +87,6 @@
                     android:imeOptions="actionUnspecified"
                     android:inputType="textPassword"
                     android:maxLines="1"
-                    android:singleLine="true"
                     />
 
             </android.support.design.widget.TextInputLayout>

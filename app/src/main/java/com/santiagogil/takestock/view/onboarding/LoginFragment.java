@@ -3,8 +3,11 @@ package com.santiagogil.takestock.view.onboarding;
 import android.content.Intent;
 import android.os.Bundle;
 import android.support.annotation.NonNull;
+import android.support.design.widget.TextInputLayout;
 import android.support.v4.app.Fragment;
+import android.text.Editable;
 import android.text.TextUtils;
+import android.text.TextWatcher;
 import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
@@ -15,9 +18,7 @@ import android.widget.Toast;
 
 import com.google.android.gms.auth.api.Auth;
 import com.google.android.gms.auth.api.signin.GoogleSignInAccount;
-import com.google.android.gms.auth.api.signin.GoogleSignInOptions;
 import com.google.android.gms.auth.api.signin.GoogleSignInResult;
-import com.google.android.gms.common.ConnectionResult;
 import com.google.android.gms.common.SignInButton;
 import com.google.android.gms.common.api.GoogleApiClient;
 import com.google.android.gms.tasks.OnCompleteListener;
@@ -44,6 +45,9 @@ public class LoginFragment extends Fragment {
 
     private EditText editTextEmailField;
     private EditText editTextPasswordField;
+
+    private TextInputLayout textInputLayoutEmail;
+    private TextInputLayout textInputLayoutPassword;
 
     private Button buttonLogin;
     private Button buttonRegister;
@@ -83,6 +87,61 @@ public class LoginFragment extends Fragment {
         editTextPasswordField = (EditText) view.findViewById(R.id.password);
         buttonLogin = (Button) view.findViewById(R.id.email_sign_in_button);
         buttonRegister = (Button) view.findViewById(R.id.register_button);
+        textInputLayoutPassword = (TextInputLayout) view.findViewById(R.id.text_input_layout_password);
+        textInputLayoutEmail = (TextInputLayout) view.findViewById(R.id.text_input_layout_email);
+
+        editTextEmailField.addTextChangedListener(new TextWatcher() {
+                                                      @Override
+                                                      public void beforeTextChanged(CharSequence charSequence, int i, int i1, int i2) {
+
+
+
+                                                      }
+
+                                                      @Override
+                                                      public void onTextChanged(CharSequence charSequence, int i, int i1, int i2) {
+
+                                                      }
+
+                                                      @Override
+                                                      public void afterTextChanged(Editable editable) {
+
+                                                          if(!isValidEmail((CharSequence) editable)){
+                                                              textInputLayoutEmail.setError("Enter a valid email address");
+                                                          } else{
+                                                              textInputLayoutEmail.setError(null);
+                                                          }
+
+                                                      }
+                                                  }
+
+
+        );
+
+        editTextPasswordField.addTextChangedListener(new TextWatcher() {
+            @Override
+            public void beforeTextChanged(CharSequence charSequence, int i, int i1, int i2) {
+
+            }
+
+            @Override
+            public void onTextChanged(CharSequence charSequence, int i, int i1, int i2) {
+
+            }
+
+            @Override
+            public void afterTextChanged(Editable editable) {
+
+                if(!isPasswordValid((CharSequence) editable)){
+                    textInputLayoutPassword.setError("Password must be at least 6 characters long");
+                } else{
+                    textInputLayoutPassword.setError(null);
+                }
+
+            }
+        });
+
+
 
 
         buttonLogin.setOnClickListener(new View.OnClickListener() {
@@ -102,46 +161,16 @@ public class LoginFragment extends Fragment {
             }
         });
 
-        /*buttonAnonymous.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View view) {
-                signInAnonymously();
-            }
-        });
-
-        // Google Sign In Button
-        // Configure sign-in to request the user's ID, email address, and basic
-        // profile. ID and basic profile are included in DEFAULT_SIGN_IN.
-        GoogleSignInOptions gso = new GoogleSignInOptions.Builder(GoogleSignInOptions.DEFAULT_SIGN_IN)
-                .requestEmail()
-                .build();
-
-
-        try {
-            googleApiClient = new GoogleApiClient.Builder(getContext())
-                    .enableAutoManage(getActivity(), new GoogleApiClient.OnConnectionFailedListener() {
-                        @Override
-                        public void onConnectionFailed(@NonNull ConnectionResult connectionResult) {
-
-                            Toast.makeText(getContext(), "Connection Failed", Toast.LENGTH_SHORT).show();
-
-                        }
-                    })
-                    .addApi(Auth.GOOGLE_SIGN_IN_API, gso)
-                    .build();
-        } catch (IllegalStateException e) {
-            e.printStackTrace();
-        }
-
-        googleButton.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View v) {
-
-                signInWithGoogle();
-            }
-        });*/
-
         return view;
+    }
+
+    private boolean isPasswordValid(CharSequence target) {
+
+        return target.length()>5;
+    }
+
+    public final static boolean isValidEmail(CharSequence target) {
+        return !TextUtils.isEmpty(target) && android.util.Patterns.EMAIL_ADDRESS.matcher(target).matches();
     }
 
     private void signInWithGoogle(){
@@ -205,9 +234,12 @@ public class LoginFragment extends Fragment {
         String email = editTextEmailField.getText().toString();
         String password = editTextPasswordField.getText().toString();
 
-        if(TextUtils.isEmpty(email) || TextUtils.isEmpty(password)){
+        if(TextUtils.isEmpty(email) ||
+                TextUtils.isEmpty(password) ||
+                textInputLayoutEmail.getError()!= null ||
+                textInputLayoutPassword.getError() != null ){
 
-            Toast.makeText(getContext(), "Fields Are Empty", Toast.LENGTH_SHORT).show();
+            Toast.makeText(getContext(), "Fields Are Empty or invalid", Toast.LENGTH_SHORT).show();
 
         } else{
 

@@ -2,9 +2,12 @@ package com.santiagogil.takestock.view.onboarding;
 
 import android.content.Intent;
 import android.support.annotation.NonNull;
+import android.support.design.widget.TextInputLayout;
 import android.support.v4.app.Fragment;
 import android.os.Bundle;
+import android.text.Editable;
 import android.text.TextUtils;
+import android.text.TextWatcher;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -41,6 +44,10 @@ public class RegisterFragment extends Fragment {
 
     private LoginFragment.OnboardingActivityCommunicator onboardingActivityCommunicator;
 
+    private TextInputLayout textInputLayoutEmail;
+    private TextInputLayout textInputLayoutPassword;
+    private TextInputLayout textInputLayoutConfirmPassword;
+
 
     public static final String EMAIL = "email";
 
@@ -59,6 +66,9 @@ public class RegisterFragment extends Fragment {
         editTextPasswordField = (EditText) view.findViewById(R.id.password);
         editTextConfirmPasswordField = (EditText) view.findViewById(R.id.confirmPassword);
         buttonRegister = (Button) view.findViewById(R.id.email_register_button);
+        textInputLayoutPassword = (TextInputLayout) view.findViewById(R.id.text_input_layout_password);
+        textInputLayoutEmail = (TextInputLayout) view.findViewById(R.id.text_input_layout_email);
+        textInputLayoutConfirmPassword = (TextInputLayout) view.findViewById(R.id.text_input_layout_confirm_password);
 
         fAuth = FirebaseAuth.getInstance();
 
@@ -77,8 +87,86 @@ public class RegisterFragment extends Fragment {
             editTextEmailField.setText(bundle.getString(EMAIL));
         }
 
+        editTextEmailField.addTextChangedListener(new TextWatcher() {
+                                                      @Override
+                                                      public void beforeTextChanged(CharSequence charSequence, int i, int i1, int i2) {
+
+
+
+                                                      }
+
+                                                      @Override
+                                                      public void onTextChanged(CharSequence charSequence, int i, int i1, int i2) {
+
+                                                      }
+
+                                                      @Override
+                                                      public void afterTextChanged(Editable editable) {
+
+                                                          if(!isValidEmail((CharSequence) editable)){
+                                                              textInputLayoutEmail.setError("Enter a valid email address");
+                                                          } else{
+                                                              textInputLayoutEmail.setError(null);
+                                                          }
+
+                                                      }
+                                                  }
+
+
+        );
+
+        editTextPasswordField.addTextChangedListener(new TextWatcher() {
+            @Override
+            public void beforeTextChanged(CharSequence charSequence, int i, int i1, int i2) {
+
+            }
+
+            @Override
+            public void onTextChanged(CharSequence charSequence, int i, int i1, int i2) {
+
+            }
+
+            @Override
+            public void afterTextChanged(Editable editable) {
+
+                if(!isPasswordValid((CharSequence) editable)){
+                    textInputLayoutPassword.setError("Password must be at least 6 characters long");
+                } else{
+                    textInputLayoutPassword.setError(null);
+                }
+
+            }
+        });
+
+        editTextConfirmPasswordField.addTextChangedListener(new TextWatcher() {
+            @Override
+            public void beforeTextChanged(CharSequence charSequence, int i, int i1, int i2) {
+
+            }
+
+            @Override
+            public void onTextChanged(CharSequence charSequence, int i, int i1, int i2) {
+
+            }
+
+            @Override
+            public void afterTextChanged(Editable editable) {
+                if (!passwordsMatch((CharSequence) editable)) {
+                    editTextConfirmPasswordField.setError("Passwords must match");
+                } else {
+                    editTextConfirmPasswordField.setError(null);
+                }
+            }
+        });
+
         return view;
     }
+
+    private boolean passwordsMatch(CharSequence target) {
+
+        return editTextPasswordField.getText().equals(target);
+    }
+
     private void startRegister() {
 
         final String name = editTextNameField.getText().toString().trim();
@@ -141,6 +229,15 @@ public class RegisterFragment extends Fragment {
 
         void startMainActivity();
 
+    }
+
+    private boolean isPasswordValid(CharSequence target) {
+
+        return target.length()>5;
+    }
+
+    public final static boolean isValidEmail(CharSequence target) {
+        return !TextUtils.isEmpty(target) && android.util.Patterns.EMAIL_ADDRESS.matcher(target).matches();
     }
 
 /*    @Override
