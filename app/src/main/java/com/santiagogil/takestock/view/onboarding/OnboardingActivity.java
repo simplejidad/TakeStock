@@ -23,6 +23,8 @@ public class OnboardingActivity extends AppCompatActivity implements LoginFragme
     boolean isAppInstalled = false;
 
 
+
+
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);

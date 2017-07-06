@@ -1,6 +1,5 @@
 package com.santiagogil.takestock.view.onboarding;
 
-import android.content.Intent;
 import android.support.annotation.NonNull;
 import android.support.design.widget.TextInputLayout;
 import android.support.v4.app.Fragment;
@@ -26,7 +25,6 @@ import com.santiagogil.takestock.model.pojos.Item;
 import com.santiagogil.takestock.util.DatabaseHelper;
 import com.santiagogil.takestock.util.FirebaseHelper;
 import com.santiagogil.takestock.util.ResultListener;
-import com.santiagogil.takestock.view.MainActivityCommunicator;
 
 import java.util.List;
 
@@ -129,10 +127,15 @@ public class RegisterFragment extends Fragment {
             @Override
             public void afterTextChanged(Editable editable) {
 
-                if(!isPasswordValid((CharSequence) editable)){
+                if(!isValidPassword((CharSequence) editable)){
                     textInputLayoutPassword.setError("Password must be at least 6 characters long");
                 } else{
                     textInputLayoutPassword.setError(null);
+                }
+                if (!isValidConfirmPassword((CharSequence) editable)) {
+                    textInputLayoutConfirmPassword.setError("Passwords must match");
+                } else {
+                    textInputLayoutConfirmPassword.setError(null);
                 }
 
             }
@@ -151,10 +154,10 @@ public class RegisterFragment extends Fragment {
 
             @Override
             public void afterTextChanged(Editable editable) {
-                if (!passwordsMatch((CharSequence) editable)) {
-                    editTextConfirmPasswordField.setError("Passwords must match");
+                if (!isValidConfirmPassword((CharSequence) editable)) {
+                    textInputLayoutConfirmPassword.setError("Passwords must match");
                 } else {
-                    editTextConfirmPasswordField.setError(null);
+                    textInputLayoutConfirmPassword.setError(null);
                 }
             }
         });
@@ -162,9 +165,9 @@ public class RegisterFragment extends Fragment {
         return view;
     }
 
-    private boolean passwordsMatch(CharSequence target) {
+    private boolean isValidConfirmPassword(CharSequence target) {
 
-        return editTextPasswordField.getText().equals(target);
+        return editTextPasswordField.getText().toString().equals(target.toString());
     }
 
     private void startRegister() {
@@ -174,14 +177,9 @@ public class RegisterFragment extends Fragment {
         String password = editTextPasswordField.getText().toString().trim();
         String confirmedPassword = editTextConfirmPasswordField.getText().toString().trim();
 
-        if(!TextUtils.isEmpty(name) && !TextUtils.isEmpty(email) && !TextUtils.isEmpty(password) && !TextUtils.isEmpty(confirmedPassword)){
-
-            if (password.equals(confirmedPassword)){
-
-                if(password.length()<6){
-
-                    Toast.makeText(getContext(), getString(R.string.error_invalid_password) , Toast.LENGTH_SHORT).show();
-                } else {
+        if(isValidEmail(editTextEmailField.getText().toString()) &&
+                isValidPassword(editTextPasswordField.getText().toString()) &&
+                isValidConfirmPassword(editTextConfirmPasswordField.getText().toString())){
 
                     fAuth.createUserWithEmailAndPassword(email, password).addOnCompleteListener(new OnCompleteListener<AuthResult>() {
                         @Override
@@ -197,13 +195,13 @@ public class RegisterFragment extends Fragment {
                                         .child(firebaseHelper.getCurrentUserID())
                                         .child(DatabaseHelper.NAME).setValue(name);
 
-                                ItemsController itemsController = new ItemsController();
+                                final ItemsController itemsController = new ItemsController();
                                 itemsController.updateItemsDatabase(getContext(), new ResultListener<List<Item>>(){
                                     @Override
                                     public void finish(List<Item> result) {
                                         Toast.makeText(getContext(), "Items Updated", Toast.LENGTH_SHORT).show();
-
                                         onboardingActivityCommunicator.startMainActivity();
+
 
                                     }
                                 });
@@ -216,13 +214,6 @@ public class RegisterFragment extends Fragment {
                     });
 
                 }
-            }
-            else{
-                Toast.makeText(getContext(), "Passwords do not match", Toast.LENGTH_SHORT).show();
-            }
-        }else {
-            Toast.makeText(getContext(), "Fields are Empty", Toast.LENGTH_SHORT).show();
-        }
     }
 
     public interface OnboardingActivityCommunicator {
@@ -231,7 +222,7 @@ public class RegisterFragment extends Fragment {
 
     }
 
-    private boolean isPasswordValid(CharSequence target) {
+    private boolean isValidPassword(CharSequence target) {
 
         return target.length()>5;
     }

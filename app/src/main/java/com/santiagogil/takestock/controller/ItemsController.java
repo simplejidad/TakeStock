@@ -1,6 +1,7 @@
 package com.santiagogil.takestock.controller;
 
 import android.content.Context;
+import android.widget.Toast;
 
 import com.santiagogil.takestock.model.daos.ItemsDAO;
 import com.santiagogil.takestock.model.pojos.Consumption;
@@ -102,7 +103,7 @@ public class ItemsController {
 
     public void updateItemsDatabase(final Context context, final ResultListener<List<Item>> listenerFromFragment) {
 
-        ItemsDAO itemsDAO = new ItemsDAO(context);
+        final ItemsDAO itemsDAO = new ItemsDAO(context);
 
         List<Item> itemList = itemsDAO.getAllItemsFromLocalDB();
 
@@ -118,10 +119,34 @@ public class ItemsController {
                     for (Item item : result) {
                         addItemToLocalDatabase(context, item);
                     }
-                    listenerFromFragment.finish(result);
+
+                    if (result.size() > 0) {
+
+                        listenerFromFragment.finish(result);
+
+                    } else {
+
+                        itemsDAO.retrieveItemsFromDefaultFirebaseList(new ResultListener<List<Item>>() {
+                            @Override
+                            public void finish(List<Item> result) {
+
+
+                                if (result.size() > 0) {
+
+                                    for (Item item : result) {
+                                        addItemToDatabases(context, item);
+                                        listenerFromFragment.finish(result);
+                                    }
+                                } else {
+                                    Toast.makeText(context, "ItemsDao.retrieveDefaultItems FAILED", Toast.LENGTH_SHORT).show();
+                                    listenerFromFragment.finish(result);
+                                }
+                            }
+                        });
+
+                    }
                 }
             });
-
         }
     }
 

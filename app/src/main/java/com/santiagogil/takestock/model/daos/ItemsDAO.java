@@ -508,4 +508,27 @@ public class ItemsDAO{
 
         return itemList;
     }
+
+    public void retrieveItemsFromDefaultFirebaseList(final ResultListener<List<Item>> listenerFromController) {
+
+        DatabaseReference dbRef = firebaseHelper.getDefaultItemDatabase().child(DatabaseHelper.TABLEITEMS);
+        final List<Item> itemList = new ArrayList<>();
+
+        dbRef.addListenerForSingleValueEvent(new ValueEventListener()   {
+            @Override
+            public void onDataChange(DataSnapshot dataSnapshot) {
+                for (DataSnapshot data : dataSnapshot.getChildren()){
+                    Item item = data.getValue(Item.class);
+                    itemList.add(item);
+                }
+                listenerFromController.finish(itemList);
+            }
+
+            @Override
+            public void onCancelled(DatabaseError databaseError) {
+
+                Toast.makeText(context, "itemsDAO.retrieveItemsFromDefaultFirebaseList FAILED", Toast.LENGTH_SHORT).show();
+            }
+        });
+    }
 }

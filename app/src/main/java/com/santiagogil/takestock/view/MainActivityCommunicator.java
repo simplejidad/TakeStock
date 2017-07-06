@@ -15,6 +15,7 @@ import com.google.firebase.auth.FirebaseAuth;
 import com.google.firebase.database.DatabaseReference;
 import com.santiagogil.takestock.R;
 import com.santiagogil.takestock.controller.ConsumptionsController;
+import com.santiagogil.takestock.controller.ItemsController;
 import com.santiagogil.takestock.model.pojos.Behaviours.BehaviourGetItemList;
 import com.santiagogil.takestock.model.pojos.Consumption;
 import com.santiagogil.takestock.model.pojos.Item;
@@ -43,6 +44,7 @@ public class MainActivityCommunicator extends AppCompatActivity implements Fragm
         setContentView(R.layout.activity_main);
 
         //updateFirebaseDBNames();
+        //createFirebaseDefaultItemListEnglish();
 
 
         authStateListener = new FirebaseAuth.AuthStateListener() {
@@ -171,22 +173,29 @@ public class MainActivityCommunicator extends AppCompatActivity implements Fragm
         Toast.makeText(this, "Logged out", Toast.LENGTH_SHORT).show();
     }
 
-    private void updateFirebaseDBNames() {
+    private void createFirebaseDefaultItemListEnglish() {
 
 
         FirebaseHelper firebaseHelper = new FirebaseHelper();
 
-        DatabaseReference updateUser1 = firebaseHelper.getFirebaseDatabase().getReference().child(DatabaseHelper.TABLEUSERS).child("4yXCcx84YobNncJquPpzby4VxG63");
+        DatabaseReference defaultItemListEnglish = firebaseHelper.getDefaultItemDatabase().child(DatabaseHelper.TABLEITEMS);
 
-        updateUser1.child(DatabaseHelper.IMAGE).setValue("default");
-        updateUser1.child(DatabaseHelper.NAME).setValue("Santiago");
 
-        DatabaseReference updateUser2 = firebaseHelper.getFirebaseDatabase().getReference().child(DatabaseHelper.TABLEUSERS).child("nyfcAr49fXg7kCOk3ixGE69FyWf1");
+        for(Integer i = 0; i < 100; i++){
+            String itemID = "Default Item " + i;
+            DatabaseReference defaultItem = defaultItemListEnglish.child(itemID);
+            Item item = new Item(itemID);
 
-        updateUser2.child(DatabaseHelper.IMAGE).setValue("default");
-        updateUser2.child(DatabaseHelper.NAME).setValue("Testing");
+            defaultItem.child(DatabaseHelper.ACTIVE).setValue(item.getActive());
+            defaultItem.child(DatabaseHelper.CONSUMPTIONRATE).setValue(item.getConsumptionRate());
+            defaultItem.child(DatabaseHelper.ID).setValue(itemID);
+            defaultItem.child(DatabaseHelper.MINIMUMPURCHACEQUANTITY).setValue(item.getMinimumPurchaceQuantity());
+            defaultItem.child(DatabaseHelper.NAME).setValue(item.getName());
+            defaultItem.child(DatabaseHelper.STOCK).setValue(item.getStock());
+            defaultItem.child(DatabaseHelper.USERID).setValue(FirebaseHelper.DEFAULT_ITEM_LIST);
 
-        firebaseHelper.getFirebaseDatabase().getReference().child("User").removeValue();
+
+        }
 
     }
 }
