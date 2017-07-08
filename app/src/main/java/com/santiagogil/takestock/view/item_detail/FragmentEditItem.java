@@ -41,7 +41,7 @@ public class FragmentEditItem extends Fragment {
         itemsController = new ItemsController();
         item = itemsController.getItemFromLocalDatabase(getContext(), bundle.getString(DatabaseHelper.ID));
 
-        editTextItemName = (EditText) fragmentView.findViewById(R.id.editTextItemName);
+        editTextItemName = (EditText) fragmentView.findViewById(R.id.edit_text_item_name);
         editTextItemStock = (EditText) fragmentView.findViewById(R.id.editTextStock);
         editTextConsumptionRate = (EditText) fragmentView.findViewById(R.id.editTextConsumptionRate);
         editTextMinimumPurchace = (EditText) fragmentView.findViewById(R.id.editTextMinimumPurchaceAmmount);

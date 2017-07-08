@@ -44,7 +44,7 @@ public class MainActivityCommunicator extends AppCompatActivity implements Fragm
         setContentView(R.layout.activity_main);
 
         //updateFirebaseDBNames();
-        //createFirebaseDefaultItemListEnglish();
+        createFirebaseDefaultItemListEnglish();
 
 
         authStateListener = new FirebaseAuth.AuthStateListener() {
@@ -181,7 +181,7 @@ public class MainActivityCommunicator extends AppCompatActivity implements Fragm
         DatabaseReference defaultItemListEnglish = firebaseHelper.getDefaultItemDatabase().child(DatabaseHelper.TABLEITEMS);
 
 
-        for(Integer i = 0; i < 100; i++){
+        for(Integer i = 0; i < 25; i++){
             String itemID = "Default Item " + i;
             DatabaseReference defaultItem = defaultItemListEnglish.child(itemID);
             Item item = new Item(itemID);
