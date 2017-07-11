@@ -22,14 +22,14 @@ import java.util.Comparator;
 import java.util.List;
 import java.util.UUID;
 
-public class ItemsDAO{
+public class ItemsDAOLocalDB {
 
     private Context context;
     private DatabaseHelper databaseHelper;
     private FirebaseHelper firebaseHelper;
 
 
-    public ItemsDAO (Context context){
+    public ItemsDAOLocalDB(Context context){
         this.context = context;
         databaseHelper = new DatabaseHelper(context);
         firebaseHelper = new FirebaseHelper();

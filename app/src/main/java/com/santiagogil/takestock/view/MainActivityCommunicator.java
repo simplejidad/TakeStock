@@ -7,6 +7,7 @@ import android.support.design.widget.NavigationView;
 import android.support.v4.app.FragmentManager;
 import android.support.v4.app.FragmentTransaction;
 import android.support.v7.app.AppCompatActivity;
+import android.support.v7.widget.Toolbar;
 import android.view.MenuItem;
 import android.widget.Toast;
 
@@ -42,6 +43,10 @@ public class MainActivityCommunicator extends AppCompatActivity implements Fragm
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_main);
+
+        Toolbar toolbar = (Toolbar) findViewById(R.id.toolbar);
+        setSupportActionBar(toolbar);
+        getSupportActionBar().setDisplayHomeAsUpEnabled(true);
 
         //updateFirebaseDBNames();
         createFirebaseDefaultItemListEnglish();
@@ -194,9 +199,14 @@ public class MainActivityCommunicator extends AppCompatActivity implements Fragm
             defaultItem.child(DatabaseHelper.STOCK).setValue(item.getStock());
             defaultItem.child(DatabaseHelper.USERID).setValue(FirebaseHelper.DEFAULT_ITEM_LIST);
 
-
         }
+    }
 
+    @Override
+    public boolean onSupportNavigateUp() {
+        //This method is called when the up button is pressed. Just the pop back stack.
+        onBackPressed();
+        return true;
     }
 }
 
