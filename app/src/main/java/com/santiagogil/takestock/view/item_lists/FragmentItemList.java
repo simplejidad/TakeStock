@@ -29,10 +29,7 @@ import java.util.List;
 public class FragmentItemList extends Fragment {
 
     private RecyclerView recyclerView;
-    private EditText editTextAddItem;
     private ItemRecyclerAdapter itemRecyclerAdapter;
-    private TextView textViewTitle;
-    private Button buttonNewItem;
     private BehaviourGetItemList behaviourGetItemList;
     private String title;
 
@@ -68,11 +65,8 @@ public class FragmentItemList extends Fragment {
 
         final View view = inflater.inflate(R.layout.fragment_item_list, container, false);
 
-        loadComponents(view);
-
-
         bundle = getArguments();
-        //independence = bundle.getInt(INDEPENDENCE);
+    
         title = bundle.getString(TITLE);
 
         behaviourGetItemList = (BehaviourGetItemList) bundle.getSerializable(BEHAVIOURGETITEMLIST);
@@ -81,19 +75,6 @@ public class FragmentItemList extends Fragment {
 
         loadRecyclerView(view);
 
-
-
-
-
-
-       /* itemsController = new ItemsController();
-        List<Item> itemList = itemsController.getActiveItemsByIndependence(getContext(), independence);
-*/
-     /*   if (independence == -1) {
-            itemList = itemsController.sortItemsAlphabetically(getContext(), itemList);
-        } else {
-            itemList = itemsController.sortItemsByIndependence(getContext(), itemList);
-        }*/
 
         itemRecyclerAdapter.setItems(behaviourGetItemList.getItemList(getContext()));
         itemRecyclerAdapter.notifyDataSetChanged();
@@ -136,13 +117,6 @@ public class FragmentItemList extends Fragment {
         recyclerView.setLayoutManager(linearLayoutManager);
     }
 
-    private void loadComponents(View view) {
-
-        //textViewTitle = (TextView) view.findViewById(R.id.textViewTitle);
-        //buttonNewItem = (Button) view.findViewById(R.id.buttonNewItem);
-        editTextAddItem = (EditText) view.findViewById(R.id.editText);
-    }
-
     public void updateItemList() {
 
         itemRecyclerAdapter.setItems(behaviourGetItemList.getItemList(getContext()));
@@ -156,6 +130,7 @@ public class FragmentItemList extends Fragment {
         void onItemTouched(Item touchedItem, Integer touchedPosition, BehaviourGetItemList behaviourGetItemList);
 
         void updateActionBarTitle(String title);
+
     }
 
     private class OnItemStockChangedListener implements View.OnClickListener {

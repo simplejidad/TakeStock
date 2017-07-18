@@ -32,7 +32,7 @@ import com.santiagogil.takestock.view.onboarding.OnboardingActivity;
 
 import java.util.List;
 
-public class MainActivityCommunicator extends AppCompatActivity implements FragmentItemList.FragmentActivityCommunicator, FragmentItemDetail.FragmentActivityCommunicator {
+public class MainActivityCommunicator extends AppCompatActivity implements FragmentItemList.FragmentActivityCommunicator, FragmentItemDetail.FragmentActivityCommunicator, DialogAddItem.AddItemDialogCommunicator {
 
 
     private FirebaseAuth fAuth;
@@ -152,7 +152,15 @@ public class MainActivityCommunicator extends AppCompatActivity implements Fragm
             super.onBackPressed();
         }
 
-        private class NavigationViewListener implements NavigationView.OnNavigationItemSelectedListener {
+    @Override
+    public void addNewItem(String itemName) {
+
+        FragmentItemListsViewPager currentFragment = (FragmentItemListsViewPager) getSupportFragmentManager().findFragmentById(R.id.fragment_holder);
+        currentFragment.getCurrentFragment(currentFragment.getCurrentFragmentPosition()).addNewItem(itemName);
+
+    }
+
+    private class NavigationViewListener implements NavigationView.OnNavigationItemSelectedListener {
 
             @Override
             public boolean onNavigationItemSelected(@NonNull MenuItem item) {
@@ -220,7 +228,9 @@ public class MainActivityCommunicator extends AppCompatActivity implements Fragm
     public boolean onOptionsItemSelected(MenuItem item) {
         switch (item.getItemId()) {
             case R.id.action_add_item:
-
+                DialogAddItem dialogAddItem = new DialogAddItem();
+                dialogAddItem.setCommunicator(MainActivityCommunicator.this);
+                dialogAddItem.show(getFragmentManager(), null);
                 return true;
             default:
                 return super.onOptionsItemSelected(item);

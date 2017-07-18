@@ -43,11 +43,11 @@ public class EditItemActivity extends AppCompatActivity {
         itemsController = new ItemsController();
         item = itemsController.getItemFromLocalDatabase(EditItemActivity.this, bundle.getString(DatabaseHelper.ID));
 
-        editTextItemName = (EditText) fragmentView.findViewById(R.id.edit_text_item_name);
-        editTextItemStock = (EditText) fragmentView.findViewById(R.id.editTextStock);
-        editTextConsumptionRate = (EditText) fragmentView.findViewById(R.id.editTextConsumptionRate);
-        editTextMinimumPurchace = (EditText) fragmentView.findViewById(R.id.editTextMinimumPurchaceAmmount);
-        cancelButton = (Button) fragmentView.findViewById(R.id.buttonCancel);
+        editTextItemName = (EditText) findViewById(R.id.edit_text_item_name);
+        editTextItemStock = (EditText) findViewById(R.id.editTextStock);
+        editTextConsumptionRate = (EditText) findViewById(R.id.editTextConsumptionRate);
+        editTextMinimumPurchace = (EditText) findViewById(R.id.editTextMinimumPurchaceAmmount);
+        cancelButton = (Button) findViewById(R.id.buttonCancel);
         cancelButton.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
@@ -55,7 +55,7 @@ public class EditItemActivity extends AppCompatActivity {
             }
         });
 
-        saveButton = (Button) fragmentView.findViewById(R.id.buttonSave);
+        saveButton = (Button) findViewById(R.id.buttonSave);
         saveButton.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {

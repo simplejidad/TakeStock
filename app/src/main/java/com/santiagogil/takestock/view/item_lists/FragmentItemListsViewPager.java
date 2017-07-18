@@ -19,18 +19,21 @@ import com.santiagogil.takestock.model.pojos.Behaviours.GetAllActiveItemsSortedB
 import com.santiagogil.takestock.model.pojos.Behaviours.GetAllActiveItemsWithStockZero;
 import com.santiagogil.takestock.model.pojos.Behaviours.GetAllInactiveItemsAlphabetically;
 
-public class FragmentItemListsViewPager extends Fragment{
+public class FragmentItemListsViewPager extends Fragment {
 
     private ViewPager itemListsViewPager;
     private ViewPager.OnPageChangeListener onPageChangeListener;
     private ItemListsViewPagerAdapter itemListsViewPagerAdapter;
     private FragmentItemList.FragmentActivityCommunicator fragmentActivityCommunicator;
+    private Integer currentFragmentPosition;
 
     public View onCreateView(LayoutInflater inflater, final ViewGroup container, Bundle savedInstanceState) {
 
         View view = inflater.inflate(R.layout.fragment_item_lists_view_pager, container, false);
         itemListsViewPager = (ViewPager) view.findViewById(R.id.viewPagerItemLists);
         itemListsViewPagerAdapter = new ItemListsViewPagerAdapter(getChildFragmentManager());
+
+        currentFragmentPosition = 0;
 
         populateFragmentListOnViewPagerAdapter();
 
@@ -45,6 +48,7 @@ public class FragmentItemListsViewPager extends Fragment{
             @Override
             public void onPageSelected(int position) {
 
+                currentFragmentPosition = position;
                 getCurrentFragment(position).updateItemList();
                 updateActionBarTitle(position);
             }
@@ -66,7 +70,7 @@ public class FragmentItemListsViewPager extends Fragment{
 
     }
 
-    private FragmentItemList getCurrentFragment(Integer position) {
+    public FragmentItemList getCurrentFragment(Integer position) {
 
         FragmentItemList currentFragment = itemListsViewPagerAdapter.getFragmentItemListList().get(position);
         return currentFragment;
@@ -116,4 +120,8 @@ public class FragmentItemListsViewPager extends Fragment{
     }
 
 
+    public Integer getCurrentFragmentPosition() {
+
+        return currentFragmentPosition;
+    }
 }
