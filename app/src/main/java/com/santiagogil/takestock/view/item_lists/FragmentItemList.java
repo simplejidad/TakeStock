@@ -31,15 +31,15 @@ public class FragmentItemList extends Fragment {
     private RecyclerView recyclerView;
     private EditText editTextAddItem;
     private ItemRecyclerAdapter itemRecyclerAdapter;
-    private TextView title;
+    private TextView textViewTitle;
     private Button buttonNewItem;
     private BehaviourGetItemList behaviourGetItemList;
-
+    private String title;
 
     private Bundle bundle;
     private FragmentActivityCommunicator fragmentActivityCommunicator;
 
-    public static final String TITLE = "title";
+    public static final String TITLE = "textViewTitle";
     public static final String POSITION = "position";
     public static final String BEHAVIOURGETITEMLIST = "behaviourGetList";
 
@@ -58,6 +58,10 @@ public class FragmentItemList extends Fragment {
         return fragmentItemList;
     }
 
+    public String getTitle() {
+        return title;
+    }
+
     @Nullable
     @Override
     public View onCreateView(LayoutInflater inflater, final ViewGroup container, Bundle savedInstanceState) {
@@ -69,12 +73,16 @@ public class FragmentItemList extends Fragment {
 
         bundle = getArguments();
         //independence = bundle.getInt(INDEPENDENCE);
-        title.setText(bundle.getString(TITLE));
+        title = bundle.getString(TITLE);
+
         behaviourGetItemList = (BehaviourGetItemList) bundle.getSerializable(BEHAVIOURGETITEMLIST);
 
         this.getActivity().getWindow().setSoftInputMode(WindowManager.LayoutParams.SOFT_INPUT_STATE_HIDDEN);
 
         loadRecyclerView(view);
+
+
+
 
 
 
@@ -90,20 +98,6 @@ public class FragmentItemList extends Fragment {
         itemRecyclerAdapter.setItems(behaviourGetItemList.getItemList(getContext()));
         itemRecyclerAdapter.notifyDataSetChanged();
 
-
-
-        buttonNewItem.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View view) {
-                if (editTextAddItem.getText().toString().equals("")) {
-                    Toast.makeText(view.getContext(), "Write an item name", Toast.LENGTH_SHORT).show();
-                } else {
-                    addNewItem(view);
-                }
-
-                editTextAddItem.clearFocus();
-            }
-        });
 
         updateRecyclerViewPosition();
 
@@ -144,8 +138,8 @@ public class FragmentItemList extends Fragment {
 
     private void loadComponents(View view) {
 
-        title = (TextView) view.findViewById(R.id.textViewTitle);
-        buttonNewItem = (Button) view.findViewById(R.id.buttonNewItem);
+        //textViewTitle = (TextView) view.findViewById(R.id.textViewTitle);
+        //buttonNewItem = (Button) view.findViewById(R.id.buttonNewItem);
         editTextAddItem = (EditText) view.findViewById(R.id.editText);
     }
 
@@ -161,6 +155,7 @@ public class FragmentItemList extends Fragment {
 
         void onItemTouched(Item touchedItem, Integer touchedPosition, BehaviourGetItemList behaviourGetItemList);
 
+        void updateActionBarTitle(String title);
     }
 
     private class OnItemStockChangedListener implements View.OnClickListener {
@@ -199,18 +194,16 @@ public class FragmentItemList extends Fragment {
     }
 
 
-    public void addNewItem(View view) {
-        String itemName = editTextAddItem.getText().toString();
-        editTextAddItem.setText("");
+    public void addNewItem(String itemName ){
         ItemsController itemsController = new ItemsController();
         Item item = new Item(itemName);
-        String newItemID = itemsController.addItemToDatabases(view.getContext(), item);
+        String newItemID = itemsController.addItemToDatabases(getContext(), item);
         //TODO: check if item already exists
         List<Item> items = behaviourGetItemList.getItemList(getContext());
         itemRecyclerAdapter.setItems(items);
         itemRecyclerAdapter.notifyDataSetChanged();
-        InputMethodManager inputMethodManager = (InputMethodManager) getActivity().getSystemService(Context.INPUT_METHOD_SERVICE);
-        inputMethodManager.hideSoftInputFromWindow(getActivity().getCurrentFocus().getWindowToken(), 0);
+        //InputMethodManager inputMethodManager = (InputMethodManager) getActivity().getSystemService(Context.INPUT_METHOD_SERVICE);
+        //inputMethodManager.hideSoftInputFromWindow(getActivity().getCurrentFocus().getWindowToken(), 0);
         recyclerView.getLayoutManager().smoothScrollToPosition(recyclerView, null, findItemPosition(newItemID));
 
     }

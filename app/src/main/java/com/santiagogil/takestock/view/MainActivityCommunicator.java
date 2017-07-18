@@ -8,6 +8,7 @@ import android.support.v4.app.FragmentManager;
 import android.support.v4.app.FragmentTransaction;
 import android.support.v7.app.AppCompatActivity;
 import android.support.v7.widget.Toolbar;
+import android.view.Menu;
 import android.view.MenuItem;
 import android.widget.Toast;
 
@@ -110,7 +111,7 @@ public class MainActivityCommunicator extends AppCompatActivity implements Fragm
         }
 
         @Override
-        public void showFragmentEditItem (Bundle bundle){
+        public void goToEditItemActivity(Bundle bundle){
 
             Intent intent = new Intent(MainActivityCommunicator.this, EditItemActivity.class);
             intent.putExtras(bundle);
@@ -135,7 +136,13 @@ public class MainActivityCommunicator extends AppCompatActivity implements Fragm
 
         }
 
-        @Override
+    @Override
+    public void updateActionBarTitle(String title) {
+
+        getSupportActionBar().setTitle((CharSequence) title);
+    }
+
+    @Override
         public void onBackPressed () {
 
             int fragments = getSupportFragmentManager().getBackStackEntryCount();
@@ -201,6 +208,23 @@ public class MainActivityCommunicator extends AppCompatActivity implements Fragm
         //This method is called when the up button is pressed. Just the pop back stack.
         onBackPressed();
         return true;
+    }
+
+    @Override
+    public boolean onCreateOptionsMenu(Menu menu) {
+        getMenuInflater().inflate(R.menu.toolbar_main_menu, menu);
+        return true;
+    }
+
+    @Override
+    public boolean onOptionsItemSelected(MenuItem item) {
+        switch (item.getItemId()) {
+            case R.id.action_add_item:
+
+                return true;
+            default:
+                return super.onOptionsItemSelected(item);
+        }
     }
 }
 

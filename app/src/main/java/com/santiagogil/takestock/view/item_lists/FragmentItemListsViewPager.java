@@ -1,11 +1,14 @@
 package com.santiagogil.takestock.view.item_lists;
 
 import android.os.Bundle;
+import android.support.design.widget.TabLayout;
 import android.support.v4.app.Fragment;
 import android.support.v4.view.ViewPager;
+import android.support.v7.app.AppCompatActivity;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
+import android.widget.Toast;
 
 import com.santiagogil.takestock.R;
 import com.santiagogil.takestock.model.pojos.Behaviours.BehaviourGetItemList;
@@ -42,7 +45,8 @@ public class FragmentItemListsViewPager extends Fragment{
             @Override
             public void onPageSelected(int position) {
 
-                itemListsViewPagerAdapter.getFragmentItemListList().get(position).updateItemList();
+                getCurrentFragment(position).updateItemList();
+                updateActionBarTitle(position);
             }
 
             @Override
@@ -51,7 +55,21 @@ public class FragmentItemListsViewPager extends Fragment{
             }
         };
 
+        fragmentActivityCommunicator.updateActionBarTitle("Items by Consumption Rate");
+
         return view;
+    }
+
+    private void updateActionBarTitle(Integer position){
+
+        fragmentActivityCommunicator.updateActionBarTitle(getCurrentFragment(position).getTitle());
+
+    }
+
+    private FragmentItemList getCurrentFragment(Integer position) {
+
+        FragmentItemList currentFragment = itemListsViewPagerAdapter.getFragmentItemListList().get(position);
+        return currentFragment;
     }
 
     private void populateFragmentListOnViewPagerAdapter() {
@@ -80,6 +98,7 @@ public class FragmentItemListsViewPager extends Fragment{
         super.onStart();
 
         itemListsViewPager.addOnPageChangeListener(onPageChangeListener);
+
     }
 
     public void setFragmentActivityCommunicator(FragmentItemList.FragmentActivityCommunicator fragmentActivityCommunicator) {
@@ -90,5 +109,11 @@ public class FragmentItemListsViewPager extends Fragment{
     public void onPause() {
         super.onPause();
     }
+
+    @Override
+    public void onResume() {
+        super.onResume();
+    }
+
 
 }

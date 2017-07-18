@@ -128,7 +128,7 @@ public class FragmentItemDetail extends Fragment {
             public void onClick(View view) {
 
                 FragmentActivityCommunicator fragmentActivityCommunicator = (FragmentActivityCommunicator) getActivity();
-                fragmentActivityCommunicator.showFragmentEditItem(getArguments());
+                fragmentActivityCommunicator.goToEditItemActivity(getArguments());
 
             }
         });
@@ -150,7 +150,7 @@ public class FragmentItemDetail extends Fragment {
 
     public interface FragmentActivityCommunicator{
         void refreshFragmentMainView(Integer position);
-        void showFragmentEditItem(Bundle bundle);
+        void goToEditItemActivity(Bundle bundle);
     }
 
     public class OnConsumptionDeletedListener{
