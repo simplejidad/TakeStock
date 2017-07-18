@@ -1,11 +1,10 @@
 package com.santiagogil.takestock.view.item_detail;
 
+import android.content.Intent;
 import android.os.Bundle;
 import android.support.annotation.Nullable;
-import android.support.v4.app.Fragment;
-import android.view.LayoutInflater;
+import android.support.v7.app.AppCompatActivity;
 import android.view.View;
-import android.view.ViewGroup;
 import android.widget.Button;
 import android.widget.EditText;
 
@@ -14,7 +13,7 @@ import com.santiagogil.takestock.controller.ItemsController;
 import com.santiagogil.takestock.util.DatabaseHelper;
 import com.santiagogil.takestock.model.pojos.Item;
 
-public class FragmentEditItem extends Fragment {
+public class EditItemActivity extends AppCompatActivity {
 
     private EditText editTextItemName;
     private EditText editTextItemStock;
@@ -31,15 +30,18 @@ public class FragmentEditItem extends Fragment {
 
     static final String POSITION = "position";
 
-    @Nullable
     @Override
-    public View onCreateView(LayoutInflater inflater, @Nullable ViewGroup container, @Nullable Bundle savedInstanceState) {
-        fragmentView = inflater.inflate(R.layout.fragment_edit_item, container, false);
+    protected void onCreate(@Nullable Bundle savedInstanceState) {
+        super.onCreate(savedInstanceState);
 
-        final Bundle bundle = getArguments();
+
+        setContentView(R.layout.fragment_edit_item);
+
+        Intent intent = getIntent();
+        final Bundle bundle = intent.getExtras();
 
         itemsController = new ItemsController();
-        item = itemsController.getItemFromLocalDatabase(getContext(), bundle.getString(DatabaseHelper.ID));
+        item = itemsController.getItemFromLocalDatabase(EditItemActivity.this, bundle.getString(DatabaseHelper.ID));
 
         editTextItemName = (EditText) fragmentView.findViewById(R.id.edit_text_item_name);
         editTextItemStock = (EditText) fragmentView.findViewById(R.id.editTextStock);
@@ -49,7 +51,7 @@ public class FragmentEditItem extends Fragment {
         cancelButton.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
-                getActivity().onBackPressed();
+                onBackPressed();
             }
         });
 
@@ -60,7 +62,7 @@ public class FragmentEditItem extends Fragment {
 
                 updateItemDetails();
 
-                getActivity().onBackPressed();
+                onBackPressed();
             }
         });
 
@@ -69,8 +71,9 @@ public class FragmentEditItem extends Fragment {
         editTextConsumptionRate.setText(item.getConsumptionRate().toString());
         editTextMinimumPurchace.setText(item.getMinimumPurchaceQuantity().toString());
 
-        return fragmentView;
     }
+
+
 
     public void updateItemDetails (){
 
@@ -81,7 +84,7 @@ public class FragmentEditItem extends Fragment {
         Boolean updatedActiveStatus = true;
 
         ItemsController itemsController = new ItemsController();
-        itemsController.updateItemDetails(getContext(), item.getID(), updatedItemName, updatedItemStock, updatedItemConsumptionRate, updatedItemMinimumPurchaceQuantity, updatedActiveStatus);
+        itemsController.updateItemDetails(EditItemActivity.this, item.getID(), updatedItemName, updatedItemStock, updatedItemConsumptionRate, updatedItemMinimumPurchaceQuantity, updatedActiveStatus);
 
     }
 

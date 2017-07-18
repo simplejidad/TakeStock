@@ -16,14 +16,13 @@ import com.google.firebase.auth.FirebaseAuth;
 import com.google.firebase.database.DatabaseReference;
 import com.santiagogil.takestock.R;
 import com.santiagogil.takestock.controller.ConsumptionsController;
-import com.santiagogil.takestock.controller.ItemsController;
 import com.santiagogil.takestock.model.pojos.Behaviours.BehaviourGetItemList;
 import com.santiagogil.takestock.model.pojos.Consumption;
 import com.santiagogil.takestock.model.pojos.Item;
 import com.santiagogil.takestock.util.DatabaseHelper;
 import com.santiagogil.takestock.util.FirebaseHelper;
 import com.santiagogil.takestock.util.ResultListener;
-import com.santiagogil.takestock.view.item_detail.FragmentEditItem;
+import com.santiagogil.takestock.view.item_detail.EditItemActivity;
 import com.santiagogil.takestock.view.item_detail.FragmentItemDetail;
 import com.santiagogil.takestock.view.item_detail.FragmentItemsViewPager;
 import com.santiagogil.takestock.view.item_lists.FragmentItemList;
@@ -113,14 +112,9 @@ public class MainActivityCommunicator extends AppCompatActivity implements Fragm
         @Override
         public void showFragmentEditItem (Bundle bundle){
 
-            FragmentEditItem fragmentEditItem = new FragmentEditItem();
-            fragmentEditItem.setArguments(bundle);
-            FragmentManager fragmentManager = getSupportFragmentManager();
-            FragmentTransaction fragmentTransaction = fragmentManager.beginTransaction();
-            fragmentTransaction.replace(R.id.fragment_holder, fragmentEditItem);
-            fragmentTransaction.addToBackStack(null);
-            fragmentTransaction.commit();
-
+            Intent intent = new Intent(MainActivityCommunicator.this, EditItemActivity.class);
+            intent.putExtras(bundle);
+            startActivity(intent);
         }
 
         @Override

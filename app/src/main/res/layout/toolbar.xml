@@ -5,6 +5,6 @@
     android:id="@+id/toolbar"
     android:layout_width="match_parent"
     android:layout_height="60dp"
-    android:background="#adf9c2"
-    app:titleTextColor="#ffffff"
+    android:background="@color/primary_light"
+    app:titleTextColor="@color/secondary_text"
     />
