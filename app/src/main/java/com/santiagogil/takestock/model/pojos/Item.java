@@ -3,7 +3,9 @@ package com.santiagogil.takestock.model.pojos;
 import com.google.firebase.database.PropertyName;
 import com.santiagogil.takestock.util.DatabaseHelper;
 
-public class Item { //implements Comparable<Item>, Serializable {
+import java.io.Serializable;
+
+public class Item implements Serializable {
 
     public static final Integer DEFAULT_CONSUMPTION_RATE = 90;
 

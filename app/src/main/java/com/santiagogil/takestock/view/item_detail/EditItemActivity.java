@@ -79,7 +79,7 @@ public class EditItemActivity extends AppCompatActivity {
         Integer updatedItemStock = tryParse(editTextItemStock.getText().toString());
         Integer updatedItemMinimumPurchaceQuantity = tryParse(editTextMinimumPurchace.getText().toString());
         Integer updatedItemConsumptionRate = tryParse(editTextConsumptionRate.getText().toString());
-        Boolean updatedActiveStatus = true;
+        Boolean updatedActiveStatus = item.getActive();
 
         ItemsController itemsController = new ItemsController();
         itemsController.updateItemDetails(EditItemActivity.this, item.getID(), updatedItemName, updatedItemStock, updatedItemConsumptionRate, updatedItemMinimumPurchaceQuantity, updatedActiveStatus);
