@@ -8,6 +8,7 @@ import android.support.v7.widget.Toolbar;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
+import android.widget.Toast;
 
 import com.santiagogil.takestock.R;
 import com.santiagogil.takestock.model.pojos.Behaviours.BehaviourGetItemList;
@@ -17,6 +18,8 @@ public class FragmentItemsViewPager extends Fragment {
 
     private ViewPager itemsViewPager;
     private Bundle bundle;
+    private ItemsViewPagerAdapter itemsViewPagerAdapter;
+    private Integer currentPosition;
 
     public static final String POSITION = "Position";
     public static final String BEHAVIOURGETITEMLIST = "behaviourGetList";
@@ -37,12 +40,45 @@ public class FragmentItemsViewPager extends Fragment {
 
         bundle = getArguments();
         itemsViewPager = (ViewPager) view.findViewById(R.id.itemsViewPager);
-        ItemsViewPagerAdapter itemsViewPagerAdapter = new ItemsViewPagerAdapter(getChildFragmentManager(), getContext(), (BehaviourGetItemList) bundle.getSerializable(FragmentItemList.BEHAVIOURGETITEMLIST));
+        itemsViewPagerAdapter = new ItemsViewPagerAdapter(getChildFragmentManager(), getContext(), (BehaviourGetItemList) bundle.getSerializable(FragmentItemList.BEHAVIOURGETITEMLIST));
         itemsViewPager.setAdapter(itemsViewPagerAdapter);
-        Integer touchedItemPosition = itemsViewPagerAdapter.getTouchedItemPosition(bundle.getString(ITEMID));
-        itemsViewPager.setCurrentItem(touchedItemPosition);
+        currentPosition = itemsViewPagerAdapter.getTouchedItemPosition(bundle.getString(ITEMID));
+        itemsViewPager.setCurrentItem(currentPosition);
+
+        itemsViewPagerAdapter.notifyDataSetChanged();
+
+        itemsViewPager.addOnPageChangeListener(new ViewPager.OnPageChangeListener() {
+            @Override
+            public void onPageScrolled(int position, float positionOffset, int positionOffsetPixels) {
+
+            }
+
+            @Override
+            public void onPageSelected(int position) {
+                currentPosition = position;
+            }
+
+            @Override
+            public void onPageScrollStateChanged(int state) {
+
+            }
+        });
+
         return view;
     }
 
+    public void reloadWithUpdatedData(Integer position){
 
+        itemsViewPagerAdapter = new ItemsViewPagerAdapter(getChildFragmentManager(), getContext(), (BehaviourGetItemList) bundle.getSerializable(FragmentItemList.BEHAVIOURGETITEMLIST));
+        itemsViewPager.setAdapter(itemsViewPagerAdapter);
+        itemsViewPager.setCurrentItem(position);
+
+    }
+
+
+    @Override
+    public void onResume() {
+        super.onResume();
+        reloadWithUpdatedData(currentPosition);
+    }
 }

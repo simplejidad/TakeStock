@@ -18,14 +18,33 @@ import com.santiagogil.takestock.model.pojos.Behaviours.GetAllActiveItemsAlphabe
 import com.santiagogil.takestock.model.pojos.Behaviours.GetAllActiveItemsSortedByIndependence;
 import com.santiagogil.takestock.model.pojos.Behaviours.GetAllActiveItemsWithStockZero;
 import com.santiagogil.takestock.model.pojos.Behaviours.GetAllInactiveItemsAlphabetically;
+import com.santiagogil.takestock.util.FragmentLifecycle;
 
 public class FragmentItemListsViewPager extends Fragment {
 
     private ViewPager itemListsViewPager;
-    private ViewPager.OnPageChangeListener onPageChangeListener;
     private ItemListsViewPagerAdapter itemListsViewPagerAdapter;
     private FragmentItemList.FragmentActivityCommunicator fragmentActivityCommunicator;
-    private Integer currentFragmentPosition;
+    private Integer currentFragmentPosition = 0;
+
+    private ViewPager.OnPageChangeListener pageChangeListener = new ViewPager.OnPageChangeListener() {
+
+        @Override
+        public void onPageSelected(int newPosition) {
+
+            FragmentLifecycle fragmentToShow = (FragmentLifecycle) itemListsViewPagerAdapter.getItem(newPosition);
+            fragmentToShow.onResumeFragment();
+            FragmentLifecycle fragmentToHide = (FragmentLifecycle) itemListsViewPagerAdapter.getItem(currentFragmentPosition);
+            fragmentToHide.onPauseFragment();
+            currentFragmentPosition = newPosition;
+            updateActionBarTitle(currentFragmentPosition);
+        }
+
+        @Override
+        public void onPageScrolled(int arg0, float arg1, int arg2) { }
+
+        public void onPageScrollStateChanged(int arg0) { }
+    };
 
     public View onCreateView(LayoutInflater inflater, final ViewGroup container, Bundle savedInstanceState) {
 
@@ -33,33 +52,15 @@ public class FragmentItemListsViewPager extends Fragment {
         itemListsViewPager = (ViewPager) view.findViewById(R.id.viewPagerItemLists);
         itemListsViewPagerAdapter = new ItemListsViewPagerAdapter(getChildFragmentManager());
 
-        currentFragmentPosition = 0;
-
         populateFragmentListOnViewPagerAdapter();
 
         itemListsViewPager.setAdapter(itemListsViewPagerAdapter);
 
-        onPageChangeListener = new ViewPager.OnPageChangeListener() {
-            @Override
-            public void onPageScrolled(int position, float positionOffset, int positionOffsetPixels) {
+        itemListsViewPager.addOnPageChangeListener(pageChangeListener);
 
-            }
+        //fragmentActivityCommunicator.updateActionBarTitle("By Consumption Rate");
 
-            @Override
-            public void onPageSelected(int position) {
-
-                currentFragmentPosition = position;
-                getCurrentFragment(position).updateItemList();
-                updateActionBarTitle(position);
-            }
-
-            @Override
-            public void onPageScrollStateChanged(int state) {
-
-            }
-        };
-
-        fragmentActivityCommunicator.updateActionBarTitle("Items by Consumption Rate");
+        updateActionBarTitle(currentFragmentPosition);
 
         return view;
     }
@@ -79,7 +80,6 @@ public class FragmentItemListsViewPager extends Fragment {
     private void populateFragmentListOnViewPagerAdapter() {
 
         BehaviourGetItemList getAllActiveItemsAlphabetically = new GetAllActiveItemsAlphabetically();
-        //BehaviourGetItemList getActiveItemsByIndependenceZero = new GetActiveItemsByIndependence(getContext(), 0);
         BehaviourGetItemList getAllActiveItemsSortedByIndependence = new GetAllActiveItemsSortedByIndependence();
         BehaviourGetItemList getActiveItemsByIndependenceOneMonth = new GetActiveItemsByIndependence(30);
         BehaviourGetItemList getActiveItemsByIndependenceThreeMonths = new GetActiveItemsByIndependence(90);
@@ -91,37 +91,24 @@ public class FragmentItemListsViewPager extends Fragment {
         itemListsViewPagerAdapter.getFragmentItemListList().add(FragmentItemList.getfragmentItemList("All Items A-Z", getAllActiveItemsAlphabetically, 0, fragmentActivityCommunicator));
         itemListsViewPagerAdapter.getFragmentItemListList().add(FragmentItemList.getfragmentItemList("All Items by Independence", getAllActiveItemsSortedByIndependence, 0, fragmentActivityCommunicator));
         itemListsViewPagerAdapter.getFragmentItemListList().add(FragmentItemList.getfragmentItemList("Stock 0", getAllActiveItemsWithStockZero, 0, fragmentActivityCommunicator));
-        //itemListsViewPagerAdapter.getFragmentItemListList().add(FragmentItemList.getfragmentItemList("Independence 0", getActiveItemsByIndependenceZero, 0, fragmentActivityCommunicator));
         itemListsViewPagerAdapter.getFragmentItemListList().add(FragmentItemList.getfragmentItemList("Menos de Un Mes", getActiveItemsByIndependenceOneMonth, 0, fragmentActivityCommunicator));
         itemListsViewPagerAdapter.getFragmentItemListList().add(FragmentItemList.getfragmentItemList("Menos de Tres Meses", getActiveItemsByIndependenceThreeMonths, 0, fragmentActivityCommunicator));
         itemListsViewPagerAdapter.getFragmentItemListList().add(FragmentItemList.getfragmentItemList("Deleted Items", getDeletedItems, 0, fragmentActivityCommunicator));
-    }
-
-    @Override
-    public void onStart() {
-        super.onStart();
-
-        itemListsViewPager.addOnPageChangeListener(onPageChangeListener);
-
     }
 
     public void setFragmentActivityCommunicator(FragmentItemList.FragmentActivityCommunicator fragmentActivityCommunicator) {
         this.fragmentActivityCommunicator = fragmentActivityCommunicator;
     }
 
-    @Override
-    public void onPause() {
-        super.onPause();
+
+    public Integer getCurrentFragmentPosition() {
+
+        return currentFragmentPosition;
     }
 
     @Override
     public void onResume() {
         super.onResume();
-    }
-
-
-    public Integer getCurrentFragmentPosition() {
-
-        return currentFragmentPosition;
+        updateActionBarTitle(currentFragmentPosition);
     }
 }

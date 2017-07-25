@@ -1,5 +1,6 @@
 package com.santiagogil.takestock.view.item_detail;
 
+import android.content.Context;
 import android.os.Bundle;
 import android.support.annotation.Nullable;
 import android.support.v4.app.Fragment;
@@ -33,6 +34,7 @@ public class FragmentItemDetail extends Fragment {
         return fragmentItemDetail;
     }
 
+    private FragmentActivityCommunicator fragmentActivityCommunicator;
     private TextView textViewItemName;
     private TextView textViewItemStock;
     private TextView textViewMinimumPurchace;
@@ -127,7 +129,6 @@ public class FragmentItemDetail extends Fragment {
             @Override
             public void onClick(View view) {
 
-                FragmentActivityCommunicator fragmentActivityCommunicator = (FragmentActivityCommunicator) getActivity();
                 fragmentActivityCommunicator.goToEditItemActivity(getArguments());
 
             }
@@ -149,7 +150,6 @@ public class FragmentItemDetail extends Fragment {
     }
 
     public interface FragmentActivityCommunicator{
-        void refreshFragmentMainView(Integer position);
         void goToEditItemActivity(Bundle bundle);
     }
 
@@ -169,9 +169,12 @@ public class FragmentItemDetail extends Fragment {
     }
 
     @Override
-    public void onPause() {
-        super.onPause();
+    public void onAttach(Context context) {
+        super.onAttach(context);
+        this.fragmentActivityCommunicator = (FragmentActivityCommunicator) context;
+
     }
+
 
 
 }

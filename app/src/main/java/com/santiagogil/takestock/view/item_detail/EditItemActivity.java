@@ -19,16 +19,14 @@ public class EditItemActivity extends AppCompatActivity {
     private EditText editTextItemStock;
     private EditText editTextMinimumPurchace;
     private EditText editTextConsumptionRate;
-    private View fragmentView;
     private Button cancelButton;
     private Button saveButton;
-
     private Item item;
     private ItemsController itemsController;
 
 
 
-    static final String POSITION = "position";
+
 
     @Override
     protected void onCreate(@Nullable Bundle savedInstanceState) {
@@ -61,8 +59,8 @@ public class EditItemActivity extends AppCompatActivity {
             public void onClick(View view) {
 
                 updateItemDetails();
-
                 onBackPressed();
+
             }
         });
 

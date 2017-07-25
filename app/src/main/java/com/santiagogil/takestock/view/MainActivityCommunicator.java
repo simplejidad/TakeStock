@@ -96,7 +96,7 @@ public class MainActivityCommunicator extends AppCompatActivity implements Fragm
             }
         }
 
-        @Override
+       /* @Override
         public void refreshFragmentMainView (Integer position){
 
             FragmentItemListsViewPager fragmentMainView = new FragmentItemListsViewPager();
@@ -108,7 +108,7 @@ public class MainActivityCommunicator extends AppCompatActivity implements Fragm
             FragmentTransaction fragmentTransaction = fragmentManager.beginTransaction();
             fragmentTransaction.replace(R.id.fragment_holder, fragmentMainView);
             fragmentTransaction.commit();
-        }
+        }*/
 
         @Override
         public void goToEditItemActivity(Bundle bundle){
@@ -130,7 +130,7 @@ public class MainActivityCommunicator extends AppCompatActivity implements Fragm
             fragmentItemsViewPager.setArguments(bundle);
 
             FragmentTransaction fragmentTransaction = getSupportFragmentManager().beginTransaction();
-            fragmentTransaction.add(R.id.fragment_holder, fragmentItemsViewPager);
+            fragmentTransaction.replace(R.id.fragment_holder, fragmentItemsViewPager);
             fragmentTransaction.addToBackStack(null);
             fragmentTransaction.commit();
 

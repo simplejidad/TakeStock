@@ -21,18 +21,19 @@ import com.santiagogil.takestock.R;
 import com.santiagogil.takestock.controller.ItemsController;
 import com.santiagogil.takestock.model.pojos.Behaviours.BehaviourGetItemList;
 import com.santiagogil.takestock.model.pojos.Item;
+import com.santiagogil.takestock.util.FragmentLifecycle;
 
 import java.util.List;
 
 
 
-public class FragmentItemList extends Fragment {
+public class FragmentItemList extends Fragment implements FragmentLifecycle {
 
     private RecyclerView recyclerView;
     private ItemRecyclerAdapter itemRecyclerAdapter;
     private BehaviourGetItemList behaviourGetItemList;
     private String title;
-
+    private Integer currentRecyclerPosition;
     private Bundle bundle;
     private FragmentActivityCommunicator fragmentActivityCommunicator;
 
@@ -56,7 +57,7 @@ public class FragmentItemList extends Fragment {
     }
 
     public String getTitle() {
-        return title;
+        return getArguments().getString(TITLE);
     }
 
     @Nullable
@@ -66,7 +67,7 @@ public class FragmentItemList extends Fragment {
         final View view = inflater.inflate(R.layout.fragment_item_list, container, false);
 
         bundle = getArguments();
-    
+
         title = bundle.getString(TITLE);
 
         behaviourGetItemList = (BehaviourGetItemList) bundle.getSerializable(BEHAVIOURGETITEMLIST);
@@ -74,7 +75,6 @@ public class FragmentItemList extends Fragment {
         this.getActivity().getWindow().setSoftInputMode(WindowManager.LayoutParams.SOFT_INPUT_STATE_HIDDEN);
 
         loadRecyclerView(view);
-
 
         itemRecyclerAdapter.setItems(behaviourGetItemList.getItemList(getContext()));
         itemRecyclerAdapter.notifyDataSetChanged();
@@ -122,8 +122,9 @@ public class FragmentItemList extends Fragment {
         itemRecyclerAdapter.setItems(behaviourGetItemList.getItemList(getContext()));
         itemRecyclerAdapter.notifyDataSetChanged();
 
-
     }
+
+
 
     public interface FragmentActivityCommunicator {
 
@@ -168,7 +169,6 @@ public class FragmentItemList extends Fragment {
         }
     }
 
-
     public void addNewItem(String itemName ){
         ItemsController itemsController = new ItemsController();
         Item item = new Item(itemName);
@@ -198,8 +198,14 @@ public class FragmentItemList extends Fragment {
     }
 
     @Override
-    public void onPause() {
-        super.onPause();
+    public void onPauseFragment() {
+
+    }
+
+    @Override
+    public void onResumeFragment() {
+        Bundle bundle = getArguments();
+        fragmentActivityCommunicator.updateActionBarTitle(bundle.getString(TITLE));
     }
 
 }
