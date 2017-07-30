@@ -52,6 +52,8 @@ public class ItemsDAOLocalDB {
 
         database.update(DatabaseHelper.TABLEITEMS, contentValues, DatabaseHelper.ID + " = " + '"' + itemID + '"', null);
 
+        database.close();
+
     }
 
     public void addItemToLocalDB(Item item){
@@ -151,6 +153,7 @@ public class ItemsDAOLocalDB {
             item.setActive(cursor.getInt(cursor.getColumnIndex(DatabaseHelper.ACTIVE)) > 0);
 
             cursor.close();
+            database.close();
 
             return item;
 

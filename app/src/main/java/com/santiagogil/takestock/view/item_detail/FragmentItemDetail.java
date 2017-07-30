@@ -1,6 +1,7 @@
 package com.santiagogil.takestock.view.item_detail;
 
 import android.content.Context;
+import android.os.Build;
 import android.os.Bundle;
 import android.support.annotation.Nullable;
 import android.support.v4.app.Fragment;
@@ -19,6 +20,7 @@ import com.santiagogil.takestock.controller.ItemsController;
 import com.santiagogil.takestock.model.pojos.Consumption;
 import com.santiagogil.takestock.util.DatabaseHelper;
 import com.santiagogil.takestock.model.pojos.Item;
+import com.santiagogil.takestock.util.SharedElementTransition;
 
 public class FragmentItemDetail extends Fragment {
 
@@ -39,7 +41,7 @@ public class FragmentItemDetail extends Fragment {
     private TextView textViewItemStock;
     private TextView textViewMinimumPurchace;
     private TextView textViewConsumptionRate;
-    private TextView textViewIndependence;
+    private TextView textViewItemIndependence;
     private View fragmentView;
     private Button deleteButton;
     private Button editButton;
@@ -51,7 +53,20 @@ public class FragmentItemDetail extends Fragment {
     private Item item;
     private Bundle bundle;
 
-    static final String POSITION = "position";
+    public static final String POSITION = "position";
+    public static final String TRANSITION_ITEM_NAME = "tin";
+    public static final String TRANSITION_ITEM_STOCK = "tis";
+    public static final String TRANSITION_ITEM_INDEPENDENCE = "tii";
+
+    @Override
+    public void onViewCreated(View view, @Nullable Bundle savedInstanceState) {
+        if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.LOLLIPOP) {
+            textViewItemName.setTransitionName(FragmentItemDetail.TRANSITION_ITEM_NAME+item.getID().trim().toLowerCase());
+            textViewItemStock.setTransitionName(FragmentItemDetail.TRANSITION_ITEM_STOCK+item.getID().trim().toLowerCase());
+            textViewItemIndependence.setTransitionName(FragmentItemDetail.TRANSITION_ITEM_INDEPENDENCE+item.getID().trim().toLowerCase());
+        }
+        super.onViewCreated(view, savedInstanceState);
+    }
 
     @Nullable
     @Override
@@ -62,11 +77,21 @@ public class FragmentItemDetail extends Fragment {
         itemController = new ItemsController();
         item = itemController.getItemFromLocalDatabase(getContext(), bundle.getString(DatabaseHelper.ID));
 
+        textViewItemName = (TextView) fragmentView.findViewById(R.id.text_view_item_name);
+        textViewItemStock = (TextView) fragmentView.findViewById(R.id.text_view_item_stock);
+        textViewConsumptionRate = (TextView) fragmentView.findViewById(R.id.textViewConsumptionRate);
+        textViewMinimumPurchace = (TextView) fragmentView.findViewById(R.id.textViewMinimumPurchaceAmmount);
+        textViewItemIndependence = (TextView) fragmentView.findViewById(R.id.text_view_independence);
+        backButton = (Button) fragmentView.findViewById(R.id.buttonBack);
+        deleteButton = (Button) fragmentView.findViewById(R.id.buttonDeleteItem);
+        editButton = (Button) fragmentView.findViewById(R.id.buttonEditItem);
+
+        updateFieldsWithItemDetails();
+
         loadLayoutComponents();
 
         setOnClickListeners();
 
-        updateFieldsWithItemDetails();
 
         loadRecyclerView();
 
@@ -80,12 +105,13 @@ public class FragmentItemDetail extends Fragment {
         textViewItemStock.setText(item.getStock().toString());
         textViewMinimumPurchace.setText(item.getMinimumPurchaceQuantity().toString());
         textViewConsumptionRate.setText(item.getConsumptionRate().toString());
-        textViewIndependence.setText(item.getIndependence().toString());
+        textViewItemIndependence.setText(item.getIndependence().toString());
         if(item.getActive()){
             deleteButton.setText("DELETE");
         } else {
             deleteButton.setText("RESTORE");
         }
+
     }
 
     private void loadRecyclerView() {
@@ -138,14 +164,7 @@ public class FragmentItemDetail extends Fragment {
     private void loadLayoutComponents() {
 
 
-        textViewItemName = (TextView) fragmentView.findViewById(R.id.textViewItemName);
-        textViewItemStock = (TextView) fragmentView.findViewById(R.id.textViewStock);
-        textViewConsumptionRate = (TextView) fragmentView.findViewById(R.id.textViewConsumptionRate);
-        textViewMinimumPurchace = (TextView) fragmentView.findViewById(R.id.textViewMinimumPurchaceAmmount);
-        textViewIndependence = (TextView) fragmentView.findViewById(R.id.text_view_independence);
-        backButton = (Button) fragmentView.findViewById(R.id.buttonBack);
-        deleteButton = (Button) fragmentView.findViewById(R.id.buttonDeleteItem);
-        editButton = (Button) fragmentView.findViewById(R.id.buttonEditItem);
+
 
     }
 
@@ -165,6 +184,7 @@ public class FragmentItemDetail extends Fragment {
 
             updateFieldsWithItemDetails();
 
+
         }
     }
 
@@ -176,5 +196,14 @@ public class FragmentItemDetail extends Fragment {
     }
 
 
+    @Override
+    public void onCreate(@Nullable Bundle savedInstanceState) {
+        super.onCreate(savedInstanceState);
+        postponeEnterTransition();
+        if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.LOLLIPOP) {
+            setSharedElementEnterTransition(new SharedElementTransition());
+        }
+        setSharedElementReturnTransition(null);
+    }
 
 }

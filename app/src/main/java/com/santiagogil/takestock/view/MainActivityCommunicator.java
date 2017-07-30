@@ -1,15 +1,19 @@
 package com.santiagogil.takestock.view;
 
 import android.content.Intent;
+import android.os.Build;
 import android.os.Bundle;
 import android.support.annotation.NonNull;
 import android.support.design.widget.NavigationView;
+import android.support.v4.app.Fragment;
 import android.support.v4.app.FragmentManager;
 import android.support.v4.app.FragmentTransaction;
 import android.support.v7.app.AppCompatActivity;
 import android.support.v7.widget.Toolbar;
+import android.transition.Fade;
 import android.view.Menu;
 import android.view.MenuItem;
+import android.widget.TextView;
 import android.widget.Toast;
 
 
@@ -17,6 +21,7 @@ import com.google.firebase.auth.FirebaseAuth;
 import com.google.firebase.database.DatabaseReference;
 import com.santiagogil.takestock.R;
 import com.santiagogil.takestock.controller.ConsumptionsController;
+import com.santiagogil.takestock.controller.ItemsController;
 import com.santiagogil.takestock.model.pojos.Behaviours.BehaviourGetItemList;
 import com.santiagogil.takestock.model.pojos.Consumption;
 import com.santiagogil.takestock.model.pojos.Item;
@@ -120,20 +125,41 @@ public class MainActivityCommunicator extends AppCompatActivity implements Fragm
 
         @Override
         public void onItemTouched (Item touchedItem, Integer touchedPosition, BehaviourGetItemList
-        behaviourGetItemList){
+        behaviourGetItemList, TextView textViewItemName, TextView textViewItemStock,
+                                   TextView textViewItemIndependence){
 
             FragmentItemsViewPager fragmentItemsViewPager = new FragmentItemsViewPager();
-
             Bundle bundle = new Bundle();
             bundle.putSerializable(FragmentItemsViewPager.BEHAVIOURGETITEMLIST, behaviourGetItemList);
             bundle.putString(FragmentItemsViewPager.ITEMID, touchedItem.getID());
+            bundle.putInt(FragmentItemsViewPager.POSITION, touchedPosition);
             fragmentItemsViewPager.setArguments(bundle);
 
-            FragmentTransaction fragmentTransaction = getSupportFragmentManager().beginTransaction();
-            fragmentTransaction.replace(R.id.fragment_holder, fragmentItemsViewPager);
-            fragmentTransaction.addToBackStack(null);
-            fragmentTransaction.commit();
+            if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.LOLLIPOP) {
 
+                //bundle.putString(FragmentItemDetail.TRANSITION_ITEM_NAME, textViewItemName.getTransitionName());
+                //bundle.putString(FragmentItemDetail.TRANSITION_ITEM_STOCK, textViewItemStock.getTransitionName());
+                //bundle.putString(FragmentItemDetail.TRANSITION_ITEM_INDEPENDENCE, textViewItemIndependence.getTransitionName());
+                fragmentItemsViewPager.setEnterTransition(new Fade());
+                Fragment currentFragment = getSupportFragmentManager().findFragmentById(R.id.fragment_holder);
+                currentFragment.setExitTransition(new Fade());
+
+                getSupportFragmentManager().beginTransaction()
+                 .addSharedElement(textViewItemIndependence, textViewItemIndependence.getTransitionName()).
+                        addSharedElement(textViewItemName, textViewItemName.getTransitionName())
+                    .addSharedElement(textViewItemStock, textViewItemStock.getTransitionName())
+                        .addToBackStack("1")
+                .replace(R.id.fragment_holder, fragmentItemsViewPager).commit();
+
+            } else {
+
+
+
+                FragmentTransaction fragmentTransaction = getSupportFragmentManager().beginTransaction();
+                fragmentTransaction.replace(R.id.fragment_holder, fragmentItemsViewPager);
+                fragmentTransaction.addToBackStack(null);
+                fragmentTransaction.commit();
+            }
         }
 
     @Override
@@ -155,9 +181,13 @@ public class MainActivityCommunicator extends AppCompatActivity implements Fragm
     @Override
     public void addNewItem(String itemName) {
 
-        FragmentItemListsViewPager currentFragment = (FragmentItemListsViewPager) getSupportFragmentManager().findFragmentById(R.id.fragment_holder);
-        currentFragment.getCurrentFragment(currentFragment.getCurrentFragmentPosition()).addNewItem(itemName);
 
+        ItemsController itemsController = new ItemsController();
+        Item item = new Item(itemName);
+        itemsController.addItemToDatabases(this, item);
+        //TODO: check if item already exists
+        Fragment fragment = getSupportFragmentManager().findFragmentById(R.id.fragment_holder);
+        getSupportFragmentManager().beginTransaction().detach(fragment).attach(fragment).commit();
     }
 
     private class NavigationViewListener implements NavigationView.OnNavigationItemSelectedListener {

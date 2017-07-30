@@ -10,7 +10,7 @@
 
 
     <TextView
-        android:id="@+id/textViewItemName"
+        android:id="@+id/text_view_item_name"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:text="@string/lorem_ipsum"
@@ -37,7 +37,7 @@
             />
 
         <TextView
-            android:id="@+id/textViewStock"
+            android:id="@+id/text_view_item_stock"
             android:layout_height="wrap_content"
             android:layout_width="wrap_content"
             android:textSize="24sp"

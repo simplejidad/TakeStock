@@ -53,6 +53,8 @@ public class FragmentItemList extends Fragment implements FragmentLifecycle {
 
         fragmentItemList.setArguments(bundle);
 
+
+
         return fragmentItemList;
     }
 
@@ -81,6 +83,7 @@ public class FragmentItemList extends Fragment implements FragmentLifecycle {
 
 
         updateRecyclerViewPosition();
+
 
         return view;
     }
@@ -128,7 +131,9 @@ public class FragmentItemList extends Fragment implements FragmentLifecycle {
 
     public interface FragmentActivityCommunicator {
 
-        void onItemTouched(Item touchedItem, Integer touchedPosition, BehaviourGetItemList behaviourGetItemList);
+        void onItemTouched(Item touchedItem, Integer touchedPosition,
+                           BehaviourGetItemList behaviourGetItemList, TextView textViewItemName,
+                           TextView textViewItemStock, TextView textViewItemIndependence);
 
         void updateActionBarTitle(String title);
 
@@ -164,24 +169,17 @@ public class FragmentItemList extends Fragment implements FragmentLifecycle {
         public void onClick(View view) {
             Integer touchedPosition = recyclerView.getChildAdapterPosition(view);
             Item touchedItem = itemRecyclerAdapter.getItemAtPosition(touchedPosition);
-            fragmentActivityCommunicator.onItemTouched(touchedItem, touchedPosition, (BehaviourGetItemList) bundle.getSerializable(BEHAVIOURGETITEMLIST));
+            TextView textViewItemName = (TextView) view.findViewById(R.id.text_view_item_name);
+            TextView textViewItemStock = (TextView) view.findViewById(R.id.text_view_item_stock);
+            TextView textViewItemIndependence = (TextView) view.findViewById(R.id.text_view_item_independence);
+            fragmentActivityCommunicator.onItemTouched(touchedItem, touchedPosition,
+                    (BehaviourGetItemList) bundle.getSerializable(BEHAVIOURGETITEMLIST),
+                    textViewItemName, textViewItemStock, textViewItemIndependence);
 
         }
     }
 
-    public void addNewItem(String itemName ){
-        ItemsController itemsController = new ItemsController();
-        Item item = new Item(itemName);
-        String newItemID = itemsController.addItemToDatabases(getContext(), item);
-        //TODO: check if item already exists
-        List<Item> items = behaviourGetItemList.getItemList(getContext());
-        itemRecyclerAdapter.setItems(items);
-        itemRecyclerAdapter.notifyDataSetChanged();
-        //InputMethodManager inputMethodManager = (InputMethodManager) getActivity().getSystemService(Context.INPUT_METHOD_SERVICE);
-        //inputMethodManager.hideSoftInputFromWindow(getActivity().getCurrentFocus().getWindowToken(), 0);
-        recyclerView.getLayoutManager().smoothScrollToPosition(recyclerView, null, findItemPosition(newItemID));
 
-    }
 
     public Integer findItemPosition(String itemID) {
         List<Item> items = itemRecyclerAdapter.getItems();
@@ -206,6 +204,14 @@ public class FragmentItemList extends Fragment implements FragmentLifecycle {
     public void onResumeFragment() {
         Bundle bundle = getArguments();
         fragmentActivityCommunicator.updateActionBarTitle(bundle.getString(TITLE));
+    }
+
+
+
+    @Override
+    public void onCreate(@Nullable Bundle savedInstanceState) {
+        super.onCreate(savedInstanceState);
+        postponeEnterTransition();
     }
 
 }

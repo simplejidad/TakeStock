@@ -1,6 +1,7 @@
 package com.santiagogil.takestock.view.item_lists;
 
 import android.content.Context;
+import android.os.Build;
 import android.support.v7.widget.RecyclerView;
 import android.view.LayoutInflater;
 import android.view.View;
@@ -13,6 +14,7 @@ import com.santiagogil.takestock.R;
 import com.santiagogil.takestock.controller.ConsumptionsController;
 import com.santiagogil.takestock.controller.ItemsController;
 import com.santiagogil.takestock.model.pojos.Item;
+import com.santiagogil.takestock.view.item_detail.FragmentItemDetail;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -51,6 +53,7 @@ public class ItemRecyclerAdapter extends RecyclerView.Adapter{
         Item item = items.get(position);
         ItemViewHolder itemViewHolder = (ItemViewHolder) holder;
         itemViewHolder.loadItem(item);
+        itemViewHolder.assignTransitionNames(item.getID().trim().toLowerCase());
 
     }
 
@@ -66,8 +69,8 @@ public class ItemRecyclerAdapter extends RecyclerView.Adapter{
     static class ItemViewHolder extends RecyclerView.ViewHolder {
 
         private TextView textViewItemName;
-        private TextView textViewStock;
-        private TextView textViewIndependence;
+        private TextView textViewItemStock;
+        private TextView textViewItemIndependence;
         private Button buttonSubtract;
         private Button buttonAdd;
         private Context context;
@@ -77,9 +80,9 @@ public class ItemRecyclerAdapter extends RecyclerView.Adapter{
         public ItemViewHolder(View itemView, Context context, View.OnClickListener onStockModifiedListener) {
             super(itemView);
 
-            textViewItemName = (TextView) itemView.findViewById(R.id.textViewItemName);
-            textViewStock = (TextView) itemView.findViewById(R.id.textViewStock);
-            textViewIndependence = (TextView) itemView.findViewById(R.id.textViewIndependence);
+            textViewItemName = (TextView) itemView.findViewById(R.id.text_view_item_name);
+            textViewItemStock = (TextView) itemView.findViewById(R.id.text_view_item_stock);
+            textViewItemIndependence = (TextView) itemView.findViewById(R.id.text_view_item_independence);
 
             buttonAdd = (Button) itemView.findViewById(R.id.buttonAdd);
             buttonSubtract = (Button) itemView.findViewById(R.id.buttonSubtract);
@@ -92,8 +95,8 @@ public class ItemRecyclerAdapter extends RecyclerView.Adapter{
 
             textViewItemName.setText(item.getName());
             String itemStock = item.getStock().toString();
-            textViewStock.setText(itemStock);
-            textViewIndependence.setText("Independence: " + Math.round(item.getConsumptionRate()*item.getStock()) + " days");
+            textViewItemStock.setText(itemStock);
+            textViewItemIndependence.setText("Independence: " + Math.round(item.getConsumptionRate()*item.getStock()) + " days");
             buttonAdd.setOnClickListener(new View.OnClickListener() {
                 @Override
                 public void onClick(View view) {
@@ -106,7 +109,7 @@ public class ItemRecyclerAdapter extends RecyclerView.Adapter{
                 @Override
                 public void onClick(View view) {
                     decreaseItemStock(item);
-                    //textViewIndependence.setText(item.getIndependence().toString());
+                    //textViewItemIndependence.setText(item.getIndependence().toString());
                     onStockModifiedListener.onClick(itemView);
                 }
             });
@@ -131,6 +134,15 @@ public class ItemRecyclerAdapter extends RecyclerView.Adapter{
                 ConsumptionsController consumptionsController = new ConsumptionsController();
                 consumptionsController.addConsumptionToDatabases(context, item.getID());
                 itemsController.updateItemConsumptionRate(context, item.getID());
+            }
+        }
+
+
+        public void assignTransitionNames(String itemID){
+            if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.LOLLIPOP) {
+                textViewItemName.setTransitionName(FragmentItemDetail.TRANSITION_ITEM_NAME + itemID);
+                textViewItemStock.setTransitionName(FragmentItemDetail.TRANSITION_ITEM_STOCK + itemID);
+                textViewItemIndependence.setTransitionName(FragmentItemDetail.TRANSITION_ITEM_INDEPENDENCE+itemID);
             }
         }
     }

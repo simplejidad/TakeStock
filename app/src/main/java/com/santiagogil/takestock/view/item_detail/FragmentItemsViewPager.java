@@ -1,7 +1,9 @@
 package com.santiagogil.takestock.view.item_detail;
 
 
+import android.os.Build;
 import android.os.Bundle;
+import android.support.annotation.Nullable;
 import android.support.v4.app.Fragment;
 import android.support.v4.view.ViewPager;
 import android.support.v7.widget.Toolbar;
@@ -12,6 +14,7 @@ import android.widget.Toast;
 
 import com.santiagogil.takestock.R;
 import com.santiagogil.takestock.model.pojos.Behaviours.BehaviourGetItemList;
+import com.santiagogil.takestock.util.SharedElementTransition;
 import com.santiagogil.takestock.view.item_lists.FragmentItemList;
 
 public class FragmentItemsViewPager extends Fragment {
@@ -32,11 +35,9 @@ public class FragmentItemsViewPager extends Fragment {
 
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container,
-                             Bundle savedInstanceState) {
+                             Bundle savedInstanceState){
 
         View view = inflater.inflate(R.layout.fragment_items_viewpager, container, false);
-
-
 
         bundle = getArguments();
         itemsViewPager = (ViewPager) view.findViewById(R.id.itemsViewPager);
@@ -81,4 +82,28 @@ public class FragmentItemsViewPager extends Fragment {
         super.onResume();
         reloadWithUpdatedData(currentPosition);
     }
+
+
+
+    @Override
+    public void onCreate(@Nullable Bundle savedInstanceState) {
+        super.onCreate(savedInstanceState);
+        postponeEnterTransition();
+        if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.LOLLIPOP) {
+            setSharedElementEnterTransition(new SharedElementTransition());
+        }
+        setSharedElementReturnTransition(null);
+    }
+
+    @Override
+    public void onStart() {
+        super.onStart();
+        postponeEnterTransition();
+        if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.LOLLIPOP) {
+            setSharedElementEnterTransition(new SharedElementTransition());
+        }
+        setSharedElementReturnTransition(null);
+    }
+
+
 }

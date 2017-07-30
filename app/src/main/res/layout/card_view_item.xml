@@ -39,7 +39,7 @@
                 android:orientation="horizontal">
 
                 <TextView
-                    android:id="@+id/textViewItemName"
+                    android:id="@+id/text_view_item_name"
                     android:layout_width="0dp"
                     android:layout_height="wrap_content"
                     android:layout_weight="8"
@@ -63,7 +63,7 @@
                     />
 
                 <TextView
-                    android:id="@+id/textViewStock"
+                    android:id="@+id/text_view_item_stock"
                     android:layout_width="0dp"
                     android:layout_weight="1.5"
                     android:layout_gravity="center"
@@ -76,7 +76,7 @@
             </LinearLayout>
 
             <TextView
-                android:id="@+id/textViewIndependence"
+                android:id="@+id/text_view_item_independence"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
                 android:text="@string/independence"
