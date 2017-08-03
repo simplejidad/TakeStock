@@ -11,6 +11,7 @@ import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.Button;
+import android.widget.ImageButton;
 import android.widget.TextView;
 import android.widget.Toast;
 
@@ -43,9 +44,9 @@ public class FragmentItemDetail extends Fragment {
     private TextView textViewConsumptionRate;
     private TextView textViewItemIndependence;
     private View fragmentView;
-    private Button deleteButton;
-    private Button editButton;
-    private Button backButton;
+    private ImageButton deleteButton;
+    private ImageButton editButton;
+    private ImageButton backButton;
     private RecyclerView recyclerView;
     private ConsumptionRecyclerAdapter consumptionRecyclerAdapter;
     private ConsumptionsController consumptionsController;
@@ -82,9 +83,9 @@ public class FragmentItemDetail extends Fragment {
         textViewConsumptionRate = (TextView) fragmentView.findViewById(R.id.textViewConsumptionRate);
         textViewMinimumPurchace = (TextView) fragmentView.findViewById(R.id.textViewMinimumPurchaceAmmount);
         textViewItemIndependence = (TextView) fragmentView.findViewById(R.id.text_view_independence);
-        backButton = (Button) fragmentView.findViewById(R.id.buttonBack);
-        deleteButton = (Button) fragmentView.findViewById(R.id.buttonDeleteItem);
-        editButton = (Button) fragmentView.findViewById(R.id.buttonEditItem);
+        backButton = (ImageButton) fragmentView.findViewById(R.id.buttonBack);
+        deleteButton = (ImageButton) fragmentView.findViewById(R.id.buttonDeleteItem);
+        editButton = (ImageButton) fragmentView.findViewById(R.id.buttonEditItem);
 
         updateFieldsWithItemDetails();
 
@@ -107,9 +108,9 @@ public class FragmentItemDetail extends Fragment {
         textViewConsumptionRate.setText(item.getConsumptionRate().toString());
         textViewItemIndependence.setText(item.getIndependence().toString());
         if(item.getActive()){
-            deleteButton.setText("DELETE");
+            deleteButton.setImageResource(R.drawable.ic_delete_black_24dp);
         } else {
-            deleteButton.setText("RESTORE");
+            deleteButton.setImageResource(R.drawable.ic_settings_backup_restore_black_24dp);
         }
 
     }

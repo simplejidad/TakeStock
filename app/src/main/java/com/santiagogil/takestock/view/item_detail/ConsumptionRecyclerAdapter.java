@@ -6,6 +6,7 @@ import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.Button;
+import android.widget.ImageButton;
 import android.widget.TextView;
 
 import com.santiagogil.takestock.R;
@@ -58,7 +59,7 @@ public class ConsumptionRecyclerAdapter extends RecyclerView.Adapter {
 
         private TextView textViewConsumptionDate;
         private DateHelper dateHelper;
-        private Button buttonDelete;
+        private ImageButton buttonDelete;
         private Consumption consumption;
 
         public ConsumptionViewHolder(View consumptionView,
@@ -66,7 +67,7 @@ public class ConsumptionRecyclerAdapter extends RecyclerView.Adapter {
             super(consumptionView);
             textViewConsumptionDate = (TextView) consumptionView.findViewById(R.id.textViewConsumptionDate);
             dateHelper = new DateHelper();
-            buttonDelete = (Button) consumptionView.findViewById(R.id.button_delete);
+            buttonDelete = (ImageButton) consumptionView.findViewById(R.id.button_delete);
             buttonDelete.setOnClickListener(new View.OnClickListener() {
                 @Override
                 public void onClick(View view) {

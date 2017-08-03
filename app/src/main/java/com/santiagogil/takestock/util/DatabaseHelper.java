@@ -29,6 +29,7 @@ public class DatabaseHelper extends SQLiteOpenHelper {
     public static final String DATE = "Date";
     public static final String ITEMID = "ItemID";
     public static final String USERID = "UserID";
+    public static final String ITEMS_IN_CART = "ItemsInCart";
 
     //Values
     public static final String ACTIVE_TRUE = "1";

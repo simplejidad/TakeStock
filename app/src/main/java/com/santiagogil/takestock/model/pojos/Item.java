@@ -26,6 +26,7 @@ public class Item implements Serializable {
     @PropertyName (DatabaseHelper.ACTIVE)
     private Boolean active;
 
+
     public Boolean getActive() {
         return active;
     }
