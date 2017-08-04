@@ -55,9 +55,9 @@ public class FragmentItemDetail extends Fragment {
     private Bundle bundle;
 
     public static final String POSITION = "position";
-    public static final String TRANSITION_ITEM_NAME = "tin";
-    public static final String TRANSITION_ITEM_STOCK = "tis";
-    public static final String TRANSITION_ITEM_INDEPENDENCE = "tii";
+    public static final String TRANSITION_ITEM_NAME = "TransitionItemName";
+    public static final String TRANSITION_ITEM_STOCK = "TransitionItemStock";
+    public static final String TRANSITION_ITEM_INDEPENDENCE = "";
 
     @Override
     public void onViewCreated(View view, @Nullable Bundle savedInstanceState) {

@@ -148,7 +148,7 @@ public class MainActivityCommunicator extends AppCompatActivity implements Fragm
                  .addSharedElement(textViewItemIndependence, textViewItemIndependence.getTransitionName()).
                         addSharedElement(textViewItemName, textViewItemName.getTransitionName())
                     .addSharedElement(textViewItemStock, textViewItemStock.getTransitionName())
-                        .addToBackStack("1")
+                        .addToBackStack(null)
                 .replace(R.id.fragment_holder, fragmentItemsViewPager).commit();
 
             } else {

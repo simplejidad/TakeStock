@@ -53,7 +53,7 @@ public class ItemRecyclerAdapter extends RecyclerView.Adapter{
         Item item = items.get(position);
         ItemViewHolder itemViewHolder = (ItemViewHolder) holder;
         itemViewHolder.loadItem(item);
-        itemViewHolder.assignTransitionNames(item.getID().trim().toLowerCase());
+        itemViewHolder.assignTransitionNames(item.getID());
 
     }
 
@@ -96,7 +96,7 @@ public class ItemRecyclerAdapter extends RecyclerView.Adapter{
             textViewItemName.setText(item.getName());
             String itemStock = item.getStock().toString();
             textViewItemStock.setText(itemStock);
-            textViewItemIndependence.setText("Independence: " + Math.round(item.getConsumptionRate()*item.getStock()) + " days");
+            textViewItemIndependence.setText(Math.round(item.getConsumptionRate()*item.getStock()) + " days");
             buttonAdd.setOnClickListener(new View.OnClickListener() {
                 @Override
                 public void onClick(View view) {

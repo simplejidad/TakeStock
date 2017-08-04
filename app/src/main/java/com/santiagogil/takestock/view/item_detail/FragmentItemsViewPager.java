@@ -95,15 +95,5 @@ public class FragmentItemsViewPager extends Fragment {
         setSharedElementReturnTransition(null);
     }
 
-    @Override
-    public void onStart() {
-        super.onStart();
-        postponeEnterTransition();
-        if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.LOLLIPOP) {
-            setSharedElementEnterTransition(new SharedElementTransition());
-        }
-        setSharedElementReturnTransition(null);
-    }
-
 
 }
