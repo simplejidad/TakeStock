@@ -30,6 +30,7 @@ public class DatabaseHelper extends SQLiteOpenHelper {
     public static final String ITEMID = "ItemID";
     public static final String USERID = "UserID";
     public static final String ITEMS_IN_CART = "ItemsInCart";
+    public static final String PRICE = "price";
 
     //Values
     public static final String ACTIVE_TRUE = "1";
@@ -55,6 +56,7 @@ public class DatabaseHelper extends SQLiteOpenHelper {
             + IMAGE + " TEXT, "
             + CONSUMPTIONRATE + " NUMBER, "
             + MINIMUMPURCHACEQUANTITY + " NUMBER, "
+            + PRICE + " NUMBER, "
             + ACTIVE + " BOOLEAN "
             + ")";
 
@@ -63,7 +65,8 @@ public class DatabaseHelper extends SQLiteOpenHelper {
             + ID + " STRING PRIMARY KEY,"
             + USERID + " TEXT,"
             + DATE + " TEXT,"
-            + ITEMID + " STRING "
+            + ITEMID + " STRING, "
+            + PRICE + " NUMBER "
             + ")";
 
 

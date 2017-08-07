@@ -71,6 +71,7 @@ public class ItemRecyclerAdapter extends RecyclerView.Adapter{
         private TextView textViewItemName;
         private TextView textViewItemStock;
         private TextView textViewItemIndependence;
+        private TextView textViewItemPrice;
         private Button buttonSubtract;
         private Button buttonAdd;
         private Context context;
@@ -83,6 +84,7 @@ public class ItemRecyclerAdapter extends RecyclerView.Adapter{
             textViewItemName = (TextView) itemView.findViewById(R.id.text_view_item_name);
             textViewItemStock = (TextView) itemView.findViewById(R.id.text_view_item_stock);
             textViewItemIndependence = (TextView) itemView.findViewById(R.id.text_view_item_independence);
+            textViewItemPrice = (TextView) itemView.findViewById(R.id.text_view_item_price);
 
             buttonAdd = (Button) itemView.findViewById(R.id.buttonAdd);
             buttonSubtract = (Button) itemView.findViewById(R.id.buttonSubtract);
@@ -93,10 +95,11 @@ public class ItemRecyclerAdapter extends RecyclerView.Adapter{
 
         public void loadItem(final Item item){
 
-            textViewItemName.setText(item.getName());
             String itemStock = item.getStock().toString();
+            textViewItemName.setText(item.getName());
             textViewItemStock.setText(itemStock);
             textViewItemIndependence.setText(Math.round(item.getConsumptionRate()*item.getStock()) + " days");
+            textViewItemPrice.setText("$" + item.getPrice());
             buttonAdd.setOnClickListener(new View.OnClickListener() {
                 @Override
                 public void onClick(View view) {
@@ -143,6 +146,7 @@ public class ItemRecyclerAdapter extends RecyclerView.Adapter{
                 textViewItemName.setTransitionName(FragmentItemDetail.TRANSITION_ITEM_NAME + itemID);
                 textViewItemStock.setTransitionName(FragmentItemDetail.TRANSITION_ITEM_STOCK + itemID);
                 textViewItemIndependence.setTransitionName(FragmentItemDetail.TRANSITION_ITEM_INDEPENDENCE+itemID);
+
             }
         }
     }

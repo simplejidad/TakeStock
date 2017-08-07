@@ -74,6 +74,7 @@ public class ItemsDAOLocalDB {
         row.put(DatabaseHelper.MINIMUMPURCHACEQUANTITY, item.getMinimumPurchaceQuantity());
         row.put(DatabaseHelper.CONSUMPTIONRATE, item.getConsumptionRate());
         row.put(DatabaseHelper.ACTIVE, booleanToInteger(item.getActive()));
+        row.put(DatabaseHelper.PRICE, item.getPrice());
 
         database.insert(DatabaseHelper.TABLEITEMS, null, row);
 
@@ -104,62 +105,46 @@ public class ItemsDAOLocalDB {
 
     }
 
-    public Item getItemFromLocalDBUsingItemName(String itemName){
+    public Item buildItemFromQuerry(String querry){
 
         SQLiteDatabase database = databaseHelper.getReadableDatabase();
+        Cursor cursor = database.rawQuery(querry, null);
+
+        if (cursor.moveToNext()) {
+
+            Item item = buildItemFromCursor(cursor);
+
+            cursor.close();
+            database.close();
+
+            return item;
+
+        } else {
+            cursor.close();
+            database.close();
+            return null;
+        }
+
+    }
+
+    public Item getItemFromLocalDBUsingItemName(String itemName){
 
         String selectQuery = "SELECT * FROM " + DatabaseHelper.TABLEITEMS + " WHERE " + DatabaseHelper.NAME + " = " + '"'
                 +  itemName + '"' + " AND " + DatabaseHelper.USERID + " = " + '"'
                 +  firebaseHelper.getCurrentUserID() + '"'  ;
-        Cursor cursor = database.rawQuery(selectQuery, null);
-        if (cursor.moveToNext()) {
 
-            Item item = new Item();
-            item.setID(cursor.getString(cursor.getColumnIndex(DatabaseHelper.ID)));
-            item.setUserID(cursor.getString(cursor.getColumnIndex(DatabaseHelper.USERID)));
-            item.setImage(cursor.getInt(cursor.getColumnIndex(DatabaseHelper.IMAGE)));
-            item.setMinimumPurchaceQuantity(cursor.getInt(cursor.getColumnIndex(DatabaseHelper.MINIMUMPURCHACEQUANTITY)));
-            item.setName(cursor.getString(cursor.getColumnIndex(DatabaseHelper.NAME)));
-            item.setStock(cursor.getInt(cursor.getColumnIndex(DatabaseHelper.STOCK)));
-            item.setConsumptionRate(cursor.getInt(cursor.getColumnIndex(DatabaseHelper.CONSUMPTIONRATE)));
-            item.setActive(cursor.getInt(cursor.getColumnIndex(DatabaseHelper.ACTIVE)) > 0);
+        return buildItemFromQuerry(selectQuery);
 
-            cursor.close();
-            database.close();
-
-            return item;
-        }
-        Toast.makeText(context, "getItemFromLocalDBUsingItemName FAILED", Toast.LENGTH_SHORT).show();
-        return null;
     }
 
     public Item getItemFromLocalDB(String itemID){
 
-        SQLiteDatabase database = databaseHelper.getReadableDatabase();
-
         String selectQuery = "SELECT * FROM " + DatabaseHelper.TABLEITEMS + " WHERE " + DatabaseHelper.ID + " = " + '"'
                 +  itemID + '"' + " AND " + DatabaseHelper.USERID + " = " + '"'
                 +  firebaseHelper.getCurrentUserID() + '"';
-        Cursor cursor = database.rawQuery(selectQuery, null);
-        if (cursor.moveToNext()){
 
-            Item item = new Item();
-            item.setID(cursor.getString(cursor.getColumnIndex(DatabaseHelper.ID)));
-            item.setImage(cursor.getInt(cursor.getColumnIndex(DatabaseHelper.IMAGE)));
-            item.setMinimumPurchaceQuantity(cursor.getInt(cursor.getColumnIndex(DatabaseHelper.MINIMUMPURCHACEQUANTITY)));
-            item.setName(cursor.getString(cursor.getColumnIndex(DatabaseHelper.NAME)));
-            item.setStock(cursor.getInt(cursor.getColumnIndex(DatabaseHelper.STOCK)));
-            item.setConsumptionRate(cursor.getInt(cursor.getColumnIndex(DatabaseHelper.CONSUMPTIONRATE)));
-            item.setActive(cursor.getInt(cursor.getColumnIndex(DatabaseHelper.ACTIVE)) > 0);
 
-            cursor.close();
-            database.close();
-
-            return item;
-
-        }
-
-        return null;
+        return buildItemFromQuerry(selectQuery);
     }
 
     public void getItemsFromFirebase(final ResultListener<List<Item>> listenerFromController){
@@ -187,78 +172,64 @@ public class ItemsDAOLocalDB {
 
     public List<Item> getAllItemsFromLocalDB() {
 
-        SQLiteDatabase database = databaseHelper.getReadableDatabase();
-
         String selectQuery = "SELECT * FROM " + DatabaseHelper.TABLEITEMS + " WHERE " + DatabaseHelper.USERID + " = " + '"'
                 +  firebaseHelper.getCurrentUserID() + '"';
-        Cursor cursor = database.rawQuery(selectQuery, null);
 
-        List<Item> items = new ArrayList<>();
+        return builItemListFromQuerry(selectQuery);
+    }
 
-        while (cursor.moveToNext()) {
+    public Item buildItemFromCursor(Cursor cursor){
 
-            Item item = new Item();
-            item.setID(cursor.getString(cursor.getColumnIndex(DatabaseHelper.ID)));
-            item.setImage(cursor.getInt(cursor.getColumnIndex(DatabaseHelper.IMAGE)));
-            item.setMinimumPurchaceQuantity(cursor.getInt(cursor.getColumnIndex(DatabaseHelper.MINIMUMPURCHACEQUANTITY)));
-            item.setName(cursor.getString(cursor.getColumnIndex(DatabaseHelper.NAME)));
-            item.setStock(cursor.getInt(cursor.getColumnIndex(DatabaseHelper.STOCK)));
-            item.setConsumptionRate(cursor.getInt(cursor.getColumnIndex(DatabaseHelper.CONSUMPTIONRATE)));
-            item.setActive(cursor.getInt(cursor.getColumnIndex(DatabaseHelper.ACTIVE))>0);
+        Item item = new Item();
+        item.setID(cursor.getString(cursor.getColumnIndex(DatabaseHelper.ID)));
+        item.setUserID(cursor.getString(cursor.getColumnIndex(DatabaseHelper.USERID)));
+        item.setImage(cursor.getInt(cursor.getColumnIndex(DatabaseHelper.IMAGE)));
+        item.setMinimumPurchaceQuantity(cursor.getInt(cursor.getColumnIndex(DatabaseHelper.MINIMUMPURCHACEQUANTITY)));
+        item.setName(cursor.getString(cursor.getColumnIndex(DatabaseHelper.NAME)));
+        item.setStock(cursor.getInt(cursor.getColumnIndex(DatabaseHelper.STOCK)));
+        item.setConsumptionRate(cursor.getInt(cursor.getColumnIndex(DatabaseHelper.CONSUMPTIONRATE)));
+        item.setPrice(cursor.getDouble(cursor.getColumnIndex(DatabaseHelper.PRICE)));
+        item.setActive(cursor.getInt(cursor.getColumnIndex(DatabaseHelper.ACTIVE)) > 0);
 
-            items.add(item);
+        return item;
 
-        }
-        cursor.close();
-        database.close();
-        return items;
     }
 
     public List<Item> getActiveItemsFromLocalDB() {
 
-        SQLiteDatabase database = databaseHelper.getReadableDatabase();
-
         String selectQuery = "SELECT * FROM " + DatabaseHelper.TABLEITEMS + " WHERE " + DatabaseHelper.ACTIVE
                 + " = " + '"' + DatabaseHelper.ACTIVE_TRUE + '"' + " AND " + DatabaseHelper.USERID + " = " + '"'
                 +  firebaseHelper.getCurrentUserID() + '"';
-        Cursor cursor = database.rawQuery(selectQuery, null);
+
+        return builItemListFromQuerry(selectQuery);
+    }
+
+    public List<Item> builItemListFromQuerry(String querry){
+
+        SQLiteDatabase database = databaseHelper.getReadableDatabase();
+        Cursor cursor = database.rawQuery(querry, null);
 
         List<Item> items = new ArrayList<>();
 
         while (cursor.moveToNext()) {
 
-            Item item = new Item();
-            item.setID(cursor.getString(cursor.getColumnIndex(DatabaseHelper.ID)));
-            item.setUserID(cursor.getString(cursor.getColumnIndex(DatabaseHelper.USERID)));
-            item.setImage(cursor.getInt(cursor.getColumnIndex(DatabaseHelper.IMAGE)));
-            item.setMinimumPurchaceQuantity(cursor.getInt(cursor.getColumnIndex(DatabaseHelper.MINIMUMPURCHACEQUANTITY)));
-            item.setName(cursor.getString(cursor.getColumnIndex(DatabaseHelper.NAME)));
-            item.setStock(cursor.getInt(cursor.getColumnIndex(DatabaseHelper.STOCK)));
-            item.setConsumptionRate(cursor.getInt(cursor.getColumnIndex(DatabaseHelper.CONSUMPTIONRATE)));
-            item.setActive(cursor.getInt(cursor.getColumnIndex(DatabaseHelper.ACTIVE))>0);
-
-            items.add(item);
+            items.add(buildItemFromCursor(cursor));
 
         }
         cursor.close();
         database.close();
+
         return items;
+
     }
 
     public List<Item> getInactiveItemsFromLocalDB() {
 
-        SQLiteDatabase database = databaseHelper.getReadableDatabase();
-
         String selectQuery = "SELECT * FROM " + DatabaseHelper.TABLEITEMS + " WHERE " + DatabaseHelper.ACTIVE
                 + " = " + '"' + DatabaseHelper.ACTIVE_FALSE + '"' + " AND " + DatabaseHelper.USERID + " = " + '"'
                 +  firebaseHelper.getCurrentUserID() + '"';
-        Cursor cursor = database.rawQuery(selectQuery, null);
 
-        List<Item> itemList = creteItemListFromCursor(cursor);
-
-        cursor.close();
-        database.close();
-        return itemList;
+        return builItemListFromQuerry(selectQuery);
     }
 
     public void increaseItemStock(Item item){
@@ -287,7 +258,7 @@ public class ItemsDAOLocalDB {
 
     }
 
-    public void updateItemStock(final Item item, final Integer newStock){
+    private void updateItemStock(final Item item, final Integer newStock){
 
         SQLiteDatabase database =  databaseHelper.getWritableDatabase();
 
@@ -333,7 +304,7 @@ public class ItemsDAOLocalDB {
         }
     }
 
-    public void updateItemDetailsOnFirebase(String itemID, String updatedItemName, Integer updatedItemStock, Integer updatedConsumptionRate, Integer updatedMinimumPurchace, Boolean active){
+    private void updateItemDetailsOnFirebase(String itemID, String updatedItemName, Integer updatedItemStock, Integer updatedConsumptionRate, Integer updatedMinimumPurchace, Boolean active){
 
         DatabaseReference myRef = firebaseHelper.getUserDB().child(DatabaseHelper.TABLEITEMS).child(itemID);
         myRef.child(DatabaseHelper.ID).setValue(itemID);
@@ -361,7 +332,7 @@ public class ItemsDAOLocalDB {
 
     }
 
-    public void toggleItemIsActiveOnFirebase(Item item) {
+    private void toggleItemIsActiveOnFirebase(Item item) {
 
         DatabaseReference myRef = firebaseHelper.getUserDB();
 
@@ -374,7 +345,7 @@ public class ItemsDAOLocalDB {
         }
     }
 
-    public void toggleItemIsActiveInLocalDB(Item item){
+    private void toggleItemIsActiveInLocalDB(Item item){
 
 
 
@@ -409,7 +380,7 @@ public class ItemsDAOLocalDB {
         updateItemConsumptionRateInFirebase(itemID, consumptionRate);
     }
 
-    public void updateItemConsumptionRateInFirebase(String itemID, Integer consumptionRate){
+    private void updateItemConsumptionRateInFirebase(String itemID, Integer consumptionRate){
 
         firebaseHelper.getUserDB().child(DatabaseHelper.TABLEITEMS).child(itemID).child(DatabaseHelper.CONSUMPTIONRATE).setValue(consumptionRate);
 
@@ -458,44 +429,12 @@ public class ItemsDAOLocalDB {
 
     public List<Item> getAllItemsWithStockZero() {
 
-        SQLiteDatabase database = databaseHelper.getReadableDatabase();
-
         String selectQuery = "SELECT * FROM " + DatabaseHelper.TABLEITEMS + " WHERE " + DatabaseHelper.ACTIVE
                 + " = " + '"' + DatabaseHelper.ACTIVE_TRUE + '"' + " AND " + DatabaseHelper.USERID + " = " + '"'
                 +  firebaseHelper.getCurrentUserID() + '"' + " AND " + DatabaseHelper.STOCK + " = " + '"'
                 +  0 + '"' ;
-        Cursor cursor = database.rawQuery(selectQuery, null);
 
-        List<Item> itemList = creteItemListFromCursor(cursor);
-
-        cursor.close();
-        database.close();
-
-        return itemList;
-    }
-
-    private List<Item> creteItemListFromCursor(Cursor cursor){
-
-        List<Item> items = new ArrayList<>();
-
-        while (cursor.moveToNext()) {
-
-            Item item = new Item();
-            item.setID(cursor.getString(cursor.getColumnIndex(DatabaseHelper.ID)));
-            item.setUserID(cursor.getString(cursor.getColumnIndex(DatabaseHelper.USERID)));
-            item.setImage(cursor.getInt(cursor.getColumnIndex(DatabaseHelper.IMAGE)));
-            item.setMinimumPurchaceQuantity(cursor.getInt(cursor.getColumnIndex(DatabaseHelper.MINIMUMPURCHACEQUANTITY)));
-            item.setName(cursor.getString(cursor.getColumnIndex(DatabaseHelper.NAME)));
-            item.setStock(cursor.getInt(cursor.getColumnIndex(DatabaseHelper.STOCK)));
-            item.setConsumptionRate(cursor.getInt(cursor.getColumnIndex(DatabaseHelper.CONSUMPTIONRATE)));
-            item.setActive(cursor.getInt(cursor.getColumnIndex(DatabaseHelper.ACTIVE))>0);
-
-            items.add(item);
-
-        }
-        //cursor.close();
-
-        return items;
+        return builItemListFromQuerry(selectQuery);
     }
 
     public List<Item> sortItemsByConsumptionRate(List<Item> itemList) {

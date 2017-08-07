@@ -25,7 +25,16 @@ public class Item implements Serializable {
     private Integer consumptionRate;
     @PropertyName (DatabaseHelper.ACTIVE)
     private Boolean active;
+    @PropertyName (DatabaseHelper.PRICE)
+    private Double price;
 
+    public Double getPrice() {
+        return price;
+    }
+
+    public void setPrice(Double price) {
+        this.price = price;
+    }
 
     public Boolean getActive() {
         return active;
@@ -54,6 +63,7 @@ public class Item implements Serializable {
         minimumPurchaceQuantity = 1;
         image = 0;
         active = true;
+        price = 0.0;
         consumptionRate = DEFAULT_CONSUMPTION_RATE;
 
     }
