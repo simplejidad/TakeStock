@@ -174,9 +174,15 @@ public class ItemsController {
         return itemsDAO.getInactiveItemsFromLocalDB();
     }
 
-    public void increaseItemCartStock(Context context, Item item) {
+    public void increaseItemCart(Context context, Item item) {
 
         ItemsDAO itemsDao = new ItemsDAO(context);
-        itemsDao.increaseItemCartStock(item);
+        itemsDao.increaseItemCart(item);
+    }
+
+    public void decreaseItemCart(Context context, Item item) {
+
+        ItemsDAO itemsDao = new ItemsDAO(context);
+        itemsDao.decreaseItemCart(item);
     }
 }

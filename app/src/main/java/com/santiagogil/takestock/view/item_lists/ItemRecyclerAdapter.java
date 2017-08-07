@@ -76,6 +76,7 @@ public class ItemRecyclerAdapter extends RecyclerView.Adapter{
         private Button buttonStockSubtract;
         private Button buttonStockAdd;
         private Button buttonCartToStock;
+        private ImageButton buttonCartSubtract;
         private ImageButton buttonCartAdd;
         private Context context;
         private View.OnClickListener onItemModifiedListener;
@@ -90,6 +91,7 @@ public class ItemRecyclerAdapter extends RecyclerView.Adapter{
             textViewItemPrice = (TextView) itemView.findViewById(R.id.text_view_item_price);
             buttonStockAdd = (Button) itemView.findViewById(R.id.buttonAdd);
             buttonStockSubtract = (Button) itemView.findViewById(R.id.buttonSubtract);
+            buttonCartSubtract = (ImageButton) itemView.findViewById(R.id.button_cart_subtract);
             buttonCartAdd = (ImageButton) itemView.findViewById(R.id.button_cart_add);
             buttonCartToStock = (Button) itemView.findViewById(R.id.button_cart_to_stock);
             this.context = context;
@@ -123,18 +125,36 @@ public class ItemRecyclerAdapter extends RecyclerView.Adapter{
             buttonCartAdd.setOnClickListener(new View.OnClickListener(){
                 @Override
                 public void onClick(View v) {
-                    increaseCartStock(item);
+                    increaseCart(item);
                     onItemModifiedListener.onClick(itemView);
                 }
             });
             buttonCartToStock.setText("<" + item.getCart());
+            buttonCartSubtract.setOnClickListener(new View.OnClickListener() {
+                @Override
+                public void onClick(View v) {
+                    decreaseItemCart(item);
+                    onItemModifiedListener.onClick(itemView);
+                }
+            });
 
         }
 
-        private void increaseCartStock(Item item) {
+        private void decreaseItemCart(Item item) {
+
+            if(item.getCart() == 0){
+                Toast.makeText(context, "Nothing left to remove", Toast.LENGTH_SHORT).show();
+            } else {
+
+                ItemsController itemsController = new ItemsController();
+                itemsController.decreaseItemCart(context, item);
+            }
+        }
+
+        private void increaseCart(Item item) {
 
             ItemsController itemsController = new ItemsController();
-            itemsController.increaseItemCartStock(context, item);
+            itemsController.increaseItemCart(context, item);
 
         }
 

@@ -274,18 +274,18 @@ public class ItemsDAO {
 
     }
 
-    private void updateItemCartStock(final Item item, final Integer itemCartStock){
+    private void updateItemCart(final Item item, final Integer itemCart){
 
         SQLiteDatabase database =  databaseHelper.getWritableDatabase();
 
         ContentValues contentValues = new ContentValues();
-        contentValues.put(DatabaseHelper.CART, itemCartStock);
+        contentValues.put(DatabaseHelper.CART, itemCart);
 
         database.update(DatabaseHelper.TABLEITEMS,  contentValues, DatabaseHelper.ID + " = " + '"' +  item.getID() + '"' , null);
 
         database.close();
 
-        firebaseHelper.getUserDB().child(DatabaseHelper.TABLEITEMS).child(item.getID()).child(DatabaseHelper.CART).setValue(itemCartStock);
+        firebaseHelper.getUserDB().child(DatabaseHelper.TABLEITEMS).child(item.getID()).child(DatabaseHelper.CART).setValue(itemCart);
 
     }
 
@@ -481,11 +481,18 @@ public class ItemsDAO {
         });
     }
 
-    public void increaseItemCartStock(Item item) {
+    public void increaseItemCart(Item item) {
 
         Integer newCartStock = item.getCart() + item.getMinimumPurchaceQuantity();
 
-        updateItemCartStock(item, newCartStock);
+        updateItemCart(item, newCartStock);
 
+    }
+
+    public void decreaseItemCart(Item item) {
+
+        Integer newCart = item.getCart() - 1;
+
+        updateItemCart(item, newCart);
     }
 }
