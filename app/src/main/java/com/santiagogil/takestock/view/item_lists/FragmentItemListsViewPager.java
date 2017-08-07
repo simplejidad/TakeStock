@@ -58,8 +58,6 @@ public class FragmentItemListsViewPager extends Fragment {
 
         itemListsViewPager.addOnPageChangeListener(pageChangeListener);
 
-        //fragmentActivityCommunicator.updateActionBarTitle("By Consumption Rate");
-
         updateActionBarTitle(currentFragmentPosition);
 
         return view;
@@ -100,11 +98,6 @@ public class FragmentItemListsViewPager extends Fragment {
         this.fragmentActivityCommunicator = fragmentActivityCommunicator;
     }
 
-
-    public Integer getCurrentFragmentPosition() {
-
-        return currentFragmentPosition;
-    }
 
     @Override
     public void onResume() {

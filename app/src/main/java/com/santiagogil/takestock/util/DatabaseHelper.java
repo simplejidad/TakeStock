@@ -4,9 +4,6 @@ import android.content.Context;
 import android.database.sqlite.SQLiteDatabase;
 import android.database.sqlite.SQLiteOpenHelper;
 
-import com.santiagogil.takestock.controller.ConsumptionsController;
-import com.santiagogil.takestock.controller.ItemsController;
-
 public class DatabaseHelper extends SQLiteOpenHelper {
 
     //Database
@@ -28,9 +25,9 @@ public class DatabaseHelper extends SQLiteOpenHelper {
     public static final String ACTIVE = "Active";
     public static final String DATE = "Date";
     public static final String ITEMID = "ItemID";
-    public static final String USERID = "UserID";
-    public static final String ITEMS_IN_CART = "ItemsInCart";
-    public static final String PRICE = "price";
+    public static final String USERID = "UserID";;
+    public static final String PRICE = "Price";
+    public static final String CART = "Cart";
 
     //Values
     public static final String ACTIVE_TRUE = "1";
@@ -57,6 +54,7 @@ public class DatabaseHelper extends SQLiteOpenHelper {
             + CONSUMPTIONRATE + " NUMBER, "
             + MINIMUMPURCHACEQUANTITY + " NUMBER, "
             + PRICE + " NUMBER, "
+            + CART + " NUMBER, "
             + ACTIVE + " BOOLEAN "
             + ")";
 

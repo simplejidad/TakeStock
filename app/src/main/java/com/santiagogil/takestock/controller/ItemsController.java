@@ -3,7 +3,7 @@ package com.santiagogil.takestock.controller;
 import android.content.Context;
 import android.widget.Toast;
 
-import com.santiagogil.takestock.model.daos.ItemsDAOLocalDB;
+import com.santiagogil.takestock.model.daos.ItemsDAO;
 import com.santiagogil.takestock.model.pojos.Consumption;
 import com.santiagogil.takestock.model.pojos.Item;
 import com.santiagogil.takestock.util.ResultListener;
@@ -14,99 +14,99 @@ import java.util.List;
 public class ItemsController {
 
     public void toggleItemIsActiveInDatabases(Context context, String itemID){
-        ItemsDAOLocalDB itemsDAOLocalDB = new ItemsDAOLocalDB(context);
-        itemsDAOLocalDB.toggleItemIsActiveInDatabases(itemID);
+        ItemsDAO itemsDAO = new ItemsDAO(context);
+        itemsDAO.toggleItemIsActiveInDatabases(itemID);
 
     }
 
     public String addItemToDatabases(Context context, Item item){
-        ItemsDAOLocalDB itemsDaoLocalDB = new ItemsDAOLocalDB(context);
-        return itemsDaoLocalDB.addItemToDatabases(item);
+        ItemsDAO itemsDao = new ItemsDAO(context);
+        return itemsDao.addItemToDatabases(item);
 
     }
 
     public void increaseItemStock(Context context, Item item){
 
-        ItemsDAOLocalDB itemsDaoLocalDB = new ItemsDAOLocalDB(context);
-        itemsDaoLocalDB.increaseItemStock(item);
+        ItemsDAO itemsDao = new ItemsDAO(context);
+        itemsDao.increaseItemStock(item);
 
     }
 
     public void increaseItemStock(Context context, String itemID){
 
-        ItemsDAOLocalDB itemsDaoLocalDB = new ItemsDAOLocalDB(context);
-        itemsDaoLocalDB.increaseItemStock(itemID);
+        ItemsDAO itemsDao = new ItemsDAO(context);
+        itemsDao.increaseItemStock(itemID);
 
     }
 
     public void decreaseItemStock(Context context, Item item){
 
-        ItemsDAOLocalDB itemsDAOLocalDB = new ItemsDAOLocalDB(context);
-        itemsDAOLocalDB.decreaseItemStock(item);
+        ItemsDAO itemsDAO = new ItemsDAO(context);
+        itemsDAO.decreaseItemStock(item);
     }
 
     public void addItemToLocalDatabase(Context context, Item item){
-        ItemsDAOLocalDB itemsDAOLocalDB = new ItemsDAOLocalDB(context);
-        itemsDAOLocalDB.addItemToLocalDB(item);
+        ItemsDAO itemsDAO = new ItemsDAO(context);
+        itemsDAO.addItemToLocalDB(item);
     }
 
     public void updateItemConsumptionRate(Context context, String itemID){
 
-        ItemsDAOLocalDB itemsDAOLocalDB = new ItemsDAOLocalDB(context);
+        ItemsDAO itemsDAO = new ItemsDAO(context);
         ConsumptionsController consumptionsController = new ConsumptionsController();
         List<Consumption> consumptions = consumptionsController.getItemConsumptionList(context, itemID);
         if(consumptions.size() > 1){
             Integer updatedConsumptionRate = consumptionsController.getItemConsumptionRate(context, itemID);
-            itemsDAOLocalDB.updateItemConsumptionRateInDatabases(itemID, updatedConsumptionRate);
+            itemsDAO.updateItemConsumptionRateInDatabases(itemID, updatedConsumptionRate);
         }
         if(consumptions.size() == 0 || consumptions.size() == 1){
-            itemsDAOLocalDB.updateItemConsumptionRateInDatabases(itemID, Item.DEFAULT_CONSUMPTION_RATE);
+            itemsDAO.updateItemConsumptionRateInDatabases(itemID, Item.DEFAULT_CONSUMPTION_RATE);
         }
     }
 
-    public void updateItemDetails(Context context, String itemID, String itemName, Integer itemStock, Integer itemConsumptionRate, Integer itemMinimumPurchace, Boolean itemActiveStatus ){
-        ItemsDAOLocalDB itemsDAOLocalDB = new ItemsDAOLocalDB(context);
-        itemsDAOLocalDB.updateItemDetails(itemID, itemName, itemStock, itemConsumptionRate, itemMinimumPurchace, itemActiveStatus);
+    public void updateItemDetails(Context context, String itemID, String itemName, Integer itemStock, Integer itemConsumptionRate, Integer itemMinimumPurchace, Boolean itemActiveStatus, Double itemPrice, Integer itemCart ){
+        ItemsDAO itemsDAO = new ItemsDAO(context);
+        itemsDAO.updateItemDetails(itemID, itemName, itemStock, itemConsumptionRate, itemMinimumPurchace,
+                itemActiveStatus, itemPrice, itemCart);
     }
-
 
     public Item getItemFromLocalDatabase(Context context, String itemID) {
 
-        ItemsDAOLocalDB itemsDAOLocalDB = new ItemsDAOLocalDB(context);
-        return itemsDAOLocalDB.getItemFromLocalDB(itemID);
+        ItemsDAO itemsDAO = new ItemsDAO(context);
+        return itemsDAO.getItemFromLocalDB(itemID);
     }
 
     public List<Item> sortItemsAlphabetically(Context context, List<Item> itemList){
 
-        ItemsDAOLocalDB itemsDAOLocalDB = new ItemsDAOLocalDB(context);
-        return itemsDAOLocalDB.sortItemsAlphabetically(itemList);
+        ItemsDAO itemsDAO = new ItemsDAO(context);
+        return itemsDAO.sortItemsAlphabetically(itemList);
     }
 
     public List<Item> getActiveItemsByIndependence(Context context, Integer independence) {
 
-        ItemsDAOLocalDB itemsDaoLocalDB = new ItemsDAOLocalDB(context);
+        ItemsDAO itemsDao = new ItemsDAO(context);
 
-        return  itemsDaoLocalDB.getActiveItemsByIndependence(independence);
+        return  itemsDao.getActiveItemsByIndependence(independence);
 
     }
 
     public List<Item> sortItemsByIndependence(Context context, List<Item> itemList) {
 
-        ItemsDAOLocalDB itemsDAOLocalDB = new ItemsDAOLocalDB(context);
-        return itemsDAOLocalDB.sortItemsByIndependence(itemList);
+        ItemsDAO itemsDAO = new ItemsDAO(context);
+        return itemsDAO.sortItemsByIndependence(itemList);
     }
 
     public Integer getItemConsumptionRate(Context context, String itemID) {
 
-        ItemsDAOLocalDB itemsDAOLocalDB = new ItemsDAOLocalDB(context);
-        return itemsDAOLocalDB.getItemConsumptionRate(itemID);
+        ItemsDAO itemsDAO = new ItemsDAO(context);
+        return itemsDAO.getItemConsumptionRate(itemID);
     }
 
     public void updateItemsDatabase(final Context context, final ResultListener<List<Item>> listenerFromFragment) {
 
-        final ItemsDAOLocalDB itemsDAOLocalDB = new ItemsDAOLocalDB(context);
+        final ItemsDAO itemsDAO = new ItemsDAO(context);
 
-        List<Item> itemList = itemsDAOLocalDB.getAllItemsFromLocalDB();
+        List<Item> itemList = itemsDAO.getAllItemsFromLocalDB();
 
         if (itemList.size() > 0) {
 
@@ -114,7 +114,7 @@ public class ItemsController {
 
         } else {
 
-            itemsDAOLocalDB.getItemsFromFirebase(new ResultListener<List<Item>>() {
+            itemsDAO.getItemsFromFirebase(new ResultListener<List<Item>>() {
                 @Override
                 public void finish(List<Item> result) {
                     for (Item item : result) {
@@ -127,7 +127,7 @@ public class ItemsController {
 
                     } else {
 
-                        itemsDAOLocalDB.retrieveItemsFromDefaultFirebaseList(new ResultListener<List<Item>>() {
+                        itemsDAO.retrieveItemsFromDefaultFirebaseList(new ResultListener<List<Item>>() {
                             @Override
                             public void finish(List<Item> result) {
 
@@ -153,27 +153,30 @@ public class ItemsController {
 
     public List<Item> getAllActiveItems(Context context) {
 
-        ItemsDAOLocalDB itemsDaoLocalDB = new ItemsDAOLocalDB(context);
-        return itemsDaoLocalDB.getActiveItemsFromLocalDB();
+        ItemsDAO itemsDao = new ItemsDAO(context);
+        return itemsDao.getActiveItemsFromLocalDB();
     }
 
     public List<Item> getAllItemsWithStockZero(Context context) {
-        ItemsDAOLocalDB itemsDAOLocalDB = new ItemsDAOLocalDB(context);
-        return itemsDAOLocalDB.getAllItemsWithStockZero();
+        ItemsDAO itemsDAO = new ItemsDAO(context);
+        return itemsDAO.getAllItemsWithStockZero();
     }
 
     public List<Item> sortItemsByConsumptionRate(Context context, List<Item> itemList) {
 
-        ItemsDAOLocalDB itemsDAOLocalDB = new ItemsDAOLocalDB(context);
-        return itemsDAOLocalDB.sortItemsByConsumptionRate(itemList);
+        ItemsDAO itemsDAO = new ItemsDAO(context);
+        return itemsDAO.sortItemsByConsumptionRate(itemList);
     }
 
     public List<Item> getAllInactiveItems(Context context) {
 
-        ItemsDAOLocalDB itemsDAOLocalDB = new ItemsDAOLocalDB(context);
-        return itemsDAOLocalDB.getInactiveItemsFromLocalDB();
+        ItemsDAO itemsDAO = new ItemsDAO(context);
+        return itemsDAO.getInactiveItemsFromLocalDB();
     }
 
-    public void activateItemInDatabases(Context context, String id) {
+    public void increaseItemCartStock(Context context, Item item) {
+
+        ItemsDAO itemsDao = new ItemsDAO(context);
+        itemsDao.increaseItemCartStock(item);
     }
 }

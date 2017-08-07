@@ -7,6 +7,7 @@ import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.Button;
+import android.widget.ImageButton;
 import android.widget.TextView;
 import android.widget.Toast;
 
@@ -23,16 +24,16 @@ public class ItemRecyclerAdapter extends RecyclerView.Adapter{
 
     private List<Item> items;
     private Context context;
-    private View.OnClickListener onStockModifiedListener;
+    private View.OnClickListener onItemModifiedListener;
     private View.OnClickListener onItemTouchedListener;
 
     public List<Item> getItems() {
         return items;
     }
 
-    public ItemRecyclerAdapter(Context context, View.OnClickListener onStockModifiedListener, View.OnClickListener onItemTouchedListener) {
+    public ItemRecyclerAdapter(Context context, View.OnClickListener onItemModifiedListener, View.OnClickListener onItemTouchedListener) {
         this.context = context;
-        this.onStockModifiedListener = onStockModifiedListener;
+        this.onItemModifiedListener = onItemModifiedListener;
         this.onItemTouchedListener = onItemTouchedListener;
         this.items = new ArrayList<>();
 
@@ -45,7 +46,7 @@ public class ItemRecyclerAdapter extends RecyclerView.Adapter{
         LayoutInflater inflater = LayoutInflater.from(context);
         View view = inflater.inflate(R.layout.card_view_item, parent, false);
         view.setOnClickListener(onItemTouchedListener);
-        return new ItemViewHolder(view, context, onStockModifiedListener);
+        return new ItemViewHolder(view, context, onItemModifiedListener);
     }
 
     @Override
@@ -72,24 +73,27 @@ public class ItemRecyclerAdapter extends RecyclerView.Adapter{
         private TextView textViewItemStock;
         private TextView textViewItemIndependence;
         private TextView textViewItemPrice;
-        private Button buttonSubtract;
-        private Button buttonAdd;
+        private Button buttonStockSubtract;
+        private Button buttonStockAdd;
+        private Button buttonCartToStock;
+        private ImageButton buttonCartAdd;
         private Context context;
-        private View.OnClickListener onStockModifiedListener;
+        private View.OnClickListener onItemModifiedListener;
         private View itemView;
 
-        public ItemViewHolder(View itemView, Context context, View.OnClickListener onStockModifiedListener) {
+        public ItemViewHolder(View itemView, Context context, View.OnClickListener onItemModifiedListener) {
             super(itemView);
 
             textViewItemName = (TextView) itemView.findViewById(R.id.text_view_item_name);
             textViewItemStock = (TextView) itemView.findViewById(R.id.text_view_item_stock);
             textViewItemIndependence = (TextView) itemView.findViewById(R.id.text_view_item_independence);
             textViewItemPrice = (TextView) itemView.findViewById(R.id.text_view_item_price);
-
-            buttonAdd = (Button) itemView.findViewById(R.id.buttonAdd);
-            buttonSubtract = (Button) itemView.findViewById(R.id.buttonSubtract);
+            buttonStockAdd = (Button) itemView.findViewById(R.id.buttonAdd);
+            buttonStockSubtract = (Button) itemView.findViewById(R.id.buttonSubtract);
+            buttonCartAdd = (ImageButton) itemView.findViewById(R.id.button_cart_add);
+            buttonCartToStock = (Button) itemView.findViewById(R.id.button_cart_to_stock);
             this.context = context;
-            this.onStockModifiedListener = onStockModifiedListener;
+            this.onItemModifiedListener = onItemModifiedListener;
             this.itemView = itemView;
         }
 
@@ -100,22 +104,37 @@ public class ItemRecyclerAdapter extends RecyclerView.Adapter{
             textViewItemStock.setText(itemStock);
             textViewItemIndependence.setText(Math.round(item.getConsumptionRate()*item.getStock()) + " days");
             textViewItemPrice.setText("$" + item.getPrice());
-            buttonAdd.setOnClickListener(new View.OnClickListener() {
+
+            buttonStockAdd.setOnClickListener(new View.OnClickListener() {
                 @Override
                 public void onClick(View view) {
                     increaseItemStock(item);
-                    onStockModifiedListener.onClick(itemView);
+                    onItemModifiedListener.onClick(itemView);
                 }
             });
-            buttonAdd.setText("+" + item.getMinimumPurchaceQuantity());
-            buttonSubtract.setOnClickListener(new View.OnClickListener() {
+            buttonStockAdd.setText("+" + item.getMinimumPurchaceQuantity());
+            buttonStockSubtract.setOnClickListener(new View.OnClickListener() {
                 @Override
                 public void onClick(View view) {
                     decreaseItemStock(item);
-                    //textViewItemIndependence.setText(item.getIndependence().toString());
-                    onStockModifiedListener.onClick(itemView);
+                    onItemModifiedListener.onClick(itemView);
                 }
             });
+            buttonCartAdd.setOnClickListener(new View.OnClickListener(){
+                @Override
+                public void onClick(View v) {
+                    increaseCartStock(item);
+                    onItemModifiedListener.onClick(itemView);
+                }
+            });
+            buttonCartToStock.setText("<" + item.getCart());
+
+        }
+
+        private void increaseCartStock(Item item) {
+
+            ItemsController itemsController = new ItemsController();
+            itemsController.increaseItemCartStock(context, item);
 
         }
 

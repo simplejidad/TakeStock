@@ -54,7 +54,7 @@ public class MainActivityCommunicator extends AppCompatActivity implements Fragm
         getSupportActionBar().setDisplayHomeAsUpEnabled(true);
 
         //updateFirebaseDBNames();
-        createFirebaseDefaultItemListEnglish();
+        //createFirebaseDefaultItemListEnglish();
 
 
         authStateListener = new FirebaseAuth.AuthStateListener() {
@@ -101,20 +101,6 @@ public class MainActivityCommunicator extends AppCompatActivity implements Fragm
             }
         }
 
-       /* @Override
-        public void refreshFragmentMainView (Integer position){
-
-            FragmentItemListsViewPager fragmentMainView = new FragmentItemListsViewPager();
-            fragmentMainView.setFragmentActivityCommunicator(MainActivityCommunicator.this);
-            FragmentManager fragmentManager = getSupportFragmentManager();
-            Bundle bundle = new Bundle();
-            bundle.putInt(FragmentItemList.POSITION, position);
-            fragmentMainView.setArguments(bundle);
-            FragmentTransaction fragmentTransaction = fragmentManager.beginTransaction();
-            fragmentTransaction.replace(R.id.fragment_holder, fragmentMainView);
-            fragmentTransaction.commit();
-        }*/
-
         @Override
         public void goToEditItemActivity(Bundle bundle){
 
@@ -137,9 +123,6 @@ public class MainActivityCommunicator extends AppCompatActivity implements Fragm
 
             if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.LOLLIPOP) {
 
-                //bundle.putString(FragmentItemDetail.TRANSITION_ITEM_NAME, textViewItemName.getTransitionName());
-                //bundle.putString(FragmentItemDetail.TRANSITION_ITEM_STOCK, textViewItemStock.getTransitionName());
-                //bundle.putString(FragmentItemDetail.TRANSITION_ITEM_INDEPENDENCE, textViewItemIndependence.getTransitionName());
                 fragmentItemsViewPager.setEnterTransition(new Fade());
                 Fragment currentFragment = getSupportFragmentManager().findFragmentById(R.id.fragment_holder);
                 currentFragment.setExitTransition(new Fade());
@@ -152,8 +135,6 @@ public class MainActivityCommunicator extends AppCompatActivity implements Fragm
                 .replace(R.id.fragment_holder, fragmentItemsViewPager).commit();
 
             } else {
-
-
 
                 FragmentTransaction fragmentTransaction = getSupportFragmentManager().beginTransaction();
                 fragmentTransaction.replace(R.id.fragment_holder, fragmentItemsViewPager);

@@ -1,7 +1,6 @@
 package com.santiagogil.takestock.view.item_lists;
 
 
-import android.content.Context;
 import android.os.Bundle;
 import android.support.annotation.Nullable;
 import android.support.v4.app.Fragment;
@@ -11,9 +10,6 @@ import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.view.WindowManager;
-import android.view.inputmethod.InputMethodManager;
-import android.widget.Button;
-import android.widget.EditText;
 import android.widget.TextView;
 import android.widget.Toast;
 
@@ -113,21 +109,12 @@ public class FragmentItemList extends Fragment implements FragmentLifecycle {
     private void loadRecyclerView(View view) {
 
         recyclerView = (RecyclerView) view.findViewById(R.id.recyclerViewItems);
-        itemRecyclerAdapter = new ItemRecyclerAdapter(getContext(), new OnItemStockChangedListener(), new OnItemTouchedListener());
+        itemRecyclerAdapter = new ItemRecyclerAdapter(getContext(), new OnItemChangedListener(), new OnItemTouchedListener());
         recyclerView.setAdapter(itemRecyclerAdapter);
         LinearLayoutManager linearLayoutManager = new LinearLayoutManager(getContext());
         linearLayoutManager.setOrientation(LinearLayoutManager.VERTICAL);
         recyclerView.setLayoutManager(linearLayoutManager);
     }
-
-    public void updateItemList() {
-
-        itemRecyclerAdapter.setItems(behaviourGetItemList.getItemList(getContext()));
-        itemRecyclerAdapter.notifyDataSetChanged();
-
-    }
-
-
 
     public interface FragmentActivityCommunicator {
 
@@ -139,7 +126,7 @@ public class FragmentItemList extends Fragment implements FragmentLifecycle {
 
     }
 
-    private class OnItemStockChangedListener implements View.OnClickListener {
+    private class OnItemChangedListener implements View.OnClickListener {
 
         @Override
         public void onClick(View view) {
@@ -160,6 +147,8 @@ public class FragmentItemList extends Fragment implements FragmentLifecycle {
             itemRecyclerAdapter.getItemAtPosition(itemPosition).setMinimumPurchaceQuantity(updatedItem.getMinimumPurchaceQuantity());
             itemRecyclerAdapter.getItemAtPosition(itemPosition).setName(updatedItem.getName());
             itemRecyclerAdapter.getItemAtPosition(itemPosition).setStock(updatedItem.getStock());
+            itemRecyclerAdapter.getItemAtPosition(itemPosition).setPrice(updatedItem.getPrice());
+            itemRecyclerAdapter.getItemAtPosition(itemPosition).setCart(updatedItem.getCart());
         }
     }
 

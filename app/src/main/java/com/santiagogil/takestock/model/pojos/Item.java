@@ -27,22 +27,9 @@ public class Item implements Serializable {
     private Boolean active;
     @PropertyName (DatabaseHelper.PRICE)
     private Double price;
+    @PropertyName (DatabaseHelper.CART)
+    private Integer cart;
 
-    public Double getPrice() {
-        return price;
-    }
-
-    public void setPrice(Double price) {
-        this.price = price;
-    }
-
-    public Boolean getActive() {
-        return active;
-    }
-
-    public void setActive(Boolean active) {
-        this.active = active;
-    }
 
     public Item(){
 
@@ -65,6 +52,7 @@ public class Item implements Serializable {
         active = true;
         price = 0.0;
         consumptionRate = DEFAULT_CONSUMPTION_RATE;
+        cart = 0;
 
     }
 
@@ -112,8 +100,31 @@ public class Item implements Serializable {
         this.userID = userID;
     }
 
-
     public Integer getIndependence(){
         return Math.round(getConsumptionRate() * getStock());
+    }
+
+    public Integer getCart() {
+        return cart;
+    }
+
+    public void setCart(Integer cart) {
+        this.cart = cart;
+    }
+
+    public Double getPrice() {
+        return price;
+    }
+
+    public void setPrice(Double price) {
+        this.price = price;
+    }
+
+    public Boolean getActive() {
+        return active;
+    }
+
+    public void setActive(Boolean active) {
+        this.active = active;
     }
 }
