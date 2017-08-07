@@ -137,6 +137,23 @@ public class ItemRecyclerAdapter extends RecyclerView.Adapter{
                     onItemModifiedListener.onClick(itemView);
                 }
             });
+            buttonCartToStock.setOnClickListener(new View.OnClickListener() {
+                @Override
+                public void onClick(View v) {
+                    cartToStock(item);
+                    onItemModifiedListener.onClick(itemView);
+                }
+            });
+
+        }
+
+        private void cartToStock(Item item) {
+
+            if(item.getCart() > 0){
+
+                ItemsController itemsController = new ItemsController();
+                itemsController.cartToStock(context, item);
+            }
 
         }
 

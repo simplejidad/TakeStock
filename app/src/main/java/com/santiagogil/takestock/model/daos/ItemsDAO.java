@@ -495,4 +495,10 @@ public class ItemsDAO {
 
         updateItemCart(item, newCart);
     }
+
+    public void cartToStock(Item item) {
+
+        updateItemStock(item, item.getStock() + item.getCart());
+        updateItemCart(item, 0);
+    }
 }

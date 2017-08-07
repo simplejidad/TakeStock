@@ -185,4 +185,12 @@ public class ItemsController {
         ItemsDAO itemsDao = new ItemsDAO(context);
         itemsDao.decreaseItemCart(item);
     }
+
+    public void cartToStock(Context context, Item item) {
+
+
+        ItemsDAO itemsDao = new ItemsDAO(context);
+        itemsDao.cartToStock(item);
+
+    }
 }
