@@ -75,9 +75,11 @@
                     <TextView
                         android:id="@+id/text_view_needed_for_goal"
                         android:layout_width="0dp"
-                        android:layout_weight="1"
                         android:layout_height="wrap_content"
                         android:textSize="18sp"
+                        android:gravity="end"
+                        android:layout_weight="1"
+                        android:layout_marginRight="5dp"
                         />
 
                 </LinearLayout>
@@ -119,6 +121,7 @@
                 android:layout_weight="1.8"
                 android:layout_height="match_parent"
                 android:text="@string/less_than"
+                android:textColor="@color/secondary_text"
                 android:drawableRight="@drawable/ic_shopping_cart_black_24dp"
                 android:drawableLeft="@drawable/ic_home_black_24dp"
                 android:textSize="18sp"

@@ -1,9 +1,7 @@
 package com.santiagogil.takestock.view.item_lists;
 
 import android.content.Context;
-import android.graphics.drawable.Drawable;
 import android.os.Build;
-import android.support.v4.content.ContextCompat;
 import android.support.v7.widget.RecyclerView;
 import android.view.LayoutInflater;
 import android.view.View;
@@ -110,7 +108,7 @@ public class ItemRecyclerAdapter extends RecyclerView.Adapter{
             textViewItemStock.setText(itemStock);
             //textViewItemIndependence.setText(Math.round(item.getConsumptionRate()*item.getStock()) + " days");
             setTextViewItemIndependenceText(item);
-            setTextViewNeededForStock(item);
+            setTextViewNeededForGoal(item);
             textViewItemPrice.setText("" + item.getPrice());
 
             buttonStockAdd.setOnClickListener(new View.OnClickListener() {
@@ -153,17 +151,35 @@ public class ItemRecyclerAdapter extends RecyclerView.Adapter{
 
         }
 
-        private void setTextViewNeededForStock(Item item) {
+        private void setTextViewNeededForGoal(Item item) {
 
             if(item.getConsumptionRate() > 0){
 
                 Integer independence = item.getIndependence();
 
-                if( independence < 30){
-                    textViewNeededForGoal.setText("" +  round((30-independence)/item.getConsumptionRate(), 0).intValue());
-                } else if (independence < 90) {
-                    textViewNeededForGoal.setText("" + round((90-independence)/item.getConsumptionRate(), 0).intValue());
+                if(independence >= 365){
+                    textViewNeededForGoal.setText("");
+                    textViewNeededForGoal.setCompoundDrawablesRelativeWithIntrinsicBounds(R.drawable.emoticon_excited , 0 , 0, 0);
                 }
+                else if (independence > 90 ){
+                    textViewNeededForGoal.setText(round((365-independence)/item.getConsumptionRate(), 0).intValue() + " till ");
+                    textViewNeededForGoal.setCompoundDrawablesRelativeWithIntrinsicBounds(0 , 0 , R.drawable.emoticon_excited, 0);
+                } else if(independence > 30){
+                    textViewNeededForGoal.setText("" +  round((90-independence)/item.getConsumptionRate(), 0).intValue()  + " till ");
+                    textViewNeededForGoal.setCompoundDrawablesRelativeWithIntrinsicBounds(0 , 0, R.drawable.ic_insert_emoticon_black_24dp, 0);
+                } else if (independence > 7) {
+                    textViewNeededForGoal.setText("" + round((30-independence)/item.getConsumptionRate(), 0).intValue()  + " till ");
+                    textViewNeededForGoal.setCompoundDrawablesRelativeWithIntrinsicBounds(0 , 0, R.drawable.ic_insert_emoticon_black_24dp, 0);
+                }else if (independence >= 0) {
+                    textViewNeededForGoal.setText("" + round((7-independence)/item.getConsumptionRate(), 0).intValue()  + " till ");
+                    textViewNeededForGoal.setCompoundDrawablesRelativeWithIntrinsicBounds(0 , 0, R.drawable.emoticon_neutral, 0);
+                }else {
+                    textViewNeededForGoal.setText("");
+                    textViewNeededForGoal.setCompoundDrawablesRelativeWithIntrinsicBounds(0 , 0, R.drawable.emoticon_excited, 0);
+                }
+            } else{
+                textViewNeededForGoal.setText("");
+                textViewNeededForGoal.setCompoundDrawablesRelativeWithIntrinsicBounds(0 , 0, R.drawable.emoticon_neutral, 0);
             }
         }
 
