@@ -149,6 +149,12 @@ public class ItemRecyclerAdapter extends RecyclerView.Adapter{
                 }
             });
 
+            if(item.getCart() == 0) {
+                buttonCartToStock.setCompoundDrawablesRelativeWithIntrinsicBounds(R.drawable.ic_home_black_24dp, 0, R.drawable.ic_shopping_cart_empty , 0);
+            } else {
+                buttonCartToStock.setCompoundDrawablesRelativeWithIntrinsicBounds(R.drawable.ic_home_black_24dp, 0, R.drawable.ic_shopping_cart_black_24dp, 0);
+            }
+
         }
 
         private void setTextViewNeededForGoal(Item item) {
@@ -156,7 +162,7 @@ public class ItemRecyclerAdapter extends RecyclerView.Adapter{
             if(item.getConsumptionRate() > 0){
 
                     textViewNeededForGoal.setText(item.getRoundedConsumtionRate());
-                    textViewNeededForGoal.setCompoundDrawablesRelativeWithIntrinsicBounds(item.getConsumtionRateEmoticon() , 0 , 0, 0);
+                    textViewNeededForGoal.setCompoundDrawablesRelativeWithIntrinsicBounds(0 , 0, item.getConsumtionRateEmoticon(), 0 );
 
             }
         }

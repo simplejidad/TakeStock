@@ -154,13 +154,13 @@ public class Item implements Serializable {
         Integer independence = getIndependence();
 
         if (independence >= 365) {
-            return R.drawable.emoticon_excited;
+            return R.drawable.ic_emoticon_excited;
         } else if (independence >= 30) {
-            return R.drawable.ic_insert_emoticon_black_24dp;
+            return R.drawable.ic_emoticon_happy;
         } else if (independence >= 7) {
-             return R.drawable.emoticon_neutral;
+             return R.drawable.ic_emoticon_neutral;
         } else {
-             return R.drawable.ic_mood_bad_black_24dp;
+             return R.drawable.ic_emoticon_sad_black_24dp;
         }
 
     }
@@ -203,21 +203,21 @@ public class Item implements Serializable {
             Integer independence = getIndependence();
 
             if(independence >= 365){
-                return R.drawable.emoticon_excited;
+                return R.drawable.ic_emoticon_excited;
             }
             else if (independence > 90 ){
-              return R.drawable.emoticon_excited;
+              return R.drawable.ic_emoticon_excited;
             } else if(independence > 30){
-                return R.drawable.ic_insert_emoticon_black_24dp;
+                return R.drawable.ic_emoticon_happy;
             } else if (independence > 7) {
-                return R.drawable.ic_insert_emoticon_black_24dp;
+                return R.drawable.ic_emoticon_smile;
             }else if (independence >= 0) {
-                return R.drawable.emoticon_neutral;
+                return R.drawable.ic_emoticon_neutral;
             }else {
-                return R.drawable.emoticon_excited;
+                return R.drawable.ic_emoticon_excited;
             }
         } else{
-            return R.drawable.emoticon_neutral;
+            return R.drawable.ic_emoticon_neutral;
         }
     }
 }

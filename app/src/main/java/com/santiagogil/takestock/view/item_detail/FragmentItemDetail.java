@@ -10,7 +10,6 @@ import android.support.v7.widget.RecyclerView;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
-import android.widget.Button;
 import android.widget.ImageButton;
 import android.widget.TextView;
 import android.widget.Toast;
@@ -22,8 +21,6 @@ import com.santiagogil.takestock.model.pojos.Consumption;
 import com.santiagogil.takestock.util.DatabaseHelper;
 import com.santiagogil.takestock.model.pojos.Item;
 import com.santiagogil.takestock.util.SharedElementTransition;
-
-import org.w3c.dom.Text;
 
 public class FragmentItemDetail extends Fragment {
 
@@ -110,12 +107,13 @@ public class FragmentItemDetail extends Fragment {
         textViewItemStock.setText(item.getStock().toString());
         textViewMinimumPurchace.setText(item.getMinimumPurchaceQuantity().toString());
         textViewConsumptionRate.setText(item.getConsumptionRate().toString());
-        textViewItemIndependence.setText(item.getIndependence().toString());
+        textViewItemIndependence.setText(item.getRoundedIndependence());
+        textViewItemIndependence.setCompoundDrawablesRelativeWithIntrinsicBounds(item.getIndependenceEmoticon(), 0 , 0 ,0);
         textViewItemPrice.setText("$" + item.getPrice());
         if(item.getActive()){
             deleteButton.setImageResource(R.drawable.ic_delete_black_24dp);
         } else {
-            deleteButton.setImageResource(R.drawable.ic_settings_backup_restore_black_24dp);
+            deleteButton.setImageResource(R.drawable.ic_restore_black_24dp);
         }
 
     }
