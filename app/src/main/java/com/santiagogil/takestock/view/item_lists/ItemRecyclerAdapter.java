@@ -155,31 +155,9 @@ public class ItemRecyclerAdapter extends RecyclerView.Adapter{
 
             if(item.getConsumptionRate() > 0){
 
-                Integer independence = item.getIndependence();
+                    textViewNeededForGoal.setText(item.getRoundedConsumtionRate());
+                    textViewNeededForGoal.setCompoundDrawablesRelativeWithIntrinsicBounds(item.getConsumtionRateEmoticon() , 0 , 0, 0);
 
-                if(independence >= 365){
-                    textViewNeededForGoal.setText("");
-                    textViewNeededForGoal.setCompoundDrawablesRelativeWithIntrinsicBounds(R.drawable.emoticon_excited , 0 , 0, 0);
-                }
-                else if (independence > 90 ){
-                    textViewNeededForGoal.setText(round((365-independence)/item.getConsumptionRate(), 0).intValue() + " till ");
-                    textViewNeededForGoal.setCompoundDrawablesRelativeWithIntrinsicBounds(0 , 0 , R.drawable.emoticon_excited, 0);
-                } else if(independence > 30){
-                    textViewNeededForGoal.setText("" +  round((90-independence)/item.getConsumptionRate(), 0).intValue()  + " till ");
-                    textViewNeededForGoal.setCompoundDrawablesRelativeWithIntrinsicBounds(0 , 0, R.drawable.ic_insert_emoticon_black_24dp, 0);
-                } else if (independence > 7) {
-                    textViewNeededForGoal.setText("" + round((30-independence)/item.getConsumptionRate(), 0).intValue()  + " till ");
-                    textViewNeededForGoal.setCompoundDrawablesRelativeWithIntrinsicBounds(0 , 0, R.drawable.ic_insert_emoticon_black_24dp, 0);
-                }else if (independence >= 0) {
-                    textViewNeededForGoal.setText("" + round((7-independence)/item.getConsumptionRate(), 0).intValue()  + " till ");
-                    textViewNeededForGoal.setCompoundDrawablesRelativeWithIntrinsicBounds(0 , 0, R.drawable.emoticon_neutral, 0);
-                }else {
-                    textViewNeededForGoal.setText("");
-                    textViewNeededForGoal.setCompoundDrawablesRelativeWithIntrinsicBounds(0 , 0, R.drawable.emoticon_excited, 0);
-                }
-            } else{
-                textViewNeededForGoal.setText("");
-                textViewNeededForGoal.setCompoundDrawablesRelativeWithIntrinsicBounds(0 , 0, R.drawable.emoticon_neutral, 0);
             }
         }
 
@@ -243,32 +221,10 @@ public class ItemRecyclerAdapter extends RecyclerView.Adapter{
 
         private void setTextViewItemIndependenceText(Item item){
 
-            double independence = item.getIndependence();
+                textViewItemIndependence.setText( item.getRoundedIndependence());
+                textViewItemIndependence.setCompoundDrawablesRelativeWithIntrinsicBounds(
+                        item.getIndependenceEmoticon(), 0, 0, 0);
 
-            if(independence >= 365){
-                textViewItemIndependence.setText( round(independence/365, 1) + " years");
-                textViewItemIndependence.setCompoundDrawablesRelativeWithIntrinsicBounds(
-                        R.drawable.emoticon_excited, 0, 0, 0);
-            }
-            else if(independence >= 30){
-                textViewItemIndependence.setText( round(independence/30, 1) + " months");
-                textViewItemIndependence.setCompoundDrawablesRelativeWithIntrinsicBounds(
-                        R.drawable.ic_insert_emoticon_black_24dp, 0, 0, 0);
-            }
-            else if(independence >= 7){
-                textViewItemIndependence.setText( round(independence/7, 1) + " weeks");
-                textViewItemIndependence.setCompoundDrawablesRelativeWithIntrinsicBounds(
-                        R.drawable.emoticon_neutral, 0, 0, 0);
-            } else{
-                textViewItemIndependence.setText(Math.round(item.getConsumptionRate()*item.getStock()) + " days");
-                textViewItemIndependence.setCompoundDrawablesRelativeWithIntrinsicBounds(
-                        R.drawable.ic_mood_bad_black_24dp, 0, 0, 0);
-            }
-        }
-
-        private static Double round (double value, int precision) {
-            int scale = (int) Math.pow(10, precision);
-            return (double) Math.round(value * scale) / scale;
         }
     }
 }

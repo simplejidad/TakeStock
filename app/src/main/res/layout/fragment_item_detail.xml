@@ -31,9 +31,10 @@
         <TextView
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:text="@string/current_stock"
+            android:text="Stock"
             android:textSize="24sp"
             android:layout_marginRight="5dp"
+            android:drawableLeft="@drawable/ic_home_black_24dp"
             />
 
         <TextView
@@ -108,6 +109,7 @@
             android:layout_height="wrap_content"
             android:text="@string/independence"
             android:textSize="24dp"
+            android:drawableLeft="@drawable/ic_insert_emoticon_black_24dp"
             android:layout_marginRight="5dp"
             />
 
@@ -125,25 +127,51 @@
     <LinearLayout
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
+        android:layout_marginLeft="5dp"
+        android:layout_marginRight="5dp">
+
+        <TextView
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:text="Price"
+            android:drawableLeft="@drawable/ic_attach_money_black_24dp"
+            android:textSize="24dp"
+            android:layout_marginRight="5dp"
+            />
+
+        <TextView
+            android:id="@+id/text_view_item_price"
+            android:layout_height="wrap_content"
+            android:layout_width="wrap_content"
+            android:textSize="24dp"
+            android:text="@string/lorem_ipsum"
+            />
+
+
+    </LinearLayout>
+
+    <LinearLayout
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
         android:orientation="horizontal">
 
         <ImageButton
             android:id="@+id/buttonBack"
-            android:layout_width="wrap_content"
+            android:layout_width="100dp"
             android:layout_height="wrap_content"
             android:src="@drawable/ic_arrow_back_black_24dp"
             />
 
         <ImageButton
             android:id="@+id/buttonEditItem"
-            android:layout_width="wrap_content"
+            android:layout_width="100dp"
             android:layout_height="wrap_content"
             android:src="@drawable/ic_create_black_24dp"
             />
 
         <ImageButton
             android:id="@+id/buttonDeleteItem"
-            android:layout_width="wrap_content"
+            android:layout_width="100dp"
             android:layout_height="wrap_content"
             android:src="@drawable/ic_delete_black_24dp"
             />

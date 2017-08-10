@@ -23,6 +23,8 @@ import com.santiagogil.takestock.util.DatabaseHelper;
 import com.santiagogil.takestock.model.pojos.Item;
 import com.santiagogil.takestock.util.SharedElementTransition;
 
+import org.w3c.dom.Text;
+
 public class FragmentItemDetail extends Fragment {
 
     public static FragmentItemDetail provideFragment(Item item, Integer position){
@@ -43,6 +45,7 @@ public class FragmentItemDetail extends Fragment {
     private TextView textViewMinimumPurchace;
     private TextView textViewConsumptionRate;
     private TextView textViewItemIndependence;
+    private TextView textViewItemPrice;
     private View fragmentView;
     private ImageButton deleteButton;
     private ImageButton editButton;
@@ -78,6 +81,7 @@ public class FragmentItemDetail extends Fragment {
         itemController = new ItemsController();
         item = itemController.getItemFromLocalDatabase(getContext(), bundle.getString(DatabaseHelper.ID));
 
+        textViewItemPrice = (TextView) fragmentView.findViewById(R.id.text_view_item_price);
         textViewItemName = (TextView) fragmentView.findViewById(R.id.text_view_item_name);
         textViewItemStock = (TextView) fragmentView.findViewById(R.id.text_view_item_stock);
         textViewConsumptionRate = (TextView) fragmentView.findViewById(R.id.textViewConsumptionRate);
@@ -107,6 +111,7 @@ public class FragmentItemDetail extends Fragment {
         textViewMinimumPurchace.setText(item.getMinimumPurchaceQuantity().toString());
         textViewConsumptionRate.setText(item.getConsumptionRate().toString());
         textViewItemIndependence.setText(item.getIndependence().toString());
+        textViewItemPrice.setText("$" + item.getPrice());
         if(item.getActive()){
             deleteButton.setImageResource(R.drawable.ic_delete_black_24dp);
         } else {

@@ -13,6 +13,7 @@ import com.google.firebase.database.DatabaseReference;
 import com.google.firebase.database.ValueEventListener;
 import com.santiagogil.takestock.controller.ItemsController;
 import com.santiagogil.takestock.model.pojos.Consumption;
+import com.santiagogil.takestock.model.pojos.Item;
 import com.santiagogil.takestock.util.DatabaseHelper;
 import com.santiagogil.takestock.util.FirebaseHelper;
 import com.santiagogil.takestock.util.ResultListener;
@@ -64,8 +65,10 @@ public class ConsumptionsDAO{
         return null;
     }
 
-
     public String addConsumptionToLocalDB(String itemID){
+
+        ItemsController itemsController = new ItemsController();
+        Item item = itemsController.getItemFromLocalDatabase(context, itemID);
 
         SQLiteDatabase database = databaseHelper.getWritableDatabase();
 
@@ -76,6 +79,7 @@ public class ConsumptionsDAO{
         row.put(DatabaseHelper.ID, consumptionID);
         row.put(DatabaseHelper.DATE, System.currentTimeMillis());
         row.put(DatabaseHelper.ITEMID, itemID);
+        row.put(DatabaseHelper.PRICE, item.getPrice());
 
         database.insert(DatabaseHelper.TABLECONSUMPTIONS, null, row);
 
@@ -88,10 +92,11 @@ public class ConsumptionsDAO{
     private void addConsumptionToFirebase(Consumption consumption){
 
 
-        DatabaseReference myRef = firebaseHelper.getUserDB();
-        myRef.child(DatabaseHelper.TABLECONSUMPTIONS).child(consumption.getID()).child(DatabaseHelper.ID).setValue(consumption.getID());
-        myRef.child(DatabaseHelper.TABLECONSUMPTIONS).child(consumption.getID()).child(DatabaseHelper.DATE).setValue(consumption.getDate());
-        myRef.child(DatabaseHelper.TABLECONSUMPTIONS).child(consumption.getID()).child(DatabaseHelper.ITEMID).setValue(consumption.getItemID());
+        DatabaseReference myRef = firebaseHelper.getUserDB().child(DatabaseHelper.TABLECONSUMPTIONS).child(consumption.getID());
+        myRef.child(DatabaseHelper.ID).setValue(consumption.getID());
+        myRef.child(DatabaseHelper.DATE).setValue(consumption.getDate());
+        myRef.child(DatabaseHelper.ITEMID).setValue(consumption.getItemID());
+        myRef.child(DatabaseHelper.PRICE).setValue(consumption.getPrice());
 
     }
 
@@ -189,8 +194,6 @@ public class ConsumptionsDAO{
         DatabaseReference userDB = firebaseHelper.getUserDB();
         userDB.child(DatabaseHelper.TABLECONSUMPTIONS).child(consumption.getID()).removeValue();
     }
-
-
 
     private class AddConsumptionToFirebaseTask extends AsyncTask <String, Void, Void>{
 

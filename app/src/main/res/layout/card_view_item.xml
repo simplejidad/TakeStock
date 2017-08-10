@@ -30,7 +30,7 @@
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
                     android:text="@string/description"
-                    android:layout_margin="5dp"
+                    android:gravity="center"
                     android:textSize="22sp"
                     android:layout_gravity="center_vertical"
                     />
@@ -100,6 +100,7 @@
                 android:layout_weight="1.2"
                 android:layout_height="match_parent"
                 android:drawableLeft="@drawable/ic_home_black_24dp"
+                android:textColor="@color/secondary_text"
                 android:text="@string/minus_sign"
                 android:textSize="24sp"
                 />
@@ -141,6 +142,7 @@
                 android:layout_width="0dp"
                 android:layout_weight="1.2"
                 android:layout_height="match_parent"
+                android:textColor="@color/secondary_text"
                 android:text="@string/plus_sign"
                 android:drawableLeft="@drawable/ic_home_black_24dp"
                 android:textSize="18sp"

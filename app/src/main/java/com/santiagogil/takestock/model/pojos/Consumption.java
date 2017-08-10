@@ -20,7 +20,16 @@ public class Consumption {
     @PropertyName(DatabaseHelper.ITEMID)
     private String itemID;
 
-    
+    @PropertyName(DatabaseHelper.PRICE)
+    private Double price;
+
+    public Double getPrice() {
+        return price;
+    }
+
+    public void setPrice(Double price) {
+        this.price = price;
+    }
 
     public Consumption(){
 

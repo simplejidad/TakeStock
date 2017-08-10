@@ -1,6 +1,7 @@
 package com.santiagogil.takestock.model.pojos;
 
 import com.google.firebase.database.PropertyName;
+import com.santiagogil.takestock.R;
 import com.santiagogil.takestock.util.DatabaseHelper;
 
 import java.io.Serializable;
@@ -126,5 +127,97 @@ public class Item implements Serializable {
 
     public void setActive(Boolean active) {
         this.active = active;
+    }
+
+    public String getRoundedIndependence() {
+
+        Integer independence = getIndependence();
+
+        if (independence >= 365) {
+            return round(independence / 365, 1) + " years";
+
+        } else if (independence >= 30) {
+
+            return round(independence / 30, 1) + " months";
+
+        } else if (independence >= 7) {
+
+            return  round(independence / 7, 1) + " weeks";
+
+        } else {
+            return Math.round(getConsumptionRate() * getStock()) + " days";
+        }
+    }
+
+    public Integer getIndependenceEmoticon(){
+
+        Integer independence = getIndependence();
+
+        if (independence >= 365) {
+            return R.drawable.emoticon_excited;
+        } else if (independence >= 30) {
+            return R.drawable.ic_insert_emoticon_black_24dp;
+        } else if (independence >= 7) {
+             return R.drawable.emoticon_neutral;
+        } else {
+             return R.drawable.ic_mood_bad_black_24dp;
+        }
+
+    }
+
+
+
+    private static Double round (double value, int precision) {
+        int scale = (int) Math.pow(10, precision);
+        return (double) Math.round(value * scale) / scale;
+    }
+
+    public String getRoundedConsumtionRate() {
+
+        if(getConsumptionRate() > 0){
+
+            Integer independence = getIndependence();
+
+            if(independence >= 365){
+                return "";
+            } else if (independence > 90 ){
+                return Math.max(round((365-independence)/getConsumptionRate(), 0).intValue(), 1) + " till ";
+            } else if(independence > 30){
+                return Math.max(round((90-independence)/getConsumptionRate(), 0).intValue(), 1)  + " till ";
+            } else if (independence > 7) {
+                return Math.max(round((30-independence)/getConsumptionRate(), 0).intValue(), 1)  + " till ";
+            } else if (independence >= 0) {
+                return Math.max(round((7-independence)/getConsumptionRate(), 0).intValue(), 1)  + " till ";
+            } else {
+                return "";
+            }
+        } else{
+            return "";
+        }
+    }
+
+    public Integer getConsumtionRateEmoticon() {
+
+        if(getConsumptionRate() > 0){
+
+            Integer independence = getIndependence();
+
+            if(independence >= 365){
+                return R.drawable.emoticon_excited;
+            }
+            else if (independence > 90 ){
+              return R.drawable.emoticon_excited;
+            } else if(independence > 30){
+                return R.drawable.ic_insert_emoticon_black_24dp;
+            } else if (independence > 7) {
+                return R.drawable.ic_insert_emoticon_black_24dp;
+            }else if (independence >= 0) {
+                return R.drawable.emoticon_neutral;
+            }else {
+                return R.drawable.emoticon_excited;
+            }
+        } else{
+            return R.drawable.emoticon_neutral;
+        }
     }
 }
