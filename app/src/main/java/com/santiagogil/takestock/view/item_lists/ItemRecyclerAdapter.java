@@ -103,13 +103,13 @@ public class ItemRecyclerAdapter extends RecyclerView.Adapter{
 
         public void loadItem(final Item item){
 
-            String itemStock = item.getStock().toString();
-            textViewItemName.setText(item.getName());
-            textViewItemStock.setText(itemStock);
-            //textViewItemIndependence.setText(Math.round(item.getConsumptionRate()*item.getStock()) + " days");
-            setTextViewItemIndependenceText(item);
-            setTextViewNeededForGoal(item);
-            textViewItemPrice.setText("" + item.getPrice());
+            setTextsForLayout(item);
+            setOnClickListeners(item);
+            setDrawablesForButtons(item);
+
+        }
+
+        private void setOnClickListeners(final Item item){
 
             buttonStockAdd.setOnClickListener(new View.OnClickListener() {
                 @Override
@@ -118,7 +118,7 @@ public class ItemRecyclerAdapter extends RecyclerView.Adapter{
                     onItemModifiedListener.onClick(itemView);
                 }
             });
-            buttonStockAdd.setText("+" + item.getMinimumPurchaceQuantity());
+
             buttonStockSubtract.setOnClickListener(new View.OnClickListener() {
                 @Override
                 public void onClick(View view) {
@@ -133,7 +133,7 @@ public class ItemRecyclerAdapter extends RecyclerView.Adapter{
                     onItemModifiedListener.onClick(itemView);
                 }
             });
-            buttonCartToStock.setText("<" + item.getCart());
+
             buttonCartSubtract.setOnClickListener(new View.OnClickListener() {
                 @Override
                 public void onClick(View v) {
@@ -149,12 +149,28 @@ public class ItemRecyclerAdapter extends RecyclerView.Adapter{
                 }
             });
 
+        }
+        private void setTextsForLayout(Item item){
+
+            textViewItemName.setText(item.getName());
+            textViewItemStock.setText(item.getStock().toString());
+            setTextViewItemIndependenceText(item);
+            setTextViewNeededForGoal(item);
+            textViewItemPrice.setText("" + item.getPrice());
+            buttonStockAdd.setText("+" + item.getMinimumPurchaceQuantity());
+            buttonCartToStock.setText("<" + item.getCart());
+
+
+        }
+
+        private void setDrawablesForButtons(Item item){
             if(item.getCart() == 0) {
+
                 buttonCartToStock.setCompoundDrawablesRelativeWithIntrinsicBounds(R.drawable.ic_home_black_24dp, 0, R.drawable.ic_shopping_cart_empty , 0);
             } else {
+
                 buttonCartToStock.setCompoundDrawablesRelativeWithIntrinsicBounds(R.drawable.ic_home_black_24dp, 0, R.drawable.ic_shopping_cart_black_24dp, 0);
             }
-
         }
 
         private void setTextViewNeededForGoal(Item item) {
