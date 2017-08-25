@@ -102,7 +102,7 @@ public class Item implements Serializable {
     }
 
     public Integer getIndependence(){
-        return Math.round(getConsumptionRate() * getStock());
+        return Math.round(getConsumptionRate() * (getStock() + getCart()));
     }
 
     public Integer getCart() {
@@ -134,45 +134,27 @@ public class Item implements Serializable {
         Integer independence = getIndependence();
 
         if (independence >= 365) {
-            return round(independence / 365, 1) + " years";
+            return round(independence / 365, 2) + " years";
 
         } else if (independence >= 30) {
 
-            return round(independence / 30, 1) + " months";
+            return round(independence / 30, 2).toString() + " months";
 
         } else if (independence >= 7) {
 
-            return  round(independence / 7, 1) + " weeks";
+            return  round(independence / 7, 2) + " weeks";
 
         } else {
             return Math.round(getConsumptionRate() * getStock()) + " days";
         }
     }
 
-    public Integer getIndependenceEmoticon(){
-
-        Integer independence = getIndependence();
-
-        if (independence >= 365) {
-            return R.drawable.ic_emoticon_excited;
-        } else if (independence >= 30) {
-            return R.drawable.ic_emoticon_happy;
-        } else if (independence >= 7) {
-             return R.drawable.ic_emoticon_neutral;
-        } else {
-             return R.drawable.ic_emoticon_sad_black_24dp;
-        }
-
-    }
-
-
-
     private static Double round (double value, int precision) {
         int scale = (int) Math.pow(10, precision);
         return (double) Math.round(value * scale) / scale;
     }
 
-    public String getRoundedConsumtionRate() {
+    public String getRoundedConsumptionRate() {
 
         if(getConsumptionRate() > 0){
 
@@ -196,28 +178,61 @@ public class Item implements Serializable {
         }
     }
 
-    public Integer getConsumtionRateEmoticon() {
+    public Integer getIndependenceEmoticon() {
 
-        if(getConsumptionRate() > 0){
+        Integer independence = getIndependence();
 
-            Integer independence = getIndependence();
+        if(getConsumptionRate() > 0) {
 
-            if(independence >= 365){
-                return R.drawable.ic_emoticon_excited;
+            if (getCart() == 0) {
+
+                if (independence > 90) {
+                    return R.drawable.ic_emoticon_excited;
+                } else if (independence > 30) {
+                    return R.drawable.ic_emoticon_happy;
+                } else if (independence > 7) {
+                    return R.drawable.ic_emoticon_smile;
+                } else if (independence > 0) {
+                    return R.drawable.ic_emoticon_neutral;
+                } else {
+                    return R.drawable.ic_emoticon_sad_24dp;
+                }
+            } else {
+
+                if (independence > 90) {
+                    return R.drawable.ic_emoticon_excited_potential;
+                } else if (independence > 30) {
+                    return R.drawable.ic_emoticon_happy_potential;
+                } else if (independence > 7) {
+                    return R.drawable.ic_emoticon_smile_potential;
+                } else if (independence > 0) {
+                    return R.drawable.ic_emoticon_neutral_potential;
+                } else {
+                    return R.drawable.ic_emoticon_sad_24dp_potential;
+                }
             }
-            else if (independence > 90 ){
-              return R.drawable.ic_emoticon_excited;
-            } else if(independence > 30){
-                return R.drawable.ic_emoticon_happy;
-            } else if (independence > 7) {
-                return R.drawable.ic_emoticon_smile;
-            }else if (independence >= 0) {
-                return R.drawable.ic_emoticon_neutral;
-            }else {
-                return R.drawable.ic_emoticon_excited;
-            }
-        } else{
+
+        } else {
+
             return R.drawable.ic_emoticon_neutral;
         }
+    }
+
+    public Integer getNextIndependenceEmoticon(){
+
+        Integer independence = getIndependence();
+
+        if (independence >= 90) {
+                return 0;
+        } else if (independence > 30) {
+            return R.drawable.ic_emoticon_excited;
+        } else if (independence > 7) {
+            return R.drawable.ic_emoticon_happy;
+        } else if (independence > 0) {
+            return R.drawable.ic_emoticon_smile;
+        } else {
+            return R.drawable.ic_emoticon_neutral;
+        }
+
     }
 }

@@ -1,4 +1,4 @@
-package com.santiagogil.takestock.view.item_lists;
+package com.santiagogil.takestock.view.item_detail;
 
 import android.content.Context;
 import android.os.Build;
@@ -15,7 +15,6 @@ import com.santiagogil.takestock.R;
 import com.santiagogil.takestock.controller.ConsumptionsController;
 import com.santiagogil.takestock.controller.ItemsController;
 import com.santiagogil.takestock.model.pojos.Item;
-import com.santiagogil.takestock.view.item_detail.FragmentItemDetail;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -126,6 +125,7 @@ public class ItemRecyclerAdapter extends RecyclerView.Adapter{
                     onItemModifiedListener.onClick(itemView);
                 }
             });
+
             buttonCartAdd.setOnClickListener(new View.OnClickListener(){
                 @Override
                 public void onClick(View v) {
@@ -141,6 +141,7 @@ public class ItemRecyclerAdapter extends RecyclerView.Adapter{
                     onItemModifiedListener.onClick(itemView);
                 }
             });
+
             buttonCartToStock.setOnClickListener(new View.OnClickListener() {
                 @Override
                 public void onClick(View v) {
@@ -150,6 +151,7 @@ public class ItemRecyclerAdapter extends RecyclerView.Adapter{
             });
 
         }
+
         private void setTextsForLayout(Item item){
 
             textViewItemName.setText(item.getName());
@@ -159,7 +161,6 @@ public class ItemRecyclerAdapter extends RecyclerView.Adapter{
             textViewItemPrice.setText("" + item.getPrice());
             buttonStockAdd.setText("+" + item.getMinimumPurchaceQuantity());
             buttonCartToStock.setText("<" + item.getCart());
-
 
         }
 
@@ -177,8 +178,8 @@ public class ItemRecyclerAdapter extends RecyclerView.Adapter{
 
             if(item.getConsumptionRate() > 0){
 
-                    textViewNeededForGoal.setText(item.getRoundedConsumtionRate());
-                    textViewNeededForGoal.setCompoundDrawablesRelativeWithIntrinsicBounds(0 , 0, item.getConsumtionRateEmoticon(), 0 );
+                textViewNeededForGoal.setText(item.getRoundedConsumptionRate());
+                textViewNeededForGoal.setCompoundDrawablesRelativeWithIntrinsicBounds(0 , 0, item.getNextIndependenceEmoticon(), 0 );
 
             }
         }

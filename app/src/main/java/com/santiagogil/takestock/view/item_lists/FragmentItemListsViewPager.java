@@ -1,24 +1,23 @@
 package com.santiagogil.takestock.view.item_lists;
 
 import android.os.Bundle;
-import android.support.design.widget.TabLayout;
 import android.support.v4.app.Fragment;
 import android.support.v4.view.ViewPager;
-import android.support.v7.app.AppCompatActivity;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
-import android.widget.Toast;
 
 import com.santiagogil.takestock.R;
 import com.santiagogil.takestock.model.pojos.Behaviours.BehaviourGetItemList;
-import com.santiagogil.takestock.model.pojos.Behaviours.GetActiveItemsByIndependence;
+import com.santiagogil.takestock.model.pojos.Behaviours.GetActiveItemsByIndependenceSortedAlphabetically;
 import com.santiagogil.takestock.model.pojos.Behaviours.GetActiveItemsSortedByConsumptionRate;
 import com.santiagogil.takestock.model.pojos.Behaviours.GetAllActiveItemsAlphabetically;
 import com.santiagogil.takestock.model.pojos.Behaviours.GetAllActiveItemsSortedByIndependence;
 import com.santiagogil.takestock.model.pojos.Behaviours.GetAllActiveItemsWithStockZero;
 import com.santiagogil.takestock.model.pojos.Behaviours.GetAllInactiveItemsAlphabetically;
 import com.santiagogil.takestock.util.FragmentLifecycle;
+
+import java.util.ArrayList;
 
 public class FragmentItemListsViewPager extends Fragment {
 
@@ -79,8 +78,8 @@ public class FragmentItemListsViewPager extends Fragment {
 
         BehaviourGetItemList getAllActiveItemsAlphabetically = new GetAllActiveItemsAlphabetically();
         BehaviourGetItemList getAllActiveItemsSortedByIndependence = new GetAllActiveItemsSortedByIndependence();
-        BehaviourGetItemList getActiveItemsByIndependenceOneMonth = new GetActiveItemsByIndependence(30);
-        BehaviourGetItemList getActiveItemsByIndependenceThreeMonths = new GetActiveItemsByIndependence(90);
+        BehaviourGetItemList getActiveItemsByIndependenceOneMonth = new GetActiveItemsByIndependenceSortedAlphabetically(30);
+        BehaviourGetItemList getActiveItemsByIndependenceThreeMonths = new GetActiveItemsByIndependenceSortedAlphabetically(90);
         BehaviourGetItemList getDeletedItems = new GetAllInactiveItemsAlphabetically();
         BehaviourGetItemList getAllActiveItemsWithStockZero = new GetAllActiveItemsWithStockZero();
         BehaviourGetItemList getAllActiveItemsSortedByConsumptionRate = new GetActiveItemsSortedByConsumptionRate();
@@ -96,6 +95,7 @@ public class FragmentItemListsViewPager extends Fragment {
 
     public void setFragmentActivityCommunicator(FragmentItemList.FragmentActivityCommunicator fragmentActivityCommunicator) {
         this.fragmentActivityCommunicator = fragmentActivityCommunicator;
+
     }
 
 
