@@ -19,13 +19,11 @@ public class EditItemActivity extends AppCompatActivity {
     private EditText editTextItemStock;
     private EditText editTextMinimumPurchace;
     private EditText editTextConsumptionRate;
+    private EditText editTextItemPrice;
     private Button cancelButton;
     private Button saveButton;
     private Item item;
     private ItemsController itemsController;
-
-
-
 
 
     @Override
@@ -33,7 +31,7 @@ public class EditItemActivity extends AppCompatActivity {
         super.onCreate(savedInstanceState);
 
 
-        setContentView(R.layout.fragment_edit_item);
+        setContentView(R.layout.activity_edit_item);
 
         Intent intent = getIntent();
         final Bundle bundle = intent.getExtras();
@@ -45,6 +43,8 @@ public class EditItemActivity extends AppCompatActivity {
         editTextItemStock = (EditText) findViewById(R.id.editTextStock);
         editTextConsumptionRate = (EditText) findViewById(R.id.editTextConsumptionRate);
         editTextMinimumPurchace = (EditText) findViewById(R.id.editTextMinimumPurchaceAmmount);
+        editTextItemPrice = (EditText) findViewById(R.id.edit_text_last_price);
+
         cancelButton = (Button) findViewById(R.id.buttonCancel);
         cancelButton.setOnClickListener(new View.OnClickListener() {
             @Override
@@ -68,10 +68,9 @@ public class EditItemActivity extends AppCompatActivity {
         editTextItemStock.setText(item.getStock().toString());
         editTextConsumptionRate.setText(item.getConsumptionRate().toString());
         editTextMinimumPurchace.setText(item.getMinimumPurchaceQuantity().toString());
+        editTextItemPrice.setText(item.getPrice().toString());
 
     }
-
-
 
     public void updateItemDetails (){
 
@@ -79,6 +78,7 @@ public class EditItemActivity extends AppCompatActivity {
         Integer updatedItemStock = tryParse(editTextItemStock.getText().toString());
         Integer updatedItemMinimumPurchaceQuantity = tryParse(editTextMinimumPurchace.getText().toString());
         Integer updatedItemConsumptionRate = tryParse(editTextConsumptionRate.getText().toString());
+        Double updatedPrice = Double.parseDouble(editTextItemPrice.getText().toString());
 
         Boolean updatedActiveStatus = item.getActive();
 
@@ -86,7 +86,7 @@ public class EditItemActivity extends AppCompatActivity {
         itemsController.updateItemDetails(
                 EditItemActivity.this, item.getID(), updatedItemName, updatedItemStock,
                 updatedItemConsumptionRate, updatedItemMinimumPurchaceQuantity, updatedActiveStatus,
-                item.getPrice(), item.getCart());
+                updatedPrice, item.getCart());
 
     }
 
