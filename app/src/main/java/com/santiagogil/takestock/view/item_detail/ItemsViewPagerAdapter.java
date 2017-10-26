@@ -58,4 +58,5 @@ public class ItemsViewPagerAdapter extends FragmentStatePagerAdapter {
 
         return 0;
     }
+
 }

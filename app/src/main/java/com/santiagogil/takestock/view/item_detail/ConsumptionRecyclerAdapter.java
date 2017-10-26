@@ -53,8 +53,6 @@ public class ConsumptionRecyclerAdapter extends RecyclerView.Adapter {
         this.consumptionList = consumptionList;
     }
 
-    public Consumption getConsumptionAtPosition(Integer position){return consumptionList.get(position);}
-
     static class ConsumptionViewHolder extends RecyclerView.ViewHolder {
 
         private TextView textViewConsumptionDate;

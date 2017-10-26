@@ -1,6 +1,7 @@
 <?xml version="1.0" encoding="utf-8"?>
 <LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:tools="http://schemas.android.com/tools"
+    android:id="@+id/fragment_item_detail_main_linear_layout"
     android:orientation="vertical"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
@@ -42,7 +43,25 @@
             android:layout_height="wrap_content"
             android:layout_width="wrap_content"
             android:textSize="24sp"
-            android:text="@string/lorem_ipsum"
+            android:text="@string/small_number"
+            />
+
+        <TextView
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:text="Price"
+            android:layout_marginLeft="20dp"
+            android:drawableLeft="@drawable/ic_money_black_24dp"
+            android:textSize="24dp"
+            android:layout_marginRight="5dp"
+            />
+
+        <TextView
+            android:id="@+id/text_view_item_price"
+            android:layout_height="wrap_content"
+            android:layout_width="wrap_content"
+            android:textSize="24dp"
+            android:text="@string/small_number"
             />
 
 
@@ -132,24 +151,63 @@
         android:layout_marginLeft="5dp"
         android:layout_marginRight="5dp">
 
-        <TextView
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:text="Price"
-            android:drawableLeft="@drawable/ic_money_black_24dp"
-            android:textSize="24dp"
-            android:layout_marginRight="5dp"
+    </LinearLayout>
+
+    <LinearLayout
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content">
+
+        <Button
+            android:id="@+id/buttonSubtract"
+            android:layout_width="0dp"
+            android:layout_weight="1.2"
+            android:layout_height="match_parent"
+            android:drawableLeft="@drawable/ic_home_black_24dp"
+            android:textColor="@color/secondary_text"
+            android:text="@string/minus_sign"
+            android:textSize="24sp"
             />
 
-        <TextView
-            android:id="@+id/text_view_item_price"
-            android:layout_height="wrap_content"
-            android:layout_width="wrap_content"
-            android:textSize="24dp"
-            android:text="@string/lorem_ipsum"
+        <ImageButton
+            android:id="@+id/button_cart_subtract"
+            android:layout_width="0dp"
+            android:layout_weight="1"
+            android:layout_height="match_parent"
+            android:src="@drawable/ic_substract_shopping_cart_black_24dp"
+            android:text="@string/minus_sign"
+            android:textSize="24sp"
+            android:elevation="3dp"
             />
 
+        <Button
+            android:id="@+id/button_cart_to_stock"
+            android:layout_width="0dp"
+            android:layout_weight="1.8"
+            android:layout_height="match_parent"
+            android:text="@string/less_than"
+            android:textColor="@color/secondary_text"
+            android:textSize="18sp"
+            />
 
+        <ImageButton
+            android:id="@+id/button_cart_add"
+            android:layout_width="0dp"
+            android:layout_weight="1"
+            android:layout_height="match_parent"
+            android:elevation="3dp"
+            android:src="@drawable/ic_add_shopping_cart_black_24dp"
+            />
+
+        <Button
+            android:id="@+id/buttonAdd"
+            android:layout_width="0dp"
+            android:layout_weight="1.2"
+            android:layout_height="match_parent"
+            android:textColor="@color/secondary_text"
+            android:text="@string/plus_sign"
+            android:drawableLeft="@drawable/ic_home_black_24dp"
+            android:textSize="18sp"
+            />
     </LinearLayout>
 
     <LinearLayout
@@ -161,6 +219,7 @@
         <ImageButton
             android:id="@+id/buttonBack"
             android:layout_width="100dp"
+            android:layout_marginRight="5dp"
             android:layout_height="wrap_content"
             android:src="@drawable/ic_arrow_back_black_24dp"
             />
@@ -169,6 +228,8 @@
             android:id="@+id/buttonEditItem"
             android:layout_width="100dp"
             android:layout_height="wrap_content"
+            android:layout_marginRight="5dp"
+            android:layout_marginLeft="5dp"
             android:src="@drawable/ic_create_black_24dp"
             />
 
@@ -176,6 +237,7 @@
             android:id="@+id/buttonDeleteItem"
             android:layout_width="100dp"
             android:layout_height="wrap_content"
+            android:layout_marginLeft="5dp"
             android:src="@drawable/ic_delete_black_24dp"
             />
 

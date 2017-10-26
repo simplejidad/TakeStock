@@ -30,5 +30,7 @@
         completions."
     </string>
     <string name="lorem">lorem</string>
+    <string name="small_number">100.0</string>
+
 
 </resources>
