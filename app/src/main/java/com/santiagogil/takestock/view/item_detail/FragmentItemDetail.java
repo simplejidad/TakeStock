@@ -90,10 +90,7 @@ public class FragmentItemDetail extends Fragment {
 
         updateFieldsWithItemDetails();
 
-        loadLayoutComponents();
-
         setOnClickListeners();
-
 
         loadRecyclerView();
 
@@ -181,7 +178,7 @@ public class FragmentItemDetail extends Fragment {
         public void onConsumptionDeleted(Consumption consumption) {
             ConsumptionsController consumptionsController = new ConsumptionsController();
             consumptionsController.deleteConsumption(getContext(), consumption);
-            consumptionRecyclerAdapter.setConsumptionList(consumptionsController.getItemConsumptionList(getContext(), bundle.getString(DatabaseHelper.ID)));
+            consumptionRecyclerAdapter.setConsumptionList(consumptionsController.sortedItemConsumptionList(getContext(), bundle.getString(DatabaseHelper.ID)));
             consumptionRecyclerAdapter.notifyDataSetChanged();
 
             item = itemController.getItemFromLocalDatabase(getContext(), bundle.getString(DatabaseHelper.ID));

@@ -160,19 +160,11 @@ public class Item implements Serializable {
 
             Integer independence = getIndependence();
 
-            if(independence >= 365){
-                return "";
-            } else if (independence > 90 ){
-                return Math.max(round((365-independence)/getConsumptionRate(), 0).intValue(), 1) + " till ";
-            } else if(independence > 30){
-                return Math.max(round((90-independence)/getConsumptionRate(), 0).intValue(), 1)  + " till ";
-            } else if (independence > 7) {
-                return Math.max(round((30-independence)/getConsumptionRate(), 0).intValue(), 1)  + " till ";
-            } else if (independence >= 0) {
-                return Math.max(round((7-independence)/getConsumptionRate(), 0).intValue(), 1)  + " till ";
+            if(independence < 90){
+
+                return Math.max(round((90-independence)/getConsumptionRate(), 0).intValue(), 1) + " till ";
             } else {
-                return "";
-            }
+                return "";}
         } else{
             return "";
         }
@@ -222,16 +214,10 @@ public class Item implements Serializable {
 
         Integer independence = getIndependence();
 
-        if (independence >= 90) {
-                return 0;
-        } else if (independence > 30) {
-            return R.drawable.ic_emoticon_excited;
-        } else if (independence > 7) {
-            return R.drawable.ic_emoticon_happy;
-        } else if (independence > 0) {
-            return R.drawable.ic_emoticon_smile;
+        if (independence < 90) {
+                return R.drawable.ic_emoticon_excited;
         } else {
-            return R.drawable.ic_emoticon_neutral;
+            return 0;
         }
 
     }

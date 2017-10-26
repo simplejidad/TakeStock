@@ -1,6 +1,7 @@
 package com.santiagogil.takestock.view.item_detail;
 
 import android.content.Context;
+import android.graphics.Color;
 import android.os.Build;
 import android.support.v7.widget.RecyclerView;
 import android.view.LayoutInflater;
@@ -8,6 +9,7 @@ import android.view.View;
 import android.view.ViewGroup;
 import android.widget.Button;
 import android.widget.ImageButton;
+import android.widget.LinearLayout;
 import android.widget.TextView;
 import android.widget.Toast;
 
@@ -81,6 +83,7 @@ public class ItemRecyclerAdapter extends RecyclerView.Adapter{
         private Context context;
         private View.OnClickListener onItemModifiedListener;
         private View itemView;
+        private LinearLayout cardLayout;
 
         public ItemViewHolder(View itemView, Context context, View.OnClickListener onItemModifiedListener) {
             super(itemView);
@@ -95,6 +98,7 @@ public class ItemRecyclerAdapter extends RecyclerView.Adapter{
             buttonCartSubtract = (ImageButton) itemView.findViewById(R.id.button_cart_subtract);
             buttonCartAdd = (ImageButton) itemView.findViewById(R.id.button_cart_add);
             buttonCartToStock = (Button) itemView.findViewById(R.id.button_cart_to_stock);
+            cardLayout = (LinearLayout) itemView.findViewById(R.id.card_view_item_linear_layout);
             this.context = context;
             this.onItemModifiedListener = onItemModifiedListener;
             this.itemView = itemView;
@@ -105,6 +109,7 @@ public class ItemRecyclerAdapter extends RecyclerView.Adapter{
             setTextsForLayout(item);
             setOnClickListeners(item);
             setDrawablesForButtons(item);
+            setCardBackgroundColor(item);
 
         }
 
@@ -190,6 +195,8 @@ public class ItemRecyclerAdapter extends RecyclerView.Adapter{
 
                 ItemsController itemsController = new ItemsController();
                 itemsController.cartToStock(context, item);
+            } else {
+                Toast.makeText(context, "Cart is Empty", Toast.LENGTH_SHORT).show();
             }
 
         }
@@ -249,5 +256,28 @@ public class ItemRecyclerAdapter extends RecyclerView.Adapter{
                         item.getIndependenceEmoticon(), 0, 0, 0);
 
         }
+
+        public int getIntFromColor(int Red, int Green, int Blue){
+            Red = (Red << 16) & 0x00FF0000; //Shift red 16-bits and mask out other stuff
+            Green = (Green << 8) & 0x0000FF00; //Shift Green 8-bits and mask out other stuff
+            Blue = Blue & 0x000000FF; //Mask out anything not blue.
+
+            return 0xFF000000 | Red | Green | Blue; //0xFF000000 for 100% Alpha. Bitwise OR everything together.
+        }
+
+        private void setCardBackgroundColor(Item item){
+
+            Integer itemIndependence = 120 - item.getIndependence()/255*30;
+
+            if(item.getIndependence() == 0){
+                cardLayout.setBackgroundColor(getIntFromColor(255, 100, 100));
+            } else {
+                cardLayout.setBackgroundColor(getIntFromColor(itemIndependence, 255, itemIndependence));
+            }
+
+        }
+
+
+
     }
 }
