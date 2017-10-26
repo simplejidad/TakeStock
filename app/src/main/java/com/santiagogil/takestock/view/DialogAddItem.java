@@ -2,11 +2,15 @@ package com.santiagogil.takestock.view;
 
 import android.app.Dialog;
 import android.app.DialogFragment;
+import android.content.Context;
 import android.content.DialogInterface;
 import android.os.Bundle;
 import android.support.v7.app.AlertDialog;
+import android.text.Editable;
 import android.text.InputType;
+import android.text.TextWatcher;
 import android.widget.EditText;
+import android.widget.Toast;
 
 import com.santiagogil.takestock.R;
 
@@ -17,6 +21,7 @@ import com.santiagogil.takestock.R;
 public class DialogAddItem extends DialogFragment {
 
     private AddItemDialogCommunicator communicator;
+    private Context context;
 
     @Override
     public Dialog onCreateDialog(Bundle savedInstanceState) {
@@ -29,14 +34,15 @@ public class DialogAddItem extends DialogFragment {
         input.setInputType(InputType.TYPE_CLASS_TEXT);
         input.setSingleLine(true);
         input.setHint("Item Name");
+
         builder.setView(input);
 
-        builder.setMessage("Add a New Item")
+        builder.setMessage("Adding a New Item:")
                 .setPositiveButton("Add", new DialogInterface.OnClickListener() {
                     public void onClick(DialogInterface dialog, int id) {
                         String itemName = input.getText().toString();
-                        if(itemName.equals("")){
-                            dialog.cancel();
+                        if(input.getText().length() == 0){
+                            Toast.makeText(context, "No Item has been added", Toast.LENGTH_SHORT).show();
                         } else{
                             communicator.addNewItem(input.getText().toString());
                             dialog.dismiss();
@@ -59,5 +65,11 @@ public class DialogAddItem extends DialogFragment {
 
     public void setCommunicator(AddItemDialogCommunicator communicator) {
         this.communicator = communicator;
+    }
+
+    @Override
+    public void onAttach(Context context) {
+        super.onAttach(context);
+        this.context = context;
     }
 }
