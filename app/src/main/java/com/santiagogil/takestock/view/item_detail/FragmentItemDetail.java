@@ -1,7 +1,6 @@
 package com.santiagogil.takestock.view.item_detail;
 
 import android.content.Context;
-import android.graphics.Color;
 import android.os.Build;
 import android.os.Bundle;
 import android.support.annotation.Nullable;
@@ -20,7 +19,7 @@ import com.santiagogil.takestock.R;
 import com.santiagogil.takestock.controller.ConsumptionsController;
 import com.santiagogil.takestock.controller.ItemsController;
 import com.santiagogil.takestock.model.pojos.Consumption;
-import com.santiagogil.takestock.util.ColorHelper;
+import com.santiagogil.takestock.util.LayoutHelper;
 import com.santiagogil.takestock.util.DatabaseHelper;
 import com.santiagogil.takestock.model.pojos.Item;
 import com.santiagogil.takestock.util.SharedElementTransition;
@@ -59,7 +58,7 @@ public class FragmentItemDetail extends Fragment {
     private Item item;
     private Context context;
 
-    private Button buttonStockSubtract;
+    private ImageButton buttonStockSubtract;
     private Button buttonStockAdd;
     private Button buttonCartToStock;
     private ImageButton buttonCartSubtract;
@@ -102,7 +101,7 @@ public class FragmentItemDetail extends Fragment {
 
     private void setBackgroundColor(View fragmentView) {
 
-        ColorHelper.setBackgroundColor(fragmentView, item.getIndependence());
+        LayoutHelper.setBackgroundColor(fragmentView, item.getIndependence());
 
     }
 
@@ -280,7 +279,7 @@ public class FragmentItemDetail extends Fragment {
         deleteButton = (ImageButton) fragmentView.findViewById(R.id.buttonDeleteItem);
         editButton = (ImageButton) fragmentView.findViewById(R.id.buttonEditItem);
         buttonStockAdd = (Button) fragmentView.findViewById(R.id.buttonAdd);
-        buttonStockSubtract = (Button) fragmentView.findViewById(R.id.buttonSubtract);
+        buttonStockSubtract = (ImageButton) fragmentView.findViewById(R.id.buttonSubtract);
         buttonCartSubtract = (ImageButton) fragmentView.findViewById(R.id.button_cart_subtract);
         buttonCartAdd = (ImageButton) fragmentView.findViewById(R.id.button_cart_add);
         buttonCartToStock = (Button) fragmentView.findViewById(R.id.button_cart_to_stock);
@@ -340,7 +339,7 @@ public class FragmentItemDetail extends Fragment {
 
     private void setTextsForButtons(Item item){
 
-        buttonStockAdd.setText("+" + item.getMinimumPurchaceQuantity());
+        buttonStockAdd.setText(item.getMinimumPurchaceQuantity().toString());
         buttonCartToStock.setText("<" + item.getCart());
 
     }

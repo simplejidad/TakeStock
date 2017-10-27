@@ -1,7 +1,6 @@
 package com.santiagogil.takestock.view.item_detail;
 
 import android.content.Context;
-import android.graphics.Color;
 import android.os.Build;
 import android.support.v7.widget.CardView;
 import android.support.v7.widget.RecyclerView;
@@ -10,7 +9,6 @@ import android.view.View;
 import android.view.ViewGroup;
 import android.widget.Button;
 import android.widget.ImageButton;
-import android.widget.LinearLayout;
 import android.widget.TextView;
 import android.widget.Toast;
 
@@ -18,7 +16,7 @@ import com.santiagogil.takestock.R;
 import com.santiagogil.takestock.controller.ConsumptionsController;
 import com.santiagogil.takestock.controller.ItemsController;
 import com.santiagogil.takestock.model.pojos.Item;
-import com.santiagogil.takestock.util.ColorHelper;
+import com.santiagogil.takestock.util.LayoutHelper;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -77,7 +75,7 @@ public class ItemRecyclerAdapter extends RecyclerView.Adapter{
         private TextView textViewItemIndependence;
         private TextView textViewItemPrice;
         private TextView textViewNeededForGoal;
-        private Button buttonStockSubtract;
+        private ImageButton buttonStockSubtract;
         private Button buttonStockAdd;
         private Button buttonCartToStock;
         private ImageButton buttonCartSubtract;
@@ -96,7 +94,7 @@ public class ItemRecyclerAdapter extends RecyclerView.Adapter{
             textViewItemPrice = (TextView) itemView.findViewById(R.id.text_view_item_price);
             textViewNeededForGoal = (TextView) itemView.findViewById(R.id.text_view_needed_for_goal);
             buttonStockAdd = (Button) itemView.findViewById(R.id.buttonAdd);
-            buttonStockSubtract = (Button) itemView.findViewById(R.id.buttonSubtract);
+            buttonStockSubtract = (ImageButton) itemView.findViewById(R.id.buttonSubtract);
             buttonCartSubtract = (ImageButton) itemView.findViewById(R.id.button_cart_subtract);
             buttonCartAdd = (ImageButton) itemView.findViewById(R.id.button_cart_add);
             buttonCartToStock = (Button) itemView.findViewById(R.id.button_cart_to_stock);
@@ -166,7 +164,10 @@ public class ItemRecyclerAdapter extends RecyclerView.Adapter{
             setTextViewItemIndependenceText(item);
             setTextViewNeededForGoal(item);
             textViewItemPrice.setText("" + item.getPrice());
-            buttonStockAdd.setText("+" + item.getMinimumPurchaceQuantity());
+            buttonStockAdd.setText(item.getMinimumPurchaceQuantity().toString());
+            if(item.getMinimumPurchaceQuantity() > 9){
+                buttonStockAdd.setPaddingRelative(12, 0, 0, 0);
+            }
             buttonCartToStock.setText("<" + item.getCart());
 
         }
@@ -261,7 +262,7 @@ public class ItemRecyclerAdapter extends RecyclerView.Adapter{
 
         private void setCardBackgroundColor(CardView cardView, Item item){
 
-            ColorHelper.setCardBackgroundColor(cardView, item.getIndependence());
+            LayoutHelper.setCardBackgroundColor(cardView, item.getIndependence());
 
         }
 

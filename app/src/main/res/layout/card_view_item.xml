@@ -74,7 +74,7 @@
                     android:id="@+id/text_view_item_price"
                     android:layout_width="0dp"
                     android:layout_marginLeft="5dp"
-                    android:layout_weight="0.7"
+                    android:layout_weight="1"
                     android:layout_height="wrap_content"
                     android:drawableStart="@drawable/ic_money_black_24dp"
                     android:textSize="18sp"
@@ -91,15 +91,13 @@
             android:orientation="horizontal"
             >
 
-            <Button
+            <ImageButton
                 android:id="@+id/buttonSubtract"
                 android:layout_width="0dp"
-                android:layout_weight="1.2"
+                android:layout_weight="1"
+                android:src="@drawable/ic_home_minus"
                 android:layout_height="match_parent"
-                android:drawableLeft="@drawable/ic_home_black_24dp"
-                android:textColor="@color/secondary_text"
-                android:text="@string/minus_sign"
-                android:textSize="24sp"
+                android:elevation="3dp"
                 />
 
             <ImageButton
@@ -115,12 +113,12 @@
 
             <Button
                 android:id="@+id/button_cart_to_stock"
-                android:layout_width="0dp"
-                android:layout_weight="1.8"
+                android:layout_width="wrap_content"
                 android:layout_height="match_parent"
                 android:text="@string/less_than"
                 android:textColor="@color/secondary_text"
                 android:textSize="18sp"
+                android:elevation="3dp"
                 />
 
             <ImageButton
@@ -134,13 +132,17 @@
 
             <Button
                 android:id="@+id/buttonAdd"
-                android:layout_width="0dp"
-                android:layout_weight="1.2"
                 android:layout_height="match_parent"
+                android:layout_width="0dp"
+                android:layout_weight="1"
                 android:textColor="@color/secondary_text"
-                android:text="@string/plus_sign"
-                android:drawableLeft="@drawable/ic_home_black_24dp"
+                android:drawableLeft="@drawable/ic_home_plus"
+                android:paddingStart="15dp"
                 android:textSize="18sp"
+                android:paddingEnd="3dp"
+                android:paddingRight="5dp"
+                android:textAlignment="textStart"
+                android:elevation="3dp"
                 />
 
         </LinearLayout>

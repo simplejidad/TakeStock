@@ -7,7 +7,7 @@ import android.view.View;
  * Created by digitalhouse on 26/10/17.
  */
 
-public class ColorHelper {
+public class LayoutHelper {
 
     public static void setBackgroundColor(View view, Integer independence){
 
@@ -15,9 +15,9 @@ public class ColorHelper {
         Integer itemIndependence = 120 - independence/255*30;
 
         if(independence == 0){
-            view.setBackgroundColor(ColorHelper.getIntFromColor(200, 100, 100));
+            view.setBackgroundColor(LayoutHelper.getIntFromColor(200, 100, 100));
         } else {
-            view.setBackgroundColor(ColorHelper.getIntFromColor(itemIndependence, 150, itemIndependence));
+            view.setBackgroundColor(LayoutHelper.getIntFromColor(itemIndependence, 150, itemIndependence));
         }
 
     };
@@ -36,9 +36,9 @@ public class ColorHelper {
         Integer itemIndependence = 120 - independence/255*30;
 
         if(independence == 0){
-            cardView.setCardBackgroundColor(ColorHelper.getIntFromColor(200, 100, 100));
+            cardView.setCardBackgroundColor(LayoutHelper.getIntFromColor(200, 100, 100));
         } else {
-            cardView.setCardBackgroundColor(ColorHelper.getIntFromColor(itemIndependence, 150, itemIndependence));
+            cardView.setCardBackgroundColor(LayoutHelper.getIntFromColor(itemIndependence, 150, itemIndependence));
         }
 
     };
