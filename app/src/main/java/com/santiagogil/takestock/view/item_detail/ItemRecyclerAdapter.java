@@ -3,6 +3,7 @@ package com.santiagogil.takestock.view.item_detail;
 import android.content.Context;
 import android.graphics.Color;
 import android.os.Build;
+import android.support.v7.widget.CardView;
 import android.support.v7.widget.RecyclerView;
 import android.view.LayoutInflater;
 import android.view.View;
@@ -17,6 +18,7 @@ import com.santiagogil.takestock.R;
 import com.santiagogil.takestock.controller.ConsumptionsController;
 import com.santiagogil.takestock.controller.ItemsController;
 import com.santiagogil.takestock.model.pojos.Item;
+import com.santiagogil.takestock.util.ColorHelper;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -83,7 +85,7 @@ public class ItemRecyclerAdapter extends RecyclerView.Adapter{
         private Context context;
         private View.OnClickListener onItemModifiedListener;
         private View itemView;
-        private LinearLayout cardLayout;
+        private CardView cardView;
 
         public ItemViewHolder(View itemView, Context context, View.OnClickListener onItemModifiedListener) {
             super(itemView);
@@ -98,7 +100,7 @@ public class ItemRecyclerAdapter extends RecyclerView.Adapter{
             buttonCartSubtract = (ImageButton) itemView.findViewById(R.id.button_cart_subtract);
             buttonCartAdd = (ImageButton) itemView.findViewById(R.id.button_cart_add);
             buttonCartToStock = (Button) itemView.findViewById(R.id.button_cart_to_stock);
-            cardLayout = (LinearLayout) itemView.findViewById(R.id.card_view_item_linear_layout);
+            cardView = (CardView) itemView.findViewById(R.id.card_view_item_card_view);
             this.context = context;
             this.onItemModifiedListener = onItemModifiedListener;
             this.itemView = itemView;
@@ -109,7 +111,7 @@ public class ItemRecyclerAdapter extends RecyclerView.Adapter{
             setTextsForLayout(item);
             setOnClickListeners(item);
             setDrawablesForButtons(item);
-            setCardBackgroundColor(item);
+            setCardBackgroundColor(cardView, item);
 
         }
 
@@ -257,27 +259,11 @@ public class ItemRecyclerAdapter extends RecyclerView.Adapter{
 
         }
 
-        public int getIntFromColor(int Red, int Green, int Blue){
-            Red = (Red << 16) & 0x00FF0000; //Shift red 16-bits and mask out other stuff
-            Green = (Green << 8) & 0x0000FF00; //Shift Green 8-bits and mask out other stuff
-            Blue = Blue & 0x000000FF; //Mask out anything not blue.
+        private void setCardBackgroundColor(CardView cardView, Item item){
 
-            return 0xFF000000 | Red | Green | Blue; //0xFF000000 for 100% Alpha. Bitwise OR everything together.
-        }
-
-        private void setCardBackgroundColor(Item item){
-
-            Integer itemIndependence = 120 - item.getIndependence()/255*30;
-
-            if(item.getIndependence() == 0){
-                cardLayout.setBackgroundColor(getIntFromColor(255, 100, 100));
-            } else {
-                cardLayout.setBackgroundColor(getIntFromColor(itemIndependence, 255, itemIndependence));
-            }
+            ColorHelper.setCardBackgroundColor(cardView, item.getIndependence());
 
         }
-
-
 
     }
 }

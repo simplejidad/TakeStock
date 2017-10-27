@@ -1,20 +1,30 @@
 <?xml version="1.0" encoding="utf-8"?>
 <android.support.v7.widget.CardView xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:app="http://schemas.android.com/apk/res-auto"
-    android:orientation="vertical"
     android:layout_width="match_parent"
     android:layout_height="wrap_content"
     android:layout_margin="3dp"
-    app:cardCornerRadius="10dp"
+    app:cardCornerRadius="5dp"
+    app:cardElevation="5dp"
+    android:id="@+id/card_view_item_card_view"
 
     >
 
     <LinearLayout
-        android:id="@+id/card_view_item_linear_layout"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:orientation="vertical"
         >
+
+        <TextView
+            android:id="@+id/text_view_item_name"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:text="@string/description"
+            android:gravity="center"
+            android:textSize="22sp"
+            android:layout_gravity="center_vertical"
+            />
 
         <LinearLayout
             android:layout_width="match_parent"
@@ -24,70 +34,52 @@
 
             <LinearLayout
                 android:layout_width="match_parent"
-                android:orientation="vertical"
                 android:layout_height="wrap_content"
-                >
+                android:orientation="horizontal">
 
                 <TextView
-                    android:id="@+id/text_view_item_name"
-                    android:layout_width="match_parent"
+                    android:id="@+id/text_view_item_independence"
+                    android:layout_width="0dp"
+                    android:layout_weight="1.6"
+                    android:lines="1"
                     android:layout_height="wrap_content"
-                    android:text="@string/description"
-                    android:gravity="center"
-                    android:textSize="22sp"
-                    android:layout_gravity="center_vertical"
+                    android:drawableLeft="@drawable/ic_emoticon_smile"
+                    android:textSize="18sp"
+                    android:layout_marginLeft="5dp"
+                    android:text="lorem"
                     />
 
-                <LinearLayout
-                    android:layout_width="match_parent"
+                <TextView
+                    android:id="@+id/text_view_item_stock"
+                    android:layout_width="0dp"
+                    android:layout_weight="0.7"
                     android:layout_height="wrap_content"
-                    android:orientation="horizontal">
+                    android:textSize="18sp"
+                    android:drawableLeft="@drawable/ic_home_black_24dp"
+                    android:text="@string/by"
+                    android:gravity="center"
+                    />
 
-                    <TextView
-                        android:id="@+id/text_view_item_independence"
-                        android:layout_width="0dp"
-                        android:layout_weight="1.6"
-                        android:lines="1"
-                        android:layout_height="wrap_content"
-                        android:drawableLeft="@drawable/ic_emoticon_smile"
-                        android:textSize="18sp"
-                        android:layout_marginLeft="5dp"
-                        android:text="lorem"
-                        />
+                <TextView
+                    android:id="@+id/text_view_needed_for_goal"
+                    android:layout_width="0dp"
+                    android:layout_height="wrap_content"
+                    android:textSize="18sp"
+                    android:gravity="end"
+                    android:layout_weight="1"
 
-                    <TextView
-                        android:id="@+id/text_view_item_stock"
-                        android:layout_width="0dp"
-                        android:layout_weight="0.7"
-                        android:layout_height="wrap_content"
-                        android:textSize="18sp"
-                        android:drawableLeft="@drawable/ic_home_black_24dp"
-                        android:text="@string/by"
-                        android:gravity="center"
-                        />
+                    />
 
-                    <TextView
-                        android:id="@+id/text_view_needed_for_goal"
-                        android:layout_width="0dp"
-                        android:layout_height="wrap_content"
-                        android:textSize="18sp"
-                        android:gravity="end"
-                        android:layout_weight="1"
-
-                        />
-
-                    <TextView
-                        android:id="@+id/text_view_item_price"
-                        android:layout_width="0dp"
-                        android:layout_marginLeft="5dp"
-                        android:layout_weight="0.7"
-                        android:layout_height="wrap_content"
-                        android:drawableStart="@drawable/ic_money_black_24dp"
-                        android:textSize="18sp"
-                        android:layout_marginRight="5dp"
-                        />
-
-                </LinearLayout>
+                <TextView
+                    android:id="@+id/text_view_item_price"
+                    android:layout_width="0dp"
+                    android:layout_marginLeft="5dp"
+                    android:layout_weight="0.7"
+                    android:layout_height="wrap_content"
+                    android:drawableStart="@drawable/ic_money_black_24dp"
+                    android:textSize="18sp"
+                    android:layout_marginRight="5dp"
+                    />
 
             </LinearLayout>
 

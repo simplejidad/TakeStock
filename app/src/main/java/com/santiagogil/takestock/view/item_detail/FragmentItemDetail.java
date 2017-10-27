@@ -1,6 +1,7 @@
 package com.santiagogil.takestock.view.item_detail;
 
 import android.content.Context;
+import android.graphics.Color;
 import android.os.Build;
 import android.os.Bundle;
 import android.support.annotation.Nullable;
@@ -19,6 +20,7 @@ import com.santiagogil.takestock.R;
 import com.santiagogil.takestock.controller.ConsumptionsController;
 import com.santiagogil.takestock.controller.ItemsController;
 import com.santiagogil.takestock.model.pojos.Consumption;
+import com.santiagogil.takestock.util.ColorHelper;
 import com.santiagogil.takestock.util.DatabaseHelper;
 import com.santiagogil.takestock.model.pojos.Item;
 import com.santiagogil.takestock.util.SharedElementTransition;
@@ -100,13 +102,7 @@ public class FragmentItemDetail extends Fragment {
 
     private void setBackgroundColor(View fragmentView) {
 
-        Integer itemIndependence = 120 - item.getIndependence()/255*30;
-
-        if(item.getIndependence() == 0){
-            fragmentView.setBackgroundColor(getIntFromColor(255, 100, 100));
-        } else {
-            fragmentView.setBackgroundColor(getIntFromColor(itemIndependence, 255, itemIndependence));
-        }
+        ColorHelper.setBackgroundColor(fragmentView, item.getIndependence());
 
     }
 
@@ -356,11 +352,4 @@ public class FragmentItemDetail extends Fragment {
 
     }
 
-    public int getIntFromColor(int Red, int Green, int Blue){
-        Red = (Red << 16) & 0x00FF0000; //Shift red 16-bits and mask out other stuff
-        Green = (Green << 8) & 0x0000FF00; //Shift Green 8-bits and mask out other stuff
-        Blue = Blue & 0x000000FF; //Mask out anything not blue.
-
-        return 0xFF000000 | Red | Green | Blue; //0xFF000000 for 100% Alpha. Bitwise OR everything together.
-    }
 }
