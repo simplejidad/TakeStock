@@ -4,10 +4,15 @@ package com.santiagogil.takestock.view.item_lists;
 import android.os.Bundle;
 import android.support.annotation.Nullable;
 import android.support.v4.app.Fragment;
+import android.support.v4.view.MenuItemCompat;
+import android.support.v4.widget.SearchViewCompat;
 import android.support.v4.widget.SwipeRefreshLayout;
 import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
+import android.support.v7.widget.SearchView;
 import android.view.LayoutInflater;
+import android.view.Menu;
+import android.view.MenuItem;
 import android.view.View;
 import android.view.ViewGroup;
 import android.view.WindowManager;
@@ -21,6 +26,7 @@ import com.santiagogil.takestock.model.pojos.Item;
 import com.santiagogil.takestock.util.FragmentLifecycle;
 import com.santiagogil.takestock.view.item_detail.ItemRecyclerAdapter;
 
+import java.util.ArrayList;
 import java.util.List;
 
 
@@ -30,24 +36,25 @@ public class FragmentItemList extends Fragment implements FragmentLifecycle {
     private RecyclerView recyclerView;
     private ItemRecyclerAdapter itemRecyclerAdapter;
     private BehaviourGetItemList behaviourGetItemList;
-    private String title;
-    private Integer currentRecyclerPosition;
     private Bundle bundle;
     private FragmentActivityCommunicator fragmentActivityCommunicator;
     private SwipeRefreshLayout swipeContainer;
+    private List<Item> itemList;
 
     public static final String TITLE = "textViewTitle";
     public static final String POSITION = "position";
     public static final String BEHAVIOURGETITEMLIST = "behaviourGetList";
+    public static final String FILTER = "filter";
 
 
-    public static FragmentItemList getfragmentItemList(String title, BehaviourGetItemList behaviourGetItemList, Integer position, FragmentActivityCommunicator fragmentActivityCommunicator) {
+    public static FragmentItemList getfragmentItemList(String title, BehaviourGetItemList behaviourGetItemList, Integer position, FragmentActivityCommunicator fragmentActivityCommunicator, String filter) {
 
         FragmentItemList fragmentItemList = new FragmentItemList();
         fragmentItemList.setFragmentActivityCommunicator(fragmentActivityCommunicator);
         Bundle bundle = new Bundle();
         bundle.putString(TITLE, title);
         bundle.putInt(POSITION, position);
+        bundle.putString(FILTER, filter);
         bundle.putSerializable(BEHAVIOURGETITEMLIST, behaviourGetItemList);
 
         fragmentItemList.setArguments(bundle);
@@ -67,15 +74,14 @@ public class FragmentItemList extends Fragment implements FragmentLifecycle {
 
         bundle = getArguments();
 
-        title = bundle.getString(TITLE);
-
         behaviourGetItemList = (BehaviourGetItemList) bundle.getSerializable(BEHAVIOURGETITEMLIST);
 
         this.getActivity().getWindow().setSoftInputMode(WindowManager.LayoutParams.SOFT_INPUT_STATE_HIDDEN);
 
         loadRecyclerView(view);
 
-        itemRecyclerAdapter.setItems(behaviourGetItemList.getItemList(getContext()));
+        itemList = behaviourGetItemList.getItemList(getContext());
+        itemRecyclerAdapter.setItems(itemList);
         itemRecyclerAdapter.notifyDataSetChanged();
 
         updateRecyclerViewPosition();
@@ -90,6 +96,7 @@ public class FragmentItemList extends Fragment implements FragmentLifecycle {
             }
         });
 
+        updateListWithFilter();
 
         return view;
     }
@@ -179,17 +186,6 @@ public class FragmentItemList extends Fragment implements FragmentLifecycle {
     }
 
 
-
-    public Integer findItemPosition(String itemID) {
-        List<Item> items = itemRecyclerAdapter.getItems();
-        for (Item item : items) {
-            if (item.getID().equals(itemID)) {
-                return (items.indexOf(item));
-            }
-        }
-        return null;
-    }
-
     public void setFragmentActivityCommunicator(FragmentActivityCommunicator fragmentActivityCommunicator) {
         this.fragmentActivityCommunicator = fragmentActivityCommunicator;
     }
@@ -206,11 +202,40 @@ public class FragmentItemList extends Fragment implements FragmentLifecycle {
     }
 
 
-
     @Override
     public void onCreate(@Nullable Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         postponeEnterTransition();
+    }
+
+    public List<Item> getItemList() {
+        return itemList;
+    }
+
+    public void updateListWithFilter(){
+
+        String filter = getArguments().getString(FILTER);
+        List<Item> filteredItemList = new ArrayList<>();
+
+        if(filter.equals("") || filter.equals(null)){
+
+        } else{
+            for(Item item : itemList){
+                if(item.getName().toLowerCase().contains(filter.toLowerCase())){
+                    filteredItemList.add(item);
+
+                }
+            }
+            if(filteredItemList.size() == 0){
+                Item anItem = new Item("*** No Items Found ***");
+                filteredItemList.add(anItem);
+            }
+            itemRecyclerAdapter.setItems(filteredItemList);
+            itemRecyclerAdapter.notifyDataSetChanged();
+        }
+
+
+
     }
 
 }

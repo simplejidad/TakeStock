@@ -1,7 +1,6 @@
 <?xml version="1.0" encoding="utf-8"?>
 <LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:tools="http://schemas.android.com/tools"
-    xmlns:app="http://schemas.android.com/apk/res-auto"
     android:id="@+id/fragment_item_detail_main_linear_layout"
     android:orientation="vertical"
     android:layout_width="match_parent"
@@ -32,7 +31,7 @@
         <TextView
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:text="Stock"
+            android:text="@string/stock"
             android:textSize="24sp"
             android:layout_marginRight="5dp"
             android:drawableLeft="@drawable/ic_home_black_24dp"
@@ -60,7 +59,7 @@
             android:id="@+id/text_view_item_price"
             android:layout_height="wrap_content"
             android:layout_width="wrap_content"
-            android:textSize="24dp"
+            android:textSize="24sp"
             android:text="@string/small_number"
             />
 
@@ -87,7 +86,7 @@
             android:layout_height="wrap_content"
             android:layout_width="wrap_content"
             android:textSize="24dp"
-            android:text="@string/lorem_ipsum"
+            android:text="@string/small_number"
             />
 
 
@@ -113,7 +112,7 @@
             android:layout_height="wrap_content"
             android:layout_width="wrap_content"
             android:textSize="24dp"
-            android:text="@string/lorem"
+            android:text="@string/small_number"
             />
 
 
@@ -137,8 +136,8 @@
             android:id="@+id/text_view_independence"
             android:layout_height="wrap_content"
             android:layout_width="wrap_content"
-            android:textSize="24dp"
-            android:text="@string/lorem_ipsum"
+            android:textSize="24sp"
+            android:text="@string/small_number"
             />
 
 

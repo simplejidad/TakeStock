@@ -8,7 +8,10 @@ import android.support.design.widget.NavigationView;
 import android.support.v4.app.Fragment;
 import android.support.v4.app.FragmentManager;
 import android.support.v4.app.FragmentTransaction;
+import android.support.v4.view.MenuItemCompat;
+import android.support.v4.widget.SearchViewCompat;
 import android.support.v7.app.AppCompatActivity;
+import android.support.v7.widget.SearchView;
 import android.support.v7.widget.Toolbar;
 import android.transition.Fade;
 import android.view.Menu;
@@ -42,8 +45,15 @@ public class MainActivityCommunicator extends AppCompatActivity implements Fragm
 
     private FirebaseAuth fAuth;
     private FirebaseAuth.AuthStateListener authStateListener;
-
+    private SearchViewCompat.OnQueryTextListener onQueryTextListener;
     private NavigationView navigationView;
+    private FragmentItemListsViewPager fragmentItemListsViewPager;
+    private String filter = "";
+
+    public String getFilter() {
+        return filter;
+    }
+
 
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -83,11 +93,14 @@ public class MainActivityCommunicator extends AppCompatActivity implements Fragm
             navigationView.setNavigationItemSelectedListener(navigationViewListener);
 
 
-            FragmentItemListsViewPager fragmentMainView = new FragmentItemListsViewPager();
-            fragmentMainView.setFragmentActivityCommunicator(MainActivityCommunicator.this);
+            fragmentItemListsViewPager = new FragmentItemListsViewPager();
+            Bundle bundle = new Bundle();
+            bundle.putString(FragmentItemList.FILTER, filter);
+            fragmentItemListsViewPager.setArguments(bundle);
+            fragmentItemListsViewPager.setFragmentActivityCommunicator(MainActivityCommunicator.this);
             FragmentManager fragmentManager = this.getSupportFragmentManager();
             FragmentTransaction fragmentTransaction = fragmentManager.beginTransaction();
-            fragmentTransaction.replace(R.id.fragment_holder, fragmentMainView);
+            fragmentTransaction.replace(R.id.fragment_holder, fragmentItemListsViewPager);
             fragmentTransaction.commit();
 
             ConsumptionsController consumptionsController = new ConsumptionsController();
@@ -232,8 +245,31 @@ public class MainActivityCommunicator extends AppCompatActivity implements Fragm
     @Override
     public boolean onCreateOptionsMenu(Menu menu) {
         getMenuInflater().inflate(R.menu.toolbar_main_menu, menu);
+
+        final MenuItem searchItem = menu.findItem(R.id.action_search);
+        final SearchView searchView = (SearchView) MenuItemCompat.getActionView(searchItem);
+        searchView.setOnQueryTextListener(new SearchView.OnQueryTextListener() {
+            @Override
+            public boolean onQueryTextSubmit(String query) {
+
+
+                return false;
+            }
+
+            @Override
+            public boolean onQueryTextChange(String newFilter) {
+
+                filter = newFilter;
+                fragmentItemListsViewPager.getArguments().putString(FragmentItemList.FILTER, filter);
+                fragmentItemListsViewPager.getItemListsViewPagerAdapter().updateFragmentsWithFilter(filter);
+
+                return false;
+            }
+        });
+
         return true;
     }
+
 
     @Override
     public boolean onOptionsItemSelected(MenuItem item) {
@@ -247,6 +283,7 @@ public class MainActivityCommunicator extends AppCompatActivity implements Fragm
                 return super.onOptionsItemSelected(item);
         }
     }
+
 }
 
 

@@ -1,5 +1,6 @@
 package com.santiagogil.takestock.view.item_lists;
 
+import android.os.Bundle;
 import android.support.v4.app.Fragment;
 import android.support.v4.app.FragmentManager;
 import android.support.v4.app.FragmentStatePagerAdapter;
@@ -33,4 +34,18 @@ public class ItemListsViewPagerAdapter extends FragmentStatePagerAdapter {
         return fragmentItemListList;
     }
 
+    public void updateFragmentsWithFilter(String filter){
+        for(FragmentItemList fragmentItemList : fragmentItemListList){
+            if(fragmentItemList != null){
+
+                fragmentItemList.getArguments().putString(FragmentItemList.FILTER, filter);
+
+                if (fragmentItemList.getItemList() != null){
+
+                    fragmentItemList.updateListWithFilter();
+
+                }
+            }
+        }
+    }
 }
