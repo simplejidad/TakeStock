@@ -8,14 +8,14 @@ import android.support.design.widget.NavigationView;
 import android.support.v4.app.Fragment;
 import android.support.v4.app.FragmentManager;
 import android.support.v4.app.FragmentTransaction;
-import android.support.v4.view.MenuItemCompat;
-import android.support.v4.widget.SearchViewCompat;
-import android.support.v7.app.AppCompatActivity;
-import android.support.v7.widget.SearchView;
+import android.support.v7.app.AppCompatActivity;;
 import android.support.v7.widget.Toolbar;
+import android.text.Editable;
+import android.text.TextWatcher;
 import android.transition.Fade;
 import android.view.Menu;
 import android.view.MenuItem;
+import android.widget.EditText;
 import android.widget.TextView;
 import android.widget.Toast;
 
@@ -45,10 +45,10 @@ public class MainActivityCommunicator extends AppCompatActivity implements Fragm
 
     private FirebaseAuth fAuth;
     private FirebaseAuth.AuthStateListener authStateListener;
-    private SearchViewCompat.OnQueryTextListener onQueryTextListener;
     private NavigationView navigationView;
     private FragmentItemListsViewPager fragmentItemListsViewPager;
     private String filter = "";
+    private Toolbar toolbar;
 
     public String getFilter() {
         return filter;
@@ -59,7 +59,7 @@ public class MainActivityCommunicator extends AppCompatActivity implements Fragm
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_main);
 
-        Toolbar toolbar = (Toolbar) findViewById(R.id.toolbar);
+        toolbar = (Toolbar) findViewById(R.id.toolbar);
         setSupportActionBar(toolbar);
         getSupportActionBar().setDisplayHomeAsUpEnabled(true);
 
@@ -246,24 +246,27 @@ public class MainActivityCommunicator extends AppCompatActivity implements Fragm
     public boolean onCreateOptionsMenu(Menu menu) {
         getMenuInflater().inflate(R.menu.toolbar_main_menu, menu);
 
-        final MenuItem searchItem = menu.findItem(R.id.action_search);
-        final SearchView searchView = (SearchView) MenuItemCompat.getActionView(searchItem);
-        searchView.setOnQueryTextListener(new SearchView.OnQueryTextListener() {
+
+
+        EditText editTextSearch = (EditText) toolbar.findViewById(R.id.toolbar_edit_text_search);
+        editTextSearch.addTextChangedListener(new TextWatcher() {
             @Override
-            public boolean onQueryTextSubmit(String query) {
+            public void beforeTextChanged(CharSequence s, int start, int count, int after) {
 
-
-                return false;
             }
 
             @Override
-            public boolean onQueryTextChange(String newFilter) {
+            public void onTextChanged(CharSequence s, int start, int before, int count) {
 
-                filter = newFilter;
+                filter = s.toString();
                 fragmentItemListsViewPager.getArguments().putString(FragmentItemList.FILTER, filter);
                 fragmentItemListsViewPager.getItemListsViewPagerAdapter().updateFragmentsWithFilter(filter);
 
-                return false;
+            }
+
+            @Override
+            public void afterTextChanged(Editable s) {
+
             }
         });
 

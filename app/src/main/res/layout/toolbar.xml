@@ -8,6 +8,15 @@
     android:background="@color/primary_light"
     app:titleTextColor="@color/secondary_text">
 
+    <EditText
+        android:id="@+id/toolbar_edit_text_search"
+        android:layout_width="wrap_content"
+        android:minWidth="50dp"
+        android:layout_marginStart="10dp"
+        android:layout_height="match_parent"
+        android:layout_gravity="right"
+        android:background="@color/primary_light" />
+
 
     </android.support.v7.widget.Toolbar>
 
