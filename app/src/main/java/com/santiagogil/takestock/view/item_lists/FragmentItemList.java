@@ -218,7 +218,7 @@ public class FragmentItemList extends Fragment implements FragmentLifecycle {
         List<Item> filteredItemList = new ArrayList<>();
 
         if(filter.equals("") || filter.equals(null)){
-
+            filteredItemList = itemList;
         } else{
             for(Item item : itemList){
                 if(item.getName().toLowerCase().contains(filter.toLowerCase())){

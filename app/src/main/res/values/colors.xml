@@ -10,5 +10,8 @@
         <color name="icons">#FFFFFF</color>
         <color name="divider">#BDBDBD</color>
         <color name="badges">#2e2e2e</color>
+        <color name="out_of_stock">#FFF8BBD0</color>
+        <color name="some_independence">#FFB9F6CA</color>
+        <color name="full_independence">#FFA7FFEB</color>
 
 </resources>

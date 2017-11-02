@@ -2,6 +2,7 @@ package com.santiagogil.takestock.view.item_detail;
 
 import android.content.Context;
 import android.os.Build;
+import android.support.v4.content.ContextCompat;
 import android.support.v7.widget.CardView;
 import android.support.v7.widget.RecyclerView;
 import android.view.LayoutInflater;
@@ -109,7 +110,7 @@ public class ItemRecyclerAdapter extends RecyclerView.Adapter{
             setTextsForLayout(item);
             setOnClickListeners(item);
             setDrawablesForButtons(item);
-            setCardBackgroundColor(cardView, item);
+            setCardBackgroundColor(cardView, item.getIndependence());
 
         }
 
@@ -260,9 +261,15 @@ public class ItemRecyclerAdapter extends RecyclerView.Adapter{
 
         }
 
-        private void setCardBackgroundColor(CardView cardView, Item item){
+        private void setCardBackgroundColor(CardView cardView, Integer independence){
 
-            LayoutHelper.setCardBackgroundColor(cardView, item.getIndependence());
+            if(independence == 0){
+                cardView.setCardBackgroundColor(ContextCompat.getColor(context, R.color.out_of_stock));
+            } else if(independence < 30){
+                cardView.setCardBackgroundColor(ContextCompat.getColor(context, R.color.some_independence));
+            } else if(independence >=30){
+                cardView.setCardBackgroundColor(ContextCompat.getColor(context, R.color.full_independence));
+            }
 
         }
 

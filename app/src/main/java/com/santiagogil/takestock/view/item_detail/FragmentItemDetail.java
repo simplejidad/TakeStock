@@ -5,6 +5,7 @@ import android.os.Build;
 import android.os.Bundle;
 import android.support.annotation.Nullable;
 import android.support.v4.app.Fragment;
+import android.support.v4.content.ContextCompat;
 import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
 import android.view.LayoutInflater;
@@ -94,15 +95,20 @@ public class FragmentItemDetail extends Fragment {
 
         setOnClickListeners();
 
-        setBackgroundColor(fragmentView);
+        setBackgroundColor(fragmentView, item.getIndependence());
 
         return fragmentView;
     }
 
-    private void setBackgroundColor(View fragmentView) {
+    private void setBackgroundColor(View fragmentView, Integer independence) {
 
-        LayoutHelper.setBackgroundColor(fragmentView, item.getIndependence());
-
+        if(independence == 0){
+            fragmentView.setBackgroundColor(ContextCompat.getColor(context, R.color.out_of_stock));
+        } else if(independence < 30){
+            fragmentView.setBackgroundColor(ContextCompat.getColor(context, R.color.some_independence));
+        } else if(independence >=30){
+            fragmentView.setBackgroundColor(ContextCompat.getColor(context, R.color.full_independence));
+        }
     }
 
     private void updateFieldsWithItemDetails() {
