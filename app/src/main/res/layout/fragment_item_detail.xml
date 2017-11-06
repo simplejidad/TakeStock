@@ -9,21 +9,40 @@
     android:background="@color/cardview_light_background">
 
 
-    <TextView
-        android:id="@+id/text_view_item_name"
-        android:layout_width="wrap_content"
+    <ViewSwitcher
+        xmlns:android="http://schemas.android.com/apk/res/android"
+        android:id="@+id/fragment_item_detail_view_switcher_name"
         android:layout_height="wrap_content"
-        android:text="@string/lorem_ipsum"
-        android:layout_margin="5dp"
-        android:textSize="40sp"
+        android:layout_width="wrap_content"
         android:layout_gravity="center_horizontal"
-        >
+        android:measureAllChildren="false">
 
-    </TextView>
+        <TextView
+            android:id="@+id/text_view_item_name"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:text="@string/lorem_ipsum"
+            android:layout_margin="5dp"
+            android:textSize="40sp"
+            android:layout_gravity="center_horizontal"
+            />
+
+        <EditText
+            android:id="@+id/fragment_item_detail_hidden_edit_text_name"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:minWidth="200dp"
+            android:textSize="24dp"
+            android:padding="2dp"
+            />
+
+    </ViewSwitcher>
+
 
     <LinearLayout
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
+        android:orientation="horizontal"
         android:layout_marginLeft="5dp"
         android:layout_marginRight="5dp"
         android:layout_marginBottom="2dp">
@@ -37,13 +56,31 @@
             android:drawableLeft="@drawable/ic_home_black_24dp"
             />
 
-        <TextView
-            android:id="@+id/text_view_item_stock"
+
+        <ViewSwitcher
+            xmlns:android="http://schemas.android.com/apk/res/android"
+            android:id="@+id/fragment_item_detail_view_switcher_stock"
             android:layout_height="wrap_content"
             android:layout_width="wrap_content"
-            android:textSize="24sp"
-            android:text="@string/small_number"
-            />
+            android:measureAllChildren="false">
+
+            <TextView
+                android:id="@+id/text_view_item_stock"
+                android:layout_height="wrap_content"
+                android:layout_width="wrap_content"
+                android:textSize="24sp"
+                android:text="@string/small_number"
+                />
+
+            <EditText
+                android:id="@+id/fragment_item_detail_hidden_edit_text_stock"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:textSize="24dp"
+                android:minWidth="100dp"
+                android:padding="2dp"/>
+
+        </ViewSwitcher>
 
         <TextView
             android:layout_width="wrap_content"
@@ -55,13 +92,30 @@
             android:layout_marginRight="5dp"
             />
 
-        <TextView
-            android:id="@+id/text_view_item_price"
+        <ViewSwitcher
+            xmlns:android="http://schemas.android.com/apk/res/android"
+            android:id="@+id/fragment_item_detail_view_switcher_price"
             android:layout_height="wrap_content"
             android:layout_width="wrap_content"
-            android:textSize="24sp"
-            android:text="@string/small_number"
-            />
+            android:measureAllChildren="false">
+
+            <TextView
+                android:id="@+id/text_view_item_price"
+                android:layout_height="wrap_content"
+                android:layout_width="wrap_content"
+                android:textSize="24sp"
+                android:text="@string/small_number"
+                />
+
+            <EditText
+                android:id="@+id/fragment_item_detail_hidden_edit_text_price"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:textSize="24dp"
+                android:minWidth="100dp"
+                android:padding="2dp"/>
+
+        </ViewSwitcher>
 
 
     </LinearLayout>
@@ -70,7 +124,7 @@
         android:layout_height="wrap_content"
         android:layout_marginLeft="5dp"
         android:layout_marginRight="5dp"
-        android:layout_marginBottom="2dp">
+        android:layout_marginBottom="0dp">
 
         <TextView
             android:layout_width="wrap_content"
@@ -81,13 +135,32 @@
             android:layout_marginRight="5dp"
             />
 
-        <TextView
-            android:id="@+id/textViewConsumptionRate"
+        <ViewSwitcher
+            xmlns:android="http://schemas.android.com/apk/res/android"
+            android:id="@+id/fragment_item_detail_view_switcher_consumption_rate"
             android:layout_height="wrap_content"
             android:layout_width="wrap_content"
-            android:textSize="24dp"
-            android:text="@string/small_number"
-            />
+            android:measureAllChildren="false">
+
+            <TextView
+                android:id="@+id/textViewConsumptionRate"
+                android:layout_height="wrap_content"
+                android:layout_width="wrap_content"
+                android:textSize="24dp"
+                android:text="@string/small_number"
+                />
+
+            <EditText
+                android:id="@+id/fragment_item_detail_hidden_edit_text_consumption_rate"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:textSize="24dp"
+                android:minWidth="100dp"
+                android:padding="2dp"
+
+                />
+
+        </ViewSwitcher>
 
 
     </LinearLayout>
@@ -96,7 +169,7 @@
         android:layout_height="wrap_content"
         android:layout_marginLeft="5dp"
         android:layout_marginRight="5dp"
-        android:layout_marginBottom="2dp">
+        android:layout_marginBottom="0dp">
 
         <TextView
             android:layout_width="wrap_content"
@@ -107,13 +180,34 @@
             android:layout_marginRight="5dp"
             />
 
-        <TextView
-            android:id="@+id/textViewMinimumPurchaceAmmount"
+
+        <ViewSwitcher
+            xmlns:android="http://schemas.android.com/apk/res/android"
+            android:id="@+id/fragment_item_detail_view_switcher_minimum_purchace"
             android:layout_height="wrap_content"
             android:layout_width="wrap_content"
-            android:textSize="24dp"
-            android:text="@string/small_number"
-            />
+            android:measureAllChildren="false">
+
+            <TextView
+                android:id="@+id/textViewMinimumPurchaceAmmount"
+                android:layout_height="wrap_content"
+                android:layout_width="wrap_content"
+                android:textSize="24dp"
+                android:text="@string/small_number"
+                />
+
+            <EditText
+                android:id="@+id/fragment_item_detail_hidden_edit_text_minimum_purchace"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:textSize="24dp"
+                android:minWidth="100dp"
+                android:padding="2dp"
+                />
+
+        </ViewSwitcher>
+
+
 
 
     </LinearLayout>
@@ -121,7 +215,9 @@
     <LinearLayout
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:layout_margin="5dp">
+        android:layout_marginStart="5dp"
+        android:layout_marginEnd="5dp"
+        >
 
         <TextView
             android:layout_width="wrap_content"
@@ -218,15 +314,50 @@
             android:elevation="3dp"
             />
 
-        <ImageButton
+        <ViewSwitcher
+            android:id="@+id/fragment_item_detail_view_switcher_edit"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:measureAllChildren="false">
+
+
+            <ImageButton
             android:id="@+id/buttonEditItem"
             android:layout_width="100dp"
             android:layout_height="wrap_content"
             android:layout_marginRight="5dp"
             android:layout_marginLeft="5dp"
             android:src="@drawable/ic_create_black_24dp"
-            android:elevation="3dp"
-            />
+            android:elevation="3dp"/>
+
+            <LinearLayout
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:orientation="horizontal">
+
+                <ImageButton
+                    android:id="@+id/button_cancel"
+                    android:layout_width="100dp"
+                    android:layout_height="wrap_content"
+                    android:layout_marginRight="5dp"
+                    android:layout_marginLeft="5dp"
+                    android:src="@drawable/ic_create_black_24dp"
+                    android:elevation="3dp"/>
+
+                <ImageButton
+                    android:id="@+id/button_save"
+                    android:layout_width="100dp"
+                    android:layout_height="wrap_content"
+                    android:layout_marginRight="5dp"
+                    android:layout_marginLeft="5dp"
+                    android:src="@drawable/ic_create_black_24dp"
+                    android:elevation="3dp"/>
+
+
+            </LinearLayout>
+
+
+        </ViewSwitcher>
 
         <ImageButton
             android:id="@+id/buttonDeleteItem"

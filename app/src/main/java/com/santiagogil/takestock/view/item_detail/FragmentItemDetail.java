@@ -12,9 +12,11 @@ import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.Button;
+import android.widget.EditText;
 import android.widget.ImageButton;
 import android.widget.TextView;
 import android.widget.Toast;
+import android.widget.ViewSwitcher;
 
 import com.santiagogil.takestock.R;
 import com.santiagogil.takestock.controller.ConsumptionsController;
@@ -24,6 +26,8 @@ import com.santiagogil.takestock.util.LayoutHelper;
 import com.santiagogil.takestock.util.DatabaseHelper;
 import com.santiagogil.takestock.model.pojos.Item;
 import com.santiagogil.takestock.util.SharedElementTransition;
+
+import java.util.function.ToDoubleBiFunction;
 
 public class FragmentItemDetail extends Fragment {
 
@@ -177,7 +181,99 @@ public class FragmentItemDetail extends Fragment {
             @Override
             public void onClick(View view) {
 
-                fragmentActivityCommunicator.goToEditItemActivity(getArguments());
+                ViewSwitcher viewSwitcherConsumptionName = (ViewSwitcher) fragmentView.findViewById(R.id.fragment_item_detail_view_switcher_name);
+                ViewSwitcher viewSwitcherConsumptionRate = (ViewSwitcher) fragmentView.findViewById(R.id.fragment_item_detail_view_switcher_consumption_rate);
+                ViewSwitcher viewSwitcherMinimumPurchace = (ViewSwitcher) fragmentView.findViewById(R.id.fragment_item_detail_view_switcher_minimum_purchace);
+                ViewSwitcher viewSwitcherPrice = (ViewSwitcher) fragmentView.findViewById(R.id.fragment_item_detail_view_switcher_price);
+                ViewSwitcher viewSwitcherStock = (ViewSwitcher) fragmentView.findViewById(R.id.fragment_item_detail_view_switcher_stock);
+                ViewSwitcher viewSwitcherEdit = (ViewSwitcher) fragmentView.findViewById(R.id.fragment_item_detail_view_switcher_edit);
+
+                viewSwitcherConsumptionName.showNext();
+                viewSwitcherConsumptionRate.showNext();
+                viewSwitcherMinimumPurchace.showNext();
+                viewSwitcherPrice.showNext();
+                viewSwitcherStock.showNext();
+                viewSwitcherEdit.showNext();
+
+                EditText editTextName = (EditText) fragmentView.findViewById(R.id.fragment_item_detail_hidden_edit_text_name);
+                EditText editTextCosumptionRate = (EditText) fragmentView.findViewById(R.id.fragment_item_detail_hidden_edit_text_consumption_rate);
+                EditText editTextMinimumPurchace = (EditText) fragmentView.findViewById(R.id.fragment_item_detail_hidden_edit_text_minimum_purchace);
+                EditText editTextPrice = (EditText) fragmentView.findViewById(R.id.fragment_item_detail_hidden_edit_text_price);
+                EditText editTextStock = (EditText) fragmentView.findViewById(R.id.fragment_item_detail_hidden_edit_text_stock);
+
+                editTextName.setHint(textViewItemName.getText());
+                editTextCosumptionRate.setHint(textViewConsumptionRate.getText());
+                editTextMinimumPurchace.setHint(textViewMinimumPurchace.getText());
+                editTextPrice.setHint(textViewItemPrice.getText());
+                editTextStock.setHint(textViewItemStock.getText());
+
+                editTextName.setText(textViewItemName.getText());
+                editTextCosumptionRate.setText(textViewConsumptionRate.getText());
+                editTextMinimumPurchace.setText(textViewMinimumPurchace.getText());
+                editTextPrice.setText(textViewItemPrice.getText());
+                editTextStock.setText(textViewItemStock.getText());
+
+                ImageButton saveButton = (ImageButton) fragmentView.findViewById(R.id.button_save);
+                ImageButton cancelButton = (ImageButton) fragmentView.findViewById(R.id.button_cancel);
+
+                cancelButton.setOnClickListener(new View.OnClickListener() {
+                    @Override
+                    public void onClick(View v) {
+                        ViewSwitcher viewSwitcherConsumptionName = (ViewSwitcher) fragmentView.findViewById(R.id.fragment_item_detail_view_switcher_name);
+                        ViewSwitcher viewSwitcherConsumptionRate = (ViewSwitcher) fragmentView.findViewById(R.id.fragment_item_detail_view_switcher_consumption_rate);
+                        ViewSwitcher viewSwitcherMinimumPurchace = (ViewSwitcher) fragmentView.findViewById(R.id.fragment_item_detail_view_switcher_minimum_purchace);
+                        ViewSwitcher viewSwitcherPrice = (ViewSwitcher) fragmentView.findViewById(R.id.fragment_item_detail_view_switcher_price);
+                        ViewSwitcher viewSwitcherStock = (ViewSwitcher) fragmentView.findViewById(R.id.fragment_item_detail_view_switcher_stock);
+                        ViewSwitcher viewSwitcherEdit = (ViewSwitcher) fragmentView.findViewById(R.id.fragment_item_detail_view_switcher_edit);
+
+                        viewSwitcherConsumptionName.showNext();
+                        viewSwitcherConsumptionRate.showNext();
+                        viewSwitcherMinimumPurchace.showNext();
+                        viewSwitcherPrice.showNext();
+                        viewSwitcherStock.showNext();
+                        viewSwitcherEdit.showNext();
+                    }
+                });
+
+                saveButton.setOnClickListener(new View.OnClickListener() {
+                    @Override
+                    public void onClick(View v) {
+                        updateItemDetails();
+                        ViewSwitcher viewSwitcherConsumptionName = (ViewSwitcher) fragmentView.findViewById(R.id.fragment_item_detail_view_switcher_name);
+                        ViewSwitcher viewSwitcherConsumptionRate = (ViewSwitcher) fragmentView.findViewById(R.id.fragment_item_detail_view_switcher_consumption_rate);
+                        ViewSwitcher viewSwitcherMinimumPurchace = (ViewSwitcher) fragmentView.findViewById(R.id.fragment_item_detail_view_switcher_minimum_purchace);
+                        ViewSwitcher viewSwitcherPrice = (ViewSwitcher) fragmentView.findViewById(R.id.fragment_item_detail_view_switcher_price);
+                        ViewSwitcher viewSwitcherStock = (ViewSwitcher) fragmentView.findViewById(R.id.fragment_item_detail_view_switcher_stock);
+                        ViewSwitcher viewSwitcherEdit = (ViewSwitcher) fragmentView.findViewById(R.id.fragment_item_detail_view_switcher_edit);
+
+                        viewSwitcherConsumptionName.showNext();
+                        viewSwitcherConsumptionRate.showNext();
+                        viewSwitcherMinimumPurchace.showNext();
+                        viewSwitcherPrice.showNext();
+                        viewSwitcherStock.showNext();
+                        viewSwitcherEdit.showNext();
+
+                        EditText editTextName = (EditText) fragmentView.findViewById(R.id.fragment_item_detail_hidden_edit_text_name);
+                        EditText editTextCosumptionRate = (EditText) fragmentView.findViewById(R.id.fragment_item_detail_hidden_edit_text_consumption_rate);
+                        EditText editTextMinimumPurchace = (EditText) fragmentView.findViewById(R.id.fragment_item_detail_hidden_edit_text_minimum_purchace);
+                        EditText editTextPrice = (EditText) fragmentView.findViewById(R.id.fragment_item_detail_hidden_edit_text_price);
+                        EditText editTextStock = (EditText) fragmentView.findViewById(R.id.fragment_item_detail_hidden_edit_text_stock);
+
+
+                        editTextName.setText(textViewItemName.getText());
+                        editTextCosumptionRate.setText(textViewConsumptionRate.getText());
+                        editTextMinimumPurchace.setText(textViewMinimumPurchace.getText());
+                        editTextPrice.setText(textViewItemPrice.getText());
+                        editTextStock.setText(textViewItemStock.getText());
+
+                        textViewItemName.setText(editTextName.getText().toString());
+                        textViewConsumptionRate.setText(editTextCosumptionRate.getText().toString());
+                        textViewMinimumPurchace.setText(editTextMinimumPurchace.getText().toString());
+                        textViewItemPrice.setText(editTextPrice.getText().toString());
+                        textViewItemStock.setText(editTextStock.getText().toString());
+
+                    }
+                });
 
             }
         });
@@ -261,7 +357,6 @@ public class FragmentItemDetail extends Fragment {
         this.context = context;
 
     }
-
 
     @Override
     public void onCreate(@Nullable Bundle savedInstanceState) {
@@ -357,6 +452,37 @@ public class FragmentItemDetail extends Fragment {
 
     }
 
+    public void updateItemDetails (){
+
+        EditText editTextName = (EditText) fragmentView.findViewById(R.id.fragment_item_detail_hidden_edit_text_name);
+        EditText editTextCosumptionRate = (EditText) fragmentView.findViewById(R.id.fragment_item_detail_hidden_edit_text_consumption_rate);
+        EditText editTextMinimumPurchace = (EditText) fragmentView.findViewById(R.id.fragment_item_detail_hidden_edit_text_minimum_purchace);
+        EditText editTextPrice = (EditText) fragmentView.findViewById(R.id.fragment_item_detail_hidden_edit_text_price);
+        EditText editTextStock = (EditText) fragmentView.findViewById(R.id.fragment_item_detail_hidden_edit_text_stock);
 
 
+        String updatedItemName = editTextName.getText().toString();
+        Integer updatedItemStock = tryParse(editTextStock.getText().toString());
+        Integer updatedItemMinimumPurchaceQuantity = tryParse(editTextMinimumPurchace.getText().toString());
+        Integer updatedItemConsumptionRate = tryParse(editTextCosumptionRate.getText().toString());
+
+        Double updatedPrice = Double.parseDouble(editTextPrice.getText().toString());
+
+        Boolean updatedActiveStatus = item.getActive();
+
+        ItemsController itemsController = new ItemsController();
+        itemsController.updateItemDetails(
+                getContext(), item.getID(), updatedItemName, updatedItemStock,
+                updatedItemConsumptionRate, updatedItemMinimumPurchaceQuantity, updatedActiveStatus,
+                updatedPrice, item.getCart());
+
+    }
+
+    public static Integer tryParse(String text) {
+        try {
+            return Integer.parseInt(text);
+        } catch (NumberFormatException e) {
+            return null;
+        }
+    }
 }

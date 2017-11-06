@@ -14,7 +14,7 @@ import com.santiagogil.takestock.util.DatabaseHelper;
 import com.santiagogil.takestock.model.pojos.Item;
 
 public class EditItemActivity extends AppCompatActivity {
-
+/*
     private EditText editTextItemName;
     private EditText editTextItemStock;
     private EditText editTextMinimumPurchace;
@@ -72,34 +72,10 @@ public class EditItemActivity extends AppCompatActivity {
 
     }
 
-    public void updateItemDetails (){
 
-        String updatedItemName = editTextItemName.getText().toString();
-        Integer updatedItemStock = tryParse(editTextItemStock.getText().toString());
-        Integer updatedItemMinimumPurchaceQuantity = tryParse(editTextMinimumPurchace.getText().toString());
-        Integer updatedItemConsumptionRate = tryParse(editTextConsumptionRate.getText().toString());
-        Double updatedPrice = Double.parseDouble(editTextItemPrice.getText().toString());
-
-        Boolean updatedActiveStatus = item.getActive();
-
-        ItemsController itemsController = new ItemsController();
-        itemsController.updateItemDetails(
-                EditItemActivity.this, item.getID(), updatedItemName, updatedItemStock,
-                updatedItemConsumptionRate, updatedItemMinimumPurchaceQuantity, updatedActiveStatus,
-                updatedPrice, item.getCart());
-
-    }
-
-    public static Integer tryParse(String text) {
-        try {
-            return Integer.parseInt(text);
-        } catch (NumberFormatException e) {
-            return null;
-        }
-    }
 
     @Override
     public void onPause() {
         super.onPause();
-    }
+    }*/
 }
