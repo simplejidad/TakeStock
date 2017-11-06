@@ -13,6 +13,7 @@ import android.support.v7.widget.Toolbar;
 import android.text.Editable;
 import android.text.TextWatcher;
 import android.transition.Fade;
+import android.util.Log;
 import android.view.Menu;
 import android.view.MenuItem;
 import android.widget.EditText;
@@ -62,9 +63,6 @@ public class MainActivityCommunicator extends AppCompatActivity implements Fragm
         toolbar = (Toolbar) findViewById(R.id.toolbar);
         setSupportActionBar(toolbar);
         getSupportActionBar().setDisplayHomeAsUpEnabled(true);
-
-        //updateFirebaseDBNames();
-        //createFirebaseDefaultItemListEnglish();
 
 
         authStateListener = new FirebaseAuth.AuthStateListener() {
@@ -145,7 +143,7 @@ public class MainActivityCommunicator extends AppCompatActivity implements Fragm
                         addSharedElement(textViewItemName, textViewItemName.getTransitionName())
                     .addSharedElement(textViewItemStock, textViewItemStock.getTransitionName())
                         .addToBackStack(null)
-                .replace(R.id.fragment_holder, fragmentItemsViewPager).commit();
+                .add(R.id.fragment_holder, fragmentItemsViewPager).commit();
 
             } else {
 
@@ -246,13 +244,17 @@ public class MainActivityCommunicator extends AppCompatActivity implements Fragm
     public boolean onCreateOptionsMenu(Menu menu) {
         getMenuInflater().inflate(R.menu.toolbar_main_menu, menu);
 
+        addListenerToSearchEditText();
 
+        return true;
+    }
 
+    private void addListenerToSearchEditText() {
         EditText editTextSearch = (EditText) toolbar.findViewById(R.id.toolbar_edit_text_search);
         editTextSearch.addTextChangedListener(new TextWatcher() {
             @Override
             public void beforeTextChanged(CharSequence s, int start, int count, int after) {
-
+                Log.d("a","aa");
             }
 
             @Override
@@ -269,8 +271,6 @@ public class MainActivityCommunicator extends AppCompatActivity implements Fragm
 
             }
         });
-
-        return true;
     }
 
 
@@ -286,6 +286,8 @@ public class MainActivityCommunicator extends AppCompatActivity implements Fragm
                 return super.onOptionsItemSelected(item);
         }
     }
+
+
 
 }
 

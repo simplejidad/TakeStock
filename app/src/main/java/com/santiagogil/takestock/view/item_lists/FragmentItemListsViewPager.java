@@ -26,24 +26,6 @@ public class FragmentItemListsViewPager extends Fragment {
     private FragmentItemList.FragmentActivityCommunicator fragmentActivityCommunicator;
     private Integer currentFragmentPosition = 0;
 
-    private ViewPager.OnPageChangeListener pageChangeListener = new ViewPager.OnPageChangeListener() {
-
-        @Override
-        public void onPageSelected(int newPosition) {
-
-            FragmentLifecycle fragmentToShow = (FragmentLifecycle) itemListsViewPagerAdapter.getItem(newPosition);
-            fragmentToShow.onResumeFragment();
-            FragmentLifecycle fragmentToHide = (FragmentLifecycle) itemListsViewPagerAdapter.getItem(currentFragmentPosition);
-            fragmentToHide.onPauseFragment();
-            currentFragmentPosition = newPosition;
-            updateActionBarTitle(currentFragmentPosition);
-        }
-
-        @Override
-        public void onPageScrolled(int arg0, float arg1, int arg2) { }
-
-        public void onPageScrollStateChanged(int arg0) { }
-    };
 
     public View onCreateView(LayoutInflater inflater, final ViewGroup container, Bundle savedInstanceState) {
 
@@ -62,6 +44,25 @@ public class FragmentItemListsViewPager extends Fragment {
 
         return view;
     }
+
+    private ViewPager.OnPageChangeListener pageChangeListener = new ViewPager.OnPageChangeListener() {
+
+        @Override
+        public void onPageSelected(int newPosition) {
+
+            FragmentLifecycle fragmentToShow = (FragmentLifecycle) itemListsViewPagerAdapter.getItem(newPosition);
+            fragmentToShow.onResumeFragment();
+            FragmentLifecycle fragmentToHide = (FragmentLifecycle) itemListsViewPagerAdapter.getItem(currentFragmentPosition);
+            fragmentToHide.onPauseFragment();
+            currentFragmentPosition = newPosition;
+            updateActionBarTitle(currentFragmentPosition);
+        }
+
+        @Override
+        public void onPageScrolled(int arg0, float arg1, int arg2) { }
+
+        public void onPageScrollStateChanged(int arg0) { }
+    };
 
     private void updateActionBarTitle(Integer position){
 

@@ -357,4 +357,6 @@ public class FragmentItemDetail extends Fragment {
 
     }
 
+
+
 }

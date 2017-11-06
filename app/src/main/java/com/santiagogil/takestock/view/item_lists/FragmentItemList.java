@@ -62,9 +62,7 @@ public class FragmentItemList extends Fragment implements FragmentLifecycle {
         return fragmentItemList;
     }
 
-    public String getTitle() {
-        return getArguments().getString(TITLE);
-    }
+
 
     @Nullable
     @Override
@@ -199,6 +197,7 @@ public class FragmentItemList extends Fragment implements FragmentLifecycle {
     public void onResumeFragment() {
         Bundle bundle = getArguments();
         fragmentActivityCommunicator.updateActionBarTitle(bundle.getString(TITLE));
+
     }
 
 
@@ -218,7 +217,8 @@ public class FragmentItemList extends Fragment implements FragmentLifecycle {
         List<Item> filteredItemList = new ArrayList<>();
 
         if(filter.equals("") || filter.equals(null)){
-            filteredItemList = itemList;
+            filteredItemList.clear();
+            filteredItemList.addAll(itemList);
         } else{
             for(Item item : itemList){
                 if(item.getName().toLowerCase().contains(filter.toLowerCase())){
@@ -236,6 +236,10 @@ public class FragmentItemList extends Fragment implements FragmentLifecycle {
 
 
 
+    }
+
+    public String getTitle() {
+        return getArguments().getString(TITLE);
     }
 
 }
