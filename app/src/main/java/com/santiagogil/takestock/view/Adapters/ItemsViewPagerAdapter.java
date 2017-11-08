@@ -1,4 +1,4 @@
-package com.santiagogil.takestock.view.item_detail;
+package com.santiagogil.takestock.view.Adapters;
 
 import android.content.Context;
 import android.support.v4.app.Fragment;
@@ -7,6 +7,7 @@ import android.support.v4.app.FragmentStatePagerAdapter;
 
 import com.santiagogil.takestock.model.pojos.Behaviours.BehaviourGetItemList;
 import com.santiagogil.takestock.model.pojos.Item;
+import com.santiagogil.takestock.view.Fragments.FragmentItemDetail;
 
 import java.util.ArrayList;
 import java.util.List;

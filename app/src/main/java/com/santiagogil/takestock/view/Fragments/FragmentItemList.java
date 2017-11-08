@@ -1,18 +1,13 @@
-package com.santiagogil.takestock.view.item_lists;
+package com.santiagogil.takestock.view.Fragments;
 
 
 import android.os.Bundle;
 import android.support.annotation.Nullable;
 import android.support.v4.app.Fragment;
-import android.support.v4.view.MenuItemCompat;
-import android.support.v4.widget.SearchViewCompat;
 import android.support.v4.widget.SwipeRefreshLayout;
 import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
-import android.support.v7.widget.SearchView;
 import android.view.LayoutInflater;
-import android.view.Menu;
-import android.view.MenuItem;
 import android.view.View;
 import android.view.ViewGroup;
 import android.view.WindowManager;
@@ -24,7 +19,7 @@ import com.santiagogil.takestock.controller.ItemsController;
 import com.santiagogil.takestock.model.pojos.Behaviours.BehaviourGetItemList;
 import com.santiagogil.takestock.model.pojos.Item;
 import com.santiagogil.takestock.util.FragmentLifecycle;
-import com.santiagogil.takestock.view.item_detail.ItemRecyclerAdapter;
+import com.santiagogil.takestock.view.Adapters.ItemRecyclerAdapter;
 
 import java.util.ArrayList;
 import java.util.List;

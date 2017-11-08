@@ -1,4 +1,4 @@
-package com.santiagogil.takestock.view.item_detail;
+package com.santiagogil.takestock.view.Fragments;
 
 
 import android.os.Build;
@@ -6,16 +6,14 @@ import android.os.Bundle;
 import android.support.annotation.Nullable;
 import android.support.v4.app.Fragment;
 import android.support.v4.view.ViewPager;
-import android.support.v7.widget.Toolbar;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
-import android.widget.Toast;
 
 import com.santiagogil.takestock.R;
 import com.santiagogil.takestock.model.pojos.Behaviours.BehaviourGetItemList;
 import com.santiagogil.takestock.util.SharedElementTransition;
-import com.santiagogil.takestock.view.item_lists.FragmentItemList;
+import com.santiagogil.takestock.view.Adapters.ItemsViewPagerAdapter;
 
 public class FragmentItemsViewPager extends Fragment {
 
@@ -94,6 +92,4 @@ public class FragmentItemsViewPager extends Fragment {
         }
         setSharedElementReturnTransition(null);
     }
-
-
 }

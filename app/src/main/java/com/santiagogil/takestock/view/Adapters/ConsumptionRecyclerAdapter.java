@@ -1,17 +1,17 @@
-package com.santiagogil.takestock.view.item_detail;
+package com.santiagogil.takestock.view.Adapters;
 
 import android.content.Context;
 import android.support.v7.widget.RecyclerView;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
-import android.widget.Button;
 import android.widget.ImageButton;
 import android.widget.TextView;
 
 import com.santiagogil.takestock.R;
 import com.santiagogil.takestock.model.pojos.Consumption;
 import com.santiagogil.takestock.util.DateHelper;
+import com.santiagogil.takestock.view.Fragments.FragmentItemDetail;
 
 import java.util.List;
 

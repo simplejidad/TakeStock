@@ -5,7 +5,7 @@
     android:orientation="vertical"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
-    tools:context=".view.item_detail.FragmentItemDetail"
+    tools:context=".view.Fragments.FragmentItemDetail"
     android:background="@color/cardview_light_background">
 
 
@@ -32,8 +32,9 @@
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:minWidth="200dp"
-            android:textSize="24dp"
-            android:padding="2dp"
+            android:textSize="40sp"
+            android:padding="5dp"
+            android:selectAllOnFocus="true"
             />
 
     </ViewSwitcher>
@@ -77,15 +78,16 @@
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:textSize="24dp"
-                android:minWidth="100dp"
-                android:padding="2dp"/>
+                android:minWidth="50dp"
+                android:padding="5dp"
+                android:selectAllOnFocus="true"/>
 
         </ViewSwitcher>
 
         <TextView
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:text="Price"
+            android:text="Price: $"
             android:layout_marginLeft="20dp"
             android:drawableLeft="@drawable/ic_money_black_24dp"
             android:textSize="24dp"
@@ -112,8 +114,9 @@
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:textSize="24dp"
-                android:minWidth="100dp"
-                android:padding="2dp"/>
+                android:minWidth="50dp"
+                android:padding="5dp"
+                android:selectAllOnFocus="true"/>
 
         </ViewSwitcher>
 
@@ -155,8 +158,9 @@
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:textSize="24dp"
-                android:minWidth="100dp"
-                android:padding="2dp"
+                android:minWidth="50dp"
+                android:padding="5dp"
+                android:selectAllOnFocus="true"
 
                 />
 
@@ -201,8 +205,9 @@
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:textSize="24dp"
-                android:minWidth="100dp"
-                android:padding="2dp"
+                android:minWidth="50dp"
+                android:padding="5dp"
+                android:selectAllOnFocus="true"
                 />
 
         </ViewSwitcher>
@@ -341,7 +346,7 @@
                     android:layout_height="wrap_content"
                     android:layout_marginRight="5dp"
                     android:layout_marginLeft="5dp"
-                    android:src="@drawable/ic_create_black_24dp"
+                    android:src="@android:drawable/ic_input_delete"
                     android:elevation="3dp"/>
 
                 <ImageButton
@@ -350,7 +355,7 @@
                     android:layout_height="wrap_content"
                     android:layout_marginRight="5dp"
                     android:layout_marginLeft="5dp"
-                    android:src="@drawable/ic_create_black_24dp"
+                    android:src="@android:drawable/ic_menu_save"
                     android:elevation="3dp"/>
 
 

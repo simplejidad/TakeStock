@@ -1,4 +1,4 @@
-package com.santiagogil.takestock.view.item_detail;
+package com.santiagogil.takestock.view.Fragments;
 
 import android.content.Context;
 import android.os.Build;
@@ -22,12 +22,10 @@ import com.santiagogil.takestock.R;
 import com.santiagogil.takestock.controller.ConsumptionsController;
 import com.santiagogil.takestock.controller.ItemsController;
 import com.santiagogil.takestock.model.pojos.Consumption;
-import com.santiagogil.takestock.util.LayoutHelper;
 import com.santiagogil.takestock.util.DatabaseHelper;
 import com.santiagogil.takestock.model.pojos.Item;
 import com.santiagogil.takestock.util.SharedElementTransition;
-
-import java.util.function.ToDoubleBiFunction;
+import com.santiagogil.takestock.view.Adapters.ConsumptionRecyclerAdapter;
 
 public class FragmentItemDetail extends Fragment {
 
@@ -43,8 +41,6 @@ public class FragmentItemDetail extends Fragment {
         return fragmentItemDetail;
     }
 
-
-    private FragmentActivityCommunicator fragmentActivityCommunicator;
     private TextView textViewItemName;
     private TextView textViewItemStock;
     private TextView textViewMinimumPurchace;
@@ -127,7 +123,7 @@ public class FragmentItemDetail extends Fragment {
         textViewConsumptionRate.setText(item.getConsumptionRate().toString());
         textViewItemIndependence.setText(item.getRoundedIndependence());
         textViewItemIndependence.setCompoundDrawablesRelativeWithIntrinsicBounds(item.getIndependenceEmoticon(), 0 , 0 ,0);
-        textViewItemPrice.setText("$" + item.getPrice());
+        textViewItemPrice.setText(item.getPrice().toString());
         if(item.getActive()){
             deleteButton.setImageResource(R.drawable.ic_delete_black_24dp);
         } else {
@@ -330,10 +326,6 @@ public class FragmentItemDetail extends Fragment {
         }
     }
 
-    public interface FragmentActivityCommunicator{
-        void goToEditItemActivity(Bundle bundle);
-    }
-
     public class OnConsumptionDeletedListener{
 
         public void onConsumptionDeleted(Consumption consumption) {
@@ -353,7 +345,6 @@ public class FragmentItemDetail extends Fragment {
     @Override
     public void onAttach(Context context) {
         super.onAttach(context);
-        this.fragmentActivityCommunicator = (FragmentActivityCommunicator) context;
         this.context = context;
 
     }

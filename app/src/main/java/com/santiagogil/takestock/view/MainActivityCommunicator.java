@@ -4,6 +4,7 @@ import android.content.Intent;
 import android.os.Build;
 import android.os.Bundle;
 import android.support.annotation.NonNull;
+import android.support.design.widget.BottomNavigationView;
 import android.support.design.widget.NavigationView;
 import android.support.v4.app.Fragment;
 import android.support.v4.app.FragmentManager;
@@ -32,16 +33,15 @@ import com.santiagogil.takestock.model.pojos.Item;
 import com.santiagogil.takestock.util.DatabaseHelper;
 import com.santiagogil.takestock.util.FirebaseHelper;
 import com.santiagogil.takestock.util.ResultListener;
-import com.santiagogil.takestock.view.item_detail.EditItemActivity;
-import com.santiagogil.takestock.view.item_detail.FragmentItemDetail;
-import com.santiagogil.takestock.view.item_detail.FragmentItemsViewPager;
-import com.santiagogil.takestock.view.item_lists.FragmentItemList;
-import com.santiagogil.takestock.view.item_lists.FragmentItemListsViewPager;
+import com.santiagogil.takestock.view.Fragments.FragmentItemDetail;
+import com.santiagogil.takestock.view.Fragments.FragmentItemsViewPager;
+import com.santiagogil.takestock.view.Fragments.FragmentItemList;
+import com.santiagogil.takestock.view.Fragments.FragmentItemListsViewPager;
 import com.santiagogil.takestock.view.onboarding.OnboardingActivity;
 
 import java.util.List;
 
-public class MainActivityCommunicator extends AppCompatActivity implements FragmentItemList.FragmentActivityCommunicator, FragmentItemDetail.FragmentActivityCommunicator, DialogAddItem.AddItemDialogCommunicator {
+public class MainActivityCommunicator extends AppCompatActivity implements FragmentItemList.FragmentActivityCommunicator, DialogAddItem.AddItemDialogCommunicator {
 
 
     private FirebaseAuth fAuth;
@@ -50,6 +50,7 @@ public class MainActivityCommunicator extends AppCompatActivity implements Fragm
     private FragmentItemListsViewPager fragmentItemListsViewPager;
     private String filter = "";
     private Toolbar toolbar;
+    private EditText toolbarEditText;
 
     public String getFilter() {
         return filter;
@@ -61,6 +62,28 @@ public class MainActivityCommunicator extends AppCompatActivity implements Fragm
         setContentView(R.layout.activity_main);
 
         toolbar = (Toolbar) findViewById(R.id.toolbar);
+        toolbarEditText = (EditText) toolbar.findViewById(R.id.toolbar_edit_text_search);
+
+        BottomNavigationView bottomNavigationView = (BottomNavigationView) findViewById(R.id.bottom_navigation_view);
+        bottomNavigationView.setOnNavigationItemSelectedListener(new BottomNavigationView.OnNavigationItemSelectedListener() {
+            @Override
+            public boolean onNavigationItemSelected(@NonNull MenuItem item) {
+                switch (item.getItemId()) {
+                    case R.id.action_add_item:
+                        DialogAddItem dialogAddItem = new DialogAddItem();
+                        dialogAddItem.setCommunicator(MainActivityCommunicator.this);
+                        dialogAddItem.show(getFragmentManager(), null);
+                        break;
+                    case R.id.action_search:
+                        toolbarEditText.findFocus();
+                        break;
+
+                }
+                return true;
+            }
+        });
+
+
         setSupportActionBar(toolbar);
         getSupportActionBar().setDisplayHomeAsUpEnabled(true);
 
@@ -113,14 +136,6 @@ public class MainActivityCommunicator extends AppCompatActivity implements Fragm
         }
 
         @Override
-        public void goToEditItemActivity(Bundle bundle){
-
-            Intent intent = new Intent(MainActivityCommunicator.this, EditItemActivity.class);
-            intent.putExtras(bundle);
-            startActivity(intent);
-        }
-
-        @Override
         public void onItemTouched (Item touchedItem, Integer touchedPosition, BehaviourGetItemList
         behaviourGetItemList, TextView textViewItemName, TextView textViewItemStock,
                                    TextView textViewItemIndependence){
@@ -152,6 +167,8 @@ public class MainActivityCommunicator extends AppCompatActivity implements Fragm
                 fragmentTransaction.addToBackStack(null);
                 fragmentTransaction.commit();
             }
+
+
         }
 
     @Override
@@ -278,9 +295,7 @@ public class MainActivityCommunicator extends AppCompatActivity implements Fragm
     public boolean onOptionsItemSelected(MenuItem item) {
         switch (item.getItemId()) {
             case R.id.action_add_item:
-                DialogAddItem dialogAddItem = new DialogAddItem();
-                dialogAddItem.setCommunicator(MainActivityCommunicator.this);
-                dialogAddItem.show(getFragmentManager(), null);
+
                 return true;
             default:
                 return super.onOptionsItemSelected(item);

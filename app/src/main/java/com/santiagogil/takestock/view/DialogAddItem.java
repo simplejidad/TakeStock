@@ -34,13 +34,13 @@ public class DialogAddItem extends DialogFragment {
         input.setInputType(InputType.TYPE_CLASS_TEXT);
         input.setSingleLine(true);
         input.setHint("Item Name");
+        input.setPadding(2, 2, 2, 2);
 
         builder.setView(input);
 
         builder.setMessage("Adding a New Item:")
                 .setPositiveButton("Add", new DialogInterface.OnClickListener() {
                     public void onClick(DialogInterface dialog, int id) {
-                        String itemName = input.getText().toString();
                         if(input.getText().length() == 0){
                             Toast.makeText(context, "No Item has been added", Toast.LENGTH_SHORT).show();
                         } else{
