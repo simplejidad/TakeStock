@@ -2,6 +2,7 @@ package com.santiagogil.takestock.view;
 
 import android.content.Context;
 import android.content.Intent;
+import android.graphics.Color;
 import android.os.Build;
 import android.os.Bundle;
 import android.support.annotation.NonNull;
@@ -10,6 +11,7 @@ import android.support.design.widget.NavigationView;
 import android.support.v4.app.Fragment;
 import android.support.v4.app.FragmentManager;
 import android.support.v4.app.FragmentTransaction;
+import android.support.v4.content.ContextCompat;
 import android.support.v7.app.AppCompatActivity;;
 import android.support.v7.widget.Toolbar;
 import android.text.Editable;
@@ -56,17 +58,23 @@ public class MainActivityCommunicator extends AppCompatActivity implements Fragm
     private Toolbar toolbar;
     private EditText toolbarEditText;
     private BottomNavigationView bottomNavigationView;
+    private Context context;
 
 
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_main);
 
+        context = this;
+
         toolbar = (Toolbar) findViewById(R.id.toolbar);
         toolbarEditText = (EditText) toolbar.findViewById(R.id.toolbar_edit_text_search);
 
         bottomNavigationView = (BottomNavigationView) findViewById(R.id.bottom_navigation_view);
         bottomNavigationView.setPadding(0,0,0,0);
+
+        bottomNavigationView.setMeasureAllChildren(false);
+
         bottomNavigationView.setOnNavigationItemSelectedListener(new BottomNavigationView.OnNavigationItemSelectedListener() {
             @Override
             public boolean onNavigationItemSelected(@NonNull MenuItem item) {
@@ -77,6 +85,7 @@ public class MainActivityCommunicator extends AppCompatActivity implements Fragm
                         dialogAddItem.show(getFragmentManager(), null);
                         break;
                     case R.id.action_search:
+                        toolbarEditText.setBackgroundColor(ContextCompat.getColor( context, R.color.icons));
                         toolbarEditText.setFocusableInTouchMode(true);
                         toolbarEditText.requestFocus();
                         getWindow().setSoftInputMode(WindowManager.LayoutParams.SOFT_INPUT_STATE_ALWAYS_VISIBLE);

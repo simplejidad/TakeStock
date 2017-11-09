@@ -190,8 +190,6 @@ public class FragmentItemList extends Fragment implements FragmentLifecycle {
 
     @Override
     public void onResumeFragment() {
-        Bundle bundle = getArguments();
-        fragmentActivityCommunicator.updateActionBarTitle(bundle.getString(TITLE));
 
     }
 

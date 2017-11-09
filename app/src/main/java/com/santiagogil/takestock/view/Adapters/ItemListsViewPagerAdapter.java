@@ -49,4 +49,9 @@ public class ItemListsViewPagerAdapter extends FragmentStatePagerAdapter {
             }
         }
     }
+
+    @Override
+    public CharSequence getPageTitle(int position) {
+        return this.fragmentItemListList.get(position).getTitle();
+    }
 }

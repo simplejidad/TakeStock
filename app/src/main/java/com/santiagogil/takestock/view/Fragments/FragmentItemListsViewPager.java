@@ -1,6 +1,7 @@
 package com.santiagogil.takestock.view.Fragments;
 
 import android.os.Bundle;
+import android.support.design.widget.TabLayout;
 import android.support.v4.app.Fragment;
 import android.support.v4.view.ViewPager;
 import android.view.LayoutInflater;
@@ -32,6 +33,9 @@ public class FragmentItemListsViewPager extends Fragment {
 
         itemListsViewPager = (ViewPager) view.findViewById(R.id.viewPagerItemLists);
         itemListsViewPagerAdapter = new ItemListsViewPagerAdapter(getChildFragmentManager());
+
+        TabLayout tabLayout = (TabLayout) view.findViewById(R.id.tabs);
+        tabLayout.setupWithViewPager(itemListsViewPager);
 
         populateFragmentListOnViewPagerAdapter(getArguments().getString(FragmentItemList.FILTER));
 

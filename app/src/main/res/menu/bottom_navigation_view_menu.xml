@@ -3,6 +3,14 @@
     xmlns:app="http://schemas.android.com/apk/res-auto">
 
     <item
+        android:id="@+id/action_back"
+        android:icon="@drawable/ic_arrow_back_black_24dp"
+        android:title="Back"
+        app:showAsAction="always"
+        android:enabled="true"
+        />
+
+    <item
         android:id="@+id/action_add_item"
         android:icon="@drawable/ic_plus_black_24dp"
         android:title="@string/add_item"

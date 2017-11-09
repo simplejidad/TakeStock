@@ -34,9 +34,11 @@
             app:menu="@menu/bottom_navigation_view_menu"
             app:itemBackground="@color/badges"
             app:itemIconTint="@android:color/white"
-            app:itemTextColor="@android:color/white">
+            app:itemTextColor="@android:color/white"
 
-        </android.support.design.widget.BottomNavigationView>
+        />
+
+
 
     </LinearLayout>
 
