@@ -4,14 +4,15 @@
     xmlns:app="http://schemas.android.com/apk/res-auto"
     android:id="@+id/toolbar"
     android:layout_width="match_parent"
-    android:layout_height="60dp"
+    android:layout_height="40dp"
     android:background="@color/primary_light"
     app:titleTextColor="@color/secondary_text">
 
     <EditText
         android:id="@+id/toolbar_edit_text_search"
         android:layout_width="wrap_content"
-        android:minWidth="50dp"
+        android:lines="1"
+        android:minWidth="75dp"
         android:layout_marginStart="10dp"
         android:layout_height="match_parent"
         android:layout_gravity="right"

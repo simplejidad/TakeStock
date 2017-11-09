@@ -34,7 +34,6 @@ public class DialogAddItem extends DialogFragment {
         input.setInputType(InputType.TYPE_CLASS_TEXT);
         input.setSingleLine(true);
         input.setHint("Item Name");
-        input.setPadding(2, 2, 2, 2);
 
         builder.setView(input);
 

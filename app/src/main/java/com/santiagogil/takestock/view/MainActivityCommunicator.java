@@ -1,5 +1,6 @@
 package com.santiagogil.takestock.view;
 
+import android.content.Context;
 import android.content.Intent;
 import android.os.Build;
 import android.os.Bundle;
@@ -17,6 +18,9 @@ import android.transition.Fade;
 import android.util.Log;
 import android.view.Menu;
 import android.view.MenuItem;
+import android.view.View;
+import android.view.WindowManager;
+import android.view.inputmethod.InputMethodManager;
 import android.widget.EditText;
 import android.widget.TextView;
 import android.widget.Toast;
@@ -51,10 +55,7 @@ public class MainActivityCommunicator extends AppCompatActivity implements Fragm
     private String filter = "";
     private Toolbar toolbar;
     private EditText toolbarEditText;
-
-    public String getFilter() {
-        return filter;
-    }
+    private BottomNavigationView bottomNavigationView;
 
 
     protected void onCreate(Bundle savedInstanceState) {
@@ -64,7 +65,8 @@ public class MainActivityCommunicator extends AppCompatActivity implements Fragm
         toolbar = (Toolbar) findViewById(R.id.toolbar);
         toolbarEditText = (EditText) toolbar.findViewById(R.id.toolbar_edit_text_search);
 
-        BottomNavigationView bottomNavigationView = (BottomNavigationView) findViewById(R.id.bottom_navigation_view);
+        bottomNavigationView = (BottomNavigationView) findViewById(R.id.bottom_navigation_view);
+        bottomNavigationView.setPadding(0,0,0,0);
         bottomNavigationView.setOnNavigationItemSelectedListener(new BottomNavigationView.OnNavigationItemSelectedListener() {
             @Override
             public boolean onNavigationItemSelected(@NonNull MenuItem item) {
@@ -75,7 +77,10 @@ public class MainActivityCommunicator extends AppCompatActivity implements Fragm
                         dialogAddItem.show(getFragmentManager(), null);
                         break;
                     case R.id.action_search:
-                        toolbarEditText.findFocus();
+                        toolbarEditText.setFocusableInTouchMode(true);
+                        toolbarEditText.requestFocus();
+                        getWindow().setSoftInputMode(WindowManager.LayoutParams.SOFT_INPUT_STATE_ALWAYS_VISIBLE);
+                        ((InputMethodManager) getSystemService(Context.INPUT_METHOD_SERVICE)).showSoftInput(toolbarEditText, 0);
                         break;
 
                 }
@@ -135,41 +140,24 @@ public class MainActivityCommunicator extends AppCompatActivity implements Fragm
             }
         }
 
-        @Override
-        public void onItemTouched (Item touchedItem, Integer touchedPosition, BehaviourGetItemList
-        behaviourGetItemList, TextView textViewItemName, TextView textViewItemStock,
-                                   TextView textViewItemIndependence){
+    @Override
+    public void onItemTouched (Item touchedItem, Integer touchedPosition, BehaviourGetItemList
+    behaviourGetItemList, TextView textViewItemName, TextView textViewItemStock,
+                               TextView textViewItemIndependence){
 
-            FragmentItemsViewPager fragmentItemsViewPager = new FragmentItemsViewPager();
-            Bundle bundle = new Bundle();
-            bundle.putSerializable(FragmentItemsViewPager.BEHAVIOURGETITEMLIST, behaviourGetItemList);
-            bundle.putString(FragmentItemsViewPager.ITEMID, touchedItem.getID());
-            bundle.putInt(FragmentItemsViewPager.POSITION, touchedPosition);
-            fragmentItemsViewPager.setArguments(bundle);
+        FragmentItemsViewPager fragmentItemsViewPager = new FragmentItemsViewPager();
+        Bundle bundle = new Bundle();
+        bundle.putSerializable(FragmentItemsViewPager.BEHAVIOURGETITEMLIST, behaviourGetItemList);
+        bundle.putString(FragmentItemsViewPager.ITEMID, touchedItem.getID());
+        bundle.putInt(FragmentItemsViewPager.POSITION, touchedPosition);
+        fragmentItemsViewPager.setArguments(bundle);
 
-            if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.LOLLIPOP) {
+        FragmentTransaction fragmentTransaction = getSupportFragmentManager().beginTransaction();
+        fragmentTransaction.replace(R.id.fragment_holder, fragmentItemsViewPager);
+        fragmentTransaction.addToBackStack(null);
+        fragmentTransaction.commit();
 
-                fragmentItemsViewPager.setEnterTransition(new Fade());
-                Fragment currentFragment = getSupportFragmentManager().findFragmentById(R.id.fragment_holder);
-                currentFragment.setExitTransition(new Fade());
-
-                getSupportFragmentManager().beginTransaction()
-                 .addSharedElement(textViewItemIndependence, textViewItemIndependence.getTransitionName()).
-                        addSharedElement(textViewItemName, textViewItemName.getTransitionName())
-                    .addSharedElement(textViewItemStock, textViewItemStock.getTransitionName())
-                        .addToBackStack(null)
-                .add(R.id.fragment_holder, fragmentItemsViewPager).commit();
-
-            } else {
-
-                FragmentTransaction fragmentTransaction = getSupportFragmentManager().beginTransaction();
-                fragmentTransaction.replace(R.id.fragment_holder, fragmentItemsViewPager);
-                fragmentTransaction.addToBackStack(null);
-                fragmentTransaction.commit();
-            }
-
-
-        }
+    }
 
     @Override
     public void updateActionBarTitle(String title) {

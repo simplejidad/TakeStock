@@ -15,20 +15,22 @@
 
         <include layout="@layout/toolbar" />
 
-
-
         <FrameLayout
             android:id="@+id/fragment_holder"
             android:layout_width="match_parent"
-            android:layout_height="match_parent">
+            android:layout_height="0dp"
+            android:layout_weight="11">
 
         </FrameLayout>
+
+
 
         <android.support.design.widget.BottomNavigationView
             android:id="@+id/bottom_navigation_view"
             android:layout_width="match_parent"
-            android:layout_height="wrap_content"
-            android:layout_alignParentBottom="true"
+            android:layout_height="0dp"
+            android:layout_weight="1"
+            android:layout_alignParentBottom="false"
             app:menu="@menu/bottom_navigation_view_menu"
             app:itemBackground="@color/badges"
             app:itemIconTint="@android:color/white"
@@ -36,8 +38,9 @@
 
         </android.support.design.widget.BottomNavigationView>
 
-
     </LinearLayout>
+
+
 
 
 
@@ -50,7 +53,6 @@
         app:menu="@menu/navigation_view_menu">
 
     </android.support.design.widget.NavigationView>
-
 
 
 
