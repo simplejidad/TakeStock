@@ -124,6 +124,7 @@ public class FragmentItemList extends Fragment implements FragmentLifecycle {
         LinearLayoutManager linearLayoutManager = new LinearLayoutManager(getContext());
         linearLayoutManager.setOrientation(LinearLayoutManager.VERTICAL);
         recyclerView.setLayoutManager(linearLayoutManager);
+
     }
 
     public interface FragmentActivityCommunicator {
