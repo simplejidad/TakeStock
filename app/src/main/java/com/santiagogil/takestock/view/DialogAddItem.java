@@ -9,6 +9,8 @@ import android.support.v7.app.AlertDialog;
 import android.text.Editable;
 import android.text.InputType;
 import android.text.TextWatcher;
+import android.view.WindowManager;
+import android.view.inputmethod.InputMethodManager;
 import android.widget.EditText;
 import android.widget.Toast;
 
@@ -24,6 +26,12 @@ public class DialogAddItem extends DialogFragment {
     private Context context;
 
     @Override
+    public void onActivityCreated(Bundle savedInstanceState) {
+        super.onActivityCreated(savedInstanceState);
+        getDialog().getWindow().setSoftInputMode( WindowManager.LayoutParams.SOFT_INPUT_STATE_VISIBLE);
+    }
+
+    @Override
     public Dialog onCreateDialog(Bundle savedInstanceState) {
         // Use the Builder class for convenient dialog construction
         AlertDialog.Builder builder = new AlertDialog.Builder(getActivity());
@@ -34,8 +42,13 @@ public class DialogAddItem extends DialogFragment {
         input.setInputType(InputType.TYPE_CLASS_TEXT);
         input.setSingleLine(true);
         input.setHint("Item Name");
+        input.setInputType(InputType.TYPE_CLASS_TEXT | InputType.TYPE_TEXT_FLAG_CAP_SENTENCES);
 
         builder.setView(input);
+
+        //InputMethodManager keyboard = (InputMethodManager) builder.getContext().getSystemService(Context.INPUT_METHOD_SERVICE);
+        //keyboard.showSoftInput(input, InputMethodManager.SHOW_FORCED);
+
 
         builder.setMessage("Adding a New Item:")
                 .setPositiveButton("Add", new DialogInterface.OnClickListener() {

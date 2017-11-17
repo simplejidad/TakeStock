@@ -268,7 +268,7 @@ public class MainActivityCommunicator extends AppCompatActivity implements Fragm
         editTextSearch.addTextChangedListener(new TextWatcher() {
             @Override
             public void beforeTextChanged(CharSequence s, int start, int count, int after) {
-                Log.d("a","aa");
+
             }
 
             @Override
@@ -298,9 +298,6 @@ public class MainActivityCommunicator extends AppCompatActivity implements Fragm
                 return super.onOptionsItemSelected(item);
         }
     }
-
-
-
 }
 
 

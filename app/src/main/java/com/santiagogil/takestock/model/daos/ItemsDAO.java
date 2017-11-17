@@ -180,19 +180,19 @@ public class ItemsDAO {
 
     public Item buildItemFromCursor(Cursor cursor){
 
-        Item item = new Item();
-        item.setID(cursor.getString(cursor.getColumnIndex(DatabaseHelper.ID)));
-        item.setUserID(cursor.getString(cursor.getColumnIndex(DatabaseHelper.USERID)));
-        item.setImage(cursor.getInt(cursor.getColumnIndex(DatabaseHelper.IMAGE)));
-        item.setMinimumPurchaceQuantity(cursor.getInt(cursor.getColumnIndex(DatabaseHelper.MINIMUMPURCHACEQUANTITY)));
-        item.setName(cursor.getString(cursor.getColumnIndex(DatabaseHelper.NAME)));
-        item.setStock(cursor.getInt(cursor.getColumnIndex(DatabaseHelper.STOCK)));
-        item.setConsumptionRate(cursor.getInt(cursor.getColumnIndex(DatabaseHelper.CONSUMPTIONRATE)));
-        item.setPrice(cursor.getDouble(cursor.getColumnIndex(DatabaseHelper.PRICE)));
-        item.setCart(cursor.getInt(cursor.getColumnIndex(DatabaseHelper.CART)));
-        item.setActive(cursor.getInt(cursor.getColumnIndex(DatabaseHelper.ACTIVE)) > 0);
+            Item item = new Item();
+            item.setID(cursor.getString(cursor.getColumnIndex(DatabaseHelper.ID)));
+            item.setUserID(cursor.getString(cursor.getColumnIndex(DatabaseHelper.USERID)));
+            item.setImage(cursor.getInt(cursor.getColumnIndex(DatabaseHelper.IMAGE)));
+            item.setMinimumPurchaceQuantity(cursor.getInt(cursor.getColumnIndex(DatabaseHelper.MINIMUMPURCHACEQUANTITY)));
+            item.setName(cursor.getString(cursor.getColumnIndex(DatabaseHelper.NAME)));
+            item.setStock(cursor.getInt(cursor.getColumnIndex(DatabaseHelper.STOCK)));
+            item.setConsumptionRate(cursor.getInt(cursor.getColumnIndex(DatabaseHelper.CONSUMPTIONRATE)));
+            item.setPrice(cursor.getDouble(cursor.getColumnIndex(DatabaseHelper.PRICE)));
+            item.setCart(cursor.getInt(cursor.getColumnIndex(DatabaseHelper.CART)));
+            item.setActive(cursor.getInt(cursor.getColumnIndex(DatabaseHelper.ACTIVE)) > 0);
 
-        return item;
+            return item;
 
     }
 
