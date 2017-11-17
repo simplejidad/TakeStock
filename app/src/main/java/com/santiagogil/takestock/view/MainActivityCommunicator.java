@@ -91,6 +91,9 @@ public class MainActivityCommunicator extends AppCompatActivity implements Fragm
                         getWindow().setSoftInputMode(WindowManager.LayoutParams.SOFT_INPUT_STATE_ALWAYS_VISIBLE);
                         ((InputMethodManager) getSystemService(Context.INPUT_METHOD_SERVICE)).showSoftInput(toolbarEditText, 0);
                         break;
+                    case R.id.action_back:
+                        onBackPressed();
+                        break;
 
                 }
                 return true;
@@ -162,7 +165,7 @@ public class MainActivityCommunicator extends AppCompatActivity implements Fragm
         fragmentItemsViewPager.setArguments(bundle);
 
         FragmentTransaction fragmentTransaction = getSupportFragmentManager().beginTransaction();
-        fragmentTransaction.replace(R.id.fragment_holder, fragmentItemsViewPager);
+        fragmentTransaction.add(R.id.fragment_holder, fragmentItemsViewPager);
         fragmentTransaction.addToBackStack(null);
         fragmentTransaction.commit();
 

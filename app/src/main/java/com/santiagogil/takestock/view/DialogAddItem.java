@@ -51,7 +51,7 @@ public class DialogAddItem extends DialogFragment {
 
 
         builder.setMessage("Adding a New Item:")
-                .setPositiveButton("Add", new DialogInterface.OnClickListener() {
+                .setPositiveButton("Add Item", new DialogInterface.OnClickListener() {
                     public void onClick(DialogInterface dialog, int id) {
                         if(input.getText().length() == 0){
                             Toast.makeText(context, "No Item has been added", Toast.LENGTH_SHORT).show();

@@ -214,6 +214,7 @@ public class FragmentItemList extends Fragment implements FragmentLifecycle {
             filteredItemList.clear();
             filteredItemList.addAll(itemList);
         } else{
+            filteredItemList.clear();
             for(Item item : itemList){
                 if(item.getName().toLowerCase().contains(filter.toLowerCase())){
                     filteredItemList.add(item);
