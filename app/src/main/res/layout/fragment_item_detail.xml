@@ -22,8 +22,11 @@
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:text="@string/lorem_ipsum"
-            android:layout_margin="5dp"
-            android:textSize="40sp"
+            android:inputType="textCapSentences"
+            android:textStyle="bold"
+            android:layout_margin="3dp"
+            android:gravity="center"
+            android:textSize="30sp"
             android:layout_gravity="center_horizontal"
             />
 
@@ -32,8 +35,9 @@
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:minWidth="200dp"
-            android:textSize="40sp"
-            android:padding="5dp"
+            android:textStyle="bold"
+            android:textSize="30sp"
+            android:padding="3dp"
             android:selectAllOnFocus="true"
             />
 
@@ -78,7 +82,9 @@
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:textSize="24dp"
+                android:inputType="number"
                 android:minWidth="50dp"
+                android:gravity="center"
                 android:padding="5dp"
                 android:selectAllOnFocus="true"/>
 
@@ -114,7 +120,9 @@
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:textSize="24dp"
+                android:inputType="numberDecimal"
                 android:minWidth="50dp"
+                android:gravity="center"
                 android:padding="5dp"
                 android:selectAllOnFocus="true"/>
 
@@ -157,7 +165,9 @@
                 android:id="@+id/fragment_item_detail_hidden_edit_text_consumption_rate"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
+                android:inputType="number"
                 android:textSize="24dp"
+                android:gravity="center"
                 android:minWidth="50dp"
                 android:padding="5dp"
                 android:selectAllOnFocus="true"
@@ -205,6 +215,8 @@
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:textSize="24dp"
+                android:gravity="center"
+                android:inputType="number"
                 android:minWidth="50dp"
                 android:padding="5dp"
                 android:selectAllOnFocus="true"

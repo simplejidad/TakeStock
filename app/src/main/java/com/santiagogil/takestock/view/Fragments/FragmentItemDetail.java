@@ -271,7 +271,11 @@ public class FragmentItemDetail extends Fragment {
                         textViewItemName.setText(editTextName.getText().toString());
                         textViewConsumptionRate.setText(editTextCosumptionRate.getText().toString());
                         textViewMinimumPurchace.setText(editTextMinimumPurchace.getText().toString());
+
+
                         textViewItemPrice.setText(editTextPrice.getText().toString());
+
+
                         textViewItemStock.setText(editTextStock.getText().toString());
 
                     }
