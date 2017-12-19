@@ -32,5 +32,8 @@
     <string name="lorem">lorem</string>
     <string name="small_number">100.0</string>
 
+    <!-- TODO: Remove or change this placeholder text -->
+    <string name="hello_blank_fragment">Hello blank fragment</string>
+
 
 </resources>

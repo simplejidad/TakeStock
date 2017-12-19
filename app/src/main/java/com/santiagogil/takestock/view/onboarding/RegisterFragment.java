@@ -53,7 +53,6 @@ public class RegisterFragment extends Fragment {
         this.onboardingActivityCommunicator = onboardingActivityCommunicator;
     }
 
-
     @Override
     public View onCreateView(LayoutInflater inflater, final ViewGroup container, Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -73,9 +72,7 @@ public class RegisterFragment extends Fragment {
         buttonRegister.setOnClickListener(new View.OnClickListener(){
             @Override
             public void onClick(View v) {
-
                 startRegister();
-
             }
         });
 
@@ -85,18 +82,19 @@ public class RegisterFragment extends Fragment {
             editTextEmailField.setText(bundle.getString(EMAIL));
         }
 
+        addEditTextListeners();
+
+        return view;
+    }
+
+    private void addEditTextListeners() {
+
         editTextEmailField.addTextChangedListener(new TextWatcher() {
                                                       @Override
-                                                      public void beforeTextChanged(CharSequence charSequence, int i, int i1, int i2) {
-
-
-
-                                                      }
+                                                      public void beforeTextChanged(CharSequence charSequence, int i, int i1, int i2) {}
 
                                                       @Override
-                                                      public void onTextChanged(CharSequence charSequence, int i, int i1, int i2) {
-
-                                                      }
+                                                      public void onTextChanged(CharSequence charSequence, int i, int i1, int i2) {}
 
                                                       @Override
                                                       public void afterTextChanged(Editable editable) {
@@ -108,21 +106,14 @@ public class RegisterFragment extends Fragment {
                                                           }
 
                                                       }
-                                                  }
-
-
-        );
+                                                  });
 
         editTextPasswordField.addTextChangedListener(new TextWatcher() {
             @Override
-            public void beforeTextChanged(CharSequence charSequence, int i, int i1, int i2) {
-
-            }
+            public void beforeTextChanged(CharSequence charSequence, int i, int i1, int i2) {}
 
             @Override
-            public void onTextChanged(CharSequence charSequence, int i, int i1, int i2) {
-
-            }
+            public void onTextChanged(CharSequence charSequence, int i, int i1, int i2) {}
 
             @Override
             public void afterTextChanged(Editable editable) {
@@ -137,20 +128,15 @@ public class RegisterFragment extends Fragment {
                 } else {
                     textInputLayoutConfirmPassword.setError(null);
                 }
-
             }
         });
 
         editTextConfirmPasswordField.addTextChangedListener(new TextWatcher() {
             @Override
-            public void beforeTextChanged(CharSequence charSequence, int i, int i1, int i2) {
-
-            }
+            public void beforeTextChanged(CharSequence charSequence, int i, int i1, int i2) {}
 
             @Override
-            public void onTextChanged(CharSequence charSequence, int i, int i1, int i2) {
-
-            }
+            public void onTextChanged(CharSequence charSequence, int i, int i1, int i2) {}
 
             @Override
             public void afterTextChanged(Editable editable) {
@@ -162,7 +148,6 @@ public class RegisterFragment extends Fragment {
             }
         });
 
-        return view;
     }
 
     private boolean isValidConfirmPassword(CharSequence target) {
@@ -230,23 +215,4 @@ public class RegisterFragment extends Fragment {
     public final static boolean isValidEmail(CharSequence target) {
         return !TextUtils.isEmpty(target) && android.util.Patterns.EMAIL_ADDRESS.matcher(target).matches();
     }
-
-/*    @Override
-    public void onPause() {
-        super.onPause();
-        Toast.makeText(getContext(), "RegisterFragment Paused", Toast.LENGTH_SHORT).show();
-    }
-
-    @Override
-    public void onStop() {
-        super.onStop();
-        Toast.makeText(getContext(), "RegisterFragment Stopped", Toast.LENGTH_SHORT).show();
-    }
-
-    @Override
-    public void onDestroy() {
-        super.onDestroy();
-        Toast.makeText(getContext(), "RegisterFragment Destroyed", Toast.LENGTH_SHORT).show();
-    }*/
-
 }

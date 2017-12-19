@@ -23,7 +23,7 @@ public class FragmentItemListsViewPager extends Fragment {
 
     private ViewPager itemListsViewPager;
     private ItemListsViewPagerAdapter itemListsViewPagerAdapter;
-    private FragmentItemList.FragmentActivityCommunicator fragmentActivityCommunicator;
+    private FragmentRecyclerItems.FragmentActivityCommunicator fragmentActivityCommunicator;
     private Integer currentFragmentPosition = 0;
 
 
@@ -37,7 +37,7 @@ public class FragmentItemListsViewPager extends Fragment {
         TabLayout tabLayout = (TabLayout) view.findViewById(R.id.tabs);
         tabLayout.setupWithViewPager(itemListsViewPager);
 
-        populateFragmentListOnViewPagerAdapter(getArguments().getString(FragmentItemList.FILTER));
+        populateFragmentListOnViewPagerAdapter(getArguments().getString(FragmentRecyclerItems.FILTER));
 
         itemListsViewPager.setAdapter(itemListsViewPagerAdapter);
 
@@ -73,9 +73,9 @@ public class FragmentItemListsViewPager extends Fragment {
 
     }
 
-    public FragmentItemList getCurrentFragment(Integer position) {
+    public FragmentRecyclerItems getCurrentFragment(Integer position) {
 
-        FragmentItemList currentFragment = itemListsViewPagerAdapter.getFragmentItemListList().get(position);
+        FragmentRecyclerItems currentFragment = itemListsViewPagerAdapter.getFragmentRecyclerItems().get(position);
         return currentFragment;
     }
 
@@ -93,16 +93,16 @@ public class FragmentItemListsViewPager extends Fragment {
         BehaviourGetItemList getAllActiveItemsWithStockZero = new GetAllActiveItemsWithStockZero();
         BehaviourGetItemList getAllActiveItemsSortedByConsumptionRate = new GetActiveItemsSortedByConsumptionRate();
 
-        itemListsViewPagerAdapter.getFragmentItemListList().add(FragmentItemList.getfragmentItemList("By Consumption Rate", getAllActiveItemsSortedByConsumptionRate, 0, fragmentActivityCommunicator, filter));
-        itemListsViewPagerAdapter.getFragmentItemListList().add(FragmentItemList.getfragmentItemList("All Items A-Z", getAllActiveItemsAlphabetically, 0, fragmentActivityCommunicator, filter));
-        itemListsViewPagerAdapter.getFragmentItemListList().add(FragmentItemList.getfragmentItemList("All Items by Independence", getAllActiveItemsSortedByIndependence, 0, fragmentActivityCommunicator, filter));
-        itemListsViewPagerAdapter.getFragmentItemListList().add(FragmentItemList.getfragmentItemList("Stock 0", getAllActiveItemsWithStockZero, 0, fragmentActivityCommunicator, filter));
-        itemListsViewPagerAdapter.getFragmentItemListList().add(FragmentItemList.getfragmentItemList("Menos de Un Mes", getActiveItemsByIndependenceOneMonth, 0, fragmentActivityCommunicator, filter));
-        itemListsViewPagerAdapter.getFragmentItemListList().add(FragmentItemList.getfragmentItemList("Menos de Tres Meses", getActiveItemsByIndependenceThreeMonths, 0, fragmentActivityCommunicator, filter));
-        itemListsViewPagerAdapter.getFragmentItemListList().add(FragmentItemList.getfragmentItemList("Deleted Items", getDeletedItems, 0, fragmentActivityCommunicator, filter));
+        itemListsViewPagerAdapter.getFragmentRecyclerItems().add(FragmentRecyclerItems.getfragmentItemList("By Consumption Rate", getAllActiveItemsSortedByConsumptionRate, 0, fragmentActivityCommunicator, filter));
+        itemListsViewPagerAdapter.getFragmentRecyclerItems().add(FragmentRecyclerItems.getfragmentItemList("All Items A-Z", getAllActiveItemsAlphabetically, 0, fragmentActivityCommunicator, filter));
+        itemListsViewPagerAdapter.getFragmentRecyclerItems().add(FragmentRecyclerItems.getfragmentItemList("All Items by Independence", getAllActiveItemsSortedByIndependence, 0, fragmentActivityCommunicator, filter));
+        itemListsViewPagerAdapter.getFragmentRecyclerItems().add(FragmentRecyclerItems.getfragmentItemList("Stock 0", getAllActiveItemsWithStockZero, 0, fragmentActivityCommunicator, filter));
+        itemListsViewPagerAdapter.getFragmentRecyclerItems().add(FragmentRecyclerItems.getfragmentItemList("Menos de Un Mes", getActiveItemsByIndependenceOneMonth, 0, fragmentActivityCommunicator, filter));
+        itemListsViewPagerAdapter.getFragmentRecyclerItems().add(FragmentRecyclerItems.getfragmentItemList("Menos de Tres Meses", getActiveItemsByIndependenceThreeMonths, 0, fragmentActivityCommunicator, filter));
+        itemListsViewPagerAdapter.getFragmentRecyclerItems().add(FragmentRecyclerItems.getfragmentItemList("Deleted Items", getDeletedItems, 0, fragmentActivityCommunicator, filter));
     }
 
-    public void setFragmentActivityCommunicator(FragmentItemList.FragmentActivityCommunicator fragmentActivityCommunicator) {
+    public void setFragmentActivityCommunicator(FragmentRecyclerItems.FragmentActivityCommunicator fragmentActivityCommunicator) {
         this.fragmentActivityCommunicator = fragmentActivityCommunicator;
 
     }

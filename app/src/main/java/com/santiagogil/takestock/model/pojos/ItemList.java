@@ -16,4 +16,7 @@ public class ItemList {
     private String ID;
     private Integer warning;
 
+    public String getName() {
+        return name;
+    }
 }

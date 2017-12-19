@@ -3,7 +3,6 @@ package com.santiagogil.takestock.view.onboarding;
 import android.content.Intent;
 import android.content.SharedPreferences;
 import android.preference.PreferenceManager;
-import android.support.v4.app.Fragment;
 import android.support.v4.app.FragmentManager;
 import android.support.v4.app.FragmentTransaction;
 import android.support.v7.app.AppCompatActivity;
@@ -11,7 +10,7 @@ import android.os.Bundle;
 
 import com.google.firebase.auth.FirebaseAuth;
 import com.santiagogil.takestock.R;
-import com.santiagogil.takestock.view.MainActivityCommunicator;
+import com.santiagogil.takestock.view.Actvityes.MainActivityCommunicator;
 
 public class OnboardingActivity extends AppCompatActivity implements LoginFragment.CallRegisterListerner , LoginFragment.OnboardingActivityCommunicator, RegisterFragment.OnboardingActivityCommunicator {
 
@@ -21,9 +20,6 @@ public class OnboardingActivity extends AppCompatActivity implements LoginFragme
 
     public SharedPreferences appPreferences;
     boolean isAppInstalled = false;
-
-
-
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -95,25 +91,4 @@ public class OnboardingActivity extends AppCompatActivity implements LoginFragme
         mainIntent.addFlags(Intent.FLAG_ACTIVITY_CLEAR_TOP);
         startActivity(mainIntent);
     }
-
-
-
-/*    @Override
-    protected void onStop() {
-        super.onStop();
-        Toast.makeText(this, "Onboarding Activity Stopped", Toast.LENGTH_SHORT).show();
-
-    }
-
-    @Override
-    protected void onDestroy() {
-        super.onDestroy();
-        Toast.makeText(this, "Onboarding Activity Destroyed", Toast.LENGTH_SHORT).show();
-    }
-
-    @Override
-    protected void onPause() {
-        super.onPause();
-        Toast.makeText(this, "Onboarding Activity Paused", Toast.LENGTH_SHORT).show();
-    }*/
 }

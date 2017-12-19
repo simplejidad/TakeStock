@@ -4,46 +4,46 @@ import android.support.v4.app.Fragment;
 import android.support.v4.app.FragmentManager;
 import android.support.v4.app.FragmentStatePagerAdapter;
 
-import com.santiagogil.takestock.view.Fragments.FragmentItemList;
+import com.santiagogil.takestock.view.Fragments.FragmentRecyclerItems;
 
 import java.util.ArrayList;
 import java.util.List;
 
 public class ItemListsViewPagerAdapter extends FragmentStatePagerAdapter {
 
-    private List<FragmentItemList> fragmentItemListList;
-    //private FragmentItemList.FragmentActivityCommunicator fragmentActivityCommunicator;
+    private List<FragmentRecyclerItems> fragmentRecyclerItems;
+    //private FragmentRecyclerItems.FragmentActivityCommunicator fragmentActivityCommunicator;
 
 
     public ItemListsViewPagerAdapter(FragmentManager fm) {
         super(fm);
-        fragmentItemListList = new ArrayList<>();
+        fragmentRecyclerItems = new ArrayList<>();
         //this.fragmentActivityCommunicator = fragmentActivityCommunicator;
     }
 
     @Override
     public Fragment getItem(int position) {
-        return fragmentItemListList.get(position);
+        return fragmentRecyclerItems.get(position);
     }
 
     @Override
     public int getCount() {
-        return fragmentItemListList.size();
+        return fragmentRecyclerItems.size();
     }
 
-    public List<FragmentItemList> getFragmentItemListList() {
-        return fragmentItemListList;
+    public List<FragmentRecyclerItems> getFragmentRecyclerItems() {
+        return fragmentRecyclerItems;
     }
 
     public void updateFragmentsWithFilter(String filter){
-        for(FragmentItemList fragmentItemList : fragmentItemListList){
-            if(fragmentItemList != null){
+        for(FragmentRecyclerItems fragmentRecyclerItems : this.fragmentRecyclerItems){
+            if(fragmentRecyclerItems != null){
 
-                fragmentItemList.getArguments().putString(FragmentItemList.FILTER, filter);
+                fragmentRecyclerItems.getArguments().putString(FragmentRecyclerItems.FILTER, filter);
 
-                if (fragmentItemList.getItemList() != null){
+                if (fragmentRecyclerItems.getItemList() != null){
 
-                    fragmentItemList.updateListWithFilter();
+                    fragmentRecyclerItems.updateListWithFilter();
 
                 }
             }
@@ -52,6 +52,6 @@ public class ItemListsViewPagerAdapter extends FragmentStatePagerAdapter {
 
     @Override
     public CharSequence getPageTitle(int position) {
-        return this.fragmentItemListList.get(position).getTitle();
+        return this.fragmentRecyclerItems.get(position).getTitle();
     }
 }

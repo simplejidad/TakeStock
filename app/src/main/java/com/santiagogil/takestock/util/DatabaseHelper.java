@@ -11,6 +11,7 @@ public class DatabaseHelper extends SQLiteOpenHelper {
     private static final Integer DATABASEVERSION = 1;
 
     //Tables
+    public static final String TABLE_DATABASES = "Databases";
     public static final String TABLEITEMS = "Items";
     public static final String TABLECONSUMPTIONS = "Consumptions";
     public static final String TABLEUSERS = "Users";

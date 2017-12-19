@@ -47,8 +47,7 @@ public class ItemRecyclerAdapter extends RecyclerView.Adapter{
     public RecyclerView.ViewHolder onCreateViewHolder(ViewGroup parent, int viewType) {
         LayoutInflater inflater = LayoutInflater.from(context);
         View view = inflater.inflate(R.layout.card_view_item, parent, false);
-        view.setOnClickListener(onItemTouchedListener);
-        return new ItemViewHolder(view, context, onItemModifiedListener);
+        return new ItemViewHolder(view, context, onItemModifiedListener, onItemTouchedListener);
     }
 
     @Override
@@ -56,7 +55,7 @@ public class ItemRecyclerAdapter extends RecyclerView.Adapter{
         Item item = items.get(position);
         ItemViewHolder itemViewHolder = (ItemViewHolder) holder;
         itemViewHolder.loadItem(item);
-        itemViewHolder.assignTransitionNames(item.getID());
+        //itemViewHolder.assignTransitionNames(item.getID());
 
     }
 
@@ -86,9 +85,10 @@ public class ItemRecyclerAdapter extends RecyclerView.Adapter{
         private View itemView;
         private CardView cardView;
 
-        public ItemViewHolder(View itemView, Context context, View.OnClickListener onItemModifiedListener) {
+        public ItemViewHolder(View itemView, Context context, View.OnClickListener onItemModifiedListener, View.OnClickListener onItemTouchedListener) {
             super(itemView);
 
+            itemView.setOnClickListener(onItemTouchedListener);
             textViewItemName = (TextView) itemView.findViewById(R.id.text_view_item_name);
             textViewItemStock = (TextView) itemView.findViewById(R.id.text_view_item_stock);
             textViewItemIndependence = (TextView) itemView.findViewById(R.id.text_view_item_independence);
@@ -244,14 +244,14 @@ public class ItemRecyclerAdapter extends RecyclerView.Adapter{
             }
         }
 
-        private void assignTransitionNames(String itemID){
+        /*private void assignTransitionNames(String itemID){
             if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.LOLLIPOP) {
                 textViewItemName.setTransitionName(FragmentItemDetail.TRANSITION_ITEM_NAME + itemID);
                 textViewItemStock.setTransitionName(FragmentItemDetail.TRANSITION_ITEM_STOCK + itemID);
                 textViewItemIndependence.setTransitionName(FragmentItemDetail.TRANSITION_ITEM_INDEPENDENCE+itemID);
 
             }
-        }
+        }*/
 
         private void setTextViewItemIndependenceText(Item item){
 

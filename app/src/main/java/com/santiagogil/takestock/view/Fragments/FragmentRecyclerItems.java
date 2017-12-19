@@ -4,7 +4,6 @@ package com.santiagogil.takestock.view.Fragments;
 import android.os.Bundle;
 import android.support.annotation.Nullable;
 import android.support.v4.app.Fragment;
-import android.support.v4.widget.SwipeRefreshLayout;
 import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
 import android.view.LayoutInflater;
@@ -26,14 +25,13 @@ import java.util.List;
 
 
 
-public class FragmentItemList extends Fragment implements FragmentLifecycle {
+public class FragmentRecyclerItems extends Fragment implements FragmentLifecycle {
 
     private RecyclerView recyclerView;
     private ItemRecyclerAdapter itemRecyclerAdapter;
     private BehaviourGetItemList behaviourGetItemList;
     private Bundle bundle;
     private FragmentActivityCommunicator fragmentActivityCommunicator;
-    private SwipeRefreshLayout swipeContainer;
     private List<Item> itemList;
 
     public static final String TITLE = "textViewTitle";
@@ -42,19 +40,19 @@ public class FragmentItemList extends Fragment implements FragmentLifecycle {
     public static final String FILTER = "filter";
 
 
-    public static FragmentItemList getfragmentItemList(String title, BehaviourGetItemList behaviourGetItemList, Integer position, FragmentActivityCommunicator fragmentActivityCommunicator, String filter) {
+    public static FragmentRecyclerItems getfragmentItemList(String title, BehaviourGetItemList behaviourGetItemList, Integer position, FragmentActivityCommunicator fragmentActivityCommunicator, String filter) {
 
-        FragmentItemList fragmentItemList = new FragmentItemList();
-        fragmentItemList.setFragmentActivityCommunicator(fragmentActivityCommunicator);
+        FragmentRecyclerItems fragmentRecyclerItems = new FragmentRecyclerItems();
+        fragmentRecyclerItems.setFragmentActivityCommunicator(fragmentActivityCommunicator);
         Bundle bundle = new Bundle();
         bundle.putString(TITLE, title);
         bundle.putInt(POSITION, position);
         bundle.putString(FILTER, filter);
         bundle.putSerializable(BEHAVIOURGETITEMLIST, behaviourGetItemList);
 
-        fragmentItemList.setArguments(bundle);
+        fragmentRecyclerItems.setArguments(bundle);
 
-        return fragmentItemList;
+        return fragmentRecyclerItems;
     }
 
 
@@ -78,16 +76,6 @@ public class FragmentItemList extends Fragment implements FragmentLifecycle {
         itemRecyclerAdapter.notifyDataSetChanged();
 
         updateRecyclerViewPosition();
-
-        swipeContainer = (SwipeRefreshLayout) view.findViewById(R.id.swipe_refresh_layout);
-        swipeContainer.setOnRefreshListener(new SwipeRefreshLayout.OnRefreshListener() {
-            @Override
-            public void onRefresh() {
-                itemRecyclerAdapter.setItems(behaviourGetItemList.getItemList(getContext()));
-                itemRecyclerAdapter.notifyDataSetChanged();
-                swipeContainer.setRefreshing(false);
-            }
-        });
 
         updateListWithFilter();
 

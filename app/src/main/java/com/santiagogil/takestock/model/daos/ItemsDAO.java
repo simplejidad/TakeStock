@@ -12,9 +12,11 @@ import com.google.firebase.database.DatabaseError;
 import com.google.firebase.database.DatabaseReference;
 import com.google.firebase.database.ValueEventListener;
 import com.santiagogil.takestock.model.pojos.Item;
+import com.santiagogil.takestock.model.pojos.ItemList;
 import com.santiagogil.takestock.util.DatabaseHelper;
 import com.santiagogil.takestock.util.FirebaseHelper;
 import com.santiagogil.takestock.util.ResultListener;
+import com.santiagogil.takestock.view.Fragments.FragmentItemDetail;
 
 import java.util.ArrayList;
 import java.util.Collections;
@@ -80,6 +82,7 @@ public class ItemsDAO {
 
         database.close();
     }
+
 
     public void addItemToFirebase(Item item){
 
@@ -147,7 +150,7 @@ public class ItemsDAO {
         return buildItemFromQuerry(selectQuery);
     }
 
-    public void getItemsFromFirebase(final ResultListener<List<Item>> listenerFromController){
+    public void getAllItemsFromFirebase(final ResultListener<List<Item>> listenerFromController){
 
         DatabaseReference dbRef = firebaseHelper.getUserDB().child(DatabaseHelper.TABLEITEMS);
         final List<Item> itemList = new ArrayList<>();
@@ -165,7 +168,7 @@ public class ItemsDAO {
             @Override
             public void onCancelled(DatabaseError databaseError) {
 
-                Toast.makeText(context, "itemsDAO.getItemsFromFirebase FAILED", Toast.LENGTH_SHORT).show();
+                Toast.makeText(context, "itemsDAO.getAllItemsFromFirebase FAILED", Toast.LENGTH_SHORT).show();
             }
         });
     }
@@ -362,8 +365,6 @@ public class ItemsDAO {
 
     private void toggleItemIsActiveInLocalDB(Item item){
 
-
-
         if (item.getActive()){
 
             SQLiteDatabase database =  databaseHelper.getWritableDatabase();
@@ -385,8 +386,6 @@ public class ItemsDAO {
 
             database.close();
         }
-
-
     }
 
     public void updateItemConsumptionRateInDatabases(String itemID, Integer consumptionRate){
@@ -500,5 +499,11 @@ public class ItemsDAO {
 
         updateItemStock(item, item.getStock() + item.getCart());
         updateItemCart(item, 0);
+    }
+
+    public List<Item> getAllItems() {
+        String selectQuery = "SELECT * FROM " + DatabaseHelper.TABLEITEMS ;
+
+        return builItemListFromQuerry(selectQuery);
     }
 }

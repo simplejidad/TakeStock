@@ -39,7 +39,7 @@ public class FragmentItemsViewPager extends Fragment {
 
         bundle = getArguments();
         itemsViewPager = (ViewPager) view.findViewById(R.id.itemsViewPager);
-        itemsViewPagerAdapter = new ItemsViewPagerAdapter(getChildFragmentManager(), getContext(), (BehaviourGetItemList) bundle.getSerializable(FragmentItemList.BEHAVIOURGETITEMLIST));
+        itemsViewPagerAdapter = new ItemsViewPagerAdapter(getChildFragmentManager(), getContext(), (BehaviourGetItemList) bundle.getSerializable(FragmentRecyclerItems.BEHAVIOURGETITEMLIST));
         itemsViewPager.setAdapter(itemsViewPagerAdapter);
         currentPosition = itemsViewPagerAdapter.getTouchedItemPosition(bundle.getString(ITEMID));
         itemsViewPager.setCurrentItem(currentPosition);
@@ -68,7 +68,7 @@ public class FragmentItemsViewPager extends Fragment {
 
     public void reloadWithUpdatedData(Integer position){
 
-        itemsViewPagerAdapter = new ItemsViewPagerAdapter(getChildFragmentManager(), getContext(), (BehaviourGetItemList) bundle.getSerializable(FragmentItemList.BEHAVIOURGETITEMLIST));
+        itemsViewPagerAdapter = new ItemsViewPagerAdapter(getChildFragmentManager(), getContext(), (BehaviourGetItemList) bundle.getSerializable(FragmentRecyclerItems.BEHAVIOURGETITEMLIST));
         itemsViewPager.setAdapter(itemsViewPagerAdapter);
         itemsViewPager.setCurrentItem(position);
 

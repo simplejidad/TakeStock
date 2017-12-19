@@ -4,13 +4,8 @@
     android:layout_height="match_parent"
     xmlns:app="http://schemas.android.com/apk/res-auto"
     android:orientation="vertical"
-    tools:context=".view.Fragments.FragmentItemList">
+    tools:context=".view.Fragments.FragmentRecyclerItems">
 
-<android.support.v4.widget.SwipeRefreshLayout
-    android:id="@+id/swipe_refresh_layout"
-    android:layout_width="match_parent"
-    android:layout_height="match_parent"
-    >
 
     <android.support.v7.widget.RecyclerView
         android:id="@+id/recyclerViewItems"
@@ -19,11 +14,6 @@
         >
 
     </android.support.v7.widget.RecyclerView>
-
-
-</android.support.v4.widget.SwipeRefreshLayout>
-
-
 
 
 </android.support.design.widget.CoordinatorLayout>

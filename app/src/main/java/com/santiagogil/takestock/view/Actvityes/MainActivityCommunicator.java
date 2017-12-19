@@ -1,10 +1,9 @@
-package com.santiagogil.takestock.view;
+package com.santiagogil.takestock.view.Actvityes;
 
 import android.content.Context;
 import android.content.Intent;
-import android.graphics.Color;
-import android.os.Build;
 import android.os.Bundle;
+import android.provider.ContactsContract;
 import android.support.annotation.NonNull;
 import android.support.design.widget.BottomNavigationView;
 import android.support.design.widget.NavigationView;
@@ -16,38 +15,47 @@ import android.support.v7.app.AppCompatActivity;;
 import android.support.v7.widget.Toolbar;
 import android.text.Editable;
 import android.text.TextWatcher;
-import android.transition.Fade;
-import android.util.Log;
 import android.view.Menu;
 import android.view.MenuItem;
-import android.view.View;
 import android.view.WindowManager;
 import android.view.inputmethod.InputMethodManager;
 import android.widget.EditText;
+import android.widget.ListView;
 import android.widget.TextView;
 import android.widget.Toast;
 
 
 import com.google.firebase.auth.FirebaseAuth;
+import com.google.firebase.database.DataSnapshot;
+import com.google.firebase.database.DatabaseError;
 import com.google.firebase.database.DatabaseReference;
+import com.google.firebase.database.FirebaseDatabase;
+import com.google.firebase.database.ValueEventListener;
 import com.santiagogil.takestock.R;
 import com.santiagogil.takestock.controller.ConsumptionsController;
 import com.santiagogil.takestock.controller.ItemsController;
+import com.santiagogil.takestock.controller.UsersController;
+import com.santiagogil.takestock.model.daos.ItemsFirebaseDAO;
 import com.santiagogil.takestock.model.pojos.Behaviours.BehaviourGetItemList;
 import com.santiagogil.takestock.model.pojos.Consumption;
 import com.santiagogil.takestock.model.pojos.Item;
+import com.santiagogil.takestock.model.pojos.User;
+import com.santiagogil.takestock.model.pojos.UserDatabase;
 import com.santiagogil.takestock.util.DatabaseHelper;
 import com.santiagogil.takestock.util.FirebaseHelper;
 import com.santiagogil.takestock.util.ResultListener;
-import com.santiagogil.takestock.view.Fragments.FragmentItemDetail;
+import com.santiagogil.takestock.view.DialogAddItem;
 import com.santiagogil.takestock.view.Fragments.FragmentItemsViewPager;
-import com.santiagogil.takestock.view.Fragments.FragmentItemList;
+import com.santiagogil.takestock.view.Fragments.FragmentRecyclerItems;
 import com.santiagogil.takestock.view.Fragments.FragmentItemListsViewPager;
 import com.santiagogil.takestock.view.onboarding.OnboardingActivity;
 
+import java.util.ArrayList;
+import java.util.HashMap;
 import java.util.List;
+import java.util.Map;
 
-public class MainActivityCommunicator extends AppCompatActivity implements FragmentItemList.FragmentActivityCommunicator, DialogAddItem.AddItemDialogCommunicator {
+public class MainActivityCommunicator extends AppCompatActivity implements FragmentRecyclerItems.FragmentActivityCommunicator, DialogAddItem.AddItemDialogCommunicator {
 
 
     private FirebaseAuth fAuth;
@@ -72,6 +80,8 @@ public class MainActivityCommunicator extends AppCompatActivity implements Fragm
 
         bottomNavigationView = (BottomNavigationView) findViewById(R.id.bottom_navigation_view);
         bottomNavigationView.setPadding(0,0,0,0);
+
+        addGroceriesListToCurrentUsers();
 
         bottomNavigationView.setMeasureAllChildren(false);
 
@@ -133,7 +143,7 @@ public class MainActivityCommunicator extends AppCompatActivity implements Fragm
 
             fragmentItemListsViewPager = new FragmentItemListsViewPager();
             Bundle bundle = new Bundle();
-            bundle.putString(FragmentItemList.FILTER, filter);
+            bundle.putString(FragmentRecyclerItems.FILTER, filter);
             fragmentItemListsViewPager.setArguments(bundle);
             fragmentItemListsViewPager.setFragmentActivityCommunicator(MainActivityCommunicator.this);
             FragmentManager fragmentManager = this.getSupportFragmentManager();
@@ -151,6 +161,8 @@ public class MainActivityCommunicator extends AppCompatActivity implements Fragm
 
             }
         }
+
+
 
     @Override
     public void onItemTouched (Item touchedItem, Integer touchedPosition, BehaviourGetItemList
@@ -226,30 +238,6 @@ public class MainActivityCommunicator extends AppCompatActivity implements Fragm
         Toast.makeText(this, "Logged out", Toast.LENGTH_SHORT).show();
     }
 
-    private void createFirebaseDefaultItemListEnglish() {
-
-
-        FirebaseHelper firebaseHelper = new FirebaseHelper();
-
-        DatabaseReference defaultItemListEnglish = firebaseHelper.getDefaultItemDatabase().child(DatabaseHelper.TABLEITEMS);
-
-
-        for(Integer i = 0; i < 25; i++){
-            String itemID = "Default Item " + i;
-            DatabaseReference defaultItem = defaultItemListEnglish.child(itemID);
-            Item item = new Item(itemID);
-
-            defaultItem.child(DatabaseHelper.ACTIVE).setValue(item.getActive());
-            defaultItem.child(DatabaseHelper.CONSUMPTIONRATE).setValue(item.getConsumptionRate());
-            defaultItem.child(DatabaseHelper.ID).setValue(itemID);
-            defaultItem.child(DatabaseHelper.MINIMUMPURCHACEQUANTITY).setValue(item.getMinimumPurchaceQuantity());
-            defaultItem.child(DatabaseHelper.NAME).setValue(item.getName());
-            defaultItem.child(DatabaseHelper.STOCK).setValue(item.getStock());
-            defaultItem.child(DatabaseHelper.USERID).setValue(FirebaseHelper.DEFAULT_ITEM_LIST);
-
-        }
-    }
-
     @Override
     public boolean onSupportNavigateUp() {
         //This method is called when the up button is pressed. Just the pop back stack.
@@ -278,7 +266,7 @@ public class MainActivityCommunicator extends AppCompatActivity implements Fragm
             public void onTextChanged(CharSequence s, int start, int before, int count) {
 
                 filter = s.toString();
-                fragmentItemListsViewPager.getArguments().putString(FragmentItemList.FILTER, filter);
+                fragmentItemListsViewPager.getArguments().putString(FragmentRecyclerItems.FILTER, filter);
                 fragmentItemListsViewPager.getItemListsViewPagerAdapter().updateFragmentsWithFilter(filter);
 
             }
@@ -290,17 +278,21 @@ public class MainActivityCommunicator extends AppCompatActivity implements Fragm
         });
     }
 
+    private void addGroceriesListToCurrentUsers() {
 
-    @Override
-    public boolean onOptionsItemSelected(MenuItem item) {
-        switch (item.getItemId()) {
-            case R.id.action_add_item:
+        final FirebaseHelper firebaseHelper = new FirebaseHelper();
+        DatabaseReference databaseReference =  firebaseHelper.getUserDB();
+        ItemsController itemsController = new ItemsController();
+        List<Item> items = itemsController.getAllItems(context);
+        for(Item item: items){
 
-                return true;
-            default:
-                return super.onOptionsItemSelected(item);
+            databaseReference.child("Lists").child("Groceries").child("Items").child(item.getID()).setValue(item.getID());
+
         }
+
     }
+
+
 }
 
 

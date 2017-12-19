@@ -9,8 +9,18 @@ import com.google.android.gms.tasks.OnCompleteListener;
 import com.google.android.gms.tasks.Task;
 import com.google.firebase.auth.AuthResult;
 import com.google.firebase.auth.FirebaseAuth;
+import com.google.firebase.database.DataSnapshot;
+import com.google.firebase.database.DatabaseError;
+import com.google.firebase.database.DatabaseReference;
+import com.google.firebase.database.ValueEventListener;
+import com.santiagogil.takestock.model.pojos.Item;
+import com.santiagogil.takestock.model.pojos.User;
 import com.santiagogil.takestock.util.DatabaseHelper;
+import com.santiagogil.takestock.util.FirebaseHelper;
 import com.santiagogil.takestock.util.ResultListener;
+
+import java.util.ArrayList;
+import java.util.List;
 
 public class UsersDAO {
 
@@ -32,8 +42,6 @@ public class UsersDAO {
                                                          final String image){
 
         final FirebaseAuth fAuth = FirebaseAuth.getInstance();
-
-
 
         fAuth.createUserWithEmailAndPassword(email, password).addOnCompleteListener(new OnCompleteListener<AuthResult>() {
             @Override

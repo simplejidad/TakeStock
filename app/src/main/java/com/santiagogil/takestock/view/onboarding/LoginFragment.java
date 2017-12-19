@@ -37,7 +37,7 @@ import com.santiagogil.takestock.controller.ItemsController;
 import com.santiagogil.takestock.model.pojos.Item;
 import com.santiagogil.takestock.util.DatabaseHelper;
 import com.santiagogil.takestock.util.ResultListener;
-import com.santiagogil.takestock.view.MainActivityCommunicator;
+import com.santiagogil.takestock.view.Actvityes.MainActivityCommunicator;
 
 import java.util.List;
 
@@ -91,31 +91,22 @@ public class LoginFragment extends Fragment {
         textInputLayoutEmail = (TextInputLayout) view.findViewById(R.id.text_input_layout_email);
 
         editTextEmailField.addTextChangedListener(new TextWatcher() {
-                                                      @Override
-                                                      public void beforeTextChanged(CharSequence charSequence, int i, int i1, int i2) {
+              @Override
+              public void beforeTextChanged(CharSequence charSequence, int i, int i1, int i2) {}
 
+              @Override
+              public void onTextChanged(CharSequence charSequence, int i, int i1, int i2) {}
 
+              @Override
+              public void afterTextChanged(Editable editable) {
 
-                                                      }
-
-                                                      @Override
-                                                      public void onTextChanged(CharSequence charSequence, int i, int i1, int i2) {
-
-                                                      }
-
-                                                      @Override
-                                                      public void afterTextChanged(Editable editable) {
-
-                                                          if(!isValidEmail((CharSequence) editable)){
-                                                              textInputLayoutEmail.setError("Enter a valid email address");
-                                                          } else{
-                                                              textInputLayoutEmail.setError(null);
-                                                          }
-
-                                                      }
-                                                  }
-
-
+                  if(!isValidEmail((CharSequence) editable)){
+                      textInputLayoutEmail.setError("Enter a valid email address");
+                  } else{
+                      textInputLayoutEmail.setError(null);
+                  }
+              }
+          }
         );
 
         editTextPasswordField.addTextChangedListener(new TextWatcher() {
@@ -140,9 +131,6 @@ public class LoginFragment extends Fragment {
 
             }
         });
-
-
-
 
         buttonLogin.setOnClickListener(new View.OnClickListener() {
             @Override
@@ -171,11 +159,6 @@ public class LoginFragment extends Fragment {
 
     public final static boolean isValidEmail(CharSequence target) {
         return !TextUtils.isEmpty(target) && android.util.Patterns.EMAIL_ADDRESS.matcher(target).matches();
-    }
-
-    private void signInWithGoogle(){
-        Intent signInIntent = Auth.GoogleSignInApi.getSignInIntent(googleApiClient);
-        startActivityForResult(signInIntent, RC_SIGN_IN);
     }
 
     @Override
@@ -255,8 +238,6 @@ public class LoginFragment extends Fragment {
                 }
             });
         }
-
-
     }
 
     private void checkIfUserExists(){
@@ -297,39 +278,6 @@ public class LoginFragment extends Fragment {
         void goToRegister(String string);
     }
 
-    private void signInAnonymously(){
-        mAuth.signInAnonymously()
-                .addOnCompleteListener(new OnCompleteListener<AuthResult>() {
-                    @Override
-                    public void onComplete(@NonNull Task<AuthResult> task) {
-                        Log.d(TAG, "signInAnonymously:onComplete:" + task.isSuccessful());
-
-                        if(task.isSuccessful()){
-
-                            ItemsController itemsController = new ItemsController();
-                            itemsController.updateItemsDatabase(getContext(), new ResultListener<List<Item>>(){
-                                @Override
-                                public void finish(List<Item> result) {
-                                    Toast.makeText(getContext(), "Items Updated", Toast.LENGTH_SHORT).show();
-
-                                    Intent intent = new Intent(getContext(), MainActivityCommunicator.class);
-                                    intent.addFlags(Intent.FLAG_ACTIVITY_CLEAR_TOP);
-                                    startActivity(intent);
-                                }
-                            });
-                        }
-
-                        if (!task.isSuccessful()) {
-                            Log.w(TAG, "signInAnonymously", task.getException());
-                            Toast.makeText(getContext(), "Authentication failed.",
-                                    Toast.LENGTH_SHORT).show();
-                        }
-
-                        // ...
-                    }
-                });
-    }
-
     public interface OnboardingActivityCommunicator {
 
         void startMainActivity();
@@ -340,21 +288,4 @@ public class LoginFragment extends Fragment {
         this.onboardingActivityCommunicator = onboardingActivityCommunicator;
     }
 
-/*    @Override
-    public void onPause() {
-        super.onPause();
-        Toast.makeText(getContext(), "LoginFragment Paused", Toast.LENGTH_SHORT).show();
-    }
-
-    @Override
-    public void onStop() {
-        super.onStop();
-        Toast.makeText(getContext(), "LoginFragment Stopped", Toast.LENGTH_SHORT).show();
-    }
-
-    @Override
-    public void onDestroy() {
-        super.onDestroy();
-        Toast.makeText(getContext(), "LoginFragment Destroyed", Toast.LENGTH_SHORT).show();
-    }*/
 }

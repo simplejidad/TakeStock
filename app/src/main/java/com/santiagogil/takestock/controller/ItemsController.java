@@ -4,6 +4,7 @@ import android.content.Context;
 import android.widget.Toast;
 
 import com.santiagogil.takestock.model.daos.ItemsDAO;
+import com.santiagogil.takestock.model.daos.ItemsFirebaseDAO;
 import com.santiagogil.takestock.model.pojos.Consumption;
 import com.santiagogil.takestock.model.pojos.Item;
 import com.santiagogil.takestock.util.ResultListener;
@@ -114,7 +115,7 @@ public class ItemsController {
 
         } else {
 
-            itemsDAO.getItemsFromFirebase(new ResultListener<List<Item>>() {
+            itemsDAO.getAllItemsFromFirebase(new ResultListener<List<Item>>() {
                 @Override
                 public void finish(List<Item> result) {
                     for (Item item : result) {
@@ -192,5 +193,11 @@ public class ItemsController {
         ItemsDAO itemsDao = new ItemsDAO(context);
         itemsDao.cartToStock(item);
 
+    }
+
+    public List<Item> getAllItems(Context context){
+
+        ItemsDAO itemsDAO = new ItemsDAO(context);
+        return itemsDAO.getAllItems();
     }
 }
