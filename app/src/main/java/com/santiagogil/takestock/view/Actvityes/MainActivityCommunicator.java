@@ -81,7 +81,7 @@ public class MainActivityCommunicator extends AppCompatActivity implements Fragm
         bottomNavigationView = (BottomNavigationView) findViewById(R.id.bottom_navigation_view);
         bottomNavigationView.setPadding(0,0,0,0);
 
-        addGroceriesListToCurrentUsers();
+        //addGroceriesListToCurrentUsers();
 
         bottomNavigationView.setMeasureAllChildren(false);
 

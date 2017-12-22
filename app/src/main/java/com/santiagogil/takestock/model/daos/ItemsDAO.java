@@ -217,7 +217,12 @@ public class ItemsDAO {
 
         while (cursor.moveToNext()) {
 
-            items.add(buildItemFromCursor(cursor));
+            Item item = buildItemFromCursor(cursor);
+
+            if(!item.getName().equals(null)){
+
+                items.add(buildItemFromCursor(cursor));
+            }
 
         }
         cursor.close();
@@ -230,7 +235,7 @@ public class ItemsDAO {
     public List<Item> getInactiveItemsFromLocalDB() {
 
         String selectQuery = "SELECT * FROM " + DatabaseHelper.TABLEITEMS + " WHERE " + DatabaseHelper.ACTIVE
-                + " = " + '"' + DatabaseHelper.ACTIVE_FALSE + '"' + " AND " + DatabaseHelper.USERID + " = " + '"'
+                + " = " + '"'+ DatabaseHelper.ACTIVE_FALSE + '"' + " AND " + DatabaseHelper.USERID + " = " + '"'
                 +  firebaseHelper.getCurrentUserID() + '"';
 
         return builItemListFromQuerry(selectQuery);
