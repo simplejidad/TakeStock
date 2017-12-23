@@ -12,7 +12,6 @@ import com.santiagogil.takestock.R;
 import com.santiagogil.takestock.controller.ConsumptionsController;
 import com.santiagogil.takestock.model.pojos.Consumption;
 import com.santiagogil.takestock.util.DateHelper;
-import com.santiagogil.takestock.view.Fragments.FragmentItemDetail;
 
 import java.util.List;
 
@@ -20,19 +19,13 @@ public class ConsumptionRecyclerAdapter extends RecyclerView.Adapter {
 
     private List<Consumption> consumptionList;
     private Context context;
-    private FragmentItemDetail.OnConsumptionDeletedListener onConsumptionDeletedListener;
+    private RecyclerConsumptionsFragmentCommunicator recyclerConsumptionsFragmentCommunicator;
 
 
     public ConsumptionRecyclerAdapter(Context context,
-                                      FragmentItemDetail.OnConsumptionDeletedListener onConsumptionDeletedListener) {
+                                      RecyclerConsumptionsFragmentCommunicator recyclerConsumptionsFragmentCommunicator) {
         this.context = context;
-        this.onConsumptionDeletedListener = onConsumptionDeletedListener;
-
-    }
-
-    public ConsumptionRecyclerAdapter(Context context) {
-        this.context = context;
-
+        this.recyclerConsumptionsFragmentCommunicator = recyclerConsumptionsFragmentCommunicator;
 
     }
 
@@ -40,7 +33,7 @@ public class ConsumptionRecyclerAdapter extends RecyclerView.Adapter {
     public RecyclerView.ViewHolder onCreateViewHolder(ViewGroup parent, int viewType) {
         LayoutInflater inflater = LayoutInflater.from(context);
         View view = inflater.inflate(R.layout.card_view_consumption, parent, false);
-        return new ConsumptionViewHolder(view, onConsumptionDeletedListener);
+        return new ConsumptionViewHolder(context, view, recyclerConsumptionsFragmentCommunicator);
     }
 
     @Override
@@ -67,8 +60,8 @@ public class ConsumptionRecyclerAdapter extends RecyclerView.Adapter {
         private ImageButton buttonDelete;
         private Consumption consumption;
 
-        public ConsumptionViewHolder(View consumptionView,
-                                     final FragmentItemDetail.OnConsumptionDeletedListener onConsumptionDeletedListener) {
+        public ConsumptionViewHolder(final Context context, View consumptionView,
+                                     final RecyclerConsumptionsFragmentCommunicator recyclerConsumptionsFragmentCommunicator) {
             super(consumptionView);
             textViewConsumptionDate = (TextView) consumptionView.findViewById(R.id.textViewConsumptionDate);
             dateHelper = new DateHelper();
@@ -76,7 +69,10 @@ public class ConsumptionRecyclerAdapter extends RecyclerView.Adapter {
             buttonDelete.setOnClickListener(new View.OnClickListener() {
                 @Override
                 public void onClick(View view) {
-                    onConsumptionDeletedListener.onConsumptionDeleted(consumption);
+                    ConsumptionsController consumptionsController = new ConsumptionsController();
+                    consumptionsController.deleteConsumption(context, consumption);
+                    recyclerConsumptionsFragmentCommunicator.onConsumptionsUpdated();
+
                 }
             });
         }
@@ -86,6 +82,10 @@ public class ConsumptionRecyclerAdapter extends RecyclerView.Adapter {
             textViewConsumptionDate.setText(dateHelper.getFormatedDayFromMiliseconds(consumption.getDate()));
 
         }
+    }
+
+    public interface RecyclerConsumptionsFragmentCommunicator {
+        void onConsumptionsUpdated();
     }
 
 }

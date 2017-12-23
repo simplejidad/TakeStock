@@ -32,4 +32,12 @@ public class ConsumptionsAndPurchacesViewPagerAdapter extends FragmentStatePager
     public int getCount() {
         return fragmentList.size();
     }
+
+    public void onConsumptionsUpdated(){
+        fragmentList.get(0).onConsumptionsUpdated();
+    }
+
+    public void onPurchacesUpdated(){
+        fragmentList.get(1).onPurchacesUpdated();
+    }
 }

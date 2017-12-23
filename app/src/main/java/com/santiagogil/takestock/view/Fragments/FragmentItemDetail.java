@@ -24,7 +24,6 @@ import android.widget.ViewSwitcher;
 import com.santiagogil.takestock.R;
 import com.santiagogil.takestock.controller.ConsumptionsController;
 import com.santiagogil.takestock.controller.ItemsController;
-import com.santiagogil.takestock.model.pojos.Consumption;
 import com.santiagogil.takestock.util.DatabaseHelper;
 import com.santiagogil.takestock.model.pojos.Item;
 import com.santiagogil.takestock.view.Adapters.ConsumptionRecyclerAdapter;
@@ -33,7 +32,7 @@ import com.santiagogil.takestock.view.Adapters.ConsumptionsAndPurchacesViewPager
 import java.util.ArrayList;
 import java.util.List;
 
-public class FragmentItemDetail extends Fragment {
+public class FragmentItemDetail extends Fragment implements SimpleRecyclerFragment.FragmentRecyclerToFragmentCommunicator{
 
     public static FragmentItemDetail provideFragment(Item item, Integer position){
         Bundle bundle = new Bundle();
@@ -65,6 +64,8 @@ public class FragmentItemDetail extends Fragment {
     private String itemID;
     private Item item;
     private Context context;
+    private List<SimpleRecyclerFragment> fragmentList;
+    private ConsumptionsAndPurchacesViewPagerAdapter consumptionsAndPurchacesViewPagerAdapter;
 
     private ImageButton buttonStockSubtract;
     private Button buttonStockAdd;
@@ -128,8 +129,6 @@ public class FragmentItemDetail extends Fragment {
 
         updateItem();
 
-
-
         textViewItemName.setText(item.getName());
         textViewItemStock.setText(item.getStock().toString());
         textViewMinimumPurchace.setText(item.getMinimumPurchaceQuantity().toString());
@@ -151,11 +150,19 @@ public class FragmentItemDetail extends Fragment {
     private void loadViewPager() {
 
         viewPager = (ViewPager) fragmentView.findViewById(R.id.view_pager_consumptions_purchaces);
-        List<SimpleRecyclerFragment> fragmentList = new ArrayList();
-        ConsumptionsAndPurchacesViewPagerAdapter consumptionsAndPurchacesViewPagerAdapter = new ConsumptionsAndPurchacesViewPagerAdapter(getChildFragmentManager(), fragmentList);
+        fragmentList = new ArrayList();
+        consumptionsAndPurchacesViewPagerAdapter = new ConsumptionsAndPurchacesViewPagerAdapter(getChildFragmentManager(), fragmentList);
 
 
-        fragmentList.add(ConsumptionRecyclerFragment.createFragment(itemID));
+        ConsumptionRecyclerFragment consumptionRecyclerFragment = new ConsumptionRecyclerFragment();
+        Bundle bundle = new Bundle();
+        bundle.putString(ConsumptionRecyclerFragment.ITEMID, itemID);
+        bundle.putString(ConsumptionRecyclerFragment.TITLE, "Consumptions");
+        consumptionRecyclerFragment.setArguments(bundle);
+        consumptionRecyclerFragment.setFragmentRecyclerToFragmentCommunicator(this);
+
+
+        fragmentList.add(consumptionRecyclerFragment);
         fragmentList.add(PurchacesRecyclerFragment.createFragment(itemID));
 
         viewPager.setAdapter(consumptionsAndPurchacesViewPagerAdapter);
@@ -299,6 +306,7 @@ public class FragmentItemDetail extends Fragment {
             @Override
             public void onClick(View view) {
                 increaseItemStock(item);
+                consumptionsAndPurchacesViewPagerAdapter.onPurchacesUpdated();
                 updateFieldsWithItemDetails();
             }
         });
@@ -307,6 +315,7 @@ public class FragmentItemDetail extends Fragment {
             @Override
             public void onClick(View view) {
                 decreaseItemStock(item);
+                consumptionsAndPurchacesViewPagerAdapter.onConsumptionsUpdated();
                 updateFieldsWithItemDetails();
             }
         });
@@ -332,6 +341,7 @@ public class FragmentItemDetail extends Fragment {
             @Override
             public void onClick(View v) {
                 cartToStock(item);
+                consumptionsAndPurchacesViewPagerAdapter.onPurchacesUpdated();
                 updateFieldsWithItemDetails();;
             }
         });
@@ -426,6 +436,7 @@ public class FragmentItemDetail extends Fragment {
             ConsumptionsController consumptionsController = new ConsumptionsController();
             consumptionsController.addConsumptionToDatabases(context, item.getID());
             itemsController.updateItemConsumptionRate(context, item.getID());
+
         }
     }
 
@@ -476,5 +487,9 @@ public class FragmentItemDetail extends Fragment {
             return null;
         }
     }
-    
+
+    @Override
+    public void onItemStockChanged() {
+        updateFieldsWithItemDetails();
+    }
 }

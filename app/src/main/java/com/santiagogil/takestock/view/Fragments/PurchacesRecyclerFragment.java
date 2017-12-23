@@ -12,9 +12,7 @@ import android.view.View;
 import android.view.ViewGroup;
 
 import com.santiagogil.takestock.R;
-import com.santiagogil.takestock.controller.ConsumptionsController;
 import com.santiagogil.takestock.controller.PurchacesController;
-import com.santiagogil.takestock.view.Adapters.ConsumptionRecyclerAdapter;
 import com.santiagogil.takestock.view.Adapters.PurchaceRecyclerAdapter;
 
 /**
@@ -22,6 +20,7 @@ import com.santiagogil.takestock.view.Adapters.PurchaceRecyclerAdapter;
  */
 public class PurchacesRecyclerFragment extends SimpleRecyclerFragment {
 
+    private PurchaceRecyclerAdapter purchaceRecyclerAdapter;
 
     public PurchacesRecyclerFragment() {
         // Required empty public constructor
@@ -53,9 +52,9 @@ public class PurchacesRecyclerFragment extends SimpleRecyclerFragment {
     public void onViewCreated(View view, @Nullable Bundle savedInstanceState) {
         super.onViewCreated(view, savedInstanceState);
         RecyclerView recyclerView = (RecyclerView) view.findViewById(R.id.recyclerView);
-        PurchaceRecyclerAdapter purchaceRecyclerAdapter = new PurchaceRecyclerAdapter(getContext());
+        purchaceRecyclerAdapter = new PurchaceRecyclerAdapter(getContext());
         PurchacesController purchacesController = new PurchacesController();
-        purchaceRecyclerAdapter.setConsumptionList(purchacesController.sortedItemConsumptionList(getContext(), getArguments().getString(ITEMID)));
+        purchaceRecyclerAdapter.setPurchacesList(purchacesController.getItemPurchaceList(getContext(), getArguments().getString(ITEMID)));
         recyclerView.setAdapter(purchaceRecyclerAdapter);
         LinearLayoutManager linearLayoutManager = new LinearLayoutManager(getContext());
         linearLayoutManager.setOrientation(LinearLayoutManager.VERTICAL);
@@ -65,6 +64,14 @@ public class PurchacesRecyclerFragment extends SimpleRecyclerFragment {
 
     public String getTitle(){
         return getArguments().getString(TITLE);
+    }
+
+    @Override
+    public void onPurchacesUpdated() {
+
+        PurchacesController purchacesController = new PurchacesController();
+        purchaceRecyclerAdapter.setPurchacesList(purchacesController.getItemPurchaceList(getContext(),getArguments().getString(ITEMID)));
+        purchaceRecyclerAdapter.notifyDataSetChanged();
     }
 
 }

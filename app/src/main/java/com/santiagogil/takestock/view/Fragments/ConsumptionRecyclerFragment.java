@@ -13,7 +13,6 @@ import android.view.ViewGroup;
 
 import com.santiagogil.takestock.R;
 import com.santiagogil.takestock.controller.ConsumptionsController;
-import com.santiagogil.takestock.model.pojos.Consumption;
 import com.santiagogil.takestock.view.Adapters.ConsumptionRecyclerAdapter;
 
 /**
@@ -21,17 +20,11 @@ import com.santiagogil.takestock.view.Adapters.ConsumptionRecyclerAdapter;
  */
 public class ConsumptionRecyclerFragment extends SimpleRecyclerFragment {
 
-    private Context context = getContext();
+    private ConsumptionRecyclerAdapter consumptionRecyclerAdapter;
+    private FragmentRecyclerToFragmentCommunicator fragmentRecyclerToFragmentCommunicator;
 
-    public static ConsumptionRecyclerFragment createFragment(String itemID){
-
-        ConsumptionRecyclerFragment consumptionRecyclerFragment = new ConsumptionRecyclerFragment();
-        Bundle bundle = new Bundle();
-        bundle.putString(ITEMID, itemID);
-        bundle.putString(TITLE, "Consumptions");
-        consumptionRecyclerFragment.setArguments(bundle);
-        return consumptionRecyclerFragment;
-
+    public void setFragmentRecyclerToFragmentCommunicator(FragmentRecyclerToFragmentCommunicator fragmentRecyclerToFragmentCommunicator) {
+        this.fragmentRecyclerToFragmentCommunicator = fragmentRecyclerToFragmentCommunicator;
     }
 
     public ConsumptionRecyclerFragment() {
@@ -50,7 +43,7 @@ public class ConsumptionRecyclerFragment extends SimpleRecyclerFragment {
     public void onViewCreated(View view, @Nullable Bundle savedInstanceState) {
         super.onViewCreated(view, savedInstanceState);
         RecyclerView recyclerView = (RecyclerView) view.findViewById(R.id.recyclerView);
-        ConsumptionRecyclerAdapter consumptionRecyclerAdapter = new ConsumptionRecyclerAdapter(getContext(), new FragmentItemDetail.OnConsumptionDeletedListener());
+        consumptionRecyclerAdapter = new ConsumptionRecyclerAdapter(getContext(), this);
         ConsumptionsController consumptionsController = new ConsumptionsController();
         consumptionRecyclerAdapter.setConsumptionList(consumptionsController.sortedItemConsumptionList(getContext(), getArguments().getString(ITEMID)));
         recyclerView.setAdapter(consumptionRecyclerAdapter);
@@ -64,5 +57,14 @@ public class ConsumptionRecyclerFragment extends SimpleRecyclerFragment {
 
     public String getTitle(){
         return getArguments().getString(TITLE);
+    }
+
+
+    @Override
+    public void onConsumptionsUpdated() {
+        ConsumptionsController consumptionsController = new ConsumptionsController();
+        consumptionRecyclerAdapter.setConsumptionList(consumptionsController.sortedItemConsumptionList(getContext(), getArguments().getString(ITEMID)));
+        consumptionRecyclerAdapter.notifyDataSetChanged();
+        fragmentRecyclerToFragmentCommunicator.onItemStockChanged();
     }
 }

@@ -9,11 +9,15 @@ import android.view.View;
 import android.view.ViewGroup;
 
 import com.santiagogil.takestock.R;
+import com.santiagogil.takestock.view.Adapters.ConsumptionRecyclerAdapter;
+import com.santiagogil.takestock.view.Adapters.PurchaceRecyclerAdapter;
+
+import java.io.Serializable;
 
 /**
  * A simple {@link Fragment} subclass.
  */
-public class SimpleRecyclerFragment extends Fragment {
+public class SimpleRecyclerFragment extends Fragment implements ConsumptionRecyclerAdapter.RecyclerConsumptionsFragmentCommunicator, PurchaceRecyclerAdapter.RecyclerPurchacesFragmentCommunicator, Serializable {
 
     public static final String ITEMID = "ItemID";
     public static final String TITLE = "Title";
@@ -34,4 +38,17 @@ public class SimpleRecyclerFragment extends Fragment {
         return getArguments().getString(TITLE);
     }
 
+    @Override
+    public void onConsumptionsUpdated() {
+
+    }
+
+    @Override
+    public void onPurchacesUpdated() {
+
+    }
+
+    public interface FragmentRecyclerToFragmentCommunicator{
+        void onItemStockChanged();
+    }
 }

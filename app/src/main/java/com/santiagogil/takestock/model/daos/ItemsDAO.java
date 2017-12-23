@@ -220,7 +220,7 @@ public class ItemsDAO {
 
             Item item = buildItemFromCursor(cursor);
 
-            if(!item.getName().equals(null)){
+            if(!(item.getName() == null)){
 
                 items.add(buildItemFromCursor(cursor));
             }

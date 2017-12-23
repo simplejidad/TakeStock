@@ -50,6 +50,11 @@ public class PurchaceRecyclerAdapter extends RecyclerView.Adapter {
         this.purchaceList = purchaceList;
     }
 
+    public void setPurchacesList(List<Purchace> purchaceList) {
+
+        this.purchaceList = purchaceList;
+    }
+
     static class PurchaceViewHolder extends RecyclerView.ViewHolder {
 
         private TextView textViewPurchacenDate;
@@ -70,5 +75,10 @@ public class PurchaceRecyclerAdapter extends RecyclerView.Adapter {
         }
     }
 
+    public interface RecyclerPurchacesFragmentCommunicator{
+
+        void onPurchacesUpdated();
+
+    }
 
 }
