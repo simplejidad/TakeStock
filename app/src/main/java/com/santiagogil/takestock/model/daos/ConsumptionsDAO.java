@@ -37,10 +37,11 @@ public class ConsumptionsDAO{
         firebaseHelper = new FirebaseHelper();
     }
 
-    public void addConsumptionToDatabases(String itemID) {
-        String consumptionID = addConsumptionToLocalDB(itemID);
-        AddConsumptionToFirebaseTask addConsumptionToFirebaseTask = new AddConsumptionToFirebaseTask(getConsumptionFromLocalDB(consumptionID));
-        addConsumptionToFirebaseTask.execute();
+    public void addConsumptionToDatabases(Consumption consumption) {
+        addConsumptionToLocalDB(consumption);
+        //AddConsumptionToFirebaseTask addConsumptionToFirebaseTask = new AddConsumptionToFirebaseTask(getConsumptionFromLocalDB(consumptionID));
+        //addConsumptionToFirebaseTask.execute();
+        addConsumptionToFirebase(consumption);
     }
 
     public Consumption getConsumptionFromLocalDB(String consumptionID){
@@ -63,30 +64,6 @@ public class ConsumptionsDAO{
         }
 
         return null;
-    }
-
-    public String addConsumptionToLocalDB(String itemID){
-
-        ItemsController itemsController = new ItemsController();
-        Item item = itemsController.getItemFromLocalDatabase(context, itemID);
-
-        SQLiteDatabase database = databaseHelper.getWritableDatabase();
-
-        ContentValues row = new ContentValues();
-
-        String consumptionID = UUID.randomUUID().toString();
-
-        row.put(DatabaseHelper.ID, consumptionID);
-        row.put(DatabaseHelper.DATE, System.currentTimeMillis());
-        row.put(DatabaseHelper.ITEMID, itemID);
-        row.put(DatabaseHelper.PRICE, item.getPrice());
-
-        database.insert(DatabaseHelper.TABLECONSUMPTIONS, null, row);
-
-        database.close();
-
-        return consumptionID;
-
     }
 
     private void addConsumptionToFirebase(Consumption consumption){
@@ -155,6 +132,7 @@ public class ConsumptionsDAO{
         row.put(DatabaseHelper.ID, consumption.getID());
         row.put(DatabaseHelper.DATE, consumption.getDate());
         row.put(DatabaseHelper.ITEMID, consumption.getItemID());
+        row.put(DatabaseHelper.PRICE, consumption.getPrice());
 
         database.insert(DatabaseHelper.TABLECONSUMPTIONS, null, row);
 

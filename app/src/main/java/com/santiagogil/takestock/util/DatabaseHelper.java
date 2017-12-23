@@ -15,6 +15,7 @@ public class DatabaseHelper extends SQLiteOpenHelper {
     public static final String TABLEITEMS = "Items";
     public static final String TABLECONSUMPTIONS = "Consumptions";
     public static final String TABLEUSERS = "Users";
+    public static final String TABLEPURCHACES = "Purchaces";
 
     //Columns
     public static final String ID = "ID";
@@ -30,6 +31,7 @@ public class DatabaseHelper extends SQLiteOpenHelper {
     public static final String PRICE = "Price";
     public static final String CART = "Cart";
     public static final String OBJECTIVE = "Objective";
+    public static final String AMMOUNT = "Ammount";
 
     //Values
     public static final String ACTIVE_TRUE = "1";
@@ -44,6 +46,7 @@ public class DatabaseHelper extends SQLiteOpenHelper {
     public void onCreate(SQLiteDatabase sqLiteDatabase) {
         sqLiteDatabase.execSQL(CREATE_TABLE_ITEMS);
         sqLiteDatabase.execSQL(CREATE_TABLE_CONSUMPTIONS);
+        sqLiteDatabase.execSQL(CREATE_TABLE_PURCHACES);
 
     }
 
@@ -68,6 +71,18 @@ public class DatabaseHelper extends SQLiteOpenHelper {
             + ITEMID + " STRING, "
             + PRICE + " NUMBER "
             + ")";
+
+
+    private static final String CREATE_TABLE_PURCHACES = "CREATE TABLE " + TABLEPURCHACES + "("
+            + ID + " STRING PRIMARY KEY,"
+            + USERID + " TEXT,"
+            + DATE + " TEXT,"
+            + ITEMID + " STRING, "
+            + AMMOUNT + " NUMBER, "
+            + PRICE + " NUMBER "
+            + ")";
+
+
 
 
 

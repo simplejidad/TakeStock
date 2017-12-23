@@ -4,6 +4,7 @@ import android.content.Context;
 
 import com.santiagogil.takestock.model.daos.ConsumptionsDAO;
 import com.santiagogil.takestock.model.pojos.Consumption;
+import com.santiagogil.takestock.model.pojos.Item;
 import com.santiagogil.takestock.util.ResultListener;
 
 import java.util.List;
@@ -48,8 +49,11 @@ public class ConsumptionsController {
 
     public void addConsumptionToDatabases(Context context, String itemID){
 
+        ItemsController itemsController = new ItemsController();
+        Item item = itemsController.getItemFromLocalDatabase(context, itemID);
+        Consumption consumption = new Consumption(item);
         ConsumptionsDAO consumptionsDAO = new ConsumptionsDAO(context);
-        consumptionsDAO.addConsumptionToDatabases(itemID);
+        consumptionsDAO.addConsumptionToDatabases(consumption);
 
     }
 

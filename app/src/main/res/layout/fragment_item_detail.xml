@@ -1,6 +1,7 @@
 <?xml version="1.0" encoding="utf-8"?>
 <LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:tools="http://schemas.android.com/tools"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
     android:id="@+id/fragment_item_detail_main_linear_layout"
     android:orientation="vertical"
     android:layout_width="match_parent"
@@ -387,20 +388,21 @@
 
     </LinearLayout>
 
-    <TextView
+    <android.support.design.widget.TabLayout
+        android:id="@+id/tabs"
         android:layout_width="match_parent"
-        android:layout_height="wrap_content"
-        android:layout_gravity="center_horizontal"
-        android:text="@string/consumed_on_these_dates"
-        android:textSize="24sp"
-        android:gravity="center_horizontal"/>
+        android:layout_height="25dp"
+        app:tabMode="fixed"
+        android:background="@color/primary"
+        app:tabGravity="fill"/>
 
-    <android.support.v7.widget.RecyclerView
-        android:id="@+id/recyclerViewConsumptions"
-        android:layout_width="match_parent"
-        android:layout_height="0dp"
-        android:layout_weight="5">
+        <android.support.v4.view.ViewPager
+            android:id="@+id/view_pager_consumptions_purchaces"
+            android:layout_width="match_parent"
+            android:layout_height="match_parent">
 
-    </android.support.v7.widget.RecyclerView>
+    </android.support.v4.view.ViewPager>
+
+
 
 </LinearLayout>

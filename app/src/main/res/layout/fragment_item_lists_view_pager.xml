@@ -15,7 +15,7 @@
        app:tabGravity="fill"/>
 
    <android.support.v4.view.ViewPager
-       android:id="@+id/viewPagerItemLists"
+       android:id="@+id/view_pager_consumptions_purchaces"
        android:layout_width="match_parent"
        android:layout_height="match_parent">
 

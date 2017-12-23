@@ -1,16 +1,12 @@
 package com.santiagogil.takestock.model.pojos;
 
+
 import com.google.firebase.database.PropertyName;
 import com.santiagogil.takestock.util.DatabaseHelper;
 
-import java.util.Date;
 import java.util.UUID;
 
-/**
- * Created by digitalhouse on 24/12/16.
- */
-
-public class Consumption {
+public class Purchace {
 
     @PropertyName(DatabaseHelper.ID)
     private String ID;
@@ -24,23 +20,23 @@ public class Consumption {
     @PropertyName(DatabaseHelper.PRICE)
     private Double price;
 
-    public Double getPrice() {
-        return price;
-    }
+    @PropertyName(DatabaseHelper.AMMOUNT)
+    private Integer ammount;
 
-    public void setPrice(Double price) {
-        this.price = price;
-    }
-
-    public Consumption(){
-
-    }
-
-    public Consumption(Item item) {
-        this.ID = UUID.randomUUID().toString();
+    public Purchace(Item item) {
+        this.ID = UUID.randomUUID().toString();;
         this.date = System.currentTimeMillis();
         this.itemID = item.getID();
         this.price = item.getPrice();
+        this.ammount = item.getMinimumPurchaceQuantity();
+    }
+
+    public Purchace(Item item, Integer cart) {
+        this.ID = UUID.randomUUID().toString();;
+        this.date = System.currentTimeMillis();
+        this.itemID = item.getID();
+        this.price = item.getPrice();
+        this.ammount = item.getCart();
     }
 
     public void setID(String ID) {
@@ -55,8 +51,20 @@ public class Consumption {
         this.itemID = itemID;
     }
 
-    public String getID() {
+    public void setPrice(Double price) {
+        this.price = price;
+    }
 
+    public void setAmmount(Integer ammount) {
+        this.ammount = ammount;
+    }
+
+    public Purchace() {
+
+    }
+
+
+    public String getID() {
         return ID;
     }
 
@@ -68,7 +76,13 @@ public class Consumption {
         return itemID;
     }
 
-    public Date getDateAsDateObject(){
-        return new Date(getDate());
+    public Double getPrice() {
+        return price;
     }
+
+    public Integer getAmmount() {
+        return ammount;
+    }
+
+
 }

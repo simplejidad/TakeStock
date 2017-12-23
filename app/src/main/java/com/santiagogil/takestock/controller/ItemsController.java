@@ -189,7 +189,6 @@ public class ItemsController {
 
     public void cartToStock(Context context, Item item) {
 
-
         ItemsDAO itemsDao = new ItemsDAO(context);
         itemsDao.cartToStock(item);
 

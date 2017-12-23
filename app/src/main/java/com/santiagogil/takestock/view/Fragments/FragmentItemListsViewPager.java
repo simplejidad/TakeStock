@@ -31,7 +31,7 @@ public class FragmentItemListsViewPager extends Fragment {
 
         View view = inflater.inflate(R.layout.fragment_item_lists_view_pager, container, false);
 
-        itemListsViewPager = (ViewPager) view.findViewById(R.id.viewPagerItemLists);
+        itemListsViewPager = (ViewPager) view.findViewById(R.id.view_pager_consumptions_purchaces);
         itemListsViewPagerAdapter = new ItemListsViewPagerAdapter(getChildFragmentManager());
 
         TabLayout tabLayout = (TabLayout) view.findViewById(R.id.tabs);

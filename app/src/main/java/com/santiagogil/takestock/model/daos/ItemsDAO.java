@@ -11,6 +11,7 @@ import com.google.firebase.database.DataSnapshot;
 import com.google.firebase.database.DatabaseError;
 import com.google.firebase.database.DatabaseReference;
 import com.google.firebase.database.ValueEventListener;
+import com.santiagogil.takestock.controller.PurchacesController;
 import com.santiagogil.takestock.model.pojos.Item;
 import com.santiagogil.takestock.model.pojos.ItemList;
 import com.santiagogil.takestock.util.DatabaseHelper;
@@ -244,8 +245,9 @@ public class ItemsDAO {
     public void increaseItemStock(Item item){
 
         Integer newStock = item.getStock() + item.getMinimumPurchaceQuantity();
-
         updateItemStock(item, newStock);
+        PurchacesController purchacesController = new PurchacesController();
+        purchacesController.addPurchaceToDatabases(context, item);
 
     }
 
@@ -502,6 +504,8 @@ public class ItemsDAO {
 
     public void cartToStock(Item item) {
 
+        PurchacesController purchacesController = new PurchacesController();
+        purchacesController.addPurchaceFromCart(context, item, item.getCart());
         updateItemStock(item, item.getStock() + item.getCart());
         updateItemCart(item, 0);
     }

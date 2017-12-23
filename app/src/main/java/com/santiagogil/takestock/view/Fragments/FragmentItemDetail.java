@@ -4,9 +4,10 @@ import android.content.Context;
 import android.os.Build;
 import android.os.Bundle;
 import android.support.annotation.Nullable;
+import android.support.design.widget.TabLayout;
 import android.support.v4.app.Fragment;
 import android.support.v4.content.ContextCompat;
-import android.support.v7.widget.LinearLayoutManager;
+import android.support.v4.view.ViewPager;
 import android.support.v7.widget.RecyclerView;
 import android.view.LayoutInflater;
 import android.view.View;
@@ -26,8 +27,11 @@ import com.santiagogil.takestock.controller.ItemsController;
 import com.santiagogil.takestock.model.pojos.Consumption;
 import com.santiagogil.takestock.util.DatabaseHelper;
 import com.santiagogil.takestock.model.pojos.Item;
-import com.santiagogil.takestock.util.SharedElementTransition;
 import com.santiagogil.takestock.view.Adapters.ConsumptionRecyclerAdapter;
+import com.santiagogil.takestock.view.Adapters.ConsumptionsAndPurchacesViewPagerAdapter;
+
+import java.util.ArrayList;
+import java.util.List;
 
 public class FragmentItemDetail extends Fragment {
 
@@ -53,6 +57,7 @@ public class FragmentItemDetail extends Fragment {
     private ImageButton deleteButton;
     private ImageButton editButton;
     private ImageButton backButton;
+    private ViewPager viewPager;
     private RecyclerView recyclerView;
     private ConsumptionRecyclerAdapter consumptionRecyclerAdapter;
     private ConsumptionsController consumptionsController;
@@ -97,6 +102,8 @@ public class FragmentItemDetail extends Fragment {
 
         loadAssets(fragmentView);
 
+        loadViewPager();
+
         updateFieldsWithItemDetails();
 
         setOnClickListeners();
@@ -121,7 +128,7 @@ public class FragmentItemDetail extends Fragment {
 
         updateItem();
 
-        loadRecyclerView();
+
 
         textViewItemName.setText(item.getName());
         textViewItemStock.setText(item.getStock().toString());
@@ -141,17 +148,21 @@ public class FragmentItemDetail extends Fragment {
 
     }
 
-    private void loadRecyclerView() {
+    private void loadViewPager() {
 
-        recyclerView = (RecyclerView) fragmentView.findViewById(R.id.recyclerViewConsumptions);
-        consumptionRecyclerAdapter = new ConsumptionRecyclerAdapter(getContext(), new OnConsumptionDeletedListener());
-        consumptionsController = new ConsumptionsController();
-        consumptionRecyclerAdapter.setConsumptionList(consumptionsController.sortedItemConsumptionList(getContext(), itemID));
-        recyclerView.setAdapter(consumptionRecyclerAdapter);
-        LinearLayoutManager linearLayoutManager = new LinearLayoutManager(getContext());
-        linearLayoutManager.setOrientation(LinearLayoutManager.VERTICAL);
-        recyclerView.setLayoutManager(linearLayoutManager);
-        recyclerView.setPadding(6,1,6,1);
+        viewPager = (ViewPager) fragmentView.findViewById(R.id.view_pager_consumptions_purchaces);
+        List<SimpleRecyclerFragment> fragmentList = new ArrayList();
+        ConsumptionsAndPurchacesViewPagerAdapter consumptionsAndPurchacesViewPagerAdapter = new ConsumptionsAndPurchacesViewPagerAdapter(getChildFragmentManager(), fragmentList);
+
+
+        fragmentList.add(ConsumptionRecyclerFragment.createFragment(itemID));
+        fragmentList.add(PurchacesRecyclerFragment.createFragment(itemID));
+
+        viewPager.setAdapter(consumptionsAndPurchacesViewPagerAdapter);
+
+        TabLayout tabLayout = (TabLayout) fragmentView.findViewById(R.id.tabs);
+        tabLayout.setupWithViewPager(viewPager);
+
     }
 
     private void setOnClickListeners() {
@@ -336,22 +347,6 @@ public class FragmentItemDetail extends Fragment {
         }
     }
 
-    public class OnConsumptionDeletedListener{
-
-        public void onConsumptionDeleted(Consumption consumption) {
-            ConsumptionsController consumptionsController = new ConsumptionsController();
-            consumptionsController.deleteConsumption(getContext(), consumption);
-            consumptionRecyclerAdapter.setConsumptionList(consumptionsController.sortedItemConsumptionList(getContext(), itemID));
-            consumptionRecyclerAdapter.notifyDataSetChanged();
-
-            item = itemController.getItemFromLocalDatabase(getContext(), itemID);
-
-            updateFieldsWithItemDetails();
-
-
-        }
-    }
-
     @Override
     public void onAttach(Context context) {
         super.onAttach(context);
@@ -481,4 +476,5 @@ public class FragmentItemDetail extends Fragment {
             return null;
         }
     }
+    
 }

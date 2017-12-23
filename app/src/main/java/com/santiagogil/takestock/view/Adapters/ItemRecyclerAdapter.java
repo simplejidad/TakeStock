@@ -16,9 +16,12 @@ import android.widget.Toast;
 import com.santiagogil.takestock.R;
 import com.santiagogil.takestock.controller.ConsumptionsController;
 import com.santiagogil.takestock.controller.ItemsController;
+import com.santiagogil.takestock.controller.PurchacesController;
 import com.santiagogil.takestock.model.pojos.Item;
 import com.santiagogil.takestock.view.Fragments.FragmentItemDetail;
 
+import java.io.PushbackInputStream;
+import java.io.PushbackReader;
 import java.util.ArrayList;
 import java.util.List;
 
@@ -243,15 +246,6 @@ public class ItemRecyclerAdapter extends RecyclerView.Adapter{
                 itemsController.updateItemConsumptionRate(context, item.getID());
             }
         }
-
-        /*private void assignTransitionNames(String itemID){
-            if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.LOLLIPOP) {
-                textViewItemName.setTransitionName(FragmentItemDetail.TRANSITION_ITEM_NAME + itemID);
-                textViewItemStock.setTransitionName(FragmentItemDetail.TRANSITION_ITEM_STOCK + itemID);
-                textViewItemIndependence.setTransitionName(FragmentItemDetail.TRANSITION_ITEM_INDEPENDENCE+itemID);
-
-            }
-        }*/
 
         private void setTextViewItemIndependenceText(Item item){
 

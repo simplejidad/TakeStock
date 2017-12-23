@@ -9,6 +9,7 @@ import android.widget.ImageButton;
 import android.widget.TextView;
 
 import com.santiagogil.takestock.R;
+import com.santiagogil.takestock.controller.ConsumptionsController;
 import com.santiagogil.takestock.model.pojos.Consumption;
 import com.santiagogil.takestock.util.DateHelper;
 import com.santiagogil.takestock.view.Fragments.FragmentItemDetail;
@@ -26,6 +27,12 @@ public class ConsumptionRecyclerAdapter extends RecyclerView.Adapter {
                                       FragmentItemDetail.OnConsumptionDeletedListener onConsumptionDeletedListener) {
         this.context = context;
         this.onConsumptionDeletedListener = onConsumptionDeletedListener;
+
+    }
+
+    public ConsumptionRecyclerAdapter(Context context) {
+        this.context = context;
+
 
     }
 
@@ -80,6 +87,5 @@ public class ConsumptionRecyclerAdapter extends RecyclerView.Adapter {
 
         }
     }
-
 
 }
