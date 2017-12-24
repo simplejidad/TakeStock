@@ -86,7 +86,7 @@
                 android:inputType="number"
                 android:minWidth="50dp"
                 android:gravity="center"
-                android:padding="5dp"
+                android:padding="3dp"
                 android:selectAllOnFocus="true"/>
 
         </ViewSwitcher>
@@ -124,7 +124,7 @@
                 android:inputType="numberDecimal"
                 android:minWidth="50dp"
                 android:gravity="center"
-                android:padding="5dp"
+                android:padding="3dp"
                 android:selectAllOnFocus="true"/>
 
         </ViewSwitcher>
@@ -170,7 +170,7 @@
                 android:textSize="24dp"
                 android:gravity="center"
                 android:minWidth="50dp"
-                android:padding="5dp"
+                android:padding="3dp"
                 android:selectAllOnFocus="true"
 
                 />
@@ -219,7 +219,7 @@
                 android:gravity="center"
                 android:inputType="number"
                 android:minWidth="50dp"
-                android:padding="5dp"
+                android:padding="3dp"
                 android:selectAllOnFocus="true"
                 />
 
@@ -258,6 +258,7 @@
     </LinearLayout>
 
     <LinearLayout
+        android:id="@+id/linear_layout_action_buttons"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:orientation="horizontal">
@@ -359,7 +360,7 @@
                     android:layout_height="wrap_content"
                     android:layout_marginRight="5dp"
                     android:layout_marginLeft="5dp"
-                    android:src="@android:drawable/ic_input_delete"
+                    android:src="@drawable/ic_cancel_black_24dp"
                     android:elevation="3dp"/>
 
                 <ImageButton
@@ -368,7 +369,7 @@
                     android:layout_height="wrap_content"
                     android:layout_marginRight="5dp"
                     android:layout_marginLeft="5dp"
-                    android:src="@android:drawable/ic_menu_save"
+                    android:src="@drawable/ic_save_black_24dp"
                     android:elevation="3dp"/>
 
 
@@ -394,7 +395,9 @@
         android:layout_height="25dp"
         app:tabMode="fixed"
         android:background="@color/primary"
-        app:tabGravity="fill"/>
+        app:tabGravity="fill"
+        app:tabIndicatorColor="@color/badges"
+        />
 
         <android.support.v4.view.ViewPager
             android:id="@+id/view_pager_consumptions_purchaces"

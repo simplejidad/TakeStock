@@ -17,6 +17,7 @@ import android.view.inputmethod.InputMethodManager;
 import android.widget.Button;
 import android.widget.EditText;
 import android.widget.ImageButton;
+import android.widget.LinearLayout;
 import android.widget.TextView;
 import android.widget.Toast;
 import android.widget.ViewSwitcher;
@@ -31,6 +32,8 @@ import com.santiagogil.takestock.view.Adapters.ConsumptionsAndPurchacesViewPager
 
 import java.util.ArrayList;
 import java.util.List;
+
+import static android.view.View.VISIBLE;
 
 public class FragmentItemDetail extends Fragment implements SimpleRecyclerFragment.FragmentRecyclerToFragmentCommunicator{
 
@@ -66,6 +69,7 @@ public class FragmentItemDetail extends Fragment implements SimpleRecyclerFragme
     private Context context;
     private List<SimpleRecyclerFragment> fragmentList;
     private ConsumptionsAndPurchacesViewPagerAdapter consumptionsAndPurchacesViewPagerAdapter;
+    private LinearLayout linearLayoutActionButtons;
 
     private ImageButton buttonStockSubtract;
     private Button buttonStockAdd;
@@ -208,6 +212,11 @@ public class FragmentItemDetail extends Fragment implements SimpleRecyclerFragme
             @Override
             public void onClick(View view) {
 
+                linearLayoutActionButtons.setVisibility(View.INVISIBLE);
+                deleteButton.setVisibility(View.INVISIBLE);
+                backButton.setVisibility(View.INVISIBLE);
+
+
                 ViewSwitcher viewSwitcherConsumptionName = (ViewSwitcher) fragmentView.findViewById(R.id.fragment_item_detail_view_switcher_name);
                 ViewSwitcher viewSwitcherConsumptionRate = (ViewSwitcher) fragmentView.findViewById(R.id.fragment_item_detail_view_switcher_consumption_rate);
                 ViewSwitcher viewSwitcherMinimumPurchace = (ViewSwitcher) fragmentView.findViewById(R.id.fragment_item_detail_view_switcher_minimum_purchace);
@@ -259,6 +268,10 @@ public class FragmentItemDetail extends Fragment implements SimpleRecyclerFragme
                         viewSwitcherPrice.showNext();
                         viewSwitcherStock.showNext();
                         viewSwitcherEdit.showNext();
+
+                        linearLayoutActionButtons.setVisibility(View.VISIBLE);
+                        deleteButton.setVisibility(VISIBLE);
+                        backButton.setVisibility(VISIBLE);
                     }
                 });
 
@@ -296,12 +309,12 @@ public class FragmentItemDetail extends Fragment implements SimpleRecyclerFragme
                         textViewItemName.setText(editTextName.getText().toString());
                         textViewConsumptionRate.setText(editTextCosumptionRate.getText().toString());
                         textViewMinimumPurchace.setText(editTextMinimumPurchace.getText().toString());
-
-
                         textViewItemPrice.setText(editTextPrice.getText().toString());
-
-
                         textViewItemStock.setText(editTextStock.getText().toString());
+
+                        linearLayoutActionButtons.setVisibility(VISIBLE);
+                        deleteButton.setVisibility(VISIBLE);
+                        backButton.setVisibility(VISIBLE);
 
                     }
                 });
@@ -392,6 +405,7 @@ public class FragmentItemDetail extends Fragment implements SimpleRecyclerFragme
         buttonCartSubtract = (ImageButton) fragmentView.findViewById(R.id.button_cart_subtract);
         buttonCartAdd = (ImageButton) fragmentView.findViewById(R.id.button_cart_add);
         buttonCartToStock = (Button) fragmentView.findViewById(R.id.button_cart_to_stock);
+        linearLayoutActionButtons = fragmentView.findViewById(R.id.linear_layout_action_buttons);
 
     }
 
