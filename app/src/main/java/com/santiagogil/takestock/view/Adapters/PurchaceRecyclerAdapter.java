@@ -9,6 +9,8 @@ import android.widget.ImageButton;
 import android.widget.TextView;
 
 import com.santiagogil.takestock.R;
+import com.santiagogil.takestock.controller.ConsumptionsController;
+import com.santiagogil.takestock.controller.PurchacesController;
 import com.santiagogil.takestock.model.pojos.Consumption;
 import com.santiagogil.takestock.model.pojos.Purchace;
 import com.santiagogil.takestock.util.DateHelper;
@@ -19,10 +21,11 @@ public class PurchaceRecyclerAdapter extends RecyclerView.Adapter {
 
     private List<Purchace> purchaceList;
     private Context context;
+    private RecyclerPurchacesFragmentCommunicator recyclerPurchacesFragmentCommunicator;
 
-
-    public PurchaceRecyclerAdapter(Context context) {
+    public PurchaceRecyclerAdapter(Context context, RecyclerPurchacesFragmentCommunicator recyclerPurchacesFragmentCommunicator) {
         this.context = context;
+        this.recyclerPurchacesFragmentCommunicator = recyclerPurchacesFragmentCommunicator;
 
     }
 
@@ -30,7 +33,7 @@ public class PurchaceRecyclerAdapter extends RecyclerView.Adapter {
     public RecyclerView.ViewHolder onCreateViewHolder(ViewGroup parent, int viewType) {
         LayoutInflater inflater = LayoutInflater.from(context);
         View view = inflater.inflate(R.layout.card_view_consumption, parent, false);
-        return new PurchaceViewHolder(view);
+        return new PurchaceViewHolder(context, view, recyclerPurchacesFragmentCommunicator);
     }
 
     @Override
@@ -60,16 +63,27 @@ public class PurchaceRecyclerAdapter extends RecyclerView.Adapter {
         private TextView textViewPurchacenDate;
         private DateHelper dateHelper;
         private ImageButton buttonDelete;
+        private Purchace purchace;
 
-        public PurchaceViewHolder(View purchaceView) {
+        public PurchaceViewHolder(final Context context, View purchaceView, final RecyclerPurchacesFragmentCommunicator recyclerPurchacesFragmentCommunicator ) {
             super(purchaceView);
             textViewPurchacenDate = (TextView) purchaceView.findViewById(R.id.textViewConsumptionDate);
             dateHelper = new DateHelper();
             buttonDelete = (ImageButton) purchaceView.findViewById(R.id.button_delete);
+            buttonDelete.setOnClickListener(new View.OnClickListener() {
+                @Override
+                public void onClick(View view) {
+                    PurchacesController purchacesController = new PurchacesController();
+                    purchacesController.deletePurchace(context, purchace);
+                    recyclerPurchacesFragmentCommunicator.onPurchacesUpdated();
+
+                }
+            });
 
         }
 
         public void loadPurchace(Purchace purchace){
+            this.purchace = purchace;
             textViewPurchacenDate.setText(dateHelper.getFormatedDayFromMiliseconds(purchace.getDate()));
 
         }

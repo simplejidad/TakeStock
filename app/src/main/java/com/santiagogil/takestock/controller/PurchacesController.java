@@ -41,4 +41,10 @@ public class PurchacesController {
         return purchacesDAO.getItemPurchacesList(context, itemID);
 
     }
+
+    public void deletePurchace(Context context, Purchace purchace) {
+
+        PurchacesDAO purchacesDAO = new PurchacesDAO();
+        purchacesDAO.deletePurchace(context, purchace);
+    }
 }

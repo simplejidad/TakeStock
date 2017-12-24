@@ -8,6 +8,7 @@ import android.database.sqlite.SQLiteDatabase;
 import android.provider.ContactsContract;
 
 import com.google.firebase.database.DatabaseReference;
+import com.santiagogil.takestock.controller.ItemsController;
 import com.santiagogil.takestock.model.pojos.Consumption;
 import com.santiagogil.takestock.model.pojos.Item;
 import com.santiagogil.takestock.model.pojos.Purchace;
@@ -98,7 +99,7 @@ public class PurchacesDAO {
             });
 
 
-            for(Integer i = purchaceList.size() - 1; i>= 0; i--){
+            for(Integer i = 0; i < purchaceList.size(); i++){
                 sortedPurchaces.add(purchaceList.get(i));
             }
 
@@ -109,4 +110,37 @@ public class PurchacesDAO {
 
     }
 
+    public void deletePurchace(Context context, Purchace purchace) {
+
+        deletePurchaceFromLocalDatabase(context, purchace);
+        deletePurchaceFromFirebase(purchace);
+        ItemsController itemsController = new ItemsController();
+        itemsController.decreaseItemStock(context, itemsController.getItemFromLocalDatabase(context, purchace.getItemID()));
+
+    }
+
+    private void deletePurchaceFromLocalDatabase(Context context, Purchace purchace) {
+
+        DatabaseHelper databaseHelper = new DatabaseHelper(context);
+
+        SQLiteDatabase database = databaseHelper.getWritableDatabase();
+
+        try {
+
+            database.delete(DatabaseHelper.TABLEPURCHACES, DatabaseHelper.ID + " = " + '"' + purchace.getID() + '"', null);
+            database.close();
+
+        } catch (Exception e){
+
+            e.printStackTrace();
+
+        }
+    }
+
+    private void deletePurchaceFromFirebase(Purchace purchace) {
+
+        FirebaseHelper firebaseHelper = new FirebaseHelper();
+        DatabaseReference userDB = firebaseHelper.getUserDB();
+        userDB.child(DatabaseHelper.TABLEPURCHACES).child(purchace.getID()).removeValue();
+    }
 }

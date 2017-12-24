@@ -21,25 +21,13 @@ import com.santiagogil.takestock.view.Adapters.PurchaceRecyclerAdapter;
 public class PurchacesRecyclerFragment extends SimpleRecyclerFragment {
 
     private PurchaceRecyclerAdapter purchaceRecyclerAdapter;
-
+    private FragmentRecyclerToFragmentCommunicator fragmentRecyclerToFragmentCommunicator;
     public PurchacesRecyclerFragment() {
         // Required empty public constructor
     }
 
     private static final String ITEMID = "ItemID";
     private static final String TITLE = "Title";
-
-    public static PurchacesRecyclerFragment createFragment(String itemID){
-
-        PurchacesRecyclerFragment purchacesRecyclerFragment = new PurchacesRecyclerFragment();
-        Bundle bundle = new Bundle();
-        bundle.putString(ITEMID, itemID);
-        bundle.putString(TITLE, "Purchaces");
-        purchacesRecyclerFragment.setArguments(bundle);
-        return purchacesRecyclerFragment;
-
-    }
-
 
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container,
@@ -52,7 +40,7 @@ public class PurchacesRecyclerFragment extends SimpleRecyclerFragment {
     public void onViewCreated(View view, @Nullable Bundle savedInstanceState) {
         super.onViewCreated(view, savedInstanceState);
         RecyclerView recyclerView = (RecyclerView) view.findViewById(R.id.recyclerView);
-        purchaceRecyclerAdapter = new PurchaceRecyclerAdapter(getContext());
+        purchaceRecyclerAdapter = new PurchaceRecyclerAdapter(getContext(), this);
         PurchacesController purchacesController = new PurchacesController();
         purchaceRecyclerAdapter.setPurchacesList(purchacesController.getItemPurchaceList(getContext(), getArguments().getString(ITEMID)));
         recyclerView.setAdapter(purchaceRecyclerAdapter);
@@ -72,6 +60,10 @@ public class PurchacesRecyclerFragment extends SimpleRecyclerFragment {
         PurchacesController purchacesController = new PurchacesController();
         purchaceRecyclerAdapter.setPurchacesList(purchacesController.getItemPurchaceList(getContext(),getArguments().getString(ITEMID)));
         purchaceRecyclerAdapter.notifyDataSetChanged();
+        fragmentRecyclerToFragmentCommunicator.onItemStockChanged();
     }
 
+    public void setFragmentRecyclerToFragmentCommunicator(FragmentRecyclerToFragmentCommunicator fragmentRecyclerToFragmentCommunicator) {
+        this.fragmentRecyclerToFragmentCommunicator = fragmentRecyclerToFragmentCommunicator;
+    }
 }

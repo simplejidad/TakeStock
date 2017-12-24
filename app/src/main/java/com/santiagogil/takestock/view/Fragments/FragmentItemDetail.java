@@ -155,15 +155,22 @@ public class FragmentItemDetail extends Fragment implements SimpleRecyclerFragme
 
 
         ConsumptionRecyclerFragment consumptionRecyclerFragment = new ConsumptionRecyclerFragment();
-        Bundle bundle = new Bundle();
-        bundle.putString(ConsumptionRecyclerFragment.ITEMID, itemID);
-        bundle.putString(ConsumptionRecyclerFragment.TITLE, "Consumptions");
-        consumptionRecyclerFragment.setArguments(bundle);
+        Bundle bundleConsumptions = new Bundle();
+        bundleConsumptions.putString(SimpleRecyclerFragment.ITEMID, itemID);
+        bundleConsumptions.putString(SimpleRecyclerFragment.TITLE, "Consumptions");
+        consumptionRecyclerFragment.setArguments(bundleConsumptions);
         consumptionRecyclerFragment.setFragmentRecyclerToFragmentCommunicator(this);
+
+        PurchacesRecyclerFragment purchacesRecyclerFragment = new PurchacesRecyclerFragment();
+        Bundle bundlePurchaces = new Bundle();
+        bundlePurchaces.putString(SimpleRecyclerFragment.ITEMID, itemID);
+        bundlePurchaces.putString(SimpleRecyclerFragment.TITLE, "Purchaces");
+        purchacesRecyclerFragment.setArguments(bundlePurchaces);
+        purchacesRecyclerFragment.setFragmentRecyclerToFragmentCommunicator(this);
 
 
         fragmentList.add(consumptionRecyclerFragment);
-        fragmentList.add(PurchacesRecyclerFragment.createFragment(itemID));
+        fragmentList.add(purchacesRecyclerFragment);
 
         viewPager.setAdapter(consumptionsAndPurchacesViewPagerAdapter);
 
