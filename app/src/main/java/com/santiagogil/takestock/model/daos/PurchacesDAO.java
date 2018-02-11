@@ -83,7 +83,7 @@ public class PurchacesDAO {
 
         cursor.close();
         database.close();
-        return purchaceList;
+        return getSortedPurchacesByDateDescending(purchaceList);
     }
 
     public List<Purchace> getSortedPurchacesByDateDescending(List<Purchace> purchaceList) {

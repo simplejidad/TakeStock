@@ -49,10 +49,6 @@ public class PurchaceRecyclerAdapter extends RecyclerView.Adapter {
         return purchaceList.size();
     }
 
-    public void setConsumptionList(List<Purchace> purchaceList) {
-        this.purchaceList = purchaceList;
-    }
-
     public void setPurchacesList(List<Purchace> purchaceList) {
 
         this.purchaceList = purchaceList;
