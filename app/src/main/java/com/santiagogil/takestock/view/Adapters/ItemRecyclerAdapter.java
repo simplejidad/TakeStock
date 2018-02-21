@@ -1,27 +1,21 @@
 package com.santiagogil.takestock.view.Adapters;
 
 import android.content.Context;
-import android.os.Build;
 import android.support.v4.content.ContextCompat;
-import android.support.v7.widget.CardView;
 import android.support.v7.widget.RecyclerView;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
-import android.widget.Button;
-import android.widget.ImageButton;
+import android.widget.FrameLayout;
+import android.widget.ImageView;
 import android.widget.TextView;
 import android.widget.Toast;
 
 import com.santiagogil.takestock.R;
 import com.santiagogil.takestock.controller.ConsumptionsController;
 import com.santiagogil.takestock.controller.ItemsController;
-import com.santiagogil.takestock.controller.PurchacesController;
 import com.santiagogil.takestock.model.pojos.Item;
-import com.santiagogil.takestock.view.Fragments.FragmentItemDetail;
 
-import java.io.PushbackInputStream;
-import java.io.PushbackReader;
 import java.util.ArrayList;
 import java.util.List;
 
@@ -78,15 +72,15 @@ public class ItemRecyclerAdapter extends RecyclerView.Adapter{
         private TextView textViewItemIndependence;
         private TextView textViewItemPrice;
         private TextView textViewNeededForGoal;
-        private ImageButton buttonStockSubtract;
-        private Button buttonStockAdd;
-        private Button buttonCartToStock;
-        private ImageButton buttonCartSubtract;
-        private ImageButton buttonCartAdd;
+        private ImageView buttonStockSubtract;
+        private TextView buttonStockAdd;
+        private TextView buttonCartToStock;
+        private ImageView buttonCartSubtract;
+        private ImageView buttonCartAdd;
         private Context context;
         private View.OnClickListener onItemModifiedListener;
         private View itemView;
-        private CardView cardView;
+        private FrameLayout verticalColorBar;
 
         public ItemViewHolder(View itemView, Context context, View.OnClickListener onItemModifiedListener, View.OnClickListener onItemTouchedListener) {
             super(itemView);
@@ -97,12 +91,12 @@ public class ItemRecyclerAdapter extends RecyclerView.Adapter{
             textViewItemIndependence = (TextView) itemView.findViewById(R.id.text_view_item_independence);
             textViewItemPrice = (TextView) itemView.findViewById(R.id.text_view_item_price);
             textViewNeededForGoal = (TextView) itemView.findViewById(R.id.text_view_needed_for_goal);
-            buttonStockAdd = (Button) itemView.findViewById(R.id.buttonAdd);
-            buttonStockSubtract = (ImageButton) itemView.findViewById(R.id.buttonSubtract);
-            buttonCartSubtract = (ImageButton) itemView.findViewById(R.id.button_cart_subtract);
-            buttonCartAdd = (ImageButton) itemView.findViewById(R.id.button_cart_add);
-            buttonCartToStock = (Button) itemView.findViewById(R.id.button_cart_to_stock);
-            cardView = (CardView) itemView.findViewById(R.id.card_view_item_card_view);
+            buttonStockAdd =  itemView.findViewById(R.id.buttonAdd);
+            buttonStockSubtract =  itemView.findViewById(R.id.buttonSubtract);
+            buttonCartSubtract =  itemView.findViewById(R.id.button_cart_subtract);
+            buttonCartAdd =  itemView.findViewById(R.id.button_cart_add);
+            buttonCartToStock =  itemView.findViewById(R.id.button_cart_to_stock);
+            verticalColorBar = itemView.findViewById(R.id.vertical_bar);
             this.context = context;
             this.onItemModifiedListener = onItemModifiedListener;
             this.itemView = itemView;
@@ -113,7 +107,7 @@ public class ItemRecyclerAdapter extends RecyclerView.Adapter{
             setTextsForLayout(item);
             setOnClickListeners(item);
             setDrawablesForButtons(item);
-            setCardBackgroundColor(cardView, item.getIndependence());
+            setCardBackgroundColor(verticalColorBar, item.getIndependence());
 
         }
 
@@ -167,7 +161,7 @@ public class ItemRecyclerAdapter extends RecyclerView.Adapter{
             textViewItemStock.setText(item.getStock().toString());
             setTextViewItemIndependenceText(item);
             setTextViewNeededForGoal(item);
-            textViewItemPrice.setText("" + item.getPrice());
+            textViewItemPrice.setText("$" + item.getPrice());
             buttonStockAdd.setText(item.getMinimumPurchaceQuantity().toString());
             if(item.getMinimumPurchaceQuantity() > 9){
                 buttonStockAdd.setPaddingRelative(12, 0, 0, 0);
@@ -191,7 +185,7 @@ public class ItemRecyclerAdapter extends RecyclerView.Adapter{
             if(item.getConsumptionRate() > 0){
 
                 textViewNeededForGoal.setText(item.getRoundedConsumptionRate());
-                textViewNeededForGoal.setCompoundDrawablesRelativeWithIntrinsicBounds(0 , 0, item.getNextIndependenceEmoticon(), 0 );
+                //textViewNeededForGoal.setCompoundDrawablesRelativeWithIntrinsicBounds(0 , 0, item.getNextIndependenceEmoticon(), 0 );
 
             }
         }
@@ -255,14 +249,14 @@ public class ItemRecyclerAdapter extends RecyclerView.Adapter{
 
         }
 
-        private void setCardBackgroundColor(CardView cardView, Integer independence){
+        private void setCardBackgroundColor(FrameLayout verticalColorBar, Integer independence){
 
             if(independence == 0){
-                cardView.setCardBackgroundColor(ContextCompat.getColor(context, R.color.out_of_stock));
-            } else if(independence < 30){
-                cardView.setCardBackgroundColor(ContextCompat.getColor(context, R.color.some_independence));
-            } else if(independence >=30){
-                cardView.setCardBackgroundColor(ContextCompat.getColor(context, R.color.full_independence));
+                verticalColorBar.setBackgroundColor(ContextCompat.getColor(context, R.color.accent));
+            } else if(independence < 60){
+                verticalColorBar.setBackgroundColor(ContextCompat.getColor(context, R.color.primary_light));
+            } else if(independence >=60){
+                verticalColorBar.setBackgroundColor(ContextCompat.getColor(context, R.color.primary));
             }
 
         }

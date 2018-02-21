@@ -160,11 +160,11 @@ public class Item implements Serializable {
 
             Integer independence = getIndependence();
 
-            if(independence < 90){
+            if(independence < 60){
 
-                return Math.max(round((90-independence)/getConsumptionRate(), 0).intValue(), 1) + " till ";
+                return Math.max(round((60-independence)/getConsumptionRate(), 0).intValue(), 1) + " till OK";
             } else {
-                return "";}
+                return "You are OK";}
         } else{
             return "";
         }
