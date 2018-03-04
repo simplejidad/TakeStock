@@ -166,17 +166,17 @@ public class ItemRecyclerAdapter extends RecyclerView.Adapter{
             if(item.getMinimumPurchaceQuantity() > 9){
                 buttonStockAdd.setPaddingRelative(12, 0, 0, 0);
             }
-            buttonCartToStock.setText("<" + item.getCart());
+            buttonCartToStock.setText(item.getCart().toString());
 
         }
 
         private void setDrawablesForButtons(Item item){
             if(item.getCart() == 0) {
 
-                buttonCartToStock.setCompoundDrawablesRelativeWithIntrinsicBounds(R.drawable.ic_home_black_24dp, 0, R.drawable.ic_shopping_cart_empty , 0);
+                buttonCartToStock.setCompoundDrawablesRelativeWithIntrinsicBounds(R.drawable.ic_up_to, 0, R.drawable.ic_shopping_cart_empty , 0);
             } else {
 
-                buttonCartToStock.setCompoundDrawablesRelativeWithIntrinsicBounds(R.drawable.ic_home_black_24dp, 0, R.drawable.ic_shopping_cart_black_24dp, 0);
+                buttonCartToStock.setCompoundDrawablesRelativeWithIntrinsicBounds(R.drawable.ic_up_to, 0, R.drawable.ic_shopping_cart_black_24dp, 0);
             }
         }
 

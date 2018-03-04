@@ -1,5 +1,7 @@
 package com.santiagogil.takestock.view.Fragments;
 
+import android.accessibilityservice.AccessibilityService;
+import android.app.Activity;
 import android.content.Context;
 import android.os.Build;
 import android.os.Bundle;
@@ -14,9 +16,9 @@ import android.view.View;
 import android.view.ViewGroup;
 import android.view.WindowManager;
 import android.view.inputmethod.InputMethodManager;
-import android.widget.Button;
 import android.widget.EditText;
 import android.widget.ImageButton;
+import android.widget.ImageView;
 import android.widget.LinearLayout;
 import android.widget.TextView;
 import android.widget.Toast;
@@ -56,9 +58,8 @@ public class FragmentItemDetail extends Fragment implements SimpleRecyclerFragme
     private TextView textViewItemIndependence;
     private TextView textViewItemPrice;
     private View fragmentView;
-    private ImageButton deleteButton;
-    private ImageButton editButton;
-    private ImageButton backButton;
+    private ImageView deleteButton;
+    private ImageView editButton;
     private ViewPager viewPager;
     private RecyclerView recyclerView;
     private ConsumptionRecyclerAdapter consumptionRecyclerAdapter;
@@ -71,11 +72,11 @@ public class FragmentItemDetail extends Fragment implements SimpleRecyclerFragme
     private ConsumptionsAndPurchacesViewPagerAdapter consumptionsAndPurchacesViewPagerAdapter;
     private LinearLayout linearLayoutActionButtons;
 
-    private ImageButton buttonStockSubtract;
-    private Button buttonStockAdd;
-    private Button buttonCartToStock;
-    private ImageButton buttonCartSubtract;
-    private ImageButton buttonCartAdd;
+    private ImageView buttonStockSubtract;
+    private TextView buttonStockAdd;
+    private TextView buttonCartToStock;
+    private ImageView buttonCartSubtract;
+    private ImageView buttonCartAdd;
 
     public static final String POSITION = "position";
     public static final String TRANSITION_ITEM_NAME = "TransitionItemName";
@@ -113,7 +114,8 @@ public class FragmentItemDetail extends Fragment implements SimpleRecyclerFragme
 
         setOnClickListeners();
 
-        setBackgroundColor(fragmentView, item.getIndependence());
+        // TODO: barra indicadora de stock
+        //setBackgroundColor(fragmentView, item.getIndependence());
 
         return fragmentView;
     }
@@ -185,15 +187,8 @@ public class FragmentItemDetail extends Fragment implements SimpleRecyclerFragme
 
     private void setOnClickListeners() {
 
-        ImageButton saveButton = (ImageButton) fragmentView.findViewById(R.id.button_save);
-        ImageButton cancelButton = (ImageButton) fragmentView.findViewById(R.id.button_cancel);
-
-        backButton.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View view) {
-                getActivity().onBackPressed();
-            }
-        });
+        ImageView saveButton = fragmentView.findViewById(R.id.button_save);
+        ImageView cancelButton = fragmentView.findViewById(R.id.button_cancel);
 
         deleteButton.setOnClickListener(new View.OnClickListener() {
                 @Override
@@ -217,7 +212,6 @@ public class FragmentItemDetail extends Fragment implements SimpleRecyclerFragme
 
                 linearLayoutActionButtons.setVisibility(View.INVISIBLE);
                 deleteButton.setVisibility(View.INVISIBLE);
-                backButton.setVisibility(View.INVISIBLE);
 
 
                 ViewSwitcher viewSwitcherConsumptionName = (ViewSwitcher) fragmentView.findViewById(R.id.fragment_item_detail_view_switcher_name);
@@ -275,7 +269,8 @@ public class FragmentItemDetail extends Fragment implements SimpleRecyclerFragme
 
                 linearLayoutActionButtons.setVisibility(View.VISIBLE);
                 deleteButton.setVisibility(VISIBLE);
-                backButton.setVisibility(VISIBLE);
+
+                hideKeyboard((Activity) context);
             }
         });
 
@@ -300,7 +295,6 @@ public class FragmentItemDetail extends Fragment implements SimpleRecyclerFragme
 
                 linearLayoutActionButtons.setVisibility(VISIBLE);
                 deleteButton.setVisibility(VISIBLE);
-                backButton.setVisibility(VISIBLE);
                 buttonStockAdd.setText(editTextMinimumPurchace.getText().toString());
 
                 ViewSwitcher viewSwitcherConsumptionName = (ViewSwitcher) fragmentView.findViewById(R.id.fragment_item_detail_view_switcher_name);
@@ -316,6 +310,9 @@ public class FragmentItemDetail extends Fragment implements SimpleRecyclerFragme
                 viewSwitcherPrice.showNext();
                 viewSwitcherStock.showNext();
                 viewSwitcherEdit.showNext();
+
+
+                hideKeyboard((Activity) context);
 
             }
         });
@@ -365,13 +362,15 @@ public class FragmentItemDetail extends Fragment implements SimpleRecyclerFragme
         });
     }
 
+
+
     private void setDrawablesForButtons(Item item){
         if(item.getCart() == 0) {
 
-            buttonCartToStock.setCompoundDrawablesRelativeWithIntrinsicBounds(R.drawable.ic_home_black_24dp, 0, R.drawable.ic_shopping_cart_empty , 0);
+            buttonCartToStock.setCompoundDrawablesRelativeWithIntrinsicBounds(R.drawable.ic_up_to, 0, R.drawable.ic_shopping_cart_empty , 0);
         } else {
 
-            buttonCartToStock.setCompoundDrawablesRelativeWithIntrinsicBounds(R.drawable.ic_home_black_24dp, 0, R.drawable.ic_shopping_cart_black_24dp, 0);
+            buttonCartToStock.setCompoundDrawablesRelativeWithIntrinsicBounds(R.drawable.ic_up_to, 0, R.drawable.ic_shopping_cart_black_24dp, 0);
         }
     }
 
@@ -395,14 +394,13 @@ public class FragmentItemDetail extends Fragment implements SimpleRecyclerFragme
         textViewConsumptionRate = (TextView) fragmentView.findViewById(R.id.textViewConsumptionRate);
         textViewMinimumPurchace = (TextView) fragmentView.findViewById(R.id.textViewMinimumPurchaceAmmount);
         textViewItemIndependence = (TextView) fragmentView.findViewById(R.id.text_view_independence);
-        backButton = (ImageButton) fragmentView.findViewById(R.id.buttonBack);
-        deleteButton = (ImageButton) fragmentView.findViewById(R.id.buttonDeleteItem);
-        editButton = (ImageButton) fragmentView.findViewById(R.id.buttonEditItem);
-        buttonStockAdd = (Button) fragmentView.findViewById(R.id.buttonAdd);
-        buttonStockSubtract = (ImageButton) fragmentView.findViewById(R.id.buttonSubtract);
-        buttonCartSubtract = (ImageButton) fragmentView.findViewById(R.id.button_cart_subtract);
-        buttonCartAdd = (ImageButton) fragmentView.findViewById(R.id.button_cart_add);
-        buttonCartToStock = (Button) fragmentView.findViewById(R.id.button_cart_to_stock);
+        deleteButton =  fragmentView.findViewById(R.id.buttonDeleteItem);
+        editButton = fragmentView.findViewById(R.id.buttonEditItem);
+        buttonStockAdd =  fragmentView.findViewById(R.id.buttonAdd);
+        buttonStockSubtract =  fragmentView.findViewById(R.id.buttonSubtract);
+        buttonCartSubtract =  fragmentView.findViewById(R.id.button_cart_subtract);
+        buttonCartAdd =  fragmentView.findViewById(R.id.button_cart_add);
+        buttonCartToStock =  fragmentView.findViewById(R.id.button_cart_to_stock);
         linearLayoutActionButtons = fragmentView.findViewById(R.id.linear_layout_action_buttons);
 
     }
@@ -462,7 +460,7 @@ public class FragmentItemDetail extends Fragment implements SimpleRecyclerFragme
     private void setTextsForButtons(Item item){
 
         buttonStockAdd.setText(item.getMinimumPurchaceQuantity().toString());
-        buttonCartToStock.setText("<" + item.getCart());
+        buttonCartToStock.setText(item.getCart().toString());
 
     }
 
@@ -510,5 +508,16 @@ public class FragmentItemDetail extends Fragment implements SimpleRecyclerFragme
     @Override
     public void onItemStockChanged() {
         updateFieldsWithItemDetails();
+    }
+
+    public static void hideKeyboard(Activity activity) {
+        InputMethodManager imm = (InputMethodManager) activity.getSystemService(Activity.INPUT_METHOD_SERVICE);
+        //Find the currently focused view, so we can grab the correct window token from it.
+        View view = activity.getCurrentFocus();
+        //If no view currently has focus, create a new one, just so we can grab a window token from it
+        if (view == null) {
+            view = new View(activity);
+        }
+        imm.hideSoftInputFromWindow(view.getWindowToken(), 0);
     }
 }

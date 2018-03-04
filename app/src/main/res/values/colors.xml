@@ -7,6 +7,7 @@
         <color name="accent">#EF5D60</color>
         <color name="primary_text">#212121</color>
         <color name="secondary_text">#2e2e2e</color>
+        <color name="tab_text">#FFFFFF</color>
         <color name="icons">#FFFFFF</color>
         <color name="divider">#BDBDBD</color>
         <color name="badges">#2e2e2e</color>

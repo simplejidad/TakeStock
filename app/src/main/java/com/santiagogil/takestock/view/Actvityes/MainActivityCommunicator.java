@@ -1,5 +1,6 @@
 package com.santiagogil.takestock.view.Actvityes;
 
+import android.app.Activity;
 import android.content.Context;
 import android.content.Intent;
 import android.os.Bundle;
@@ -17,6 +18,7 @@ import android.text.Editable;
 import android.text.TextWatcher;
 import android.view.Menu;
 import android.view.MenuItem;
+import android.view.View;
 import android.view.WindowManager;
 import android.view.inputmethod.InputMethodManager;
 import android.widget.EditText;
@@ -192,11 +194,15 @@ public class MainActivityCommunicator extends AppCompatActivity implements Fragm
     @Override
         public void onBackPressed () {
 
+            hideKeyboard(this);
             int fragments = getSupportFragmentManager().getBackStackEntryCount();
             if (fragments == 0) {
                 moveTaskToBack(true);
             }
             super.onBackPressed();
+
+
+
         }
 
     @Override
@@ -293,6 +299,16 @@ public class MainActivityCommunicator extends AppCompatActivity implements Fragm
     }
 
 
+    public static void hideKeyboard(Activity activity) {
+        InputMethodManager imm = (InputMethodManager) activity.getSystemService(Activity.INPUT_METHOD_SERVICE);
+        //Find the currently focused view, so we can grab the correct window token from it.
+        View view = activity.getCurrentFocus();
+        //If no view currently has focus, create a new one, just so we can grab a window token from it
+        if (view == null) {
+            view = new View(activity);
+        }
+        imm.hideSoftInputFromWindow(view.getWindowToken(), 0);
+    }
 }
 
 
