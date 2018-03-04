@@ -317,8 +317,10 @@
             android:layout_height="match_parent"
             android:layout_width="0dp"
             android:layout_weight="1"
+            android:text="00"
+            android:gravity="center"
             android:textColor="@color/secondary_text"
-            android:drawableLeft="@drawable/ic_home_plus"
+            android:drawableStart="@drawable/ic_home_plus"
             android:paddingStart="15dp"
             android:textSize="18sp"
             android:paddingEnd="3dp"
@@ -336,7 +338,7 @@
         <ViewSwitcher
             android:id="@+id/fragment_item_detail_view_switcher_edit"
             android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
+            android:layout_height="match_parent"
             android:measureAllChildren="false">
 
             <LinearLayout
@@ -348,8 +350,9 @@
                 <ImageView
                     android:id="@+id/buttonEditItem"
                     android:layout_width="100dp"
-                    android:layout_height="wrap_content"
+                    android:layout_height="match_parent"
                     android:layout_marginRight="5dp"
+                    android:scaleType="center"
                     android:layout_marginLeft="5dp"
                     android:src="@drawable/ic_create_black_24dp"
                     android:elevation="3dp"/>
@@ -357,8 +360,9 @@
                 <ImageView
                     android:id="@+id/buttonDeleteItem"
                     android:layout_width="100dp"
-                    android:layout_height="wrap_content"
+                    android:layout_height="match_parent"
                     android:layout_marginLeft="5dp"
+                    android:scaleType="center"
                     android:elevation="3dp"
                     android:src="@drawable/ic_delete_black_24dp" />
 
@@ -374,7 +378,8 @@
                 <ImageView
                     android:id="@+id/button_cancel"
                     android:layout_width="100dp"
-                    android:layout_height="wrap_content"
+                    android:layout_height="match_parent"
+                    android:scaleType="center"
                     android:layout_marginRight="5dp"
                     android:layout_marginLeft="5dp"
                     android:src="@drawable/ic_cancel_black_24dp"
@@ -383,7 +388,8 @@
                 <ImageView
                     android:id="@+id/button_save"
                     android:layout_width="100dp"
-                    android:layout_height="wrap_content"
+                    android:layout_height="match_parent"
+                    android:scaleType="center"
                     android:layout_marginRight="5dp"
                     android:layout_marginLeft="5dp"
                     android:src="@drawable/ic_save_black_24dp"
@@ -402,7 +408,8 @@
         android:layout_width="match_parent"
         android:layout_height="25dp"
         app:tabMode="fixed"
-        app:tabTextColor="@color/tab_text"
+        app:tabTextColor="@color/secondary_text"
+        app:tabSelectedTextColor="@color/tab_text"
         android:background="@color/primary"
         app:tabGravity="fill"
         app:tabIndicatorColor="@color/badges"
