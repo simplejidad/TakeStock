@@ -1,4 +1,4 @@
-package com.santiagogil.takestock.view.Fragments;
+package com.santiagogil.takestock.view.fragment;
 
 
 import android.os.Build;
@@ -13,7 +13,7 @@ import android.view.ViewGroup;
 import com.santiagogil.takestock.R;
 import com.santiagogil.takestock.model.pojos.Behaviours.BehaviourGetItemList;
 import com.santiagogil.takestock.util.SharedElementTransition;
-import com.santiagogil.takestock.view.Adapters.ItemsViewPagerAdapter;
+import com.santiagogil.takestock.view.adapter.ItemsViewPagerAdapter;
 
 public class FragmentItemsViewPager extends Fragment {
 

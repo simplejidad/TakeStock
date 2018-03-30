@@ -1,4 +1,4 @@
-package com.santiagogil.takestock.view.Fragments;
+package com.santiagogil.takestock.view.fragment;
 
 
 import android.os.Bundle;

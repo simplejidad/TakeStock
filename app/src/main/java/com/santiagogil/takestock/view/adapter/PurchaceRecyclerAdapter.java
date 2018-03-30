@@ -1,4 +1,4 @@
-package com.santiagogil.takestock.view.Adapters;
+package com.santiagogil.takestock.view.adapter;
 
 import android.content.Context;
 import android.support.v7.widget.RecyclerView;
@@ -9,9 +9,7 @@ import android.widget.ImageButton;
 import android.widget.TextView;
 
 import com.santiagogil.takestock.R;
-import com.santiagogil.takestock.controller.ConsumptionsController;
 import com.santiagogil.takestock.controller.PurchacesController;
-import com.santiagogil.takestock.model.pojos.Consumption;
 import com.santiagogil.takestock.model.pojos.Purchace;
 import com.santiagogil.takestock.util.DateHelper;
 

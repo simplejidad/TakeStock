@@ -1,4 +1,4 @@
-package com.santiagogil.takestock.view.Fragments;
+package com.santiagogil.takestock.view.fragment;
 
 
 import android.os.Bundle;
@@ -13,7 +13,7 @@ import android.view.ViewGroup;
 
 import com.santiagogil.takestock.R;
 import com.santiagogil.takestock.controller.PurchacesController;
-import com.santiagogil.takestock.view.Adapters.PurchaceRecyclerAdapter;
+import com.santiagogil.takestock.view.adapter.PurchaceRecyclerAdapter;
 
 /**
  * A simple {@link Fragment} subclass.

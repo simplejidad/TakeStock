@@ -1,4 +1,4 @@
-package com.santiagogil.takestock.view.Fragments;
+package com.santiagogil.takestock.view.fragment;
 
 import android.os.Bundle;
 import android.support.design.widget.TabLayout;
@@ -17,7 +17,7 @@ import com.santiagogil.takestock.model.pojos.Behaviours.GetAllActiveItemsSortedB
 import com.santiagogil.takestock.model.pojos.Behaviours.GetAllActiveItemsWithStockZero;
 import com.santiagogil.takestock.model.pojos.Behaviours.GetAllInactiveItemsAlphabetically;
 import com.santiagogil.takestock.util.FragmentLifecycle;
-import com.santiagogil.takestock.view.Adapters.ItemListsViewPagerAdapter;
+import com.santiagogil.takestock.view.adapter.ItemListsViewPagerAdapter;
 
 public class FragmentItemListsViewPager extends Fragment {
 

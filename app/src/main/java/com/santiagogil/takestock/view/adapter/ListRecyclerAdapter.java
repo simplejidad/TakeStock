@@ -1,4 +1,4 @@
-package com.santiagogil.takestock.view.Adapters;
+package com.santiagogil.takestock.view.adapter;
 
 
 import android.content.Context;

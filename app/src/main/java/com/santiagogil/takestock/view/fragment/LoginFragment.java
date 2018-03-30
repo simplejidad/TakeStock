@@ -1,4 +1,4 @@
-package com.santiagogil.takestock.view.onboarding;
+package com.santiagogil.takestock.view.fragment;
 
 import android.content.Intent;
 import android.os.Bundle;
@@ -37,7 +37,6 @@ import com.santiagogil.takestock.controller.ItemsController;
 import com.santiagogil.takestock.model.pojos.Item;
 import com.santiagogil.takestock.util.DatabaseHelper;
 import com.santiagogil.takestock.util.ResultListener;
-import com.santiagogil.takestock.view.Actvityes.MainActivityCommunicator;
 
 import java.util.List;
 

@@ -1,4 +1,4 @@
-package com.santiagogil.takestock.view.onboarding;
+package com.santiagogil.takestock.view.activity;
 
 import android.content.Intent;
 import android.content.SharedPreferences;
@@ -10,7 +10,8 @@ import android.os.Bundle;
 
 import com.google.firebase.auth.FirebaseAuth;
 import com.santiagogil.takestock.R;
-import com.santiagogil.takestock.view.Actvityes.MainActivityCommunicator;
+import com.santiagogil.takestock.view.fragment.LoginFragment;
+import com.santiagogil.takestock.view.fragment.RegisterFragment;
 
 public class OnboardingActivity extends AppCompatActivity implements LoginFragment.CallRegisterListerner , LoginFragment.OnboardingActivityCommunicator, RegisterFragment.OnboardingActivityCommunicator {
 

@@ -1,10 +1,10 @@
-package com.santiagogil.takestock.view.Adapters;
+package com.santiagogil.takestock.view.adapter;
 
 import android.support.v4.app.Fragment;
 import android.support.v4.app.FragmentManager;
 import android.support.v4.app.FragmentStatePagerAdapter;
 
-import com.santiagogil.takestock.view.Fragments.FragmentRecyclerItems;
+import com.santiagogil.takestock.view.fragment.FragmentRecyclerItems;
 
 import java.util.ArrayList;
 import java.util.List;

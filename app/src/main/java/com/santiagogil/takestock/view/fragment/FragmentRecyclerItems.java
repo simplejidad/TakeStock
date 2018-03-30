@@ -1,4 +1,4 @@
-package com.santiagogil.takestock.view.Fragments;
+package com.santiagogil.takestock.view.fragment;
 
 
 import android.os.Bundle;
@@ -18,7 +18,7 @@ import com.santiagogil.takestock.controller.ItemsController;
 import com.santiagogil.takestock.model.pojos.Behaviours.BehaviourGetItemList;
 import com.santiagogil.takestock.model.pojos.Item;
 import com.santiagogil.takestock.util.FragmentLifecycle;
-import com.santiagogil.takestock.view.Adapters.ItemRecyclerAdapter;
+import com.santiagogil.takestock.view.adapter.ItemRecyclerAdapter;
 
 import java.util.ArrayList;
 import java.util.List;

@@ -1,4 +1,4 @@
-package com.santiagogil.takestock.view.Actvityes;
+package com.santiagogil.takestock.view.activity;
 
 import android.content.Context;
 import android.support.annotation.NonNull;
@@ -16,7 +16,7 @@ import android.widget.EditText;
 import com.google.firebase.auth.FirebaseAuth;
 import com.santiagogil.takestock.R;
 import com.santiagogil.takestock.view.DialogAddItem;
-import com.santiagogil.takestock.view.Fragments.FragmentItemListsViewPager;
+import com.santiagogil.takestock.view.fragment.FragmentItemListsViewPager;
 
 public class ItemsListsActivity extends AppCompatActivity {
 

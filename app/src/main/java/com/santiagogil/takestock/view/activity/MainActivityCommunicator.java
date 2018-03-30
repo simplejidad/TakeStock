@@ -1,10 +1,9 @@
-package com.santiagogil.takestock.view.Actvityes;
+package com.santiagogil.takestock.view.activity;
 
 import android.app.Activity;
 import android.content.Context;
 import android.content.Intent;
 import android.os.Bundle;
-import android.provider.ContactsContract;
 import android.support.annotation.NonNull;
 import android.support.design.widget.BottomNavigationView;
 import android.support.design.widget.NavigationView;
@@ -22,40 +21,26 @@ import android.view.View;
 import android.view.WindowManager;
 import android.view.inputmethod.InputMethodManager;
 import android.widget.EditText;
-import android.widget.ListView;
 import android.widget.TextView;
 import android.widget.Toast;
 
 
 import com.google.firebase.auth.FirebaseAuth;
-import com.google.firebase.database.DataSnapshot;
-import com.google.firebase.database.DatabaseError;
 import com.google.firebase.database.DatabaseReference;
-import com.google.firebase.database.FirebaseDatabase;
-import com.google.firebase.database.ValueEventListener;
 import com.santiagogil.takestock.R;
 import com.santiagogil.takestock.controller.ConsumptionsController;
 import com.santiagogil.takestock.controller.ItemsController;
-import com.santiagogil.takestock.controller.UsersController;
-import com.santiagogil.takestock.model.daos.ItemsFirebaseDAO;
 import com.santiagogil.takestock.model.pojos.Behaviours.BehaviourGetItemList;
 import com.santiagogil.takestock.model.pojos.Consumption;
 import com.santiagogil.takestock.model.pojos.Item;
-import com.santiagogil.takestock.model.pojos.User;
-import com.santiagogil.takestock.model.pojos.UserDatabase;
-import com.santiagogil.takestock.util.DatabaseHelper;
 import com.santiagogil.takestock.util.FirebaseHelper;
 import com.santiagogil.takestock.util.ResultListener;
 import com.santiagogil.takestock.view.DialogAddItem;
-import com.santiagogil.takestock.view.Fragments.FragmentItemsViewPager;
-import com.santiagogil.takestock.view.Fragments.FragmentRecyclerItems;
-import com.santiagogil.takestock.view.Fragments.FragmentItemListsViewPager;
-import com.santiagogil.takestock.view.onboarding.OnboardingActivity;
+import com.santiagogil.takestock.view.fragment.FragmentItemsViewPager;
+import com.santiagogil.takestock.view.fragment.FragmentRecyclerItems;
+import com.santiagogil.takestock.view.fragment.FragmentItemListsViewPager;
 
-import java.util.ArrayList;
-import java.util.HashMap;
 import java.util.List;
-import java.util.Map;
 
 public class MainActivityCommunicator extends AppCompatActivity implements FragmentRecyclerItems.FragmentActivityCommunicator, DialogAddItem.AddItemDialogCommunicator {
 

@@ -1,7 +1,6 @@
-package com.santiagogil.takestock.view.Fragments;
+package com.santiagogil.takestock.view.fragment;
 
 
-import android.content.Context;
 import android.os.Bundle;
 import android.support.annotation.Nullable;
 import android.support.v4.app.Fragment;
@@ -13,7 +12,7 @@ import android.view.ViewGroup;
 
 import com.santiagogil.takestock.R;
 import com.santiagogil.takestock.controller.ConsumptionsController;
-import com.santiagogil.takestock.view.Adapters.ConsumptionRecyclerAdapter;
+import com.santiagogil.takestock.view.adapter.ConsumptionRecyclerAdapter;
 
 /**
  * A simple {@link Fragment} subclass.

@@ -1,6 +1,5 @@
-package com.santiagogil.takestock.view.Fragments;
+package com.santiagogil.takestock.view.fragment;
 
-import android.accessibilityservice.AccessibilityService;
 import android.app.Activity;
 import android.content.Context;
 import android.os.Build;
@@ -17,7 +16,6 @@ import android.view.ViewGroup;
 import android.view.WindowManager;
 import android.view.inputmethod.InputMethodManager;
 import android.widget.EditText;
-import android.widget.ImageButton;
 import android.widget.ImageView;
 import android.widget.LinearLayout;
 import android.widget.TextView;
@@ -27,10 +25,10 @@ import android.widget.ViewSwitcher;
 import com.santiagogil.takestock.R;
 import com.santiagogil.takestock.controller.ConsumptionsController;
 import com.santiagogil.takestock.controller.ItemsController;
-import com.santiagogil.takestock.util.DatabaseHelper;
 import com.santiagogil.takestock.model.pojos.Item;
-import com.santiagogil.takestock.view.Adapters.ConsumptionRecyclerAdapter;
-import com.santiagogil.takestock.view.Adapters.ConsumptionsAndPurchacesViewPagerAdapter;
+import com.santiagogil.takestock.util.DatabaseHelper;
+import com.santiagogil.takestock.view.adapter.ConsumptionRecyclerAdapter;
+import com.santiagogil.takestock.view.adapter.ConsumptionsAndPurchacesViewPagerAdapter;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -85,6 +83,21 @@ public class FragmentItemDetail extends Fragment implements SimpleRecyclerFragme
 
     @Override
     public void onViewCreated(View view, @Nullable Bundle savedInstanceState) {
+
+        itemID = getArguments().getString(DatabaseHelper.ID);
+
+        loadAssets(fragmentView);
+
+        loadViewPager();
+
+        updateFieldsWithItemDetails();
+
+        setOnClickListeners();
+
+        // TODO: barra indicadora de stock
+        //setBackgroundColor(fragmentView, item.getIndependence());
+
+
         if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.LOLLIPOP) {
             textViewItemName.setTransitionName(FragmentItemDetail.TRANSITION_ITEM_NAME+item.getID().trim().toLowerCase());
             textViewItemStock.setTransitionName(FragmentItemDetail.TRANSITION_ITEM_STOCK+item.getID().trim().toLowerCase());
@@ -103,19 +116,6 @@ public class FragmentItemDetail extends Fragment implements SimpleRecyclerFragme
     @Override
     public View onCreateView(LayoutInflater inflater, @Nullable ViewGroup container, @Nullable Bundle savedInstanceState) {
         fragmentView = inflater.inflate(R.layout.fragment_item_detail, container, false);
-
-        itemID = getArguments().getString(DatabaseHelper.ID);
-
-        loadAssets(fragmentView);
-
-        loadViewPager();
-
-        updateFieldsWithItemDetails();
-
-        setOnClickListeners();
-
-        // TODO: barra indicadora de stock
-        //setBackgroundColor(fragmentView, item.getIndependence());
 
         return fragmentView;
     }
@@ -362,8 +362,6 @@ public class FragmentItemDetail extends Fragment implements SimpleRecyclerFragme
         });
     }
 
-
-
     private void setDrawablesForButtons(Item item){
         if(item.getCart() == 0) {
 
@@ -379,11 +377,6 @@ public class FragmentItemDetail extends Fragment implements SimpleRecyclerFragme
         super.onAttach(context);
         this.context = context;
 
-    }
-
-    @Override
-    public void onCreate(@Nullable Bundle savedInstanceState) {
-        super.onCreate(savedInstanceState);
     }
 
     private void loadAssets(View fragmentView){
@@ -520,4 +513,6 @@ public class FragmentItemDetail extends Fragment implements SimpleRecyclerFragme
         }
         imm.hideSoftInputFromWindow(view.getWindowToken(), 0);
     }
+
+
 }

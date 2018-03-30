@@ -1,4 +1,4 @@
-package com.santiagogil.takestock.view.onboarding;
+package com.santiagogil.takestock.view.fragment;
 
 import android.support.annotation.NonNull;
 import android.support.design.widget.TextInputLayout;
@@ -25,6 +25,7 @@ import com.santiagogil.takestock.model.pojos.Item;
 import com.santiagogil.takestock.util.DatabaseHelper;
 import com.santiagogil.takestock.util.FirebaseHelper;
 import com.santiagogil.takestock.util.ResultListener;
+import com.santiagogil.takestock.view.fragment.LoginFragment;
 
 import java.util.List;
 
