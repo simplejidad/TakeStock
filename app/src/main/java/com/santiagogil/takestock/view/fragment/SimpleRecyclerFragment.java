@@ -17,7 +17,8 @@ import java.io.Serializable;
 /**
  * A simple {@link Fragment} subclass.
  */
-public class SimpleRecyclerFragment extends Fragment implements ConsumptionRecyclerAdapter.RecyclerConsumptionsFragmentCommunicator, PurchaceRecyclerAdapter.RecyclerPurchacesFragmentCommunicator, Serializable {
+public class SimpleRecyclerFragment extends Fragment implements ConsumptionRecyclerAdapter.RecyclerConsumptionsFragmentCommunicator,
+        PurchaceRecyclerAdapter.RecyclerPurchacesFragmentCommunicator, Serializable {
 
     public static final String ITEMID = "ItemID";
     public static final String TITLE = "Title";

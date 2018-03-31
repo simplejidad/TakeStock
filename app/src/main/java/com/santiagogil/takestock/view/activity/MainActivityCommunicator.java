@@ -185,9 +185,6 @@ public class MainActivityCommunicator extends AppCompatActivity implements Fragm
                 moveTaskToBack(true);
             }
             super.onBackPressed();
-
-
-
         }
 
     @Override
