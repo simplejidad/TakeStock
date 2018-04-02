@@ -21,6 +21,7 @@ import android.view.View;
 import android.view.WindowManager;
 import android.view.inputmethod.InputMethodManager;
 import android.widget.EditText;
+import android.widget.ImageView;
 import android.widget.TextView;
 import android.widget.Toast;
 
@@ -41,8 +42,13 @@ import com.santiagogil.takestock.view.fragment.FragmentRecyclerItems;
 import com.santiagogil.takestock.view.fragment.FragmentItemListsViewPager;
 
 import java.util.List;
+import java.util.Objects;
 
-public class MainActivityCommunicator extends AppCompatActivity implements FragmentRecyclerItems.FragmentActivityCommunicator, DialogAddItem.AddItemDialogCommunicator {
+import butterknife.BindView;
+import butterknife.ButterKnife;
+import butterknife.OnClick;
+
+public class MainActivityCommunicator extends AppCompatActivity implements FragmentRecyclerItems.FragmentActivityCommunicator, DialogAddItem.AddItemDialogCommunicator, FragmentItemsViewPager.Listener {
 
 
     private FirebaseAuth fAuth;
@@ -52,20 +58,28 @@ public class MainActivityCommunicator extends AppCompatActivity implements Fragm
     private String filter = "";
     private Toolbar toolbar;
     private EditText toolbarEditText;
-    private BottomNavigationView bottomNavigationView;
     private Context context;
+    private FragmentItemsViewPager fragmentItemsViewPager;
+    @BindView(R.id.bottom_navigation_view) BottomNavigationView bottomNavigationView;
+    @BindView(R.id.buttonEditItem) ImageView toolbarEditItembutton;
+    @BindView(R.id.buttonDeleteItem) ImageView toolbarDeleteItemButton;
 
+    @OnClick(R.id.buttonDeleteItem)
+    void deleteOrRestoreItem(){
+        fragmentItemsViewPager.deleteItem();
+    }
 
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_main);
 
+        ButterKnife.bind(this, this);
+
         context = this;
 
-        toolbar = (Toolbar) findViewById(R.id.toolbar);
-        toolbarEditText = (EditText) toolbar.findViewById(R.id.toolbar_edit_text_search);
+        toolbar = findViewById(R.id.toolbar);
+        toolbarEditText = toolbar.findViewById(R.id.toolbar_edit_text_search);
 
-        bottomNavigationView = (BottomNavigationView) findViewById(R.id.bottom_navigation_view);
         bottomNavigationView.setPadding(0,0,0,0);
 
         //addGroceriesListToCurrentUsers();
@@ -82,7 +96,7 @@ public class MainActivityCommunicator extends AppCompatActivity implements Fragm
                         dialogAddItem.show(getFragmentManager(), null);
                         break;
                     case R.id.action_search:
-                        toolbarEditText.setBackgroundColor(ContextCompat.getColor( context, R.color.icons));
+                        toolbarEditText.setBackgroundColor(ContextCompat.getColor( context, R.color.icons_enabled));
                         toolbarEditText.setFocusableInTouchMode(true);
                         toolbarEditText.requestFocus();
                         getWindow().setSoftInputMode(WindowManager.LayoutParams.SOFT_INPUT_STATE_ALWAYS_VISIBLE);
@@ -99,7 +113,7 @@ public class MainActivityCommunicator extends AppCompatActivity implements Fragm
 
 
         setSupportActionBar(toolbar);
-        getSupportActionBar().setDisplayHomeAsUpEnabled(true);
+        Objects.requireNonNull(getSupportActionBar()).setDisplayHomeAsUpEnabled(true);
 
 
         authStateListener = new FirebaseAuth.AuthStateListener() {
@@ -123,7 +137,7 @@ public class MainActivityCommunicator extends AppCompatActivity implements Fragm
 
         } else {
 
-            navigationView = (NavigationView) findViewById(R.id.navigationView);
+            navigationView =  findViewById(R.id.navigationView);
             NavigationViewListener navigationViewListener = new NavigationViewListener();
             navigationView.setNavigationItemSelectedListener(navigationViewListener);
 
@@ -156,34 +170,36 @@ public class MainActivityCommunicator extends AppCompatActivity implements Fragm
     behaviourGetItemList, TextView textViewItemName, TextView textViewItemStock,
                                TextView textViewItemIndependence){
 
-        FragmentItemsViewPager fragmentItemsViewPager = new FragmentItemsViewPager();
+        fragmentItemsViewPager = new FragmentItemsViewPager();
         Bundle bundle = new Bundle();
         bundle.putSerializable(FragmentItemsViewPager.BEHAVIOURGETITEMLIST, behaviourGetItemList);
         bundle.putString(FragmentItemsViewPager.ITEMID, touchedItem.getID());
         bundle.putInt(FragmentItemsViewPager.POSITION, touchedPosition);
         fragmentItemsViewPager.setArguments(bundle);
+        fragmentItemsViewPager.setListener(this);
 
         FragmentTransaction fragmentTransaction = getSupportFragmentManager().beginTransaction();
         fragmentTransaction.replace(R.id.fragment_holder, fragmentItemsViewPager);
         fragmentTransaction.addToBackStack(null);
         fragmentTransaction.commit();
 
+        togleToolBarItems();
+
     }
 
     @Override
     public void updateActionBarTitle(String title) {
-
-        getSupportActionBar().setTitle((CharSequence) title);
+        Objects.requireNonNull(getSupportActionBar()).setTitle(title);
     }
 
     @Override
         public void onBackPressed () {
-
             hideKeyboard(this);
             int fragments = getSupportFragmentManager().getBackStackEntryCount();
             if (fragments == 0) {
                 moveTaskToBack(true);
             }
+            toolbarEditText.setVisibility(View.VISIBLE);
             super.onBackPressed();
         }
 
@@ -199,8 +215,16 @@ public class MainActivityCommunicator extends AppCompatActivity implements Fragm
         getSupportFragmentManager().beginTransaction().detach(fragment).attach(fragment).commit();
     }
 
-    private class NavigationViewListener implements NavigationView.OnNavigationItemSelectedListener {
+    @Override
+    public void updateToolbarIcon(Item item) {
+        if(item.getActive()){
+            toolbarDeleteItemButton.setImageResource(R.drawable.ic_delete_black_24dp);
+        } else {
+            toolbarDeleteItemButton.setImageResource(R.drawable.ic_restore_black_24dp);
+        }
+    }
 
+    private class NavigationViewListener implements NavigationView.OnNavigationItemSelectedListener {
             @Override
             public boolean onNavigationItemSelected(@NonNull MenuItem item) {
 
@@ -214,11 +238,11 @@ public class MainActivityCommunicator extends AppCompatActivity implements Fragm
             }
         }
 
-        @Override
-        protected void onStart () {
-            super.onStart();
-            fAuth.addAuthStateListener(authStateListener);
-        }
+    @Override
+    protected void onStart () {
+        super.onStart();
+        fAuth.addAuthStateListener(authStateListener);
+    }
 
     private void logout() {
 
@@ -243,7 +267,7 @@ public class MainActivityCommunicator extends AppCompatActivity implements Fragm
     }
 
     private void addListenerToSearchEditText() {
-        EditText editTextSearch = (EditText) toolbar.findViewById(R.id.toolbar_edit_text_search);
+        EditText editTextSearch = toolbar.findViewById(R.id.toolbar_edit_text_search);
         editTextSearch.addTextChangedListener(new TextWatcher() {
             @Override
             public void beforeTextChanged(CharSequence s, int start, int count, int after) {
@@ -252,11 +276,9 @@ public class MainActivityCommunicator extends AppCompatActivity implements Fragm
 
             @Override
             public void onTextChanged(CharSequence s, int start, int before, int count) {
-
                 filter = s.toString();
                 fragmentItemListsViewPager.getArguments().putString(FragmentRecyclerItems.FILTER, filter);
                 fragmentItemListsViewPager.getItemListsViewPagerAdapter().updateFragmentsWithFilter(filter);
-
             }
 
             @Override
@@ -289,7 +311,14 @@ public class MainActivityCommunicator extends AppCompatActivity implements Fragm
         if (view == null) {
             view = new View(activity);
         }
+        assert imm != null;
         imm.hideSoftInputFromWindow(view.getWindowToken(), 0);
+    }
+
+    public void togleToolBarItems(){
+        toolbarEditText.setVisibility(View.GONE);
+        toolbarDeleteItemButton.setVisibility(View.VISIBLE);
+        toolbarEditItembutton.setVisibility(View.VISIBLE);
     }
 }
 

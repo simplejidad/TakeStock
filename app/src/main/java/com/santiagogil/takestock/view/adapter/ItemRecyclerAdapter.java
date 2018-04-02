@@ -15,9 +15,15 @@ import com.santiagogil.takestock.R;
 import com.santiagogil.takestock.controller.ConsumptionsController;
 import com.santiagogil.takestock.controller.ItemsController;
 import com.santiagogil.takestock.model.pojos.Item;
+import com.santiagogil.takestock.view.fragment.FragmentItemDetail;
 
 import java.util.ArrayList;
 import java.util.List;
+
+import butterknife.BindView;
+import butterknife.ButterKnife;
+
+import static android.view.View.VISIBLE;
 
 public class ItemRecyclerAdapter extends RecyclerView.Adapter{
 
@@ -49,11 +55,8 @@ public class ItemRecyclerAdapter extends RecyclerView.Adapter{
 
     @Override
     public void onBindViewHolder(RecyclerView.ViewHolder holder, int position) {
-        Item item = items.get(position);
         ItemViewHolder itemViewHolder = (ItemViewHolder) holder;
-        itemViewHolder.loadItem(item);
-        //itemViewHolder.assignTransitionNames(item.getID());
-
+        itemViewHolder.loadItem(items.get(position));
     }
 
     @Override
@@ -67,36 +70,27 @@ public class ItemRecyclerAdapter extends RecyclerView.Adapter{
 
     static class ItemViewHolder extends RecyclerView.ViewHolder {
 
-        private TextView textViewItemName;
-        private TextView textViewItemStock;
-        private TextView textViewItemIndependence;
-        private TextView textViewItemPrice;
-        private TextView textViewNeededForGoal;
-        private ImageView buttonStockSubtract;
-        private TextView buttonStockAdd;
-        private TextView buttonCartToStock;
-        private ImageView buttonCartSubtract;
-        private ImageView buttonCartAdd;
         private Context context;
         private View.OnClickListener onItemModifiedListener;
         private View itemView;
-        private FrameLayout verticalColorBar;
+
+        @BindView(R.id.text_view_item_name) TextView textViewItemName;
+        @BindView(R.id.text_view_item_stock) TextView textViewItemStock;
+        @BindView(R.id.text_view_item_independence) TextView textViewItemIndependence;
+        @BindView (R.id.text_view_item_price) TextView  textViewItemPrice;
+        @BindView(R.id.text_view_needed_for_goal) TextView textViewNeededForGoal;
+        @BindView(R.id.buttonSubtract) ImageView buttonStockSubtract;
+        @BindView(R.id.button_cart_subtract) ImageView buttonCartSubtract;
+        @BindView(R.id.buttonAdd) TextView buttonStockAdd;
+        @BindView(R.id.button_cart_add) ImageView buttonCartAdd;
+        @BindView(R.id.button_cart_to_stock) TextView buttonCartToStock;
+        @BindView(R.id.vertical_bar) FrameLayout verticalColorBar;
 
         public ItemViewHolder(View itemView, Context context, View.OnClickListener onItemModifiedListener, View.OnClickListener onItemTouchedListener) {
             super(itemView);
-
+            ButterKnife.bind(this, itemView);
             itemView.setOnClickListener(onItemTouchedListener);
-            textViewItemName = (TextView) itemView.findViewById(R.id.text_view_item_name);
-            textViewItemStock = (TextView) itemView.findViewById(R.id.text_view_item_stock);
-            textViewItemIndependence = (TextView) itemView.findViewById(R.id.text_view_item_independence);
-            textViewItemPrice = (TextView) itemView.findViewById(R.id.text_view_item_price);
-            textViewNeededForGoal = (TextView) itemView.findViewById(R.id.text_view_needed_for_goal);
-            buttonStockAdd =  itemView.findViewById(R.id.buttonAdd);
-            buttonStockSubtract =  itemView.findViewById(R.id.buttonSubtract);
-            buttonCartSubtract =  itemView.findViewById(R.id.button_cart_subtract);
-            buttonCartAdd =  itemView.findViewById(R.id.button_cart_add);
-            buttonCartToStock =  itemView.findViewById(R.id.button_cart_to_stock);
-            verticalColorBar = itemView.findViewById(R.id.vertical_bar);
+
             this.context = context;
             this.onItemModifiedListener = onItemModifiedListener;
             this.itemView = itemView;
@@ -171,11 +165,19 @@ public class ItemRecyclerAdapter extends RecyclerView.Adapter{
         }
 
         private void setDrawablesForButtons(Item item){
+
+            if(item.getStock() == 0) {
+                buttonStockSubtract.setImageResource(R.drawable.ic_home_minus_disabled);
+            } else{
+                buttonStockSubtract.setImageResource(R.drawable.ic_home_minus_enabled);
+            }
             if(item.getCart() == 0) {
 
-                buttonCartToStock.setCompoundDrawablesRelativeWithIntrinsicBounds(R.drawable.ic_up_to, 0, R.drawable.ic_shopping_cart_empty , 0);
+                buttonCartToStock.setCompoundDrawablesRelativeWithIntrinsicBounds(R.drawable.ic_up_to, 0, 0 , 0);
+                buttonCartToStock.setVisibility(View.GONE);
+                buttonCartSubtract.setImageResource(R.drawable.ic_cart_substract_disabled);
             } else {
-
+                buttonCartToStock.setVisibility(VISIBLE);
                 buttonCartToStock.setCompoundDrawablesRelativeWithIntrinsicBounds(R.drawable.ic_up_to, 0, R.drawable.ic_shopping_cart_black_24dp, 0);
             }
         }
@@ -185,7 +187,6 @@ public class ItemRecyclerAdapter extends RecyclerView.Adapter{
             if(item.getConsumptionRate() > 0){
 
                 textViewNeededForGoal.setText(item.getRoundedConsumptionRate());
-                //textViewNeededForGoal.setCompoundDrawablesRelativeWithIntrinsicBounds(0 , 0, item.getNextIndependenceEmoticon(), 0 );
 
             }
         }
@@ -258,8 +259,6 @@ public class ItemRecyclerAdapter extends RecyclerView.Adapter{
             } else if(independence >=60){
                 verticalColorBar.setBackgroundColor(ContextCompat.getColor(context, R.color.primary));
             }
-
         }
-
     }
 }

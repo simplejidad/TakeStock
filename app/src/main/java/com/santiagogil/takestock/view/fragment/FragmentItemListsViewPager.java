@@ -1,6 +1,7 @@
 package com.santiagogil.takestock.view.fragment;
 
 import android.os.Bundle;
+import android.support.annotation.Nullable;
 import android.support.design.widget.TabLayout;
 import android.support.v4.app.Fragment;
 import android.support.v4.view.ViewPager;
@@ -26,10 +27,14 @@ public class FragmentItemListsViewPager extends Fragment {
     private FragmentRecyclerItems.FragmentActivityCommunicator fragmentActivityCommunicator;
     private Integer currentFragmentPosition = 0;
 
-
     public View onCreateView(LayoutInflater inflater, final ViewGroup container, Bundle savedInstanceState) {
 
-        View view = inflater.inflate(R.layout.fragment_item_lists_view_pager, container, false);
+        return inflater.inflate(R.layout.fragment_item_lists_view_pager, container, false);
+    }
+
+    @Override
+    public void onViewCreated(View view, @Nullable Bundle savedInstanceState) {
+        super.onViewCreated(view, savedInstanceState);
 
         itemListsViewPager = (ViewPager) view.findViewById(R.id.view_pager_consumptions_purchaces);
         itemListsViewPagerAdapter = new ItemListsViewPagerAdapter(getChildFragmentManager());
@@ -44,8 +49,6 @@ public class FragmentItemListsViewPager extends Fragment {
         itemListsViewPager.addOnPageChangeListener(pageChangeListener);
 
         updateActionBarTitle(currentFragmentPosition);
-
-        return view;
     }
 
     private ViewPager.OnPageChangeListener pageChangeListener = new ViewPager.OnPageChangeListener() {

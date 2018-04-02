@@ -294,7 +294,6 @@ public class ItemsDAO {
         database.close();
 
         firebaseHelper.getUserDB().child(DatabaseHelper.TABLEITEMS).child(item.getID()).child(DatabaseHelper.CART).setValue(itemCart);
-
     }
 
     public void updateItemDetails(String itemID, String updatedItemName, Integer updatedItemStock, Integer updatedConsumptionRate, Integer updatedMinimumPurchace, Boolean active, Double price, Integer cart){

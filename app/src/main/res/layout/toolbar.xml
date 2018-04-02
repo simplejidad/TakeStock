@@ -1,22 +1,59 @@
 <?xml version="1.0" encoding="utf-8"?>
-<android.support.v7.widget.Toolbar
-    xmlns:android="http://schemas.android.com/apk/res/android"
+<android.support.v7.widget.Toolbar xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools"
     android:id="@+id/toolbar"
     android:layout_width="match_parent"
     android:layout_height="40dp"
     android:background="@color/primary"
-    app:titleTextColor="@color/secondary_text">
+    app:titleTextColor="@color/secondary_text"
+    android:gravity="end">
 
-    <EditText
-        android:id="@+id/toolbar_edit_text_search"
-        android:layout_width="wrap_content"
-        android:lines="1"
-        android:minWidth="75dp"
-        android:layout_marginStart="10dp"
+    <LinearLayout
+        android:layout_width="match_parent"
         android:layout_height="match_parent"
-        android:layout_gravity="right"
-        />
+        android:orientation="horizontal"
+        android:gravity="end">
+
+        <EditText
+            android:id="@+id/toolbar_edit_text_search"
+            android:layout_width="wrap_content"
+            android:lines="1"
+            android:minWidth="75dp"
+            android:layout_marginStart="10dp"
+            android:layout_height="match_parent"
+            android:layout_gravity="end"
+            tools:visibility="visible"
+            />
+
+        <ImageView
+            android:id="@+id/buttonEditItem"
+            android:layout_width="50dp"
+            android:layout_height="match_parent"
+            android:layout_marginRight="5dp"
+            android:scaleType="center"
+            android:layout_marginLeft="5dp"
+            android:src="@drawable/ic_create_black_24dp"
+            android:elevation="3dp"
+            android:visibility="gone"
+            tools:visibility="visible" />
+
+        <ImageView
+            android:id="@+id/buttonDeleteItem"
+            android:layout_width="50dp"
+            android:layout_height="match_parent"
+            android:layout_marginLeft="5dp"
+            android:scaleType="center"
+            android:elevation="3dp"
+            android:visibility="gone"
+            android:src="@drawable/ic_delete_black_24dp"
+            tools:visibility="visible"
+            />
+
+
+    </LinearLayout>
+
+
 
 
     </android.support.v7.widget.Toolbar>

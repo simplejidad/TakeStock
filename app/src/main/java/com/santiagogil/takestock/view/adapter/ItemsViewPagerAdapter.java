@@ -16,16 +16,10 @@ public class ItemsViewPagerAdapter extends FragmentStatePagerAdapter {
 
     private List<Fragment> fragmentList;
     private List<Item> itemList;
-    private Context context;
     private BehaviourGetItemList behaviourGetItemList;
-
-    public void setContext(Context context) {
-        this.context = context;
-    }
 
     public ItemsViewPagerAdapter(FragmentManager fm, Context context, BehaviourGetItemList behaviourGetItemList){
         super(fm);
-        this.context = context;
         fragmentList = new ArrayList<>();
         this.behaviourGetItemList = behaviourGetItemList;
         this.itemList = behaviourGetItemList.getItemList(context);
@@ -56,8 +50,10 @@ public class ItemsViewPagerAdapter extends FragmentStatePagerAdapter {
                 return itemList.indexOf(item);
             }
         }
-
         return 0;
     }
 
+    public void getCurrentItem(){
+
+    }
 }

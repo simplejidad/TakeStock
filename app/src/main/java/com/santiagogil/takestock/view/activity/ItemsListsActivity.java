@@ -53,7 +53,7 @@ public class ItemsListsActivity extends AppCompatActivity {
                         dialogAddItem.show(getFragmentManager(), null);
                         break;
                     case R.id.action_search:
-                        toolbarEditText.setBackgroundColor(ContextCompat.getColor( context, R.color.icons));
+                        toolbarEditText.setBackgroundColor(ContextCompat.getColor( context, R.color.icons_enabled));
                         toolbarEditText.setFocusableInTouchMode(true);
                         toolbarEditText.requestFocus();
                         getWindow().setSoftInputMode(WindowManager.LayoutParams.SOFT_INPUT_STATE_ALWAYS_VISIBLE);
