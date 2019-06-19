@@ -16,4 +16,7 @@
         <color name="some_independence">#ffcc80</color>
         <color name="full_independence">#6ef7d8</color>
 
+        <color name="backgroundColorLight">#C4C3C3</color>
+        <color name="backgroundColorDark">#33343B</color>
+
 </resources>

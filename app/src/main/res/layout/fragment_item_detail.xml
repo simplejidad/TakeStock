@@ -212,7 +212,7 @@
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:layout_marginRight="5dp"
-            android:drawableLeft="@drawable/ic_home_black_24dp"
+            android:drawableLeft="@drawable/ic_home_24dp"
             android:text="@string/stock"
             android:textSize="18sp" />
 

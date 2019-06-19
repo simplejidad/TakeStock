@@ -71,9 +71,8 @@ public class FragmentItemListsViewPager extends Fragment {
     };
 
     private void updateActionBarTitle(Integer position){
-
-        fragmentActivityCommunicator.updateActionBarTitle(getCurrentFragment(position).getTitle());
-
+        if (fragmentActivityCommunicator != null)
+            fragmentActivityCommunicator.updateActionBarTitle(getCurrentFragment(position).getTitle());
     }
 
     public FragmentRecyclerItems getCurrentFragment(Integer position) {

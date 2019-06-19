@@ -3,7 +3,9 @@ package com.santiagogil.takestock.view.activity;
 import android.app.Activity;
 import android.content.Context;
 import android.content.Intent;
+import android.content.SharedPreferences;
 import android.os.Bundle;
+import android.preference.PreferenceManager;
 import android.support.annotation.NonNull;
 import android.support.design.widget.BottomNavigationView;
 import android.support.design.widget.NavigationView;
@@ -50,6 +52,7 @@ import butterknife.OnClick;
 
 public class MainActivityCommunicator extends AppCompatActivity implements FragmentRecyclerItems.FragmentActivityCommunicator, DialogAddItem.AddItemDialogCommunicator, FragmentItemsViewPager.Listener {
 
+    public static final String NIGHT_MODE = "night mode";
 
     private FirebaseAuth fAuth;
     private FirebaseAuth.AuthStateListener authStateListener;
@@ -70,6 +73,9 @@ public class MainActivityCommunicator extends AppCompatActivity implements Fragm
     }
 
     protected void onCreate(Bundle savedInstanceState) {
+        if (isNightModeEnabled()) {
+            setTheme(R.style.MainActivityCommunicatorThemeDark);
+        }
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_main);
 
@@ -163,8 +169,6 @@ public class MainActivityCommunicator extends AppCompatActivity implements Fragm
             }
         }
 
-
-
     @Override
     public void onItemTouched (Item touchedItem, Integer touchedPosition, BehaviourGetItemList
     behaviourGetItemList, TextView textViewItemName, TextView textViewItemStock,
@@ -227,13 +231,15 @@ public class MainActivityCommunicator extends AppCompatActivity implements Fragm
     private class NavigationViewListener implements NavigationView.OnNavigationItemSelectedListener {
             @Override
             public boolean onNavigationItemSelected(@NonNull MenuItem item) {
-
-                if (item.getItemId() == R.id.action_logout) {
-
+                if (item.getItemId() == R.id.action_logout)
                     logout();
+                if (item.getItemId() == R.id.changeTheme) {
+                    SharedPreferences mPrefs =  PreferenceManager.getDefaultSharedPreferences(MainActivityCommunicator.this);
+                    SharedPreferences.Editor editor = mPrefs.edit();
+                    editor.putBoolean(NIGHT_MODE, !isNightModeEnabled());
+                    editor.apply();
+                    recreate();
                 }
-
-
                 return false;
             }
         }
@@ -319,6 +325,11 @@ public class MainActivityCommunicator extends AppCompatActivity implements Fragm
         toolbarEditText.setVisibility(View.GONE);
         toolbarDeleteItemButton.setVisibility(View.VISIBLE);
         toolbarEditItembutton.setVisibility(View.VISIBLE);
+    }
+
+    private boolean isNightModeEnabled() {
+        SharedPreferences mPrefs = PreferenceManager.getDefaultSharedPreferences(MainActivityCommunicator.this);
+        return mPrefs.getBoolean(NIGHT_MODE, false);
     }
 }
 
