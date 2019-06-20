@@ -222,9 +222,9 @@ public class MainActivityCommunicator extends AppCompatActivity implements Fragm
     @Override
     public void updateToolbarIcon(Item item) {
         if(item.getActive()){
-            toolbarDeleteItemButton.setImageResource(R.drawable.ic_delete_black_24dp);
+            toolbarDeleteItemButton.setImageResource(R.drawable.ic_delete_24dp);
         } else {
-            toolbarDeleteItemButton.setImageResource(R.drawable.ic_restore_black_24dp);
+            toolbarDeleteItemButton.setImageResource(R.drawable.ic_restore_24dp);
         }
     }
 

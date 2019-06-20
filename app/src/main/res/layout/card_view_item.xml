@@ -34,7 +34,7 @@
                 android:layout_marginTop="10dp"
                 android:layout_marginBottom="15dp"
                 android:gravity="center"
-                android:textSize="14sp"
+                android:textSize="18sp"
                 android:textColor="?attr/primaryTextColor"
                 tools:text="@string/description"/>
 
@@ -57,18 +57,19 @@
                     android:lines="1"
                     tools:text="@string/lorem"
                     android:textColor="?attr/primaryTextColor"
-                    android:textSize="12sp" />
+                    android:textSize="16sp" />
 
                 <TextView
                     android:id="@+id/text_view_item_stock"
                     android:layout_width="0dp"
                     android:layout_height="wrap_content"
-                    android:layout_weight="0.7"
+                    android:layout_weight="0.8"
                     android:drawableStart="@drawable/ic_home_24dp"
                     android:gravity="center"
                     android:text="@string/by"
                     android:textColor="?attr/primaryTextColor"
-                    android:textSize="12sp" />
+                    android:textSize="16sp"
+                    tools:text="x 20"/>
 
                 <TextView
                     android:id="@+id/text_view_needed_for_goal"
@@ -77,9 +78,8 @@
                     android:layout_weight="1.25"
                     android:gravity="end"
                     android:textColor="?attr/primaryTextColor"
-                    android:textSize="12sp"
-
-                    />
+                    android:textSize="16sp"
+                    tools:text="You are OK" />
 
                 <TextView
                     android:id="@+id/text_view_item_price"
@@ -90,7 +90,8 @@
                     android:layout_weight="1"
                     android:textColor="?attr/primaryTextColor"
                     android:gravity="end"
-                    android:textSize="12sp" />
+                    android:textSize="16sp"
+                    tools:text="$100"/>
 
             </LinearLayout>
 
@@ -125,12 +126,13 @@
                     android:id="@+id/button_cart_to_stock"
                     android:layout_width="wrap_content"
                     android:layout_height="match_parent"
-                    android:drawableStart="@drawable/ic_up_to"
+                    android:drawableStart="@drawable/ic_move_to"
                     android:gravity="center"
                     android:textColor="?attr/primaryTextColor"
-                    android:textSize="12sp"
+                    android:textSize="16sp"
+                    android:text="0"
                     tools:text="88"
-                    tools:drawableEnd="@drawable/ic_shopping_cart_black_24dp"/>
+                    tools:drawableEnd="@drawable/ic_shopping_cart_24dp"/>
 
                 <ImageView
                     android:id="@+id/button_cart_add"
@@ -152,7 +154,7 @@
                     android:textAlignment="textStart"
                     android:gravity="center"
                     android:textColor="?attr/primaryTextColor"
-                    android:textSize="12sp"
+                    android:textSize="16sp"
                     tools:text="10"/>
 
             </LinearLayout>

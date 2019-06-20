@@ -291,12 +291,12 @@ public class FragmentItemDetail extends Fragment implements SimpleRecyclerFragme
             buttonStockSubtract.setImageResource(R.drawable.ic_home_minus_enabled);
         }
         if(item.getCart() == 0) {
-            buttonCartToStock.setCompoundDrawablesRelativeWithIntrinsicBounds(R.drawable.ic_up_to, 0, 0 , 0);
+            buttonCartToStock.setCompoundDrawablesRelativeWithIntrinsicBounds(R.drawable.ic_move_to, 0, 0 , 0);
             buttonCartToStock.setVisibility(View.GONE);
             buttonCartSubtract.setImageResource(R.drawable.ic_cart_substract_disabled);
         } else {
             buttonCartToStock.setVisibility(VISIBLE);
-            buttonCartToStock.setCompoundDrawablesRelativeWithIntrinsicBounds(R.drawable.ic_up_to, 0, R.drawable.ic_shopping_cart_black_24dp, 0);
+            buttonCartToStock.setCompoundDrawablesRelativeWithIntrinsicBounds(R.drawable.ic_move_to, 0, R.drawable.ic_shopping_cart_24dp, 0);
         }
     }
 

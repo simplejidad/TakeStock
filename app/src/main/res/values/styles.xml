@@ -16,14 +16,16 @@
         <item name="secondaryTextColor">#96F4F4F6</item>
         <item name="backgroundCardColor">#FFFF</item>
         <item name="dividerColor">#F2F2F3</item>
+        <item name="badgeColor">#313131</item>
     </style>
 
     <!-- Dark base activity theme -->
     <style name="ActivityTheme.Primary.Base.Dark"    parent="Theme.AppCompat.NoActionBar">
-        <item name="primaryTextColor">#33343B</item>
+        <item name="primaryTextColor">#BBBBBB</item>
         <item name="secondaryTextColor">#8033343B</item>
         <item name="backgroundCardColor">#28292e</item>
         <item name="dividerColor">#F2F2F3</item>
+        <item name="badgeColor">#BBBBBB</item>
     </style>
 
 

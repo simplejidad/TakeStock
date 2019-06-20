@@ -15,7 +15,6 @@ import com.santiagogil.takestock.R;
 import com.santiagogil.takestock.controller.ConsumptionsController;
 import com.santiagogil.takestock.controller.ItemsController;
 import com.santiagogil.takestock.model.pojos.Item;
-import com.santiagogil.takestock.view.fragment.FragmentItemDetail;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -173,12 +172,12 @@ public class ItemRecyclerAdapter extends RecyclerView.Adapter{
             }
             if(item.getCart() == 0) {
 
-                buttonCartToStock.setCompoundDrawablesRelativeWithIntrinsicBounds(R.drawable.ic_up_to, 0, 0 , 0);
-                buttonCartToStock.setVisibility(View.GONE);
+                buttonCartToStock.setCompoundDrawablesRelativeWithIntrinsicBounds(R.drawable.ic_move_to, 0, 0 , 0);
+                buttonCartToStock.setVisibility(View.INVISIBLE);
                 buttonCartSubtract.setImageResource(R.drawable.ic_cart_substract_disabled);
             } else {
                 buttonCartToStock.setVisibility(VISIBLE);
-                buttonCartToStock.setCompoundDrawablesRelativeWithIntrinsicBounds(R.drawable.ic_up_to, 0, R.drawable.ic_shopping_cart_black_24dp, 0);
+                buttonCartToStock.setCompoundDrawablesRelativeWithIntrinsicBounds(R.drawable.ic_move_to, 0, R.drawable.ic_shopping_cart_24dp, 0);
             }
         }
 

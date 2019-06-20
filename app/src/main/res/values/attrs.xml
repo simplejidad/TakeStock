@@ -2,6 +2,7 @@
 <resources>
 
     <declare-styleable name="CTAppTheme">
+        <attr name="badgeColor" format="color"/>
         <attr name="primaryTextColor" format="color"/>
         <attr name="secondaryTextColor" format="color"/>
         <attr name="dividerColor" format="color"/>
