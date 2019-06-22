@@ -14,9 +14,10 @@
     <style name="ActivityTheme.Primary.Base.Light" parent="Theme.AppCompat.NoActionBar">
         <item name="primaryTextColor">#181717</item>
         <item name="secondaryTextColor">#96F4F4F6</item>
-        <item name="backgroundCardColor">#FFFF</item>
+        <item name="backgroundCardColor">#ECECEC</item>
         <item name="dividerColor">#F2F2F3</item>
         <item name="badgeColor">#313131</item>
+        <item name="primaryBackgroundColor">#D5D5D5</item>
     </style>
 
     <!-- Dark base activity theme -->
@@ -26,6 +27,7 @@
         <item name="backgroundCardColor">#28292e</item>
         <item name="dividerColor">#F2F2F3</item>
         <item name="badgeColor">#BBBBBB</item>
+        <item name="primaryBackgroundColor">#28292e</item>
     </style>
 
 

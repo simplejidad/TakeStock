@@ -165,66 +165,53 @@ public class ItemRecyclerAdapter extends RecyclerView.Adapter{
 
         private void setDrawablesForButtons(Item item){
 
-            if(item.getStock() == 0) {
+            if(item.getStock() == 0)
                 buttonStockSubtract.setImageResource(R.drawable.ic_home_minus_disabled);
-            } else{
+            else
                 buttonStockSubtract.setImageResource(R.drawable.ic_home_minus_enabled);
-            }
-            if(item.getCart() == 0) {
 
-                buttonCartToStock.setCompoundDrawablesRelativeWithIntrinsicBounds(R.drawable.ic_move_to, 0, 0 , 0);
+            if(item.getCart() == 0) {
+                //buttonCartToStock.setCompoundDrawablesRelativeWithIntrinsicBounds(R.drawable.ic_move_to, 0, 0 , 0);
                 buttonCartToStock.setVisibility(View.INVISIBLE);
                 buttonCartSubtract.setImageResource(R.drawable.ic_cart_substract_disabled);
             } else {
                 buttonCartToStock.setVisibility(VISIBLE);
-                buttonCartToStock.setCompoundDrawablesRelativeWithIntrinsicBounds(R.drawable.ic_move_to, 0, R.drawable.ic_shopping_cart_24dp, 0);
+                buttonCartSubtract.setImageResource(R.drawable.ic_cart_substract_enabled);
             }
         }
 
         private void setTextViewNeededForGoal(Item item) {
-
-            if(item.getConsumptionRate() > 0){
-
+            if(item.getConsumptionRate() > 0)
                 textViewNeededForGoal.setText(item.getRoundedConsumptionRate());
-
-            }
         }
 
         private void cartToStock(Item item) {
-
             if(item.getCart() > 0){
-
                 ItemsController itemsController = new ItemsController();
                 itemsController.cartToStock(context, item);
-            } else {
+            } else
                 Toast.makeText(context, "Cart is Empty", Toast.LENGTH_SHORT).show();
-            }
 
         }
 
         private void decreaseItemCart(Item item) {
 
-            if(item.getCart() == 0){
+            if(item.getCart() == 0)
                 Toast.makeText(context, "Nothing left to remove", Toast.LENGTH_SHORT).show();
-            } else {
-
+            else {
                 ItemsController itemsController = new ItemsController();
                 itemsController.decreaseItemCart(context, item);
             }
         }
 
         private void increaseCart(Item item) {
-
             ItemsController itemsController = new ItemsController();
             itemsController.increaseItemCart(context, item);
-
         }
 
         private  void increaseItemStock(Item item){
-
             ItemsController itemsController = new ItemsController();
             itemsController.increaseItemStock(context, item);
-
         }
 
         private void decreaseItemStock(Item item){

@@ -87,6 +87,12 @@ public class FragmentItemDetail extends Fragment implements SimpleRecyclerFragme
     public static final String TRANSITION_ITEM_STOCK = "TransitionItemStock";
     public static final String TRANSITION_ITEM_INDEPENDENCE = "";
 
+    @Nullable
+    @Override
+    public View onCreateView(LayoutInflater inflater, @Nullable ViewGroup container, @Nullable Bundle savedInstanceState) {
+        return inflater.inflate(R.layout.fragment_item_detail, container, false);
+    }
+
     @Override
     public void onViewCreated(View view, @Nullable Bundle savedInstanceState) {
 
@@ -110,12 +116,6 @@ public class FragmentItemDetail extends Fragment implements SimpleRecyclerFragme
         getActivity().getWindow().setSoftInputMode(WindowManager.LayoutParams.SOFT_INPUT_STATE_HIDDEN);
         ((InputMethodManager) Objects.requireNonNull(getActivity().getSystemService(Context.INPUT_METHOD_SERVICE)))
                 .hideSoftInputFromWindow(Objects.requireNonNull(getView()).getWindowToken(), 0);
-    }
-
-    @Nullable
-    @Override
-    public View onCreateView(LayoutInflater inflater, @Nullable ViewGroup container, @Nullable Bundle savedInstanceState) {
-        return inflater.inflate(R.layout.fragment_item_detail, container, false);
     }
 
     @SuppressLint("SetTextI18n")
@@ -285,18 +285,17 @@ public class FragmentItemDetail extends Fragment implements SimpleRecyclerFragme
     }
 
     private void setDrawablesForButtons(Item item){
-        if(item.getStock() == 0) {
+        if(item.getStock() == 0)
             buttonStockSubtract.setImageResource(R.drawable.ic_home_minus_disabled);
-        } else{
+        else
             buttonStockSubtract.setImageResource(R.drawable.ic_home_minus_enabled);
-        }
+
         if(item.getCart() == 0) {
-            buttonCartToStock.setCompoundDrawablesRelativeWithIntrinsicBounds(R.drawable.ic_move_to, 0, 0 , 0);
-            buttonCartToStock.setVisibility(View.GONE);
+            buttonCartToStock.setVisibility(View.INVISIBLE);
             buttonCartSubtract.setImageResource(R.drawable.ic_cart_substract_disabled);
         } else {
             buttonCartToStock.setVisibility(VISIBLE);
-            buttonCartToStock.setCompoundDrawablesRelativeWithIntrinsicBounds(R.drawable.ic_move_to, 0, R.drawable.ic_shopping_cart_24dp, 0);
+            buttonCartSubtract.setImageResource(R.drawable.ic_cart_substract_enabled);
         }
     }
 
