@@ -24,7 +24,6 @@ public class SimpleRecyclerFragment extends Fragment implements ConsumptionRecyc
     public static final String TITLE = "Title";
 
     public SimpleRecyclerFragment() {
-        // Required empty public constructor
     }
 
 

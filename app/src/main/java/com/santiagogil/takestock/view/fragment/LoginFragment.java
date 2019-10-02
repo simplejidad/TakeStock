@@ -71,17 +71,14 @@ public class LoginFragment extends Fragment {
         super.onCreate(savedInstanceState);
         View view = inflater.inflate(R.layout.fragment_login, container, false);
 
-        firebase = FirebaseDatabase.getInstance().getReference().child(DatabaseHelper.TABLEUSERS);
+        setUpFirebase();
 
-        mAuth = FirebaseAuth.getInstance();
+        setUpUI(view);
 
-        mAuth.addAuthStateListener(new FirebaseAuth.AuthStateListener() {
-            @Override
-            public void onAuthStateChanged(@NonNull FirebaseAuth firebaseAuth) {
+        return view;
+    }
 
-            }
-        });
-
+    private void setUpUI(View view) {
         editTextEmailField = (EditText) view.findViewById(R.id.email);
         editTextPasswordField = (EditText) view.findViewById(R.id.password);
         buttonLogin = (Button) view.findViewById(R.id.email_sign_in_button);
@@ -122,19 +119,16 @@ public class LoginFragment extends Fragment {
             @Override
             public void afterTextChanged(Editable editable) {
 
-                if(!isPasswordValid((CharSequence) editable)){
+                if(!isPasswordValid((CharSequence) editable))
                     textInputLayoutPassword.setError("Password must be at least 6 characters long");
-                } else{
+                else
                     textInputLayoutPassword.setError(null);
-                }
-
             }
         });
 
         buttonLogin.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-
                 startSingIn();
             }
         });
@@ -142,13 +136,21 @@ public class LoginFragment extends Fragment {
         buttonRegister.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-
                 CallRegisterListerner callRegisterListerner = (CallRegisterListerner) getActivity();
                 callRegisterListerner.goToRegister(editTextEmailField.getText().toString());
             }
         });
+    }
 
-        return view;
+    private void setUpFirebase() {
+        firebase = FirebaseDatabase.getInstance().getReference().child(DatabaseHelper.TABLEUSERS);
+        mAuth = FirebaseAuth.getInstance();
+        mAuth.addAuthStateListener(new FirebaseAuth.AuthStateListener() {
+            @Override
+            public void onAuthStateChanged(@NonNull FirebaseAuth firebaseAuth) {
+
+            }
+        });
     }
 
     private boolean isPasswordValid(CharSequence target) {

@@ -22,8 +22,9 @@ public class PurchacesRecyclerFragment extends SimpleRecyclerFragment {
 
     private PurchaceRecyclerAdapter purchaceRecyclerAdapter;
     private FragmentRecyclerToFragmentCommunicator fragmentRecyclerToFragmentCommunicator;
-    public PurchacesRecyclerFragment() {
-        // Required empty public constructor
+
+   public PurchacesRecyclerFragment() {
+
     }
 
     private static final String ITEMID = "ItemID";
@@ -32,13 +33,16 @@ public class PurchacesRecyclerFragment extends SimpleRecyclerFragment {
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container,
                              Bundle savedInstanceState) {
-        // Inflate the layout for this fragment
         return inflater.inflate(R.layout.simple_recycler_view, container, false);
     }
 
     @Override
     public void onViewCreated(View view, @Nullable Bundle savedInstanceState) {
         super.onViewCreated(view, savedInstanceState);
+        setUpRecyclerView(view);
+    }
+
+    private void setUpRecyclerView(View view) {
         RecyclerView recyclerView = (RecyclerView) view.findViewById(R.id.recyclerView);
         purchaceRecyclerAdapter = new PurchaceRecyclerAdapter(getContext(), this);
         PurchacesController purchacesController = new PurchacesController();
@@ -56,7 +60,6 @@ public class PurchacesRecyclerFragment extends SimpleRecyclerFragment {
 
     @Override
     public void onPurchacesUpdated() {
-
         PurchacesController purchacesController = new PurchacesController();
         purchaceRecyclerAdapter.setPurchacesList(purchacesController.getItemPurchaceList(getContext(),getArguments().getString(ITEMID)));
         purchaceRecyclerAdapter.notifyDataSetChanged();

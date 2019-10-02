@@ -36,7 +36,7 @@ public class Purchace {
         this.date = System.currentTimeMillis();
         this.itemID = item.getID();
         this.price = item.getPrice();
-        this.ammount = item.getCart();
+        this.ammount = item.getUnitsInCart();
     }
 
     public void setID(String ID) {

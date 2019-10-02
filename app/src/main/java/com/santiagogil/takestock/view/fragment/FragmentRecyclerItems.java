@@ -10,7 +10,6 @@ import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.view.WindowManager;
-import android.widget.TextView;
 import android.widget.Toast;
 
 import com.santiagogil.takestock.R;
@@ -49,9 +48,7 @@ public class FragmentRecyclerItems extends Fragment implements FragmentLifecycle
         bundle.putInt(POSITION, position);
         bundle.putString(FILTER, filter);
         bundle.putSerializable(BEHAVIOURGETITEMLIST, behaviourGetItemList);
-
         fragmentRecyclerItems.setArguments(bundle);
-
         return fragmentRecyclerItems;
     }
 
@@ -62,64 +59,74 @@ public class FragmentRecyclerItems extends Fragment implements FragmentLifecycle
     public View onCreateView(LayoutInflater inflater, final ViewGroup container, Bundle savedInstanceState) {
 
         final View view = inflater.inflate(R.layout.fragment_item_list, container, false);
-
         bundle = getArguments();
-
         behaviourGetItemList = (BehaviourGetItemList) bundle.getSerializable(BEHAVIOURGETITEMLIST);
 
-        this.getActivity().getWindow().setSoftInputMode(WindowManager.LayoutParams.SOFT_INPUT_STATE_HIDDEN);
-
+        hideKeyboard();
         loadRecyclerView(view);
-
-        itemList = behaviourGetItemList.getItemList(getContext());
-        itemRecyclerAdapter.setItems(itemList);
-        itemRecyclerAdapter.notifyDataSetChanged();
-
+        updateItemList();
         updateRecyclerViewPosition();
-
         updateListWithFilter();
 
         return view;
     }
 
+    private void updateItemList() {
+        itemList = behaviourGetItemList.getItemList(getContext());
+        itemRecyclerAdapter.setItems(itemList);
+        itemRecyclerAdapter.notifyDataSetChanged();
+    }
+
+    private void hideKeyboard() {
+        this.getActivity().getWindow().setSoftInputMode(WindowManager.LayoutParams.SOFT_INPUT_STATE_HIDDEN);
+    }
+
     private void updateRecyclerViewPosition() {
 
-        if (bundle != null) {
-
+        if (isNoBundleAttached()) {
             Integer position = null;
-
             try {
                 position = bundle.getInt(POSITION);
             } catch (Exception e) {
                 Toast.makeText(getContext(), "No position in bundle", Toast.LENGTH_SHORT).show();
             }
 
-            if (position <= itemRecyclerAdapter.getItems().size()) {
-
+            if (isValidPositionSelected(position)) {
                 recyclerView.scrollToPosition(position);
-
-            } else if (position > 0) {
+            } else if (isInvalidPositionSelected(position)) {
                 recyclerView.scrollToPosition(position - 1);
             }
         }
     }
 
-    private void loadRecyclerView(View view) {
+    private boolean isInvalidPositionSelected(Integer position) {
+        return position > 0;
+    }
 
+    private boolean isValidPositionSelected(Integer position) {
+        return position <= itemRecyclerAdapter.getItems().size();
+    }
+
+    private boolean isNoBundleAttached() {
+        return bundle != null;
+    }
+
+    private void loadRecyclerView(View view) {
         recyclerView = (RecyclerView) view.findViewById(R.id.recyclerViewItems);
         itemRecyclerAdapter = new ItemRecyclerAdapter(getContext(), new OnItemChangedListener(), new OnItemTouchedListener());
         recyclerView.setAdapter(itemRecyclerAdapter);
         LinearLayoutManager linearLayoutManager = new LinearLayoutManager(getContext());
         linearLayoutManager.setOrientation(LinearLayoutManager.VERTICAL);
         recyclerView.setLayoutManager(linearLayoutManager);
-
     }
 
     public interface FragmentActivityCommunicator {
 
-        void onItemTouched(Item touchedItem, Integer touchedPosition,
-                           BehaviourGetItemList behaviourGetItemList, TextView textViewItemName,
-                           TextView textViewItemStock, TextView textViewItemIndependence);
+        void onItemTouched(
+                Item touchedItem,
+                Integer touchedPosition,
+                BehaviourGetItemList behaviourGetItemList
+        );
 
         void updateActionBarTitle(String title);
 
@@ -129,25 +136,27 @@ public class FragmentRecyclerItems extends Fragment implements FragmentLifecycle
 
         @Override
         public void onClick(View view) {
+            updateReciclerView(view);
+        }
 
+        private void updateReciclerView(View view) {
             ItemsController itemsController = new ItemsController();
             Integer touchedPosition = recyclerView.getChildAdapterPosition(view);
             Item touchedItem = itemRecyclerAdapter.getItemAtPosition(touchedPosition);
             Item updatedItem = itemsController.getItemFromLocalDatabase(getContext(), touchedItem.getID());
             updateRecyclerAdapterItem(touchedPosition, updatedItem);
             itemRecyclerAdapter.notifyDataSetChanged();
-
         }
 
         private void updateRecyclerAdapterItem(Integer itemPosition, Item updatedItem) {
-            itemRecyclerAdapter.getItemAtPosition(itemPosition).setActive(updatedItem.getActive());
+            itemRecyclerAdapter.getItemAtPosition(itemPosition).setActive(updatedItem.isActive());
             itemRecyclerAdapter.getItemAtPosition(itemPosition).setConsumptionRate(updatedItem.getConsumptionRate());
             itemRecyclerAdapter.getItemAtPosition(itemPosition).setImage(updatedItem.getImage());
             itemRecyclerAdapter.getItemAtPosition(itemPosition).setMinimumPurchaceQuantity(updatedItem.getMinimumPurchaceQuantity());
             itemRecyclerAdapter.getItemAtPosition(itemPosition).setName(updatedItem.getName());
             itemRecyclerAdapter.getItemAtPosition(itemPosition).setStock(updatedItem.getStock());
             itemRecyclerAdapter.getItemAtPosition(itemPosition).setPrice(updatedItem.getPrice());
-            itemRecyclerAdapter.getItemAtPosition(itemPosition).setCart(updatedItem.getCart());
+            itemRecyclerAdapter.getItemAtPosition(itemPosition).setUnitsInCart(updatedItem.getUnitsInCart());
         }
     }
 
@@ -157,12 +166,8 @@ public class FragmentRecyclerItems extends Fragment implements FragmentLifecycle
         public void onClick(View view) {
             Integer touchedPosition = recyclerView.getChildAdapterPosition(view);
             Item touchedItem = itemRecyclerAdapter.getItemAtPosition(touchedPosition);
-            TextView textViewItemName = (TextView) view.findViewById(R.id.text_view_item_name);
-            TextView textViewItemStock = (TextView) view.findViewById(R.id.text_view_item_stock);
-            TextView textViewItemIndependence = (TextView) view.findViewById(R.id.text_view_item_independence);
             fragmentActivityCommunicator.onItemTouched(touchedItem, touchedPosition,
-                    (BehaviourGetItemList) bundle.getSerializable(BEHAVIOURGETITEMLIST),
-                    textViewItemName, textViewItemStock, textViewItemIndependence);
+                    (BehaviourGetItemList) bundle.getSerializable(BEHAVIOURGETITEMLIST));
 
         }
     }
@@ -198,27 +203,44 @@ public class FragmentRecyclerItems extends Fragment implements FragmentLifecycle
         String filter = getArguments().getString(FILTER);
         List<Item> filteredItemList = new ArrayList<>();
 
-        if(filter.equals("") || filter.equals(null)){
-            filteredItemList.clear();
-            filteredItemList.addAll(itemList);
-        } else{
+        if(isNoFilterSelected(filter))
+            getUnfilteredList(filteredItemList);
+        else{
             filteredItemList.clear();
             for(Item item : itemList){
-                if(item.getName().toLowerCase().contains(filter.toLowerCase())){
+                if(itemNameMatchesFilter(filter, item))
                     filteredItemList.add(item);
-
-                }
             }
-            if(filteredItemList.size() == 0){
-                Item anItem = new Item("*** No Items Found ***");
-                filteredItemList.add(anItem);
-            }
+            if(filteredListIsEmpty(filteredItemList))
+                showNoItemsFoundItem(filteredItemList);
             itemRecyclerAdapter.setItems(filteredItemList);
             itemRecyclerAdapter.notifyDataSetChanged();
         }
 
 
 
+    }
+
+    private boolean itemNameMatchesFilter(String filter, Item item) {
+        return item.getName().toLowerCase().contains(filter.toLowerCase());
+    }
+
+    private void showNoItemsFoundItem(List<Item> filteredItemList) {
+        Item anItem = new Item("*** No Items Found ***");
+        filteredItemList.add(anItem);
+    }
+
+    private boolean filteredListIsEmpty(List<Item> filteredItemList) {
+        return filteredItemList.size() == 0;
+    }
+
+    private void getUnfilteredList(List<Item> filteredItemList) {
+        filteredItemList.clear();
+        filteredItemList.addAll(itemList);
+    }
+
+    private boolean isNoFilterSelected(String filter) {
+        return filter.equals("") || filter.equals(null);
     }
 
     public String getTitle() {

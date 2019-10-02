@@ -18,7 +18,7 @@ public class MethodRepository {
             DatabaseReference defaultItem = defaultItemListEnglish.child(itemID);
             Item item = new Item(itemID);
 
-            defaultItem.child(DatabaseHelper.ACTIVE).setValue(item.getActive());
+            defaultItem.child(DatabaseHelper.ACTIVE).setValue(item.isActive());
             defaultItem.child(DatabaseHelper.CONSUMPTIONRATE).setValue(item.getConsumptionRate());
             defaultItem.child(DatabaseHelper.ID).setValue(itemID);
             defaultItem.child(DatabaseHelper.MINIMUMPURCHACEQUANTITY).setValue(item.getMinimumPurchaceQuantity());

@@ -38,12 +38,14 @@ public class FragmentItemsViewPager extends Fragment {
 
         bundle = getArguments();
         itemsViewPager = view.findViewById(R.id.itemsViewPager);
-        itemsViewPagerAdapter = new ItemsViewPagerAdapter(getChildFragmentManager(), getContext(),
-                (BehaviourGetItemList) Objects.requireNonNull(bundle.getSerializable(FragmentRecyclerItems.BEHAVIOURGETITEMLIST)));
+        itemsViewPagerAdapter = new ItemsViewPagerAdapter(
+                getChildFragmentManager(),
+                getContext(),
+                (BehaviourGetItemList) Objects.requireNonNull(bundle.getSerializable(FragmentRecyclerItems.BEHAVIOURGETITEMLIST))
+            );
         itemsViewPager.setAdapter(itemsViewPagerAdapter);
         currentPosition = itemsViewPagerAdapter.getTouchedItemPosition(bundle.getString(ITEMID));
         itemsViewPager.setCurrentItem(currentPosition);
-
         itemsViewPagerAdapter.notifyDataSetChanged();
 
         itemsViewPager.addOnPageChangeListener(new ViewPager.OnPageChangeListener() {
@@ -93,6 +95,11 @@ public class FragmentItemsViewPager extends Fragment {
         FragmentItemDetail fragmentItemDetail = (FragmentItemDetail) this.itemsViewPagerAdapter.getItem(currentPosition);
         fragmentItemDetail.onItemDeleted();
         listener.updateToolbarIcon(getCurrentItem());
+    }
+
+    public void editItem() {
+        FragmentItemDetail fragmentItemDetail = (FragmentItemDetail) this.itemsViewPagerAdapter.getItem(currentPosition);
+        fragmentItemDetail.editItem();
     }
 
     public Item getCurrentItem(){

@@ -29,45 +29,63 @@ public class OnboardingActivity extends AppCompatActivity implements LoginFragme
 
         appPreferences = PreferenceManager.getDefaultSharedPreferences(this);
         isAppInstalled = appPreferences.getBoolean("isAppInstalled",false);
-        if(isAppInstalled==false){
+        if(!isAppInstalled){
 
-            //  create short code
-
-            Intent shortcutIntent = new Intent(getApplicationContext(),MainActivityCommunicator.class);
-            shortcutIntent.setAction(Intent.ACTION_MAIN);
-            Intent intent = new Intent();
-            intent.putExtra(Intent.EXTRA_SHORTCUT_INTENT, shortcutIntent);
-            intent.putExtra(Intent.EXTRA_SHORTCUT_NAME, "AppShortcut");
-            intent.putExtra(Intent.EXTRA_SHORTCUT_ICON_RESOURCE, Intent.ShortcutIconResource
-                    .fromContext(getApplicationContext(), R.mipmap.ic_launcher));
-            intent.setAction("com.android.launcher.action.INSTALL_SHORTCUT");
-            getApplicationContext().sendBroadcast(intent);
+            createShortcut();
 
             //Make preference true
 
-            SharedPreferences.Editor editor = appPreferences.edit();
-            editor.putBoolean("isAppInstalled", true);
-            editor.commit();
+            updatePreferencesAppIsInstalled();
         }
 
 
 
         fragmentManager = getSupportFragmentManager();
         mAuth = FirebaseAuth.getInstance();
-        if(mAuth.getCurrentUser() == null){
+        if(noCurrentUser()){
 
-            LoginFragment loginFragment = new LoginFragment();
-            loginFragment.setOnboardingActivityCommunicator(OnboardingActivity.this);
-            FragmentTransaction fragmentTransaction = fragmentManager.beginTransaction();
-            fragmentTransaction.replace(R.id.fragment_holder, loginFragment);
-            fragmentTransaction.commit();
+            openLoginFragment();
 
         } else{
-            Intent intent = new Intent(OnboardingActivity.this, MainActivityCommunicator.class);
-            intent.addFlags(Intent.FLAG_ACTIVITY_CLEAR_TOP);
-            startActivity(intent);
-            finish();
+            goToMainActivity();
         }
+    }
+
+    private void goToMainActivity() {
+        Intent intent = new Intent(OnboardingActivity.this, MainActivityCommunicator.class);
+        intent.addFlags(Intent.FLAG_ACTIVITY_CLEAR_TOP);
+        startActivity(intent);
+        finish();
+    }
+
+    private void openLoginFragment() {
+        LoginFragment loginFragment = new LoginFragment();
+        loginFragment.setOnboardingActivityCommunicator(OnboardingActivity.this);
+        FragmentTransaction fragmentTransaction = fragmentManager.beginTransaction();
+        fragmentTransaction.replace(R.id.fragment_holder, loginFragment);
+        fragmentTransaction.commit();
+    }
+
+    private boolean noCurrentUser() {
+        return mAuth.getCurrentUser() == null;
+    }
+
+    private void updatePreferencesAppIsInstalled() {
+        SharedPreferences.Editor editor = appPreferences.edit();
+        editor.putBoolean("isAppInstalled", true);
+        editor.commit();
+    }
+
+    private void createShortcut() {
+        Intent shortcutIntent = new Intent(getApplicationContext(), MainActivityCommunicator.class);
+        shortcutIntent.setAction(Intent.ACTION_MAIN);
+        Intent intent = new Intent();
+        intent.putExtra(Intent.EXTRA_SHORTCUT_INTENT, shortcutIntent);
+        intent.putExtra(Intent.EXTRA_SHORTCUT_NAME, "AppShortcut");
+        intent.putExtra(Intent.EXTRA_SHORTCUT_ICON_RESOURCE, Intent.ShortcutIconResource
+                .fromContext(getApplicationContext(), R.mipmap.ic_launcher));
+        intent.setAction("com.android.launcher.action.INSTALL_SHORTCUT");
+        getApplicationContext().sendBroadcast(intent);
     }
 
 

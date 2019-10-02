@@ -37,14 +37,12 @@ public class ItemsViewPagerAdapter extends FragmentStatePagerAdapter {
     }
 
     public void populateFragmentList(){
-
         for(Item item : itemList){
             fragmentList.add(FragmentItemDetail.provideFragment(item, itemList.indexOf(item)));
         }
     }
 
     public Integer getTouchedItemPosition(String itemID){
-
         for (Item item : itemList){
             if(item.getID().equals(itemID)){
                 return itemList.indexOf(item);

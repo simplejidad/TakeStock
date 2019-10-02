@@ -12,13 +12,10 @@ import java.util.List;
 public class ItemListsViewPagerAdapter extends FragmentStatePagerAdapter {
 
     private List<FragmentRecyclerItems> fragmentRecyclerItems;
-    //private FragmentRecyclerItems.FragmentActivityCommunicator fragmentActivityCommunicator;
-
 
     public ItemListsViewPagerAdapter(FragmentManager fm) {
         super(fm);
         fragmentRecyclerItems = new ArrayList<>();
-        //this.fragmentActivityCommunicator = fragmentActivityCommunicator;
     }
 
     @Override
@@ -38,14 +35,9 @@ public class ItemListsViewPagerAdapter extends FragmentStatePagerAdapter {
     public void updateFragmentsWithFilter(String filter){
         for(FragmentRecyclerItems fragmentRecyclerItems : this.fragmentRecyclerItems){
             if(fragmentRecyclerItems != null){
-
                 fragmentRecyclerItems.getArguments().putString(FragmentRecyclerItems.FILTER, filter);
-
-                if (fragmentRecyclerItems.getItemList() != null){
-
+                if (fragmentRecyclerItems.getItemList() != null)
                     fragmentRecyclerItems.updateListWithFilter();
-
-                }
             }
         }
     }

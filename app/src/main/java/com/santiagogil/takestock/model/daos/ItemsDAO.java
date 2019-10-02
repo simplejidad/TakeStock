@@ -45,106 +45,97 @@ public class ItemsDAO {
     }
 
     public void updateItemConsumptionRateInLocalDB(String itemID, Integer consumptionRate){
-
         SQLiteDatabase database = new DatabaseHelper(context).getWritableDatabase();
-
         ContentValues contentValues = new ContentValues();
         contentValues.put(DatabaseHelper.CONSUMPTIONRATE, consumptionRate);
-
-        database.update(DatabaseHelper.TABLEITEMS, contentValues, DatabaseHelper.ID + " = " + '"' + itemID + '"', null);
-
+        database.update(
+                DatabaseHelper.TABLEITEMS,
+                contentValues, DatabaseHelper.ID + " = " + '"' + itemID + '"',
+                null
+            );
         database.close();
-
     }
 
     public void addItemToLocalDB(Item item){
-
         SQLiteDatabase database = databaseHelper.getWritableDatabase();
-
         ContentValues row = new ContentValues();
 
-        if(item.getID() != null){
+        if(item.getID() != null)
             row.put(DatabaseHelper.ID, item.getID());
-        } else {
+        else
             row.put(DatabaseHelper.ID, UUID.randomUUID().toString());
-        }
+
         row.put(DatabaseHelper.USERID, firebaseHelper.getmAuth().getCurrentUser().getUid());
         row.put(DatabaseHelper.NAME, item.getName());
         row.put(DatabaseHelper.STOCK, item.getStock());
         row.put(DatabaseHelper.IMAGE, item.getImage());
         row.put(DatabaseHelper.MINIMUMPURCHACEQUANTITY, item.getMinimumPurchaceQuantity());
         row.put(DatabaseHelper.CONSUMPTIONRATE, item.getConsumptionRate());
-        row.put(DatabaseHelper.ACTIVE, booleanToInteger(item.getActive()));
+        row.put(DatabaseHelper.ACTIVE, booleanToInteger(item.isActive()));
         row.put(DatabaseHelper.PRICE, item.getPrice());
 
         database.insert(DatabaseHelper.TABLEITEMS, null, row);
-
         database.close();
     }
 
 
     public void addItemToFirebase(Item item){
-
-        firebaseHelper.getUserDB().child(DatabaseHelper.TABLEITEMS).child(item.getID()).child(DatabaseHelper.ID).setValue(item.getID());
-        firebaseHelper.getUserDB().child(DatabaseHelper.TABLEITEMS).child(item.getID()).child(DatabaseHelper.USERID).setValue(firebaseHelper.getmAuth().getCurrentUser().getUid());
-        updateItemDetails(item.getID(), item.getName(), item.getStock(), item.getConsumptionRate(), item.getMinimumPurchaceQuantity(), item.getActive(), item.getPrice(), item.getCart());
-
+        firebaseHelper
+                .getUserDB()
+                .child(DatabaseHelper.TABLEITEMS)
+                .child(item.getID())
+                .child(DatabaseHelper.ID)
+                .setValue(item.getID());
+        firebaseHelper
+                .getUserDB()
+                .child(DatabaseHelper.TABLEITEMS)
+                .child(item.getID())
+                .child(DatabaseHelper.USERID)
+                .setValue(firebaseHelper.getmAuth().getCurrentUser().getUid());
+        updateItemDetails(
+                item.getID(), item.getName(), item.getStock(), item.getConsumptionRate(),
+                item.getMinimumPurchaceQuantity(), item.isActive(), item.getPrice(), item.getUnitsInCart()
+        );
     }
 
     public List<Item> sortItemsAlphabetically(List<Item> itemList) {
-
         if(itemList.size() > 1){
-
             Collections.sort(itemList, new Comparator<Item>(){
                 public int compare (Item o1, Item o2){
                     return o1.getName().compareTo(o2.getName());
                 }
             });
         }
-
-
         return itemList;
-
     }
 
     public Item buildItemFromQuerry(String querry){
-
         SQLiteDatabase database = databaseHelper.getReadableDatabase();
         Cursor cursor = database.rawQuery(querry, null);
-
         if (cursor.moveToNext()) {
-
             Item item = buildItemFromCursor(cursor);
-
             cursor.close();
             database.close();
-
             return item;
-
         } else {
             cursor.close();
             database.close();
             return null;
         }
-
     }
 
     public Item getItemFromLocalDBUsingItemName(String itemName){
-
         String selectQuery = "SELECT * FROM " + DatabaseHelper.TABLEITEMS + " WHERE " + DatabaseHelper.NAME + " = " + '"'
                 +  itemName + '"' + " AND " + DatabaseHelper.USERID + " = " + '"'
                 +  firebaseHelper.getCurrentUserID() + '"'  ;
 
         return buildItemFromQuerry(selectQuery);
-
     }
 
     public Item getItemFromLocalDB(String itemID){
-
         String selectQuery = "SELECT * FROM " + DatabaseHelper.TABLEITEMS + " WHERE " + DatabaseHelper.ID + " = " + '"'
                 +  itemID + '"' + " AND " + DatabaseHelper.USERID + " = " + '"'
                 +  firebaseHelper.getCurrentUserID() + '"';
-
 
         return buildItemFromQuerry(selectQuery);
     }
@@ -177,25 +168,24 @@ public class ItemsDAO {
         String selectQuery = "SELECT * FROM " + DatabaseHelper.TABLEITEMS + " WHERE " + DatabaseHelper.USERID + " = " + '"'
                 +  firebaseHelper.getCurrentUserID() + '"';
 
-        return builItemListFromQuerry(selectQuery);
+        return buildItemListFromQuerry(selectQuery);
     }
 
     public Item buildItemFromCursor(Cursor cursor){
+        Item item = new Item();
 
-            Item item = new Item();
-            item.setID(cursor.getString(cursor.getColumnIndex(DatabaseHelper.ID)));
-            item.setUserID(cursor.getString(cursor.getColumnIndex(DatabaseHelper.USERID)));
-            item.setImage(cursor.getInt(cursor.getColumnIndex(DatabaseHelper.IMAGE)));
-            item.setMinimumPurchaceQuantity(cursor.getInt(cursor.getColumnIndex(DatabaseHelper.MINIMUMPURCHACEQUANTITY)));
-            item.setName(cursor.getString(cursor.getColumnIndex(DatabaseHelper.NAME)));
-            item.setStock(cursor.getInt(cursor.getColumnIndex(DatabaseHelper.STOCK)));
-            item.setConsumptionRate(cursor.getInt(cursor.getColumnIndex(DatabaseHelper.CONSUMPTIONRATE)));
-            item.setPrice(cursor.getDouble(cursor.getColumnIndex(DatabaseHelper.PRICE)));
-            item.setCart(cursor.getInt(cursor.getColumnIndex(DatabaseHelper.CART)));
-            item.setActive(cursor.getInt(cursor.getColumnIndex(DatabaseHelper.ACTIVE)) > 0);
+        item.setID(cursor.getString(cursor.getColumnIndex(DatabaseHelper.ID)));
+        item.setUserID(cursor.getString(cursor.getColumnIndex(DatabaseHelper.USERID)));
+        item.setImage(cursor.getInt(cursor.getColumnIndex(DatabaseHelper.IMAGE)));
+        item.setMinimumPurchaceQuantity(cursor.getInt(cursor.getColumnIndex(DatabaseHelper.MINIMUMPURCHACEQUANTITY)));
+        item.setName(cursor.getString(cursor.getColumnIndex(DatabaseHelper.NAME)));
+        item.setStock(cursor.getInt(cursor.getColumnIndex(DatabaseHelper.STOCK)));
+        item.setConsumptionRate(cursor.getInt(cursor.getColumnIndex(DatabaseHelper.CONSUMPTIONRATE)));
+        item.setPrice(cursor.getDouble(cursor.getColumnIndex(DatabaseHelper.PRICE)));
+        item.setUnitsInCart(cursor.getInt(cursor.getColumnIndex(DatabaseHelper.CART)));
+        item.setActive(cursor.getInt(cursor.getColumnIndex(DatabaseHelper.ACTIVE)) > 0);
 
-            return item;
-
+        return item;
     }
 
     public List<Item> getActiveItemsFromLocalDB() {
@@ -204,31 +194,24 @@ public class ItemsDAO {
                 + " = " + '"' + DatabaseHelper.ACTIVE_TRUE + '"' + " AND " + DatabaseHelper.USERID + " = " + '"'
                 +  firebaseHelper.getCurrentUserID() + '"';
 
-        return builItemListFromQuerry(selectQuery);
+        return buildItemListFromQuerry(selectQuery);
     }
 
-    public List<Item> builItemListFromQuerry(String querry){
-
+    public List<Item> buildItemListFromQuerry(String querry){
         SQLiteDatabase database = databaseHelper.getReadableDatabase();
         Cursor cursor = database.rawQuery(querry, null);
 
         List<Item> items = new ArrayList<>();
 
         while (cursor.moveToNext()) {
-
             Item item = buildItemFromCursor(cursor);
-
-            if(!(item.getName() == null)){
-
+            if(!(item.getName() == null))
                 items.add(buildItemFromCursor(cursor));
-            }
-
         }
         cursor.close();
         database.close();
 
         return items;
-
     }
 
     public List<Item> getInactiveItemsFromLocalDB() {
@@ -237,45 +220,34 @@ public class ItemsDAO {
                 + " = " + '"'+ DatabaseHelper.ACTIVE_FALSE + '"' + " AND " + DatabaseHelper.USERID + " = " + '"'
                 +  firebaseHelper.getCurrentUserID() + '"';
 
-        return builItemListFromQuerry(selectQuery);
+        return buildItemListFromQuerry(selectQuery);
     }
 
     public void increaseItemStock(Item item){
-
         Integer newStock = item.getStock() + item.getMinimumPurchaceQuantity();
         updateItemStock(item, newStock);
         PurchacesController purchacesController = new PurchacesController();
         purchacesController.addPurchaceToDatabases(context, item);
-
     }
 
     public void increaseItemStock(String itemID){
-
         Item item = getItemFromLocalDB(itemID);
-
         Integer newStock = item.getStock() + item.getMinimumPurchaceQuantity();
-
         updateItemStock(item, newStock);
-
     }
 
     public void decreaseItemStock(Item item){
-
         Integer newStock = item.getStock() - 1;
-
         updateItemStock(item, newStock);
-
     }
 
     private void updateItemStock(final Item item, final Integer newStock){
-
         SQLiteDatabase database =  databaseHelper.getWritableDatabase();
 
         ContentValues contentValues = new ContentValues();
         contentValues.put(DatabaseHelper.STOCK, newStock);
 
         database.update(DatabaseHelper.TABLEITEMS,  contentValues, DatabaseHelper.ID + " = " + '"' +  item.getID() + '"' , null);
-
         database.close();
 
         firebaseHelper.getUserDB().child(DatabaseHelper.TABLEITEMS).child(item.getID()).child(DatabaseHelper.STOCK).setValue(newStock);
@@ -283,14 +255,12 @@ public class ItemsDAO {
     }
 
     private void updateItemCart(final Item item, final Integer itemCart){
-
         SQLiteDatabase database =  databaseHelper.getWritableDatabase();
 
         ContentValues contentValues = new ContentValues();
         contentValues.put(DatabaseHelper.CART, itemCart);
 
         database.update(DatabaseHelper.TABLEITEMS,  contentValues, DatabaseHelper.ID + " = " + '"' +  item.getID() + '"' , null);
-
         database.close();
 
         firebaseHelper.getUserDB().child(DatabaseHelper.TABLEITEMS).child(item.getID()).child(DatabaseHelper.CART).setValue(itemCart);
@@ -322,11 +292,10 @@ public class ItemsDAO {
     }
 
     private Integer booleanToInteger(Boolean activeStatus){
-        if(activeStatus){
+        if(activeStatus)
             return 1;
-        } else {
+        else
             return 0;
-        }
     }
 
     private void updateItemDetailsOnFirebase(
@@ -346,62 +315,46 @@ public class ItemsDAO {
     }
 
     public void toggleItemIsActiveInDatabases(String itemID){
-
         Item item = getItemFromLocalDB(itemID);
-
         toggleItemIsActiveInLocalDB(item);
         toggleItemIsActiveOnFirebase(item);
-
     }
 
     private void toggleItemIsActiveOnFirebase(Item item) {
-
         DatabaseReference myRef = firebaseHelper.getUserDB();
-
-        if (item.getActive()){
-
-            myRef.child(DatabaseHelper.TABLEITEMS).child(item.getID()).child(DatabaseHelper.ACTIVE).setValue(false);
-
-        } else {
-            myRef.child(DatabaseHelper.TABLEITEMS).child(item.getID()).child(DatabaseHelper.ACTIVE).setValue(true);
+        if (item.isActive())
+            myRef.child(DatabaseHelper.TABLEITEMS).child(item.getID())
+                    .child(DatabaseHelper.ACTIVE).setValue(false);
+        else {
+            myRef.child(DatabaseHelper.TABLEITEMS).child(item.getID())
+                    .child(DatabaseHelper.ACTIVE).setValue(true);
         }
     }
 
     private void toggleItemIsActiveInLocalDB(Item item){
+        SQLiteDatabase database =  databaseHelper.getWritableDatabase();
+        ContentValues contentValues = new ContentValues();
 
-        if (item.getActive()){
-
-            SQLiteDatabase database =  databaseHelper.getWritableDatabase();
-
-            ContentValues contentValues = new ContentValues();
+        if (item.isActive())
             contentValues.put(DatabaseHelper.ACTIVE, DatabaseHelper.ACTIVE_FALSE);
-
-            database.update(DatabaseHelper.TABLEITEMS,  contentValues, DatabaseHelper.ID + " = " + '"' + item.getID() + '"' , null);
-
-            database.close();
-
-        } else {
-            SQLiteDatabase database =  databaseHelper.getWritableDatabase();
-
-            ContentValues contentValues = new ContentValues();
+        else
             contentValues.put(DatabaseHelper.ACTIVE, DatabaseHelper.ACTIVE_TRUE);
 
-            database.update(DatabaseHelper.TABLEITEMS,  contentValues, DatabaseHelper.ID + " = " + '"' + item.getID() + '"' , null);
-
-            database.close();
-        }
+        database.update(
+                DatabaseHelper.TABLEITEMS,
+                contentValues, DatabaseHelper.ID + " = " + '"' + item.getID() + '"' ,
+                null
+                );
+        database.close();
     }
 
     public void updateItemConsumptionRateInDatabases(String itemID, Integer consumptionRate){
-
         updateItemConsumptionRateInLocalDB(itemID, consumptionRate);
         updateItemConsumptionRateInFirebase(itemID, consumptionRate);
     }
 
     private void updateItemConsumptionRateInFirebase(String itemID, Integer consumptionRate){
-
         firebaseHelper.getUserDB().child(DatabaseHelper.TABLEITEMS).child(itemID).child(DatabaseHelper.CONSUMPTIONRATE).setValue(consumptionRate);
-
     }
 
     public List<Item> getActiveItemsByIndependence(Integer independence) {
@@ -413,7 +366,6 @@ public class ItemsDAO {
                 itemsByIndependence.add(item);
               }
         }
-
         return itemsByIndependence;
     }
 
@@ -427,13 +379,10 @@ public class ItemsDAO {
                 }
             });
         }
-
         return itemList;
-
     }
 
     public Integer getItemConsumptionRate(String itemID) {
-
         return getItemFromLocalDB(itemID).getConsumptionRate();
     }
 
@@ -444,20 +393,17 @@ public class ItemsDAO {
                 +  firebaseHelper.getCurrentUserID() + '"' + " AND " + DatabaseHelper.STOCK + " = " + '"'
                 +  0 + '"' ;
 
-        return builItemListFromQuerry(selectQuery);
+        return buildItemListFromQuerry(selectQuery);
     }
 
     public List<Item> sortItemsByConsumptionRate(List<Item> itemList) {
-
         if(itemList.size() > 1){
-
             Collections.sort(itemList, new Comparator<Item>(){
                 public int compare (Item o1, Item o2){
                     return o1.getConsumptionRate().compareTo(o2.getConsumptionRate());
                 }
             });
         }
-
         return itemList;
     }
 
@@ -485,31 +431,24 @@ public class ItemsDAO {
     }
 
     public void increaseItemCart(Item item) {
-
-        Integer newCartStock = item.getCart() + item.getMinimumPurchaceQuantity();
-
+        Integer newCartStock = item.getUnitsInCart() + item.getMinimumPurchaceQuantity();
         updateItemCart(item, newCartStock);
-
     }
 
     public void decreaseItemCart(Item item) {
-
-        Integer newCart = item.getCart() - 1;
-
+        Integer newCart = item.getUnitsInCart() - 1;
         updateItemCart(item, newCart);
     }
 
     public void cartToStock(Item item) {
-
         PurchacesController purchacesController = new PurchacesController();
-        purchacesController.addPurchaceFromCart(context, item, item.getCart());
-        updateItemStock(item, item.getStock() + item.getCart());
+        purchacesController.addPurchaceFromCart(context, item, item.getUnitsInCart());
+        updateItemStock(item, item.getStock() + item.getUnitsInCart());
         updateItemCart(item, 0);
     }
 
     public List<Item> getAllItems() {
         String selectQuery = "SELECT * FROM " + DatabaseHelper.TABLEITEMS ;
-
-        return builItemListFromQuerry(selectQuery);
+        return buildItemListFromQuerry(selectQuery);
     }
 }

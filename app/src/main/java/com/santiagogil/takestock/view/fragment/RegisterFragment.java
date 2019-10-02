@@ -1,9 +1,9 @@
 package com.santiagogil.takestock.view.fragment;
 
+import android.os.Bundle;
 import android.support.annotation.NonNull;
 import android.support.design.widget.TextInputLayout;
 import android.support.v4.app.Fragment;
-import android.os.Bundle;
 import android.text.Editable;
 import android.text.TextUtils;
 import android.text.TextWatcher;
@@ -25,7 +25,6 @@ import com.santiagogil.takestock.model.pojos.Item;
 import com.santiagogil.takestock.util.DatabaseHelper;
 import com.santiagogil.takestock.util.FirebaseHelper;
 import com.santiagogil.takestock.util.ResultListener;
-import com.santiagogil.takestock.view.fragment.LoginFragment;
 
 import java.util.List;
 
@@ -203,13 +202,10 @@ public class RegisterFragment extends Fragment {
     }
 
     public interface OnboardingActivityCommunicator {
-
         void startMainActivity();
-
     }
 
     private boolean isValidPassword(CharSequence target) {
-
         return target.length()>5;
     }
 

@@ -22,7 +22,6 @@ import android.view.WindowManager;
 import android.view.inputmethod.InputMethodManager;
 import android.widget.EditText;
 import android.widget.ImageView;
-import android.widget.TextView;
 import android.widget.Toast;
 
 
@@ -69,6 +68,11 @@ public class MainActivityCommunicator extends AppCompatActivity implements Fragm
         fragmentItemsViewPager.deleteItem();
     }
 
+    @OnClick(R.id.buttonEditItem)
+    void editItem(){
+        fragmentItemsViewPager.editItem();
+    }
+
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_main);
@@ -76,13 +80,79 @@ public class MainActivityCommunicator extends AppCompatActivity implements Fragm
         ButterKnife.bind(this, this);
 
         context = this;
-
         toolbar = findViewById(R.id.toolbar);
         toolbarEditText = toolbar.findViewById(R.id.toolbar_edit_text_search);
 
-        bottomNavigationView.setPadding(0,0,0,0);
+        setUI();
 
-        //addGroceriesListToCurrentUsers();
+        authStateListener = new FirebaseAuth.AuthStateListener() {
+            @Override
+            public void onAuthStateChanged(@NonNull FirebaseAuth firebaseAuth) {
+                if (isNoCurrentUser(firebaseAuth)) {
+                    goToOnBoardingActivity();
+                }
+            }
+        };
+
+        fAuth = FirebaseAuth.getInstance();
+
+        if (isNoCurrentUser(fAuth))
+            goToOnBoardingActivity();
+        else {
+
+            setUpNavigationView();
+            setUpFragmentItemListViewPager();
+
+            updateConsuptionsDataBase();
+        }
+    }
+
+    private void updateConsuptionsDataBase() {
+        ConsumptionsController consumptionsController = new ConsumptionsController();
+        consumptionsController.updateConsumptionsDatabase(this, new ResultListener<List<Consumption>>() {
+            @Override
+            public void finish(List<Consumption> result) {
+
+            }
+        });
+    }
+
+    private void setUpFragmentItemListViewPager() {
+        fragmentItemListsViewPager = new FragmentItemListsViewPager();
+        Bundle bundle = new Bundle();
+        bundle.putString(FragmentRecyclerItems.FILTER, filter);
+        fragmentItemListsViewPager.setArguments(bundle);
+        fragmentItemListsViewPager.setFragmentActivityCommunicator(MainActivityCommunicator.this);
+        FragmentManager fragmentManager = this.getSupportFragmentManager();
+        FragmentTransaction fragmentTransaction = fragmentManager.beginTransaction();
+        fragmentTransaction.replace(R.id.fragment_holder, fragmentItemListsViewPager);
+        fragmentTransaction.commit();
+    }
+
+    private void setUpNavigationView() {
+        navigationView =  findViewById(R.id.navigationView);
+        NavigationViewListener navigationViewListener = new NavigationViewListener();
+        navigationView.setNavigationItemSelectedListener(navigationViewListener);
+    }
+
+    private void goToOnBoardingActivity() {
+        Intent intent = new Intent(MainActivityCommunicator.this, OnboardingActivity.class);
+        intent.addFlags(Intent.FLAG_ACTIVITY_CLEAR_TOP);
+        startActivity(intent);
+    }
+
+    private boolean isNoCurrentUser(@NonNull FirebaseAuth firebaseAuth) {
+        return firebaseAuth.getCurrentUser() == null;
+    }
+
+    private void setUI() {
+        setUpBottomNavigationView();
+        setSupportActionBar(toolbar);
+        Objects.requireNonNull(getSupportActionBar()).setDisplayHomeAsUpEnabled(true);
+    }
+
+    private void setUpBottomNavigationView() {
+        bottomNavigationView.setPadding(0,0,0,0);
 
         bottomNavigationView.setMeasureAllChildren(false);
 
@@ -110,66 +180,18 @@ public class MainActivityCommunicator extends AppCompatActivity implements Fragm
                 return true;
             }
         });
-
-
-        setSupportActionBar(toolbar);
-        Objects.requireNonNull(getSupportActionBar()).setDisplayHomeAsUpEnabled(true);
-
-
-        authStateListener = new FirebaseAuth.AuthStateListener() {
-            @Override
-            public void onAuthStateChanged(@NonNull FirebaseAuth firebaseAuth) {
-                if (firebaseAuth.getCurrentUser() == null) {
-                    Intent intent = new Intent(MainActivityCommunicator.this, OnboardingActivity.class);
-                    intent.addFlags(Intent.FLAG_ACTIVITY_CLEAR_TOP);
-                    startActivity(intent);
-                }
-            }
-        };
-
-        fAuth = FirebaseAuth.getInstance();
-
-        if (fAuth.getCurrentUser() == null) {
-
-            Intent intent = new Intent(MainActivityCommunicator.this, OnboardingActivity.class);
-            intent.addFlags(Intent.FLAG_ACTIVITY_CLEAR_TOP);
-            startActivity(intent);
-
-        } else {
-
-            navigationView =  findViewById(R.id.navigationView);
-            NavigationViewListener navigationViewListener = new NavigationViewListener();
-            navigationView.setNavigationItemSelectedListener(navigationViewListener);
-
-
-            fragmentItemListsViewPager = new FragmentItemListsViewPager();
-            Bundle bundle = new Bundle();
-            bundle.putString(FragmentRecyclerItems.FILTER, filter);
-            fragmentItemListsViewPager.setArguments(bundle);
-            fragmentItemListsViewPager.setFragmentActivityCommunicator(MainActivityCommunicator.this);
-            FragmentManager fragmentManager = this.getSupportFragmentManager();
-            FragmentTransaction fragmentTransaction = fragmentManager.beginTransaction();
-            fragmentTransaction.replace(R.id.fragment_holder, fragmentItemListsViewPager);
-            fragmentTransaction.commit();
-
-            ConsumptionsController consumptionsController = new ConsumptionsController();
-            consumptionsController.updateConsumptionsDatabase(this, new ResultListener<List<Consumption>>() {
-                @Override
-                public void finish(List<Consumption> result) {
-
-                }
-            });
-
-            }
-        }
-
+    }
 
 
     @Override
     public void onItemTouched (Item touchedItem, Integer touchedPosition, BehaviourGetItemList
-    behaviourGetItemList, TextView textViewItemName, TextView textViewItemStock,
-                               TextView textViewItemIndependence){
+    behaviourGetItemList){
 
+        goToFragmentItemsViewPagerFragment(touchedItem, touchedPosition, behaviourGetItemList);
+        togleToolBarItems();
+    }
+
+    private void goToFragmentItemsViewPagerFragment(Item touchedItem, Integer touchedPosition, BehaviourGetItemList behaviourGetItemList) {
         fragmentItemsViewPager = new FragmentItemsViewPager();
         Bundle bundle = new Bundle();
         bundle.putSerializable(FragmentItemsViewPager.BEHAVIOURGETITEMLIST, behaviourGetItemList);
@@ -177,14 +199,10 @@ public class MainActivityCommunicator extends AppCompatActivity implements Fragm
         bundle.putInt(FragmentItemsViewPager.POSITION, touchedPosition);
         fragmentItemsViewPager.setArguments(bundle);
         fragmentItemsViewPager.setListener(this);
-
         FragmentTransaction fragmentTransaction = getSupportFragmentManager().beginTransaction();
         fragmentTransaction.replace(R.id.fragment_holder, fragmentItemsViewPager);
         fragmentTransaction.addToBackStack(null);
         fragmentTransaction.commit();
-
-        togleToolBarItems();
-
     }
 
     @Override
@@ -196,28 +214,24 @@ public class MainActivityCommunicator extends AppCompatActivity implements Fragm
         public void onBackPressed () {
             hideKeyboard(this);
             int fragments = getSupportFragmentManager().getBackStackEntryCount();
-            if (fragments == 0) {
+            if (fragments == 0)
                 moveTaskToBack(true);
-            }
             toolbarEditText.setVisibility(View.VISIBLE);
             super.onBackPressed();
         }
 
     @Override
     public void addNewItem(String itemName) {
-
-
         ItemsController itemsController = new ItemsController();
         Item item = new Item(itemName);
         itemsController.addItemToDatabases(this, item);
-        //TODO: check if item already exists
         Fragment fragment = getSupportFragmentManager().findFragmentById(R.id.fragment_holder);
         getSupportFragmentManager().beginTransaction().detach(fragment).attach(fragment).commit();
     }
 
     @Override
     public void updateToolbarIcon(Item item) {
-        if(item.getActive()){
+        if(item.isActive()){
             toolbarDeleteItemButton.setImageResource(R.drawable.ic_delete_black_24dp);
         } else {
             toolbarDeleteItemButton.setImageResource(R.drawable.ic_restore_black_24dp);
@@ -227,13 +241,8 @@ public class MainActivityCommunicator extends AppCompatActivity implements Fragm
     private class NavigationViewListener implements NavigationView.OnNavigationItemSelectedListener {
             @Override
             public boolean onNavigationItemSelected(@NonNull MenuItem item) {
-
-                if (item.getItemId() == R.id.action_logout) {
-
+                if (item.getItemId() == R.id.action_logout)
                     logout();
-                }
-
-
                 return false;
             }
         }
@@ -260,9 +269,7 @@ public class MainActivityCommunicator extends AppCompatActivity implements Fragm
     @Override
     public boolean onCreateOptionsMenu(Menu menu) {
         getMenuInflater().inflate(R.menu.toolbar_main_menu, menu);
-
         addListenerToSearchEditText();
-
         return true;
     }
 
@@ -289,15 +296,12 @@ public class MainActivityCommunicator extends AppCompatActivity implements Fragm
     }
 
     private void addGroceriesListToCurrentUsers() {
-
         final FirebaseHelper firebaseHelper = new FirebaseHelper();
         DatabaseReference databaseReference =  firebaseHelper.getUserDB();
         ItemsController itemsController = new ItemsController();
         List<Item> items = itemsController.getAllItems(context);
         for(Item item: items){
-
             databaseReference.child("Lists").child("Groceries").child("Items").child(item.getID()).setValue(item.getID());
-
         }
 
     }

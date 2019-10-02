@@ -38,7 +38,6 @@ public class ConsumptionRecyclerAdapter extends RecyclerView.Adapter {
 
     @Override
     public void onBindViewHolder(RecyclerView.ViewHolder holder, int position) {
-
         Consumption consumption = consumptionList.get(position);
         ConsumptionViewHolder consumptionViewHolder = (ConsumptionViewHolder) holder;
         consumptionViewHolder.loadConsumption(consumption);
@@ -60,8 +59,11 @@ public class ConsumptionRecyclerAdapter extends RecyclerView.Adapter {
         private ImageButton buttonDelete;
         private Consumption consumption;
 
-        public ConsumptionViewHolder(final Context context, View consumptionView,
-                                     final RecyclerConsumptionsFragmentCommunicator recyclerConsumptionsFragmentCommunicator) {
+        public ConsumptionViewHolder(
+                    final Context context,
+                    View consumptionView,
+                    final RecyclerConsumptionsFragmentCommunicator recyclerConsumptionsFragmentCommunicator
+                ) {
             super(consumptionView);
             textViewConsumptionDate = (TextView) consumptionView.findViewById(R.id.textViewConsumptionDate);
             dateHelper = new DateHelper();
@@ -80,7 +82,6 @@ public class ConsumptionRecyclerAdapter extends RecyclerView.Adapter {
         public void loadConsumption(Consumption consumption){
             this.consumption = consumption;
             textViewConsumptionDate.setText(dateHelper.getFormatedDayFromMiliseconds(consumption.getDate()));
-
         }
     }
 

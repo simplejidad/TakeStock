@@ -11,7 +11,11 @@ import java.util.List;
 
 public class ConsumptionsAndPurchacesViewPagerAdapter extends FragmentStatePagerAdapter {
 
+    private static final int PURCHASES_FRAGMENT_INDEX = 1;
+    private static final int CONSUMPTIONS_FRAGMENT_INDEX = 0;
+
     private List<SimpleRecyclerFragment> fragmentList;
+
 
     public ConsumptionsAndPurchacesViewPagerAdapter(FragmentManager fm, List<SimpleRecyclerFragment> fragmentList) {
         super(fm);
@@ -34,10 +38,10 @@ public class ConsumptionsAndPurchacesViewPagerAdapter extends FragmentStatePager
     }
 
     public void onConsumptionsUpdated(){
-        fragmentList.get(0).onConsumptionsUpdated();
+        fragmentList.get(CONSUMPTIONS_FRAGMENT_INDEX).onConsumptionsUpdated();
     }
 
     public void onPurchacesUpdated(){
-        fragmentList.get(1).onPurchacesUpdated();
+        fragmentList.get(PURCHASES_FRAGMENT_INDEX).onPurchacesUpdated();
     }
 }

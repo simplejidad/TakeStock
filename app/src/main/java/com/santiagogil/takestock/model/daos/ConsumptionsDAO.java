@@ -13,17 +13,14 @@ import com.google.firebase.database.DatabaseReference;
 import com.google.firebase.database.ValueEventListener;
 import com.santiagogil.takestock.controller.ItemsController;
 import com.santiagogil.takestock.model.pojos.Consumption;
-import com.santiagogil.takestock.model.pojos.Item;
 import com.santiagogil.takestock.util.DatabaseHelper;
 import com.santiagogil.takestock.util.FirebaseHelper;
 import com.santiagogil.takestock.util.ResultListener;
 
-import java.lang.reflect.Array;
 import java.util.ArrayList;
 import java.util.Collections;
 import java.util.Comparator;
 import java.util.List;
-import java.util.UUID;
 
 public class ConsumptionsDAO{
 
@@ -39,8 +36,6 @@ public class ConsumptionsDAO{
 
     public void addConsumptionToDatabases(Consumption consumption) {
         addConsumptionToLocalDB(consumption);
-        //AddConsumptionToFirebaseTask addConsumptionToFirebaseTask = new AddConsumptionToFirebaseTask(getConsumptionFromLocalDB(consumptionID));
-        //addConsumptionToFirebaseTask.execute();
         addConsumptionToFirebase(consumption);
     }
 
@@ -152,23 +147,16 @@ public class ConsumptionsDAO{
     }
 
     private void deleteConsumptionFromLocalDatabase(Consumption consumption) {
-
         SQLiteDatabase database = databaseHelper.getWritableDatabase();
-
         try {
-
             database.delete(DatabaseHelper.TABLECONSUMPTIONS, DatabaseHelper.ID + " = " + '"' + consumption.getID() + '"', null);
             database.close();
-
         } catch (Exception e){
-
             e.printStackTrace();
-
         }
     }
 
     private void deleteConsumptionFromFirebase(Consumption consumption) {
-
         DatabaseReference userDB = firebaseHelper.getUserDB();
         userDB.child(DatabaseHelper.TABLECONSUMPTIONS).child(consumption.getID()).removeValue();
     }
@@ -183,17 +171,13 @@ public class ConsumptionsDAO{
 
         @Override
         protected Void doInBackground(String... strings) {
-
             addConsumptionToFirebase(consumption);
-
             return null;
         }
     }
 
     public List<Consumption> getConsumptions(){
-
         return getConsumptionsFromLocalDB();
-
     }
 
     public List<Consumption> getConsumptionsFromLocalDB(){
@@ -274,28 +258,19 @@ public class ConsumptionsDAO{
         }
 
     public List<Consumption> getSortedConsumptionsByDateDescending(List<Consumption> consumptions){
-
         List<Consumption> sortedConsumptions = new ArrayList<>();
-
         if(consumptions.size() > 1){
-
             Collections.sort(consumptions, new Comparator<Consumption>(){
                 public int compare (Consumption o1, Consumption o2){
                     return o1.getDate().compareTo(o2.getDate());
                 }
             });
-
-
             for(Integer i = consumptions.size() - 1; i>= 0; i--){
                 sortedConsumptions.add(consumptions.get(i));
             }
-
             return  sortedConsumptions;
         }
-
         return consumptions;
-
     }
-
 }
 

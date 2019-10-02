@@ -29,7 +29,7 @@ public class Item implements Serializable {
     @PropertyName (DatabaseHelper.PRICE)
     private Double price;
     @PropertyName (DatabaseHelper.CART)
-    private Integer cart;
+    private Integer unitsInCart;
 
 
     public Item(){
@@ -53,7 +53,7 @@ public class Item implements Serializable {
         active = true;
         price = 0.0;
         consumptionRate = DEFAULT_CONSUMPTION_RATE;
-        cart = 0;
+        unitsInCart = 0;
 
     }
 
@@ -102,15 +102,15 @@ public class Item implements Serializable {
     }
 
     public Integer getIndependence(){
-        return Math.round(getConsumptionRate() * (getStock() + getCart()));
+        return Math.round(getConsumptionRate() * (getStock() + getUnitsInCart()));
     }
 
-    public Integer getCart() {
-        return cart;
+    public Integer getUnitsInCart() {
+        return unitsInCart;
     }
 
-    public void setCart(Integer cart) {
-        this.cart = cart;
+    public void setUnitsInCart(Integer unitsInCart) {
+        this.unitsInCart = unitsInCart;
     }
 
     public Double getPrice() {
@@ -121,7 +121,7 @@ public class Item implements Serializable {
         this.price = price;
     }
 
-    public Boolean getActive() {
+    public Boolean isActive() {
         return active;
     }
 
@@ -176,7 +176,7 @@ public class Item implements Serializable {
 
         if(getConsumptionRate() > 0) {
 
-            if (getCart() == 0) {
+            if (getUnitsInCart() == 0) {
 
                 if (independence > 90) {
                     return R.drawable.ic_emoticon_excited;

@@ -42,11 +42,8 @@ public class FragmentItemDetail extends Fragment implements SimpleRecyclerFragme
         Bundle bundle = new Bundle();
         bundle.putInt(FragmentItemDetail.POSITION, position);
         bundle.putString(DatabaseHelper.ID, item.getID());
-
         FragmentItemDetail fragmentItemDetail = new FragmentItemDetail();
-
         fragmentItemDetail.setArguments(bundle);
-
         return fragmentItemDetail;
     }
 
@@ -98,8 +95,6 @@ public class FragmentItemDetail extends Fragment implements SimpleRecyclerFragme
         updateFieldsWithItemDetails();
 
         setOnClickListeners();
-
-        // TODO: barra indicadora de stock
 
         textViewItemName.setTransitionName(FragmentItemDetail.TRANSITION_ITEM_NAME+item.getID().trim().toLowerCase());
         textViewItemStock.setTransitionName(FragmentItemDetail.TRANSITION_ITEM_STOCK+item.getID().trim().toLowerCase());
@@ -162,35 +157,31 @@ public class FragmentItemDetail extends Fragment implements SimpleRecyclerFragme
         tabLayout.setupWithViewPager(viewPager);
     }
 
+    public void editItem() {
+        linearLayoutActionButtons.setVisibility(View.INVISIBLE);
+
+        viewSwitcherConsumptionName.showNext();
+        viewSwitcherConsumptionRate.showNext();
+        viewSwitcherMinimumPurchace.showNext();
+        viewSwitcherPrice.showNext();
+        viewSwitcherStock.showNext();
+        cancelButton.setVisibility(VISIBLE);
+        saveButton.setVisibility(VISIBLE);
+
+        editTextName.setHint(textViewItemName.getText());
+        editTextCosumptionRate.setHint(textViewConsumptionRate.getText());
+        editTextMinimumPurchace.setHint(textViewMinimumPurchace.getText());
+        editTextPrice.setHint(textViewItemPrice.getText());
+        editTextStock.setHint(textViewItemStock.getText());
+
+        editTextName.setText(textViewItemName.getText());
+        editTextCosumptionRate.setText(textViewConsumptionRate.getText());
+        editTextMinimumPurchace.setText(textViewMinimumPurchace.getText());
+        editTextPrice.setText(textViewItemPrice.getText());
+        editTextStock.setText(textViewItemStock.getText());
+    }
+
     private void setOnClickListeners() {
-
-        /*editButton.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View view) {
-
-                linearLayoutActionButtons.setVisibility(View.INVISIBLE);
-
-                viewSwitcherConsumptionName.showNext();
-                viewSwitcherConsumptionRate.showNext();
-                viewSwitcherMinimumPurchace.showNext();
-                viewSwitcherPrice.showNext();
-                viewSwitcherStock.showNext();
-                cancelButton.setVisibility(VISIBLE);
-                saveButton.setVisibility(VISIBLE);
-
-                editTextName.setHint(textViewItemName.getText());
-                editTextCosumptionRate.setHint(textViewConsumptionRate.getText());
-                editTextMinimumPurchace.setHint(textViewMinimumPurchace.getText());
-                editTextPrice.setHint(textViewItemPrice.getText());
-                editTextStock.setHint(textViewItemStock.getText());
-
-                editTextName.setText(textViewItemName.getText());
-                editTextCosumptionRate.setText(textViewConsumptionRate.getText());
-                editTextMinimumPurchace.setText(textViewMinimumPurchace.getText());
-                editTextPrice.setText(textViewItemPrice.getText());
-                editTextStock.setText(textViewItemStock.getText());
-            }
-        });*/
 
         cancelButton.setOnClickListener(new View.OnClickListener() {
             @Override
@@ -290,7 +281,7 @@ public class FragmentItemDetail extends Fragment implements SimpleRecyclerFragme
         } else{
             buttonStockSubtract.setImageResource(R.drawable.ic_home_minus_enabled);
         }
-        if(item.getCart() == 0) {
+        if(item.getUnitsInCart() == 0) {
             buttonCartToStock.setCompoundDrawablesRelativeWithIntrinsicBounds(R.drawable.ic_up_to, 0, 0 , 0);
             buttonCartToStock.setVisibility(View.GONE);
             buttonCartSubtract.setImageResource(R.drawable.ic_cart_substract_disabled);
@@ -307,9 +298,9 @@ public class FragmentItemDetail extends Fragment implements SimpleRecyclerFragme
     }
 
     private void cartToStock(Item item) {
-        if(item.getCart() > 0){
+        if(item.getUnitsInCart() > 0){
             ItemsController itemsController = new ItemsController();
-            itemsController.cartToStock(context, item);
+            itemsController.moveFromCartToStock(context, item);
         } else {
             Toast.makeText(context, "Cart is Empty", Toast.LENGTH_SHORT).show();
         }
@@ -317,7 +308,7 @@ public class FragmentItemDetail extends Fragment implements SimpleRecyclerFragme
 
     private void decreaseItemCart(Item item) {
 
-        if(item.getCart() == 0){
+        if(item.getUnitsInCart() == 0){
             Toast.makeText(context, "Nothing left to remove", Toast.LENGTH_SHORT).show();
         } else {
             ItemsController itemsController = new ItemsController();
@@ -352,7 +343,7 @@ public class FragmentItemDetail extends Fragment implements SimpleRecyclerFragme
     @SuppressLint("SetTextI18n")
     private void setTextsForButtons(Item item){
         buttonStockAdd.setText(item.getMinimumPurchaceQuantity().toString());
-        buttonCartToStock.setText(item.getCart().toString());
+        buttonCartToStock.setText(item.getUnitsInCart().toString());
     }
 
     private void updateItem(){
@@ -368,13 +359,13 @@ public class FragmentItemDetail extends Fragment implements SimpleRecyclerFragme
 
         Double updatedPrice = Double.parseDouble(editTextPrice.getText().toString());
 
-        Boolean updatedActiveStatus = item.getActive();
+        Boolean updatedActiveStatus = item.isActive();
 
         ItemsController itemsController = new ItemsController();
         itemsController.updateItemDetails(
                 getContext(), item.getID(), updatedItemName, updatedItemStock,
                 updatedItemConsumptionRate, updatedItemMinimumPurchaceQuantity, updatedActiveStatus,
-                updatedPrice, item.getCart());
+                updatedPrice, item.getUnitsInCart());
     }
 
     public static Integer tryParse(String text) {
@@ -404,8 +395,8 @@ public class FragmentItemDetail extends Fragment implements SimpleRecyclerFragme
     public void onItemDeleted(){
         ItemsController itemsController = new ItemsController();
         itemsController.toggleItemIsActiveInDatabases(getContext(), item.getID());
-        item.setActive(!item.getActive());
-        if (item.getActive()){
+        item.setActive(!item.isActive());
+        if (item.isActive()){
             Toast.makeText(getContext(), "Item Restored", Toast.LENGTH_SHORT).show();
         } else{
             Toast.makeText(getContext(), "Item Deleted", Toast.LENGTH_SHORT).show();

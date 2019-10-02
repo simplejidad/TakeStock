@@ -49,7 +49,6 @@ public class ItemsListsActivity extends AppCompatActivity {
                 switch (item.getItemId()) {
                     case R.id.action_add_item:
                         DialogAddItem dialogAddItem = new DialogAddItem();
-                        //dialogAddItem.setCommunicator(MainActivityCommunicator.this);
                         dialogAddItem.show(getFragmentManager(), null);
                         break;
                     case R.id.action_search:

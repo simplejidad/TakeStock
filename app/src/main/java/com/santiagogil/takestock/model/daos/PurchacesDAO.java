@@ -5,12 +5,9 @@ import android.content.ContentValues;
 import android.content.Context;
 import android.database.Cursor;
 import android.database.sqlite.SQLiteDatabase;
-import android.provider.ContactsContract;
 
 import com.google.firebase.database.DatabaseReference;
 import com.santiagogil.takestock.controller.ItemsController;
-import com.santiagogil.takestock.model.pojos.Consumption;
-import com.santiagogil.takestock.model.pojos.Item;
 import com.santiagogil.takestock.model.pojos.Purchace;
 import com.santiagogil.takestock.util.DatabaseHelper;
 import com.santiagogil.takestock.util.FirebaseHelper;
@@ -19,7 +16,6 @@ import java.util.ArrayList;
 import java.util.Collections;
 import java.util.Comparator;
 import java.util.List;
-import java.util.UUID;
 
 public class PurchacesDAO {
 

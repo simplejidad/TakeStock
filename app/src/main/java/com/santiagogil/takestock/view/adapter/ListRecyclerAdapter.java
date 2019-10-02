@@ -27,7 +27,6 @@ public class ListRecyclerAdapter extends RecyclerView.Adapter {
 
     @Override
     public RecyclerView.ViewHolder onCreateViewHolder(ViewGroup parent, int viewType) {
-
         LayoutInflater inflater = LayoutInflater.from(context);
         View view = inflater.inflate(R.layout.card_view_item_list, parent, false);
         view.setOnClickListener(onItemTouchedListener);
@@ -36,11 +35,9 @@ public class ListRecyclerAdapter extends RecyclerView.Adapter {
 
     @Override
     public void onBindViewHolder(RecyclerView.ViewHolder holder, int position) {
-
         ItemList itemList = itemLists.get(position);
         ItemListViewHolder itemListViewHolder = (ItemListViewHolder) holder;
         itemListViewHolder.loadItemList(itemList);
-
     }
 
     @Override

@@ -24,7 +24,6 @@ public class PurchaceRecyclerAdapter extends RecyclerView.Adapter {
     public PurchaceRecyclerAdapter(Context context, RecyclerPurchacesFragmentCommunicator recyclerPurchacesFragmentCommunicator) {
         this.context = context;
         this.recyclerPurchacesFragmentCommunicator = recyclerPurchacesFragmentCommunicator;
-
     }
 
     @Override
@@ -36,7 +35,6 @@ public class PurchaceRecyclerAdapter extends RecyclerView.Adapter {
 
     @Override
     public void onBindViewHolder(RecyclerView.ViewHolder holder, int position) {
-
         Purchace purchace = purchaceList.get(position);
         PurchaceViewHolder purchaceViewHolder = (PurchaceViewHolder) holder;
         purchaceViewHolder.loadPurchace(purchace);
@@ -48,7 +46,6 @@ public class PurchaceRecyclerAdapter extends RecyclerView.Adapter {
     }
 
     public void setPurchacesList(List<Purchace> purchaceList) {
-
         this.purchaceList = purchaceList;
     }
 
@@ -59,7 +56,7 @@ public class PurchaceRecyclerAdapter extends RecyclerView.Adapter {
         private ImageButton buttonDelete;
         private Purchace purchace;
 
-        public PurchaceViewHolder(final Context context, View purchaceView, final RecyclerPurchacesFragmentCommunicator recyclerPurchacesFragmentCommunicator ) {
+        public PurchaceViewHolder(final Context context, View purchaceView, final RecyclerPurchacesFragmentCommunicator recyclerPurchacesFragmentCommunicator) {
             super(purchaceView);
             textViewPurchacenDate = (TextView) purchaceView.findViewById(R.id.textViewConsumptionDate);
             dateHelper = new DateHelper();
@@ -76,17 +73,15 @@ public class PurchaceRecyclerAdapter extends RecyclerView.Adapter {
 
         }
 
-        public void loadPurchace(Purchace purchace){
+        public void loadPurchace(Purchace purchace) {
             this.purchace = purchace;
             textViewPurchacenDate.setText(dateHelper.getFormatedDayFromMiliseconds(purchace.getDate()));
 
         }
     }
 
-    public interface RecyclerPurchacesFragmentCommunicator{
-
+    public interface RecyclerPurchacesFragmentCommunicator {
         void onPurchacesUpdated();
-
     }
 
 }

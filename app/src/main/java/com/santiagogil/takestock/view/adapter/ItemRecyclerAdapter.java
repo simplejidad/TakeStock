@@ -15,7 +15,6 @@ import com.santiagogil.takestock.R;
 import com.santiagogil.takestock.controller.ConsumptionsController;
 import com.santiagogil.takestock.controller.ItemsController;
 import com.santiagogil.takestock.model.pojos.Item;
-import com.santiagogil.takestock.view.fragment.FragmentItemDetail;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -41,7 +40,6 @@ public class ItemRecyclerAdapter extends RecyclerView.Adapter{
         this.onItemModifiedListener = onItemModifiedListener;
         this.onItemTouchedListener = onItemTouchedListener;
         this.items = new ArrayList<>();
-
     }
 
     public Item getItemAtPosition(Integer position){return items.get(position);}
@@ -73,6 +71,7 @@ public class ItemRecyclerAdapter extends RecyclerView.Adapter{
         private Context context;
         private View.OnClickListener onItemModifiedListener;
         private View itemView;
+        private ItemsController itemsController = new ItemsController();
 
         @BindView(R.id.text_view_item_name) TextView textViewItemName;
         @BindView(R.id.text_view_item_stock) TextView textViewItemStock;
@@ -97,12 +96,10 @@ public class ItemRecyclerAdapter extends RecyclerView.Adapter{
         }
 
         public void loadItem(final Item item){
-
             setTextsForLayout(item);
             setOnClickListeners(item);
             setDrawablesForButtons(item);
             setCardBackgroundColor(verticalColorBar, item.getIndependence());
-
         }
 
         private void setOnClickListeners(final Item item){
@@ -126,7 +123,7 @@ public class ItemRecyclerAdapter extends RecyclerView.Adapter{
             buttonCartAdd.setOnClickListener(new View.OnClickListener(){
                 @Override
                 public void onClick(View v) {
-                    increaseCart(item);
+                    increaseAmmountInCart(item);
                     onItemModifiedListener.onClick(itemView);
                 }
             });
@@ -142,7 +139,7 @@ public class ItemRecyclerAdapter extends RecyclerView.Adapter{
             buttonCartToStock.setOnClickListener(new View.OnClickListener() {
                 @Override
                 public void onClick(View v) {
-                    cartToStock(item);
+                    moveFromCartToStock(item);
                     onItemModifiedListener.onClick(itemView);
                 }
             });
@@ -160,7 +157,7 @@ public class ItemRecyclerAdapter extends RecyclerView.Adapter{
             if(item.getMinimumPurchaceQuantity() > 9){
                 buttonStockAdd.setPaddingRelative(12, 0, 0, 0);
             }
-            buttonCartToStock.setText(item.getCart().toString());
+            buttonCartToStock.setText(item.getUnitsInCart().toString());
 
         }
 
@@ -171,7 +168,7 @@ public class ItemRecyclerAdapter extends RecyclerView.Adapter{
             } else{
                 buttonStockSubtract.setImageResource(R.drawable.ic_home_minus_enabled);
             }
-            if(item.getCart() == 0) {
+            if(item.getUnitsInCart() == 0) {
 
                 buttonCartToStock.setCompoundDrawablesRelativeWithIntrinsicBounds(R.drawable.ic_up_to, 0, 0 , 0);
                 buttonCartToStock.setVisibility(View.GONE);
@@ -183,58 +180,45 @@ public class ItemRecyclerAdapter extends RecyclerView.Adapter{
         }
 
         private void setTextViewNeededForGoal(Item item) {
-
-            if(item.getConsumptionRate() > 0){
-
+            if(item.getConsumptionRate() > 0)
                 textViewNeededForGoal.setText(item.getRoundedConsumptionRate());
-
-            }
         }
 
-        private void cartToStock(Item item) {
-
-            if(item.getCart() > 0){
-
-                ItemsController itemsController = new ItemsController();
-                itemsController.cartToStock(context, item);
-            } else {
+        private void moveFromCartToStock(Item item) {
+            if(itemIsInCart(item))
+                itemsController.moveFromCartToStock(context, item);
+            else
                 Toast.makeText(context, "Cart is Empty", Toast.LENGTH_SHORT).show();
-            }
+        }
 
+        private boolean itemIsInCart(Item item) {
+            return item.getUnitsInCart() > 0;
         }
 
         private void decreaseItemCart(Item item) {
-
-            if(item.getCart() == 0){
+            if(isEmptyItemCart(item))
                 Toast.makeText(context, "Nothing left to remove", Toast.LENGTH_SHORT).show();
-            } else {
-
-                ItemsController itemsController = new ItemsController();
+            else
                 itemsController.decreaseItemCart(context, item);
-            }
         }
 
-        private void increaseCart(Item item) {
+        private boolean isEmptyItemCart(Item item) {
+            return item.getUnitsInCart() == 0;
+        }
 
-            ItemsController itemsController = new ItemsController();
+        private void increaseAmmountInCart(Item item) {
             itemsController.increaseItemCart(context, item);
-
         }
 
         private  void increaseItemStock(Item item){
-
-            ItemsController itemsController = new ItemsController();
             itemsController.increaseItemStock(context, item);
-
         }
 
         private void decreaseItemStock(Item item){
 
-            if(item.getStock() == 0){
+            if(item.getStock() == 0)
                 Toast.makeText(context, "Nothing left to consume", Toast.LENGTH_SHORT).show();
-            } else {
-
-                ItemsController itemsController = new ItemsController();
+            else {
                 itemsController.decreaseItemStock(context, item);
                 ConsumptionsController consumptionsController = new ConsumptionsController();
                 consumptionsController.addConsumptionToDatabases(context, item.getID());

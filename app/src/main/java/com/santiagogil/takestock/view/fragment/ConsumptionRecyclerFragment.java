@@ -26,21 +26,22 @@ public class ConsumptionRecyclerFragment extends SimpleRecyclerFragment {
         this.fragmentRecyclerToFragmentCommunicator = fragmentRecyclerToFragmentCommunicator;
     }
 
-    public ConsumptionRecyclerFragment() {
-        // Required empty public constructor
-    }
+    public ConsumptionRecyclerFragment() { }
 
 
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container,
                              Bundle savedInstanceState) {
-        // Inflate the layout for this fragment
         return inflater.inflate(R.layout.simple_recycler_view, container, false);
     }
 
     @Override
     public void onViewCreated(View view, @Nullable Bundle savedInstanceState) {
         super.onViewCreated(view, savedInstanceState);
+        setUpRecyclerView(view);
+    }
+
+    private void setUpRecyclerView(View view) {
         RecyclerView recyclerView = (RecyclerView) view.findViewById(R.id.recyclerView);
         consumptionRecyclerAdapter = new ConsumptionRecyclerAdapter(getContext(), this);
         ConsumptionsController consumptionsController = new ConsumptionsController();
@@ -51,7 +52,6 @@ public class ConsumptionRecyclerFragment extends SimpleRecyclerFragment {
         recyclerView.setLayoutManager(linearLayoutManager);
         recyclerView.setPadding(6,1,6,1);
     }
-
 
 
     public String getTitle(){

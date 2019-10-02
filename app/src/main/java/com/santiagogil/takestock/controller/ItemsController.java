@@ -187,7 +187,7 @@ public class ItemsController {
         itemsDao.decreaseItemCart(item);
     }
 
-    public void cartToStock(Context context, Item item) {
+    public void moveFromCartToStock(Context context, Item item) {
 
         ItemsDAO itemsDao = new ItemsDAO(context);
         itemsDao.cartToStock(item);

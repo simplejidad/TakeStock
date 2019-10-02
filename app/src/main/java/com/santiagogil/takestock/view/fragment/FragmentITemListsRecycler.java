@@ -16,7 +16,7 @@ public class FragmentITemListsRecycler extends Fragment {
 
 
     public FragmentITemListsRecycler() {
-        // Required empty public constructor
+
     }
 
 
