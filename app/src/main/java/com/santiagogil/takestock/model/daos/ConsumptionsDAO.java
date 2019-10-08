@@ -186,9 +186,9 @@ public class ConsumptionsDAO{
 
         SQLiteDatabase database = databaseHelper.getReadableDatabase();
 
-        String sqlQuerry = "SELECT * FROM " + DatabaseHelper.TABLECONSUMPTIONS;
+        String sqlQuery = "SELECT * FROM " + DatabaseHelper.TABLECONSUMPTIONS;
 
-        Cursor cursor = database.rawQuery(sqlQuerry, null);
+        Cursor cursor = database.rawQuery(sqlQuery, null);
 
         while(cursor.moveToNext()){
 

@@ -161,9 +161,7 @@ public class MainActivityCommunicator extends AppCompatActivity implements Fragm
             public boolean onNavigationItemSelected(@NonNull MenuItem item) {
                 switch (item.getItemId()) {
                     case R.id.action_add_item:
-                        DialogAddItem dialogAddItem = new DialogAddItem();
-                        dialogAddItem.setCommunicator(MainActivityCommunicator.this);
-                        dialogAddItem.show(getFragmentManager(), null);
+                        showAddItemDialog();
                         break;
                     case R.id.action_search:
                         toolbarEditText.setBackgroundColor(ContextCompat.getColor( context, R.color.icons_enabled));
@@ -182,13 +180,20 @@ public class MainActivityCommunicator extends AppCompatActivity implements Fragm
         });
     }
 
+    private void showAddItemDialog() {
+        DialogAddItem dialogAddItem = new DialogAddItem();
+        dialogAddItem.setCommunicator(MainActivityCommunicator.this);
+        dialogAddItem.show(getFragmentManager(), null);
+        return;
+    }
+
 
     @Override
     public void onItemTouched (Item touchedItem, Integer touchedPosition, BehaviourGetItemList
     behaviourGetItemList){
 
         goToFragmentItemsViewPagerFragment(touchedItem, touchedPosition, behaviourGetItemList);
-        togleToolBarItems();
+        togleToolBarItemsForItemDeatil();
     }
 
     private void goToFragmentItemsViewPagerFragment(Item touchedItem, Integer touchedPosition, BehaviourGetItemList behaviourGetItemList) {
@@ -217,6 +222,7 @@ public class MainActivityCommunicator extends AppCompatActivity implements Fragm
             if (fragments == 0)
                 moveTaskToBack(true);
             toolbarEditText.setVisibility(View.VISIBLE);
+            toggleToolbarItemsForItemList();
             super.onBackPressed();
         }
 
@@ -231,11 +237,10 @@ public class MainActivityCommunicator extends AppCompatActivity implements Fragm
 
     @Override
     public void updateToolbarIcon(Item item) {
-        if(item.isActive()){
+        if(item.isActive())
             toolbarDeleteItemButton.setImageResource(R.drawable.ic_delete_black_24dp);
-        } else {
+        else
             toolbarDeleteItemButton.setImageResource(R.drawable.ic_restore_black_24dp);
-        }
     }
 
     private class NavigationViewListener implements NavigationView.OnNavigationItemSelectedListener {
@@ -261,7 +266,6 @@ public class MainActivityCommunicator extends AppCompatActivity implements Fragm
 
     @Override
     public boolean onSupportNavigateUp() {
-        //This method is called when the up button is pressed. Just the pop back stack.
         onBackPressed();
         return true;
     }
@@ -319,10 +323,16 @@ public class MainActivityCommunicator extends AppCompatActivity implements Fragm
         imm.hideSoftInputFromWindow(view.getWindowToken(), 0);
     }
 
-    public void togleToolBarItems(){
+    public void togleToolBarItemsForItemDeatil(){
         toolbarEditText.setVisibility(View.GONE);
         toolbarDeleteItemButton.setVisibility(View.VISIBLE);
         toolbarEditItembutton.setVisibility(View.VISIBLE);
+    }
+
+    public void toggleToolbarItemsForItemList(){
+        toolbarEditText.setVisibility(View.VISIBLE);
+        toolbarDeleteItemButton.setVisibility(View.GONE);
+        toolbarEditItembutton.setVisibility(View.GONE);
     }
 }
 

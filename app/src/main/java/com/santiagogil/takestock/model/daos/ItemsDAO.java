@@ -109,9 +109,9 @@ public class ItemsDAO {
         return itemList;
     }
 
-    public Item buildItemFromQuerry(String querry){
+    public Item buildItemFromQuery(String query){
         SQLiteDatabase database = databaseHelper.getReadableDatabase();
-        Cursor cursor = database.rawQuery(querry, null);
+        Cursor cursor = database.rawQuery(query, null);
         if (cursor.moveToNext()) {
             Item item = buildItemFromCursor(cursor);
             cursor.close();
@@ -129,7 +129,7 @@ public class ItemsDAO {
                 +  itemName + '"' + " AND " + DatabaseHelper.USERID + " = " + '"'
                 +  firebaseHelper.getCurrentUserID() + '"'  ;
 
-        return buildItemFromQuerry(selectQuery);
+        return buildItemFromQuery(selectQuery);
     }
 
     public Item getItemFromLocalDB(String itemID){
@@ -137,7 +137,7 @@ public class ItemsDAO {
                 +  itemID + '"' + " AND " + DatabaseHelper.USERID + " = " + '"'
                 +  firebaseHelper.getCurrentUserID() + '"';
 
-        return buildItemFromQuerry(selectQuery);
+        return buildItemFromQuery(selectQuery);
     }
 
     public void getAllItemsFromFirebase(final ResultListener<List<Item>> listenerFromController){
@@ -168,7 +168,7 @@ public class ItemsDAO {
         String selectQuery = "SELECT * FROM " + DatabaseHelper.TABLEITEMS + " WHERE " + DatabaseHelper.USERID + " = " + '"'
                 +  firebaseHelper.getCurrentUserID() + '"';
 
-        return buildItemListFromQuerry(selectQuery);
+        return buildItemListFromQuery(selectQuery);
     }
 
     public Item buildItemFromCursor(Cursor cursor){
@@ -194,12 +194,12 @@ public class ItemsDAO {
                 + " = " + '"' + DatabaseHelper.ACTIVE_TRUE + '"' + " AND " + DatabaseHelper.USERID + " = " + '"'
                 +  firebaseHelper.getCurrentUserID() + '"';
 
-        return buildItemListFromQuerry(selectQuery);
+        return buildItemListFromQuery(selectQuery);
     }
 
-    public List<Item> buildItemListFromQuerry(String querry){
+    public List<Item> buildItemListFromQuery(String query){
         SQLiteDatabase database = databaseHelper.getReadableDatabase();
-        Cursor cursor = database.rawQuery(querry, null);
+        Cursor cursor = database.rawQuery(query, null);
 
         List<Item> items = new ArrayList<>();
 
@@ -220,7 +220,7 @@ public class ItemsDAO {
                 + " = " + '"'+ DatabaseHelper.ACTIVE_FALSE + '"' + " AND " + DatabaseHelper.USERID + " = " + '"'
                 +  firebaseHelper.getCurrentUserID() + '"';
 
-        return buildItemListFromQuerry(selectQuery);
+        return buildItemListFromQuery(selectQuery);
     }
 
     public void increaseItemStock(Item item){
@@ -393,7 +393,7 @@ public class ItemsDAO {
                 +  firebaseHelper.getCurrentUserID() + '"' + " AND " + DatabaseHelper.STOCK + " = " + '"'
                 +  0 + '"' ;
 
-        return buildItemListFromQuerry(selectQuery);
+        return buildItemListFromQuery(selectQuery);
     }
 
     public List<Item> sortItemsByConsumptionRate(List<Item> itemList) {
@@ -449,6 +449,6 @@ public class ItemsDAO {
 
     public List<Item> getAllItems() {
         String selectQuery = "SELECT * FROM " + DatabaseHelper.TABLEITEMS ;
-        return buildItemListFromQuerry(selectQuery);
+        return buildItemListFromQuery(selectQuery);
     }
 }
