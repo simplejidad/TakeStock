@@ -33,7 +33,7 @@
             android:layout_marginRight="5dp"
             android:scaleType="center"
             android:layout_marginLeft="5dp"
-            android:src="@drawable/ic_create_black_24dp"
+            android:src="@drawable/ic_create_24dp"
             android:elevation="3dp"
             android:visibility="gone"
             tools:visibility="visible" />
@@ -46,7 +46,7 @@
             android:scaleType="center"
             android:elevation="3dp"
             android:visibility="gone"
-            android:src="@drawable/ic_delete_black_24dp"
+            android:src="@drawable/ic_delete_24dp"
             tools:visibility="visible"
             />
 

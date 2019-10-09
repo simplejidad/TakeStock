@@ -7,14 +7,13 @@
     android:layout_height="wrap_content"
     android:layout_margin="3dp"
     app:cardCornerRadius="5dp"
-    app:cardElevation="5dp"
-
-    >
+    app:cardElevation="5dp" >
 
     <LinearLayout
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:orientation="horizontal">
+        android:orientation="horizontal"
+        android:background="?attr/backgroundCardColor">
 
         <FrameLayout
             android:id="@+id/vertical_bar"
@@ -35,7 +34,8 @@
                 android:layout_marginTop="10dp"
                 android:layout_marginBottom="15dp"
                 android:gravity="center"
-                android:textSize="14sp"
+                android:textSize="18sp"
+                android:textColor="?attr/primaryTextColor"
                 tools:text="@string/description"/>
 
             <LinearLayout
@@ -56,17 +56,20 @@
                     android:drawableStart="@drawable/ic_emoticon_smile"
                     android:lines="1"
                     tools:text="@string/lorem"
-                    android:textSize="12sp" />
+                    android:textColor="?attr/primaryTextColor"
+                    android:textSize="16sp" />
 
                 <TextView
                     android:id="@+id/text_view_item_stock"
                     android:layout_width="0dp"
                     android:layout_height="wrap_content"
-                    android:layout_weight="0.7"
-                    android:drawableStart="@drawable/ic_home_black_24dp"
+                    android:layout_weight="0.8"
+                    android:drawableStart="@drawable/ic_home_24dp"
                     android:gravity="center"
                     android:text="@string/by"
-                    android:textSize="12sp" />
+                    android:textColor="?attr/primaryTextColor"
+                    android:textSize="16sp"
+                    tools:text="x 20"/>
 
                 <TextView
                     android:id="@+id/text_view_needed_for_goal"
@@ -74,9 +77,9 @@
                     android:layout_height="wrap_content"
                     android:layout_weight="1.25"
                     android:gravity="end"
-                    android:textSize="12sp"
-
-                    />
+                    android:textColor="?attr/primaryTextColor"
+                    android:textSize="16sp"
+                    tools:text="You are OK" />
 
                 <TextView
                     android:id="@+id/text_view_item_price"
@@ -85,8 +88,10 @@
                     android:layout_marginLeft="5dp"
                     android:layout_marginRight="5dp"
                     android:layout_weight="1"
+                    android:textColor="?attr/primaryTextColor"
                     android:gravity="end"
-                    android:textSize="12sp" />
+                    android:textSize="16sp"
+                    tools:text="$100"/>
 
             </LinearLayout>
 
@@ -121,16 +126,15 @@
                     android:id="@+id/button_cart_to_stock"
                     android:layout_width="wrap_content"
                     android:layout_height="match_parent"
-                    android:drawableStart="@drawable/ic_up_to"
+                    android:drawableStart="@drawable/ic_move_to"
+                    android:drawableEnd="@drawable/ic_shopping_cart_24dp"
                     android:gravity="center"
-                    android:textColor="@color/secondary_text"
-                    android:textSize="12sp"
-                    tools:text="88"
-                    tools:drawableEnd="@drawable/ic_shopping_cart_black_24dp"/>
+                    android:textColor="?attr/primaryTextColor"
+                    android:textSize="16sp"
+                    tools:text="88" />
 
                 <ImageView
                     android:id="@+id/button_cart_add"
-                    android:contentDescription="@string/lorem"
                     android:layout_width="0dp"
                     android:layout_height="match_parent"
                     android:layout_weight="1"
@@ -147,16 +151,14 @@
                     android:paddingStart="15dp"
                     android:textAlignment="textStart"
                     android:gravity="center"
-                    android:textColor="@color/secondary_text"
-                    android:textSize="12sp"
+                    android:textColor="?attr/primaryTextColor"
+                    android:textSize="16sp"
                     tools:text="10"/>
 
             </LinearLayout>
 
         </LinearLayout>
 
-
     </LinearLayout>
-
 
 </android.support.v7.widget.CardView>

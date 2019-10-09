@@ -3,7 +3,9 @@ package com.santiagogil.takestock.view.activity;
 import android.app.Activity;
 import android.content.Context;
 import android.content.Intent;
+import android.content.SharedPreferences;
 import android.os.Bundle;
+import android.preference.PreferenceManager;
 import android.support.annotation.NonNull;
 import android.support.design.widget.BottomNavigationView;
 import android.support.design.widget.NavigationView;
@@ -49,6 +51,7 @@ import butterknife.OnClick;
 
 public class MainActivityCommunicator extends AppCompatActivity implements FragmentRecyclerItems.FragmentActivityCommunicator, DialogAddItem.AddItemDialogCommunicator, FragmentItemsViewPager.Listener {
 
+    public static final String NIGHT_MODE = "night mode";
 
     private FirebaseAuth fAuth;
     private FirebaseAuth.AuthStateListener authStateListener;
@@ -74,6 +77,9 @@ public class MainActivityCommunicator extends AppCompatActivity implements Fragm
     }
 
     protected void onCreate(Bundle savedInstanceState) {
+        if (isNightModeEnabled()) {
+            setTheme(R.style.MainActivityCommunicatorThemeDark);
+        }
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_main);
 
@@ -104,6 +110,56 @@ public class MainActivityCommunicator extends AppCompatActivity implements Fragm
             setUpFragmentItemListViewPager();
 
             updateConsuptionsDataBase();
+        }
+
+        setSupportActionBar(toolbar);
+        Objects.requireNonNull(getSupportActionBar()).setDisplayHomeAsUpEnabled(true);
+
+
+        authStateListener = new FirebaseAuth.AuthStateListener() {
+            @Override
+            public void onAuthStateChanged(@NonNull FirebaseAuth firebaseAuth) {
+                if (firebaseAuth.getCurrentUser() == null) {
+                    Intent intent = new Intent(MainActivityCommunicator.this, OnboardingActivity.class);
+                    intent.addFlags(Intent.FLAG_ACTIVITY_CLEAR_TOP);
+                    startActivity(intent);
+                }
+            }
+        };
+
+        fAuth = FirebaseAuth.getInstance();
+
+        if (fAuth.getCurrentUser() == null) {
+
+            Intent intent = new Intent(MainActivityCommunicator.this, OnboardingActivity.class);
+            intent.addFlags(Intent.FLAG_ACTIVITY_CLEAR_TOP);
+            startActivity(intent);
+
+        } else {
+
+            navigationView =  findViewById(R.id.navigationView);
+            NavigationViewListener navigationViewListener = new NavigationViewListener();
+            navigationView.setNavigationItemSelectedListener(navigationViewListener);
+
+
+            fragmentItemListsViewPager = new FragmentItemListsViewPager();
+            Bundle bundle = new Bundle();
+            bundle.putString(FragmentRecyclerItems.FILTER, filter);
+            fragmentItemListsViewPager.setArguments(bundle);
+            fragmentItemListsViewPager.setFragmentActivityCommunicator(MainActivityCommunicator.this);
+            FragmentManager fragmentManager = this.getSupportFragmentManager();
+            FragmentTransaction fragmentTransaction = fragmentManager.beginTransaction();
+            fragmentTransaction.replace(R.id.fragment_holder, fragmentItemListsViewPager);
+            fragmentTransaction.commit();
+
+            ConsumptionsController consumptionsController = new ConsumptionsController();
+            consumptionsController.updateConsumptionsDatabase(this, new ResultListener<List<Consumption>>() {
+                @Override
+                public void finish(List<Consumption> result) {
+
+                }
+            });
+
         }
     }
 
@@ -187,7 +243,6 @@ public class MainActivityCommunicator extends AppCompatActivity implements Fragm
         return;
     }
 
-
     @Override
     public void onItemTouched (Item touchedItem, Integer touchedPosition, BehaviourGetItemList
     behaviourGetItemList){
@@ -238,19 +293,26 @@ public class MainActivityCommunicator extends AppCompatActivity implements Fragm
     @Override
     public void updateToolbarIcon(Item item) {
         if(item.isActive())
-            toolbarDeleteItemButton.setImageResource(R.drawable.ic_delete_black_24dp);
+            toolbarDeleteItemButton.setImageResource(R.drawable.ic_delete_24dp);
         else
-            toolbarDeleteItemButton.setImageResource(R.drawable.ic_restore_black_24dp);
+            toolbarDeleteItemButton.setImageResource(R.drawable.ic_restore_24dp);
     }
 
     private class NavigationViewListener implements NavigationView.OnNavigationItemSelectedListener {
-            @Override
-            public boolean onNavigationItemSelected(@NonNull MenuItem item) {
-                if (item.getItemId() == R.id.action_logout)
-                    logout();
-                return false;
+        @Override
+        public boolean onNavigationItemSelected(@NonNull MenuItem item) {
+            if (item.getItemId() == R.id.action_logout)
+                logout();
+            if (item.getItemId() == R.id.changeTheme) {
+                SharedPreferences mPrefs =  PreferenceManager.getDefaultSharedPreferences(MainActivityCommunicator.this);
+                SharedPreferences.Editor editor = mPrefs.edit();
+                editor.putBoolean(NIGHT_MODE, !isNightModeEnabled());
+                editor.apply();
+                recreate();
             }
+            return false;
         }
+    }
 
     @Override
     protected void onStart () {
@@ -329,10 +391,16 @@ public class MainActivityCommunicator extends AppCompatActivity implements Fragm
         toolbarEditItembutton.setVisibility(View.VISIBLE);
     }
 
-    public void toggleToolbarItemsForItemList(){
+
+    public void toggleToolbarItemsForItemList() {
         toolbarEditText.setVisibility(View.VISIBLE);
         toolbarDeleteItemButton.setVisibility(View.GONE);
         toolbarEditItembutton.setVisibility(View.GONE);
+    }
+
+    private boolean isNightModeEnabled() {
+        SharedPreferences mPrefs = PreferenceManager.getDefaultSharedPreferences(MainActivityCommunicator.this);
+        return mPrefs.getBoolean(NIGHT_MODE, false);
     }
 }
 
